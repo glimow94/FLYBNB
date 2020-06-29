@@ -19,7 +19,7 @@ import LoginButton from "../components/buttons/LoginButton"
 
 export default function LoggedOut(){ 
   
-  const navigation = useNavigation();
+const navigation = useNavigation();
 
  return(
     <View style={styles.wrapper}> 

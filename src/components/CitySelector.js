@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Button } from 'react-native';
 import colors from '../style/colors';
 import CityButton from "../components/buttons/Button1"
 import DropDownPicker from 'react-native-dropdown-picker';
+import data from "../components/regioni_province_comuni"
 
 
 export default class CitySelector extends Component{
@@ -11,9 +12,7 @@ export default class CitySelector extends Component{
         this.state = {
           //set del valore di inizio e fine data
           region: 'Sicilia',
-          selectedRegion: null,
           selectedCity: null,
-          selectedComune: null,
           // status è il valore che rende visibile/invisibile il menu delle citta
           status: false,
           status2: false,
@@ -31,15 +30,38 @@ export default class CitySelector extends Component{
         }
     }
     showProvinces=()=>{
-        
+        if(this.state.status2==true){
+            this.setState({status2:false})
+        }
+        else{
+            this.setState({status2:true})
+        }
     }
     render(){
         
         return(
-            <View>
-                <CityButton text="Luogo" onPress={this.showHide}></CityButton>
+            <View style={styles.container}>
+                <CityButton text={this.state.region} onPress={this.showHide}></CityButton>
+                <View style={styles.dropdownContainer}>
                 {
                     this.state.status ? <View>
+                        <DropDownPicker style={styles.dropdown}
+                            items={[
+                                {label: 'Sicilia', value: 'Sicilia'},
+                                {label: 'Sardegna', value: 'Sardegna'}
+                            ]}
+                            defaultValue={this.state.region}
+                            containerStyle={{height: 40, width: 150}}
+                            style={{backgroundColor: '#fafafa'}}
+                            dropDownStyle={{backgroundColor: '#fafafa'}}
+                            onChangeItem={item => this.setState({
+                            region: item.value
+                            }), this.showProvinces}
+                        />
+                    </View> : null
+                }
+                {
+                    this.state.status2 ? <View>
                         <DropDownPicker style={styles.dropdown}
                             items={[
                                 {label: 'Sicilia', value: 'Sicilia'},
@@ -55,6 +77,7 @@ export default class CitySelector extends Component{
                         />
                     </View> : null
                 }
+                </View>
             </View>
         )
     }
@@ -64,6 +87,9 @@ export default class CitySelector extends Component{
 const styles = StyleSheet.create({
     dropdown:{
 
+    },
+    dropdownContainer:{
+        flexDirection: 'row'
     },
     container: {
       flex: 1,

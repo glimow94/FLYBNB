@@ -33,9 +33,10 @@ export default function Home(){
             <Text style={styles.titleStyle}>
               Come possiamo aiutarti?
             </Text>
-        
-            <DateSelector></DateSelector>
-            <CitySelector></CitySelector>
+            <View style={styles.buttonGroup}>
+              <DateSelector></DateSelector>
+              <CitySelector></CitySelector>
+            </View>
           </View>
         </ScrollView>
         
@@ -70,5 +71,9 @@ const styles = StyleSheet.create({
       fontWeight: "700",
       paddingHorizontal: 20,
       paddingTop:20
+    },
+    buttonGroup:{
+      flexDirection: "row",
+      marginTop: 5
     }
 });
