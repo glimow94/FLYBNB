@@ -13,10 +13,10 @@ export default class CitySelector extends Component{
         super(props);
         this.state = {
           //set del valore di inizio e fine data
-          region: 'Sicilia',
-          province: 'Palermo',
+          region: 'Luogo',
+          province: 'Luogo',
           province_code: 'Pa',
-          city: 'Palermo',
+          city: 'Luogo',
           city_code: '',
           // status è il valore che rende visibile/invisibile il menu delle citta
           status: false,
@@ -52,16 +52,21 @@ export default class CitySelector extends Component{
         
         return (
             <View style={styles.container}>
-              <CityButton text={this.state.city.substring(0,10)} onPress={this.showHide}></CityButton>
+              <CityButton text={this.state.city.substring(0,9)} onPress={this.showHide}></CityButton>
             { this.state.status ?
-              <View >
+              <View>
                 <Picker mode="dropdown" 
                     style={styles.pickerstyle}                  
                     onValueChange={itemValue => this.setState({
                     region: itemValue,
+                    province: 'seleziona provincia',
+                    city:'seleziona comune',
                     status2: true
                     })}
+
                 >
+                  <Picker.Item label={this.state.region} value ={this.state.region}></Picker.Item>
+
                   {
                     db.map((item) =>{
                       return(
@@ -79,9 +84,12 @@ export default class CitySelector extends Component{
                     onValueChange={
                       itemValue => this.setState({
                       province: itemValue,
+                      city:'seleziona comune',
                       status3: true
                     })}
                   >
+                  <Picker.Item label={this.state.province} value ={this.state.province}></Picker.Item>
+                  
                   {
                     db.map((item) =>{
                       if(item.nome == this.state.region){
@@ -106,25 +114,28 @@ export default class CitySelector extends Component{
                     mode="dropdown" 
                     style={styles.pickerstyle}
                     onValueChange={itemValue => this.setState({
-                    city: itemValue,
-                    status3: false,
-                    status2:false,
-                    status:false
+                      city: itemValue,
+                      status3: false,
+                      status2:false,
+                      status:false
                     })}
                   >
+                  <Picker.Item label={this.state.city} value ={this.state.city_code}></Picker.Item>
+
                   {
                     db.map((item) =>{
                       if(item.nome == this.state.region){
                         return (
                           item.province.map((item_prov)=>{
-                            return(
-                              item_prov.comuni.map((item_comuni)=>{
-                                this.state.city_code = item_comuni.code
-                                return(
+                            if(item_prov.nome==this.state.province){
+                              return(
+                                item_prov.comuni.map((item_comuni)=>{
+                                  this.state.city_code = item_comuni.code
+                                  return(
                                   <Picker.Item label = {item_comuni.nome} value={item_comuni.nome} key={item_comuni.code} />
                                 )
                               })
-                            );
+                            );}
                           })
                         )
                       }
@@ -145,14 +156,15 @@ export default class CitySelector extends Component{
    
    const styles = StyleSheet.create({
      container: {
-       flex: 1,
        flexDirection:'column',
-       backgroundColor: colors.green01
+       backgroundColor: colors.green01,
+       width: 150
      },
      pickerstyle:{
       height:30, 
-      width: 150, 
-      backgroundColor: 'white',
+      width: 140, 
+      alignItems: 'center',
+      backgroundColor: colors.white,
       borderRadius:10
      }
    })

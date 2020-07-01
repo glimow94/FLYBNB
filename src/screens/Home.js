@@ -4,6 +4,8 @@ import colors from "../style/colors/index";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import SearchBar from "../components/SearchBar";
 import DateSelector from "../components/DateSelector";
+import FilterSelector from "../components/FilterSelector";
+
 import {
   Text,
   View,
@@ -36,6 +38,7 @@ export default function Home(){
             <View style={styles.buttonGroup}>
               <DateSelector></DateSelector>
               <CitySelector></CitySelector>
+              <FilterSelector></FilterSelector>
             </View>
           </View>
         </ScrollView>
@@ -74,6 +77,7 @@ const styles = StyleSheet.create({
     },
     buttonGroup:{
       flexDirection: "row",
+      resizeMode:'contain',
       marginTop: 5
     }
 });

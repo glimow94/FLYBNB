@@ -86,7 +86,6 @@ export default class DateSelector extends Component {
                 selectedDayTextColor="#000000"
                 scaleFactor={375}
                 textStyle={{
-                    fontFamily: 'Lucida Console',
                     color: '#000000',
                 }}
                 onDateChange={this.onDateChange}
@@ -95,9 +94,9 @@ export default class DateSelector extends Component {
             </View> : null
         }
         <View style={{padding:16}}>
-          <Text style={{padding:16,fontWeight: 300}}>Check-In:</Text>
+          <Text style={{padding:16}}>Check-In:</Text>
           <Text style={{padding:10}}>{startDate}</Text>
-          <Text style={{padding:16, fontWeight:300}}>Check-Out: </Text>
+          <Text style={{padding:16}}>Check-Out: </Text>
           <Text style={{padding:10}}>{endDate}</Text>
         </View>
       </View>
@@ -107,7 +106,6 @@ export default class DateSelector extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: colors.white,
     alignItems: 'center',
 
