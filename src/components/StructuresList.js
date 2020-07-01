@@ -1,36 +1,44 @@
 import React from 'react';
 import { SafeAreaView, View, FlatList, StyleSheet, Text } from 'react-native';
 import Constants from 'expo-constants';
-import colors from "../style/colors/index"
+import colors from "../style/colors/index";
+import BookingButton from "../components/buttons/bookingButton"
 
 const DATA = [
   {
     id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
     title: 'Struttura 1',
+    price: 34,
   },
   {
     id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
     title: 'Struttura 2',
+    price: 45
   },
   {
     id: '58694a0f-3da1-471f-bd96-145571e29d72',
     title: 'struttura 3',
+    price: 120
   },
   {
     id: '58694a0f-s3da1-471f-bd96-145571e29d72',
     title: 'Struttura 4',
+    price: 68
   },
   {
     id: '58694a0f-3dda1-471f-bd96-145571e29d72',
     title: 'Struttura 5',
+    price: 50
   },
   
 ];
 
-function Item({ title }) {
+function Item({ title,price }) {
   return (
     <View style={styles.item}>
       <Text style={styles.title}>{title}</Text>
+      <Text style={styles.price}>{price}€</Text>
+      <BookingButton text='Prenota'></BookingButton>
     </View>
   );
 }
@@ -40,7 +48,7 @@ export default function App() {
     <SafeAreaView style={styles.container}>
       <FlatList
         data={DATA}
-        renderItem={({ item }) => <Item title={item.title} />}
+        renderItem={({ item }) => <Item title={item.title} price={item.price} />}
         keyExtractor={item => item.id}
       />
     </SafeAreaView>
@@ -60,6 +68,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   title: {
-    fontSize: 32,
+    fontSize: 18,
+  },
+  price:{
+    paddingTop:8
   },
 });

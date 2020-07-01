@@ -15,7 +15,8 @@ export default class DateSelector extends Component {
       selectedStartDate: null,
       selectedEndDate: null,
       // status è il valore che rende visibile/invisibile il calendario
-      status: false
+      status: false,
+      status2:true,
     };
     this.onDateChange = this.onDateChange.bind(this);
 
@@ -24,11 +25,21 @@ export default class DateSelector extends Component {
   
   showHideCalendar=()=>{
       if(this.state.status==true){
-          this.setState({status:false})
+          this.setState({
+            status:false,
+            status2:true
+          })
       }
       else{
-          this.setState({status:true})
+          this.setState({
+            status:true,
+            statsu2:false
+          })
       }
+  }
+
+  showHideText=()=>{
+
   }
 
   onDateChange(date, type) {
@@ -94,12 +105,15 @@ export default class DateSelector extends Component {
             <ConfirmButton text="OK" onPress={this.showHideCalendar}></ConfirmButton>
             </View> : null
         }
-        <View style={{padding:6}}>
-          <Text style={{padding:6}}>Check-In:</Text>
-          <Text style={{padding:0}}>{startDate}</Text>
-          <Text style={{padding:6}}>Check-Out: </Text>
-          <Text style={{padding:0}}>{endDate}</Text>
-        </View>
+        
+        {
+        
+           this.state.status2 ?   <View style={{padding:6}}>
+                <Text style={{padding:6}}>Check-In:</Text>
+                <Text style={{padding:0}}>{startDate}</Text>
+                <Text style={{padding:6}}>Check-Out: </Text>
+                <Text style={{padding:0}}>{endDate}</Text>
+              </View>:null}
       </View>
     );
   }
