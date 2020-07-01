@@ -158,7 +158,7 @@ export default class CitySelector extends Component{
      container: {
        flexDirection:'column',
        backgroundColor: colors.green01,
-       width: 150
+       width: 108
      },
      pickerstyle:{
       height:30, 

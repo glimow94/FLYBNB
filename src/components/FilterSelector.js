@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button, Modal } from 'react-native';
 import { CheckBox } from 'react-native-elements'
-import CalendarPicker from 'react-native-calendar-picker';
 import colors from '../style/colors';
 import ConfirmButton from '../components/buttons/confirmButton';
 import FilterButton from '../components/buttons/Button1'
+
 //definisco la funzione 'changeDateFormat' per convertire una stringa di data 
 // da "Day Mon DayNumber Year" in "DD-MM-YYYY"
 
@@ -171,8 +171,13 @@ export default class DateSelector extends Component {
                     onPress={this.changeParkingCheck}
                     size='300'
                     width='150'
-                />                
+                />
+                            <View style={styles.confirmButton}>
+                <ConfirmButton text='OK' onPress={this.showHide} ></ConfirmButton>           
             </View>
+            </View>
+
+
         </View>
           : null
         }
@@ -189,13 +194,16 @@ const styles = StyleSheet.create({
     justifyContent:'left',
     width:300,
     height:300,
-    top:50,
+    top:1,
     right: 10,
     backgroundColor: colors.white,
     borderRadius:20
 
   },
-  checkBox:{
-      width:190
-  },
+ confirmButton:{
+    flexDirection:'row',
+    justifyContent:'center',
+    padding:15
+ }
+
 });

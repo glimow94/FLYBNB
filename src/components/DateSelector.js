@@ -20,7 +20,8 @@ export default class DateSelector extends Component {
     this.onDateChange = this.onDateChange.bind(this);
 
   }
-
+//callback per comunicare con gli altri pulsanti in modo da chiuderli una volta aperto questo
+  
   showHideCalendar=()=>{
       if(this.state.status==true){
           this.setState({status:false})
@@ -93,11 +94,11 @@ export default class DateSelector extends Component {
             <ConfirmButton text="OK" onPress={this.showHideCalendar}></ConfirmButton>
             </View> : null
         }
-        <View style={{padding:16}}>
-          <Text style={{padding:16}}>Check-In:</Text>
-          <Text style={{padding:10}}>{startDate}</Text>
-          <Text style={{padding:16}}>Check-Out: </Text>
-          <Text style={{padding:10}}>{endDate}</Text>
+        <View style={{padding:6}}>
+          <Text style={{padding:6}}>Check-In:</Text>
+          <Text style={{padding:0}}>{startDate}</Text>
+          <Text style={{padding:6}}>Check-Out: </Text>
+          <Text style={{padding:0}}>{endDate}</Text>
         </View>
       </View>
     );

@@ -5,6 +5,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import SearchBar from "../components/SearchBar";
 import DateSelector from "../components/DateSelector";
 import FilterSelector from "../components/FilterSelector";
+import StructuresList from "../components/StructuresList"
 
 import {
   Text,
@@ -40,7 +41,9 @@ export default function Home(){
               <CitySelector></CitySelector>
               <FilterSelector></FilterSelector>
             </View>
+            <StructuresList></StructuresList>
           </View>
+          
         </ScrollView>
         
       </View>
