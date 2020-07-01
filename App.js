@@ -6,6 +6,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoggedOut from "./src/screens/LoggedOut";
 import colors from "./src/style/colors/index"
 import Home from './src/screens/Home';
+import Structure from "./src/screens/Structure"
+
 
 
 
@@ -19,6 +21,7 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen name="Logout" component={LoggedOut} />
         <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="Structure" component={Structure} />
       </Stack.Navigator>
     </NavigationContainer>
   );

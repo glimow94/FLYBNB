@@ -2,7 +2,10 @@ import React from 'react';
 import { SafeAreaView, View, FlatList, StyleSheet, Text } from 'react-native';
 import Constants from 'expo-constants';
 import colors from "../style/colors/index";
-import BookingButton from "../components/buttons/bookingButton"
+import BookingButton from "../components/buttons/bookingButton";
+import { useNavigation } from '@react-navigation/native';
+import Structure from "../screens/Structure"
+
 
 const DATA = [
   {
@@ -32,18 +35,27 @@ const DATA = [
   },
   
 ];
+function Item({ title,price,id }) {
+    const navigation = useNavigation();
 
-function Item({ title,price }) {
   return (
     <View style={styles.item}>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.price}>{price}€</Text>
-      <BookingButton text='Prenota'></BookingButton>
+      <BookingButton text='Prenota' 
+        onPress={()=>navigation.navigate('Structure',{
+          /* parametri da passare alla schermata succesiva */
+          itemTitle: title,
+          itemPrice: price,
+          itemID: id
+        })}></BookingButton>
     </View>
   );
 }
 
-export default function App() {
+export default function StructuresList() {
+   
+
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
@@ -59,13 +71,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: 'relative',
-    
   },
   item: {
     backgroundColor: colors.white,
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
+    borderTopRightRadius: 20,
+    borderTopLeftRadius:20
   },
   title: {
     fontSize: 18,
