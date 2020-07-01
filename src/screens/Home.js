@@ -36,14 +36,18 @@ export default function Home(){
             <Text style={styles.titleStyle}>
               Come possiamo aiutarti?
             </Text>
+            <View  style={styles.structuresList}>
+            <StructuresList></StructuresList>
+            </View>
+
             <View style={styles.buttonGroup}>
               <DateSelector></DateSelector>
               <CitySelector></CitySelector>
               <FilterSelector></FilterSelector>
             </View>
-            <StructuresList></StructuresList>
+
           </View>
-          
+
         </ScrollView>
         
       </View>
@@ -76,11 +80,20 @@ const styles = StyleSheet.create({
       fontSize: 24,
       fontWeight: "700",
       paddingHorizontal: 20,
-      paddingTop:20
+      paddingTop:20,
+      position: 'relative',
+      bottom: 18
     },
     buttonGroup:{
       flexDirection: "row",
       resizeMode:'contain',
-      marginTop: 5
+      marginTop: 5,
+      position: 'absolute',
+      top: 20,
+      padding: 10
+    },
+    structuresList:{
+     
+      top: 120
     }
 });

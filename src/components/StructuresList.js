@@ -50,7 +50,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: Constants.statusBarHeight,
+    position: 'relative',
+    
   },
   item: {
     backgroundColor: colors.white,

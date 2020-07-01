@@ -165,6 +165,8 @@ export default class CitySelector extends Component{
       width: 140, 
       alignItems: 'center',
       backgroundColor: colors.white,
-      borderRadius:10
+      borderRadius:10,
+      borderWidth:2,
+      borderColor: colors.black
      }
    })

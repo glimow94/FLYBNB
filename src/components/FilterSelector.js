@@ -25,7 +25,7 @@ export default class DateSelector extends Component {
       wifiCheck:false,
       parkingCheck:false
     };
-
+    
 
   }
   setModalVisible(visible) {
@@ -188,6 +188,9 @@ export default class DateSelector extends Component {
 }
 
 const styles = StyleSheet.create({
+    wrapper:{
+  
+    },
   container: {
     flexDirection:'column',
     position:'absolute',
@@ -197,7 +200,10 @@ const styles = StyleSheet.create({
     top:1,
     right: 10,
     backgroundColor: colors.white,
-    borderRadius:20
+    borderRadius:20,
+    borderWidth:2,
+    borderColor: colors.black
+    
 
   },
  confirmButton:{
