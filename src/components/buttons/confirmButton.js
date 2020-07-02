@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
       display: "flex",
       borderRadius: 20,
       borderWidth: 2,
-      borderColor: colors.blue,
+      borderColor: colors.green01,
       marginBottom: 50,
       width:40,
     },
@@ -40,6 +40,6 @@ const styles = StyleSheet.create({
     /*   fontWeight:700, */
       width: "100%",
       textAlign: "center",
-      color: colors.blue,
+      color: colors.green01,
     }
   });

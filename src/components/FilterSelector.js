@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button, Modal } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { CheckBox } from 'react-native-elements'
 import colors from '../style/colors';
 import ConfirmButton from '../components/buttons/confirmButton';
@@ -12,25 +12,15 @@ export default class DateSelector extends Component {
   constructor(props) {
     super(props);
     this.state = {  
-
-      //set del valore di inizio e fine data
-      selectedStartDate: null,
-      selectedEndDate: null,
-      // status è il valore che rende visibile/invisibile il calendario
-      status: false,
-      modalVisible: false,
-      kitchenCheck: false,
-      fullBoardCheck: false,
-      airConditionerCheck:false,
-      wifiCheck:false,
-      parkingCheck:false
+     
     };
-    
 
   }
-  setModalVisible(visible) {
-    this.setState({modalVisible: visible});
+  updateState(data){
+      this.props.updateState(data)
   }
+  
+
   showHide=()=>{
       if(this.state.status==true){
           this.setState({status:false})
@@ -53,68 +43,7 @@ export default class DateSelector extends Component {
           })
       }
   }
-  changeFullBoardCheck=()=>{
-    if(this.state.fullBoardCheck==true){
-        this.setState({
-            fullBoardCheck:false
-        })
-    }
-    else{
-        this.setState({
-            fullBoardCheck:true
-        })
-    }
-  }
-
-  changeAirConditionerCheck=()=>{
-    if(this.state.airConditionerCheck==true){
-        this.setState({
-            airConditionerCheck:false
-        })
-    }
-    else{
-        this.setState({
-            airConditionerCheck:true
-        })
-    }
-  }
-  changeKitchenCheck=()=>{
-    if(this.state.kitchenCheck==true){
-        this.setState({
-            kitchenCheck:false
-        })
-    }
-    else{
-        this.setState({
-            kitchenCheck:true
-        })
-    }
-  }  
-  changeWifiCheck=()=>{
-    if(this.state.wifiCheck==true){
-        this.setState({
-            wifiCheck:false
-        })
-    }
-    else{
-        this.setState({
-            wifiCheck:true
-        })
-    }
-  }  
-  changeParkingCheck=()=>{
-    if(this.state.parkingCheck==true){
-        this.setState({
-            parkingCheck:false
-        })
-    }
-    else{
-        this.setState({
-            parkingCheck:true
-        })
-    }
-  }    
-  
+ 
 
   render() {
 
@@ -131,8 +60,10 @@ export default class DateSelector extends Component {
                     checkedIcon='dot-circle-o'
                     uncheckedIcon='circle-o'
                     title='Colazione inclusa'
-                    checked={this.state.fullBoardCheck}
-                    onPress={this.changeFullBoardCheck}
+                    checked={this.props.fullBoard}
+                    onPress={()=>{
+                        this.props.fullBoard==false ? this.updateState({fullBoard: true}) : this.updateState({fullBoard: false})
+                     }}
                     size='300'
                 />
                 <CheckBox
@@ -140,8 +71,10 @@ export default class DateSelector extends Component {
                     checkedIcon='dot-circle-o'
                     uncheckedIcon='circle-o'
                     title='Cucina'
-                    checked={this.state.kitchenCheck}
-                    onPress={this.changeKitchenCheck}
+                    checked={this.props.kitchen}
+                    onPress={()=>{
+                        this.props.kitchen==false ? this.updateState({kitchen: true}) : this.updateState({kitchen: false})
+                    }}
                     size='300'
                 />
                 <CheckBox
@@ -149,8 +82,10 @@ export default class DateSelector extends Component {
                     checkedIcon='dot-circle-o'
                     uncheckedIcon='circle-o'
                     title='Aria condizionata'
-                    checked={this.state.airConditionerCheck}
-                    onPress={this.changeAirConditionerCheck}
+                    checked={this.props.airConditioner}
+                    onPress={()=>{
+                        this.props.airConditioner==false ? this.updateState({airConditioner: true}) : this.updateState({airConditioner: false})
+                     }}
                     size='300'
                 />
                 <CheckBox
@@ -158,8 +93,10 @@ export default class DateSelector extends Component {
                     checkedIcon='dot-circle-o'
                     uncheckedIcon='circle-o'
                     title='Wi-Fi'
-                    checked={this.state.wifiCheck}
-                    onPress={this.changeWifiCheck}
+                    checked={this.props.wifi}
+                    onPress={()=>{
+                        this.props.wifi==false ? this.updateState({wifi: true}) : this.updateState({wifi: false})
+                     }}
                     size='300'
                 />
                 <CheckBox
@@ -167,12 +104,14 @@ export default class DateSelector extends Component {
                     checkedIcon='dot-circle-o'
                     uncheckedIcon='circle-o'
                     title='Parcheggio Auto'
-                    checked={this.state.parkingCheck}
-                    onPress={this.changeParkingCheck}
+                    checked={this.props.parking}
+                    onPress={()=>{
+                        this.props.parking==false ? this.updateState({parking: true}) : this.updateState({parking: false})
+                     }}
                     size='300'
                     width='150'
                 />
-                            <View style={styles.confirmButton}>
+            <View style={styles.confirmButton}>
                 <ConfirmButton text='OK' onPress={this.showHide} ></ConfirmButton>           
             </View>
             </View>

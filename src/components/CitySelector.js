@@ -6,6 +6,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import data from "../components/regioni_province_comuni";
 import comuni from '../components/comuni'
 import db from '../components/database_region_city'
+import ConfirmButton from './buttons/confirmButton';
 
 
 export default class CitySelector extends Component{
@@ -14,17 +15,22 @@ export default class CitySelector extends Component{
         this.state = {
           //set del valore di inizio e fine data
           region: 'Luogo',
-          province: 'Luogo',
+          province: 'seleziona provincia',
           province_code: 'Pa',
-          city: 'Luogo',
           city_code: '',
           // status è il valore che rende visibile/invisibile il menu delle citta
           status: false,
           status2: false,
         };
-
-    
-      }
+    }
+    updateCity(data){
+      this.props.updateCity(data)
+      this.setState({
+        status3: false,
+        status2:false,
+        status:false
+      })
+    }
     setRegion(item){
         this.setState({
             region: item.value
@@ -52,7 +58,7 @@ export default class CitySelector extends Component{
         
         return (
             <View style={styles.container}>
-              <CityButton text={this.state.city.substring(0,9)} onPress={this.showHide}></CityButton>
+              <CityButton text={this.props.city.substring(0,9)} onPress={this.showHide}></CityButton>
             { this.state.status ?
               <View>
                 <Picker mode="dropdown" 
@@ -113,11 +119,8 @@ export default class CitySelector extends Component{
                   <Picker 
                     mode="dropdown" 
                     style={styles.pickerstyle}
-                    onValueChange={itemValue => this.setState({
-                      city: itemValue,
-                      status3: false,
-                      status2:false,
-                      status:false
+                    onValueChange={itemValue => this.updateCity({
+                      city:itemValue
                     })}
                   >
                   <Picker.Item label={this.state.city} value ={this.state.city_code}></Picker.Item>

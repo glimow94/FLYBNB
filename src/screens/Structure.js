@@ -4,10 +4,10 @@ import colors from '../style/colors';
 
 
 export default function Structure({ route}){
-    const { itemTitle } = route.params;
+    const { itemID } = route.params;
     return (
       <View style={styles.container}>
-        <Text>{JSON.stringify(itemTitle)}</Text>
+        <Text>{JSON.stringify(itemID)}</Text>
       </View>
     )
 }

@@ -21,37 +21,77 @@ import CitySelector from '../components/CitySelector';
 
 
 
-export default function Home(){
-    return (
-      <View style={styles.container}>
-        <View style={styles.searchHeader}>
-          <Image
-            style={styles.logo}
-            source={require('../img/logo_green.png')}
-          />
-          <SearchBar></SearchBar>
-        </View>
-        <ScrollView scrollEventThrottle={16}>
-          <View style={styles.scrollStyle}>
-            <Text style={styles.titleStyle}>
-              Come possiamo aiutarti?
-            </Text>
-            <View  style={styles.structuresList}>
-            <StructuresList></StructuresList>
-            </View>
+export default class Home extends Component{
+  constructor(props){
+    super(props);
+    this.state={
+      kitchen: false,
+      fullBoard: false,
+      airConditioner:false,
+      wifi:false,
+      parking:false,
+      city:'Luogo'
+    }
+  }
 
-            <View style={styles.buttonGroup}>
-              <DateSelector></DateSelector>
-              <CitySelector></CitySelector>
-              <FilterSelector></FilterSelector>
-            </View>
+  updateState(filterStatus){
+    this.setState(filterStatus)
+  } 
+  updateCity(cityStatus){
+    this.setState(cityStatus)
+  }
 
+  render()
+    {
+      return (
+        <View style={styles.container}>
+          <View style={styles.searchHeader}>
+            <Image
+              style={styles.logo}
+              source={require('../img/logo_green.png')}
+            />
+            <SearchBar></SearchBar>
           </View>
+          <ScrollView scrollEventThrottle={16}>
+            <View style={styles.scrollStyle}>
+              <Text style={styles.titleStyle}>
+                Come possiamo aiutarti? {this.state.city}
+              </Text>
+              <View  style={styles.structuresList}>
+              <StructuresList
+                  kitchen={this.state.kitchen}
+                  fullBoard={this.state.fullBoard}
+                  airConditioner={this.state.airConditioner}
+                  wifi={this.state.wifi}
+                  parking={this.state.parking}
+                  city={this.state.city}                
+              ></StructuresList>
+              </View>
 
-        </ScrollView>
-        
-      </View>
+              <View style={styles.buttonGroup}>
+                <DateSelector></DateSelector>
+                <CitySelector
+                  updateCity={this.updateCity.bind(this)}
+                  city={this.state.city}                >
+                </CitySelector>
+                <FilterSelector 
+                  updateState={this.updateState.bind(this)} 
+                  kitchen={this.state.kitchen}
+                  fullBoard={this.state.fullBoard}
+                  airConditioner={this.state.airConditioner}
+                  wifi={this.state.wifi}
+                  parking={this.state.parking}
+                >
+                </FilterSelector>
+              </View>
+
+            </View>
+
+          </ScrollView>
+          
+        </View>
     )
+  }
 }
 
 const styles = StyleSheet.create({
