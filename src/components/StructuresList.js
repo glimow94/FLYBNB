@@ -90,11 +90,11 @@ function Item({ title,price,id,place,kitchen,fullBoard,airConditioner,wifi,parki
             itemPrice: price,
             itemID: id,
             ItemPlace: place,
-            kitchen: kitchen,
-            fullBoard: fullBoard,
-            airConditioner: airConditioner,
-            wifi: wifi,
-            parking: parking,
+            itemKitchen: kitchen,
+            itemFullBoard: fullBoard,
+            itemAirConditioner: airConditioner,
+            itemWifi: wifi,
+            itemParking: parking,
         })}></BookingButton>
     </View>
   );
@@ -167,8 +167,11 @@ export default class StructuresList extends Component {
             { item }) => <Item 
                             title={item.title} 
                             price={item.price} 
-                            priceString={item.price.toString()}
                             id={item.id} 
+                            kitchen={item.kitchen}
+                            fullBoard={item.fullBoard}
+                            airConditioner={item.airConditioner}
+                            wifi={item.wifi}
                             place={item.place} 
                             parking={item.parking} 
                             price={item.price}

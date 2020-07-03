@@ -5,11 +5,32 @@ import DateSelector from '../components/DateSelector'
 
 
 export default function Structure({ route}){
-    const { itemID } = route.params;
+    const { 
+      itemTitle,
+      itemPrice,
+      itemID,
+      ItemPlace,
+      itemKitchen,
+      itemFullBoard,
+      itemAirConditioner,
+      itemWifi,
+      itemParking } = route.params;
     return (
       <View style={styles.container}>
-        <Text>{JSON.stringify(itemID)}</Text>
+        <View style={styles.structureInfo}>
+          <Text>{itemTitle}</Text>
+          <Text>{itemPrice}</Text>
+          <Text>{ItemPlace}</Text>
+          <View> 
+            {itemKitchen ? <Text>Cucina</Text> : null}
+            {itemFullBoard == true ? <Text>Pensione completa</Text> : null }
+            {itemAirConditioner == true ? <Text>Aria condizionata</Text> : null}
+            {itemWifi == true ? <Text>Wi-Fi</Text> : null }
+            {itemParking==true ? <Text>Parcheggio auto</Text> : null }      
+          </View>   
+        </View>
         <DateSelector></DateSelector>
+
       </View>
     )
 }
