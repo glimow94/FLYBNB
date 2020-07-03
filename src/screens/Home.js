@@ -18,6 +18,7 @@ import {
   SafeAreaView
 } from 'react-native';
 import CitySelector from '../components/CitySelector';
+import PriceSelector from '../components/PriceSelector';
 
 
 
@@ -30,7 +31,8 @@ export default class Home extends Component{
       airConditioner:false,
       wifi:false,
       parking:false,
-      city:'Luogo'
+      city:'Luogo',
+      price: 'Prezzo'
     }
   }
 
@@ -39,6 +41,9 @@ export default class Home extends Component{
   } 
   updateCity(cityStatus){
     this.setState(cityStatus)
+  }
+  updatePrice(priceStatus){
+    this.setState(priceStatus)
   }
 
   render()
@@ -55,7 +60,7 @@ export default class Home extends Component{
           <ScrollView scrollEventThrottle={16}>
             <View style={styles.scrollStyle}>
               <Text style={styles.titleStyle}>
-                Come possiamo aiutarti? {this.state.city}
+                Come possiamo aiutarti?
               </Text>
               <View  style={styles.structuresList}>
               <StructuresList
@@ -64,16 +69,21 @@ export default class Home extends Component{
                   airConditioner={this.state.airConditioner}
                   wifi={this.state.wifi}
                   parking={this.state.parking}
-                  city={this.state.city}                
+                  city={this.state.city}    
+                  price={this.state.price}
+            
               ></StructuresList>
               </View>
 
               <View style={styles.buttonGroup}>
-                <DateSelector></DateSelector>
                 <CitySelector
                   updateCity={this.updateCity.bind(this)}
                   city={this.state.city}                >
                 </CitySelector>
+                <PriceSelector
+                updatePrice={this.updatePrice.bind(this)}
+                  price={this.state.price}
+                ></PriceSelector>
                 <FilterSelector 
                   updateState={this.updateState.bind(this)} 
                   kitchen={this.state.kitchen}
@@ -109,7 +119,6 @@ const styles = StyleSheet.create({
       height:90,
       marginTop: 0,
       marginBottom: 0,
-      resizeMode:'contain'
     },
     scrollStyle:{
       flex: 1, 
@@ -126,7 +135,6 @@ const styles = StyleSheet.create({
     },
     buttonGroup:{
       flexDirection: "row",
-      resizeMode:'contain',
       marginTop: 5,
       position: 'absolute',
       top: 20,

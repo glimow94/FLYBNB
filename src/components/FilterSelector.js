@@ -5,8 +5,10 @@ import colors from '../style/colors';
 import ConfirmButton from '../components/buttons/confirmButton';
 import FilterButton from '../components/buttons/Button1'
 
-//definisco la funzione 'changeDateFormat' per convertire una stringa di data 
-// da "Day Mon DayNumber Year" in "DD-MM-YYYY"
+//Questo componente è costituito da una serie di CheckBox che permettono d selezionare i filtri di ricerca relativi
+//ai servizi.
+//Le variabili booleane che si attivano (diventando TRUE in caso di attivazione del filtro) sono salvate
+//nella classe madre Home, in modo tale da poter essere passate al componente "StructureList" che filtrerà i risultati
 
 export default class DateSelector extends Component {
   constructor(props) {
@@ -133,7 +135,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection:'column',
     position:'absolute',
-    justifyContent:'left',
     width:300,
     height:300,
     top:1,

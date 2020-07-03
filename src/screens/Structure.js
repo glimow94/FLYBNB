@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import colors from '../style/colors';
+import DateSelector from '../components/DateSelector'
 
 
 export default function Structure({ route}){
@@ -8,6 +9,7 @@ export default function Structure({ route}){
     return (
       <View style={styles.container}>
         <Text>{JSON.stringify(itemID)}</Text>
+        <DateSelector></DateSelector>
       </View>
     )
 }

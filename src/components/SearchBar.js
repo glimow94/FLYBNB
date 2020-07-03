@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white,
         borderBottomWidth: 1,
         borderBottomColor: colors.white,
-        resizeMode:'contain'
         
     },
     iconstyle: {
@@ -61,7 +60,6 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 0 },
         shadowColor: "black",
         shadowOpacity: 0.2,
-        resizeMode:'contain'
     },
 
   });

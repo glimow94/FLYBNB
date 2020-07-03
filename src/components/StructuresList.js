@@ -73,26 +73,28 @@ const DATA = [
 
 
 function Item({ title,price,id,place,kitchen,fullBoard,airConditioner,wifi,parking }) {
-    const navigation = useNavigation();
+  
+  const navigation = useNavigation();
 
   return (
     
     <View style={styles.item}>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.place}>{place}</Text>
+
       <Text style={styles.services}>Servizi inclusi :</Text>
-      <BookingButton text='Prenota' 
+      <BookingButton text={parseInt(price)+'€ a Notte'} 
         onPress={()=>navigation.navigate('Structure',{
-          /* parametri da passare alla schermata succesiva */
-          itemTitle: title,
-          itemPrice: price,
-          itemID: id,
-          ItemPlace: place,
-          kitchen: kitchen,
-          fullBoard: fullBoard,
-          airConditioner: airConditioner,
-          wifi: wifi,
-          parking: parking
+            /* parametri da passare alla schermata successiva */
+            itemTitle: title,
+            itemPrice: price,
+            itemID: id,
+            ItemPlace: place,
+            kitchen: kitchen,
+            fullBoard: fullBoard,
+            airConditioner: airConditioner,
+            wifi: wifi,
+            parking: parking,
         })}></BookingButton>
     </View>
   );
@@ -115,18 +117,44 @@ export default class StructuresList extends Component {
     }
     else return DATA
   }
-  dataFilter(DATA){
-    var newData = [];
+  dataServicesFilter(DATA){
+    var newData = []
+    var kitchen=this.props.kitchen 
+    var airConditioner = this.props.airConditioner 
+    var parking = this.props.parking 
+    var fullBoard = this.props.fullBoard
+    var wifi = this.props.wifi 
 
-    if(this.props.wifi==true){
-        DATA.forEach(function (item){
-        if(item.wifi==true)
+
+    if(wifi==true || kitchen == true || airConditioner == true || fullBoard == true || parking == true ){ 
+      DATA.forEach(function (item){
+        //controllo che vengano rispettati i filtri dei 'servizi' relativi alla camera
+        if( !(wifi==true&&item.wifi==false) && !(kitchen==true&&item.kitchen==false) 
+            && !(airConditioner==true&&item.airConditioner==false) && !(parking==true&&item.parking==false)
+            && !(fullBoard==true&&item.fullBoard==false && (item.price < selectedPrice)) ){
+                newData.push(item)
+        }
+      })
+      return newData
+    }
+    return DATA
+    
+  }
+
+  dataPriceFilter(DATA){
+    var newData = []
+    var selectedPrice = this.props.price
+
+    if(selectedPrice != 'Prezzo'){
+      DATA.forEach(function (item){
+        if(item.price <= parseInt(selectedPrice)){
           newData.push(item)
+        }
       })
       return newData
     }
     else return DATA
-    
+
   }
 
   render(){
@@ -134,14 +162,16 @@ export default class StructuresList extends Component {
       
       <SafeAreaView style={styles.container}>
         <FlatList
-          data={this.dataCityFilter(DATA)}
+          data={this.dataServicesFilter(this.dataCityFilter(this.dataPriceFilter(DATA)))}
           renderItem={(
             { item }) => <Item 
                             title={item.title} 
                             price={item.price} 
+                            priceString={item.price.toString()}
                             id={item.id} 
                             place={item.place} 
                             parking={item.parking} 
+                            price={item.price}
                           />}
           keyExtractor={item => item.id}
         />
@@ -168,6 +198,7 @@ const styles = StyleSheet.create({
     paddingBottom: 8
   },
   price:{
-    paddingTop:8
+    paddingTop:8,
+    paddingBottom:8
   },
 });

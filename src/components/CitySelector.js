@@ -57,18 +57,21 @@ export default class CitySelector extends Component{
     render(){
         
         return (
-            <View style={styles.container}>
+            <View>
               <CityButton text={this.props.city.substring(0,9)} onPress={this.showHide}></CityButton>
+
+              <View style={styles.container}>
             { this.state.status ?
               <View>
                 <Picker mode="dropdown" 
                     style={styles.pickerstyle}                  
                     onValueChange={itemValue => this.setState({
-                    region: itemValue,
-                    province: 'seleziona provincia',
-                    city:'seleziona comune',
-                    status2: true
-                    })}
+                                                  region: itemValue,
+                                                  province: 'seleziona provincia',
+                                                  city:'seleziona comune',
+                                                  status2: true
+                                                })
+                      }     
 
                 >
                   <Picker.Item label={this.state.region} value ={this.state.region}></Picker.Item>
@@ -153,6 +156,7 @@ export default class CitySelector extends Component{
            </View> : null
             }
             </View>
+            </View>
          )
       }
    }
@@ -160,16 +164,9 @@ export default class CitySelector extends Component{
    const styles = StyleSheet.create({
      container: {
        flexDirection:'column',
-       backgroundColor: colors.green01,
        width: 108
      },
      pickerstyle:{
-      height:30, 
-      width: 140, 
-      alignItems: 'center',
-      backgroundColor: colors.white,
-      borderRadius:10,
-      borderWidth:2,
-      borderColor: colors.black
+      
      }
    })
