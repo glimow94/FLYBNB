@@ -24,16 +24,20 @@ export default class DateSelector extends Component {
   
 
   showHide=()=>{
-      if(this.state.status==true){
-          this.setState({status:false})
+      if(this.props.status3==true){
+          this.updateState({status3:false})
       }
       else{
-          this.setState({status:true})
+          this.updateState({
+              status3:true,
+              status1:false,
+              status2:false
+            })
       }
   }
 
 
-  changeCheck=()=>{
+/*   changeCheck=()=>{
       if(this.state.checked==true){
           this.setState({
               checked:false
@@ -44,7 +48,7 @@ export default class DateSelector extends Component {
               checked:true
           })
       }
-  }
+  } */
  
 
   render() {
@@ -54,7 +58,7 @@ export default class DateSelector extends Component {
         <FilterButton text="Servizi" onPress={this.showHide}></FilterButton>
         
         {   
-          this.state.status ? 
+          this.props.status3 ? 
           <View style={styles.wrapper}>
             <View style={styles.container}>
                 <CheckBox
@@ -66,7 +70,7 @@ export default class DateSelector extends Component {
                     onPress={()=>{
                         this.props.fullBoard==false ? this.updateState({fullBoard: true}) : this.updateState({fullBoard: false})
                      }}
-                    size='300'
+                    
                 />
                 <CheckBox
                     style={styles.checkBox}
@@ -77,7 +81,7 @@ export default class DateSelector extends Component {
                     onPress={()=>{
                         this.props.kitchen==false ? this.updateState({kitchen: true}) : this.updateState({kitchen: false})
                     }}
-                    size='300'
+                    
                 />
                 <CheckBox
                     style={styles.checkBox}
@@ -88,7 +92,7 @@ export default class DateSelector extends Component {
                     onPress={()=>{
                         this.props.airConditioner==false ? this.updateState({airConditioner: true}) : this.updateState({airConditioner: false})
                      }}
-                    size='300'
+                    
                 />
                 <CheckBox
                     containerStyle={styles.checkBox}
@@ -99,7 +103,7 @@ export default class DateSelector extends Component {
                     onPress={()=>{
                         this.props.wifi==false ? this.updateState({wifi: true}) : this.updateState({wifi: false})
                      }}
-                    size='300'
+                   
                 />
                 <CheckBox
                     style={styles.checkBox}
@@ -110,8 +114,6 @@ export default class DateSelector extends Component {
                     onPress={()=>{
                         this.props.parking==false ? this.updateState({parking: true}) : this.updateState({parking: false})
                      }}
-                    size='300'
-                    width='150'
                 />
             <View style={styles.confirmButton}>
                 <ConfirmButton text='OK' onPress={this.showHide} ></ConfirmButton>           
@@ -130,19 +132,23 @@ export default class DateSelector extends Component {
 
 const styles = StyleSheet.create({
     wrapper:{
-  
+        flex:1,
+        marginBottom: 325,
+        marginTop: 20
     },
   container: {
     flexDirection:'column',
     position:'absolute',
     width:300,
-    height:300,
+    height:340,
     top:1,
     right: 10,
     backgroundColor: colors.white,
     borderRadius:20,
     borderWidth:2,
-    borderColor: colors.black
+    borderColor: colors.black,
+    shadowColor: colors.black,
+    
     
 
   },

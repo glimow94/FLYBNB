@@ -131,7 +131,7 @@ export default class StructuresList extends Component {
         //controllo che vengano rispettati i filtri dei 'servizi' relativi alla camera
         if( !(wifi==true&&item.wifi==false) && !(kitchen==true&&item.kitchen==false) 
             && !(airConditioner==true&&item.airConditioner==false) && !(parking==true&&item.parking==false)
-            && !(fullBoard==true&&item.fullBoard==false && (item.price < selectedPrice)) ){
+            && !(fullBoard==true&&item.fullBoard==false) ){
                 newData.push(item)
         }
       })
@@ -160,7 +160,7 @@ export default class StructuresList extends Component {
   render(){
     return (
       
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <FlatList
           data={this.dataServicesFilter(this.dataCityFilter(this.dataPriceFilter(DATA)))}
           renderItem={(
@@ -177,16 +177,29 @@ export default class StructuresList extends Component {
                             price={item.price}
                           />}
           keyExtractor={item => item.id}
+          contentContainerStyle={{paddingTop:40}}
+          ListFooterComponent={
+            <View styles={styles.footer}>
+              <Text styles={styles.footerText}>*la disponibilità può variare in base alle date di permanenza</Text>
+            </View>
+          }
         />
-      </SafeAreaView>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    position: 'relative',
+    height:'80%',
+    marginBottom: '20%',
+    borderTopColor: colors.white,
+    borderTopWidth: 2,
+    flexGrow:1,
+    justifyContent:'center',
+    borderBottomWidth:2,
+    borderBottomColor:colors.white
+    
   },
   item: {
     backgroundColor: colors.white,
@@ -194,7 +207,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
     borderTopRightRadius: 20,
-    borderTopLeftRadius:20
+    borderTopLeftRadius:20,
   },
   title: {
     fontSize: 18,
@@ -204,4 +217,9 @@ const styles = StyleSheet.create({
     paddingTop:8,
     paddingBottom:8
   },
+  footer:{
+    marginBottom:10
+  },
+  footerText:{
+  }
 });

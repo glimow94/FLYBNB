@@ -5,7 +5,8 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import SearchBar from "../components/SearchBar";
 import DateSelector from "../components/DateSelector";
 import FilterSelector from "../components/FilterSelector";
-import StructuresList from "../components/StructuresList"
+import StructuresList from "../components/StructuresList";
+import StructureLIstProva from "../components/provaStruttureLista"
 
 import {
   Text,
@@ -32,24 +33,24 @@ export default class Home extends Component{
       wifi:false,
       parking:false,
       city:'Luogo',
-      price: 'Prezzo'
+      price: 'Prezzo',
+      //status per gestire l'apertura e chiusura dei componenti che filtrano i risultati delle strutture
+      status1 : false,
+      status2: false,
+      status3:false
     }
   }
-
+  
   updateState(filterStatus){
     this.setState(filterStatus)
   } 
-  updateCity(cityStatus){
-    this.setState(cityStatus)
-  }
-  updatePrice(priceStatus){
-    this.setState(priceStatus)
-  }
+  
 
   render()
     {
       return (
         <View style={styles.container}>
+          
           <View style={styles.searchHeader}>
             <Image
               style={styles.logo}
@@ -57,32 +58,25 @@ export default class Home extends Component{
             />
             <SearchBar></SearchBar>
           </View>
-          <ScrollView scrollEventThrottle={16}>
-            <View style={styles.scrollStyle}>
-              <Text style={styles.titleStyle}>
-                Come possiamo aiutarti?
-              </Text>
-              <View  style={styles.structuresList}>
-              <StructuresList
-                  kitchen={this.state.kitchen}
-                  fullBoard={this.state.fullBoard}
-                  airConditioner={this.state.airConditioner}
-                  wifi={this.state.wifi}
-                  parking={this.state.parking}
-                  city={this.state.city}    
-                  price={this.state.price}
-            
-              ></StructuresList>
-              </View>
 
-              <View style={styles.buttonGroup}>
+          <Text style={styles.titleStyle}>
+                Come possiamo aiutarti?
+          </Text>
+
+          <View style={styles.buttonGroup}>
                 <CitySelector
-                  updateCity={this.updateCity.bind(this)}
-                  city={this.state.city}                >
-                </CitySelector>
+                  updateState={this.updateState.bind(this)}
+                  city={this.state.city}
+                  status1={this.state.status1}
+                  status2={this.state.status2}
+                  status3={this.state.status3}
+                ></CitySelector>
                 <PriceSelector
-                updatePrice={this.updatePrice.bind(this)}
+                  updateState={this.updateState.bind(this)}
                   price={this.state.price}
+                  status1={this.state.status1}
+                  status2={this.state.status2}
+                  status3={this.state.status3}
                 ></PriceSelector>
                 <FilterSelector 
                   updateState={this.updateState.bind(this)} 
@@ -91,14 +85,27 @@ export default class Home extends Component{
                   airConditioner={this.state.airConditioner}
                   wifi={this.state.wifi}
                   parking={this.state.parking}
-                >
-                </FilterSelector>
-              </View>
+                  status1={this.state.status1}
+                  status2={this.state.status2}
+                  status3={this.state.status3}
+                ></FilterSelector>
+          </View>
 
-            </View>
+          <View style={styles.structuresList}>
+            <StructuresList
+              kitchen={this.state.kitchen}
+              fullBoard={this.state.fullBoard}
+              airConditioner={this.state.airConditioner}
+              wifi={this.state.wifi}
+              parking={this.state.parking}
+              city={this.state.city}    
+              price={this.state.price}
+            ></StructuresList>
+          </View>
+          <View style={styles.footer}>
+            <Text>Footer dell'applicazione</Text>
+          </View>
 
-          </ScrollView>
-          
         </View>
     )
   }
@@ -108,6 +115,7 @@ const styles = StyleSheet.create({
     container:{
       flex:1,
       backgroundColor: colors.green01,
+      height:'100%'
     },
     searchHeader:{
       flexDirection:'row',
@@ -134,14 +142,22 @@ const styles = StyleSheet.create({
       bottom: 18
     },
     buttonGroup:{
+      width:'100%',
       flexDirection: "row",
-      marginTop: 5,
-      position: 'absolute',
-      top: 20,
+      justifyContent:'center',
+      alignContent:'center',
       padding: 10
     },
     structuresList:{
+      flex:1,
+      top:10,
+      width: '100%',
+      alignContent:'center'
+
+    },
+    footer:{
+      backgroundColor: colors.black,
+      height:'0%'
      
-      top: 120
     }
 });

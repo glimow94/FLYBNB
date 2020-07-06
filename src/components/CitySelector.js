@@ -19,12 +19,12 @@ export default class CitySelector extends Component{
           province_code: 'Pa',
           city_code: '',
           // status è il valore che rende visibile/invisibile il menu delle citta
-          status: false,
+          status3: false,
           status2: false,
         };
     }
     updateCity(data){
-      this.props.updateCity(data)
+      this.props.updateState(data)
       this.setState({
         status3: false,
         status2:false,
@@ -37,13 +37,12 @@ export default class CitySelector extends Component{
         })
         this.showProvinces
     }
-
     showHide=()=>{
-        if(this.state.status==true){
-            this.setState({status:false})
+        if(this.props.status1==true){
+            this.props.updateState({status1:false})
         }
         else{
-            this.setState({status:true})
+            this.props.updateState({status1:true,status2:false,status3:false})
         }
     }
     showProvinces=()=>{
@@ -61,8 +60,10 @@ export default class CitySelector extends Component{
               <CityButton text={this.props.city.substring(0,9)} onPress={this.showHide}></CityButton>
 
               <View style={styles.container}>
-            { this.state.status ?
+            { this.props.status1 ?
               <View>
+               <Button title="Annulla" style={styles.cancelButton}></Button>
+
                 <Picker mode="dropdown" 
                     style={styles.pickerstyle}                  
                     onValueChange={itemValue => this.setState({
@@ -164,9 +165,13 @@ export default class CitySelector extends Component{
    const styles = StyleSheet.create({
      container: {
        flexDirection:'column',
-       width: 108
+       width: 108,
+       marginTop: 20
      },
      pickerstyle:{
       
+     },
+     cancelButton:{
+       width:'50'
      }
    })

@@ -11,24 +11,24 @@ export default class PriceSelector extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // status è il valore che rende visibile/invisibile il selettore del prezzo
-      status: false,
       buttonText: 'Prezzo',
     };
   }
 //callback per comunicare con gli altri pulsanti in modo da chiuderli una volta aperto questo
     updatePrice(data){
-        this.props.updatePrice(data)
+        this.props.updateState(data)
     }
     showHide=()=>{
-        if(this.state.status==true){
-            this.setState({
-                status:false
+        if(this.props.status2==true){
+            this.props.updateState({
+              status2:false
             })
         }
         else{
-            this.setState({
-                status:true,
+            this.props.updateState({
+              status2:true,
+              status1:false,
+              status3:false
             })
         }
     }
@@ -38,8 +38,8 @@ export default class PriceSelector extends Component {
     }
     showHideKey=(event)=>{
         if (event.key==='Enter'){
-            this.setState({
-                status:false
+            this.props.updateState({
+                status2:false,
             })
         }
     }
@@ -70,12 +70,11 @@ export default class PriceSelector extends Component {
         <PriceButton text={this.state.buttonText} onPress={this.showHide}></PriceButton>
         
         {   
-          this.state.status ? 
+          this.props.status2 ? 
             <View >
                 
                 
                 <TextInput  
-                    defaultValue={this.props.price}
                     placeholder='Prezzo/notte' 
                     underlineColorAndroid='transparent'  
                     style={styles.textInputStyle}  
@@ -94,29 +93,7 @@ export default class PriceSelector extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection:'row',
-    position:'absolute',
-    width:200,
-    height:200,
-    top:36,
-    backgroundColor: colors.white,
-    borderRadius:20,
-    borderWidth:2,
-    borderColor: colors.black
-
-  },
-  title:{
-    fontSize: 12,
-    fontWeight: "300",
-    paddingHorizontal: 8,
-    paddingTop:12,
-    position: 'relative',
-    bottom: 4
-  },
-  confirmButton:{
-    padding:5
- },
+ 
  textInputStyle: {  
     textAlign: 'center', 
     position:'relative',
@@ -127,6 +104,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,  
     borderWidth: 2,  
     borderColor: colors.black,  
-    marginBottom: 10  
+    marginTop: 20  
 }  
 });
