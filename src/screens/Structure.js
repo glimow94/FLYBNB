@@ -22,7 +22,6 @@ export default function Structure({ route}){
 
           <Text style={styles.title}>{itemTitle}</Text>
           <View style={styles.dateSelect}>
-            <DateSelector></DateSelector>
           </View>
           <View style={styles.mainInfo}>
             <View style={{flexDirection:'row'}}>
@@ -42,8 +41,9 @@ export default function Structure({ route}){
             {itemParking==true ? <Text style={styles.servicesText}>Parcheggio auto</Text> : null }      
           </View>   
         </View>
-        
-        <BookingButton text="PRENOTA" backgroundColor={colors.green01}></BookingButton>
+        <DateSelector></DateSelector>
+
+        <BookingButton text="PRENOTA"></BookingButton>
 
       </View>
     )
@@ -59,14 +59,14 @@ const styles = StyleSheet.create({
         marginBottom:50,
         borderRadius: 20,
         borderWidth: 2,
-        borderColor: colors.white,
+        borderColor: colors.black,
         padding:20
     },
     structureServicesBox:{
       marginBottom:50,
       borderRadius: 20,
       borderWidth: 2,
-      borderColor: colors.white,
+      borderColor: colors.black,
       padding:20
     },
     servicesText:{
@@ -93,6 +93,9 @@ const styles = StyleSheet.create({
       fontSize: 16
     },
     dateSelect:{
-     width:'100%'
+     
+    },
+    BookingButton:{
+      
     }
 });

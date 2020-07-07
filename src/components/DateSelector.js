@@ -110,9 +110,9 @@ export default class DateSelector extends Component {
         
            this.state.status2 ?   <View style={styles.checkInOutText}>
                 <Text style={{padding:6}}>Check-In:</Text>
-                <Text style={{padding:0}}>{startDate}</Text>
+                <Text style={{padding:0, color:'orangered', fontSize:16}}>{startDate}</Text>
                 <Text style={{padding:6}}>Check-Out: </Text>
-                <Text style={{padding:0}}>{endDate}</Text>
+                <Text style={{padding:0, color: 'orangered', fontSize:16}}>{endDate}</Text>
               </View>:null}
       </View>
     );
@@ -127,7 +127,10 @@ const styles = StyleSheet.create({
   },
   checkInOutText:{
     position: 'relative',
-    padding:6,
+    flexDirection:'row',
+    alignContent:'center',
+    alignItems:'center',
+    padding:5,
     
   }
 });

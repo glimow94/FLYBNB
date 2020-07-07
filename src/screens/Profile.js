@@ -4,7 +4,8 @@ import {View, Text, StyleSheet} from 'react-native';
 export default function Profile(){
     return (
       <View style={styles.container}>
-        <Text>Profile</Text>
+        <Text>Dati Personali</Text>
+        <Text>Le mie strutture:</Text>
       </View>
     )
 }

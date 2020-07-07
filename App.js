@@ -1,28 +1,57 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View  } from 'react-native';
+import { Icon } from 'react-native-elements';
+//navigazione
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import { createDrawerNavigator } from '@react-navigation/drawer';
+//screens e components
 import LoggedOut from "./src/screens/LoggedOut";
 import colors from "./src/style/colors/index"
 import Home from './src/screens/Home';
-import Structure from "./src/screens/Structure"
+import Structure from "./src/screens/Structure";
+import Profile from "./src/screens/Profile"
 
 
 
 
-const Stack = createStackNavigator();
+
+const HomeStack = createStackNavigator();
+const Drawer = createDrawerNavigator();
+
+const HomeStackScreen = ({navigation}) =>(
+      <HomeStack.Navigator>
+        <HomeStack.Screen name="Logout" component={LoggedOut} />
+        <HomeStack.Screen name="Home" component={Home} options={
+          {
+            name:'rowing',
+            headerLeft:()=>(
+              <Icon
+              
+                name='list'
+                type='font-awesome'
+                color='#f50'
+                onPress={() => navigation.openDrawer()}
+                color={colors.black} />
+            )
+          }
+        } />
+        <HomeStack.Screen name="Structure" component={Structure} />
+      </HomeStack.Navigator>
+);
+
+
 
 
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Logout" component={LoggedOut} />
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="Structure" component={Structure} />
-      </Stack.Navigator>
+      <Drawer.Navigator initialRouteName="Home">
+        <Drawer.Screen name="Logout" component={LoggedOut}/>
+        <Drawer.Screen name="Home" component={HomeStackScreen}/>
+        <Drawer.Screen name='Profilo' component={Profile}/>
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 }
@@ -34,4 +63,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  menuicon:{
+    margin: 15
+  }
 });

@@ -7,6 +7,7 @@ import DateSelector from "../components/DateSelector";
 import FilterSelector from "../components/FilterSelector";
 import StructuresList from "../components/StructuresList";
 import StructureLIstProva from "../components/provaStruttureLista"
+import StructureListDB from "../components/StructureListDB"
 
 import {
   Text,
@@ -37,7 +38,7 @@ export default class Home extends Component{
       //status per gestire l'apertura e chiusura dei componenti che filtrano i risultati delle strutture
       status1 : false,
       status2: false,
-      status3:false
+      status3:false,
     }
   }
   
@@ -92,7 +93,16 @@ export default class Home extends Component{
           </View>
 
           <View style={styles.structuresList}>
-            <StructuresList
+            {/* <StructureListDB
+               kitchen={this.state.kitchen}
+               fullBoard={this.state.fullBoard}
+               airConditioner={this.state.airConditioner}
+               wifi={this.state.wifi}
+               parking={this.state.parking}
+               city={this.state.city}    
+               price={this.state.price}
+            ></StructureListDB> */}
+            <StructureList
               kitchen={this.state.kitchen}
               fullBoard={this.state.fullBoard}
               airConditioner={this.state.airConditioner}
@@ -100,7 +110,7 @@ export default class Home extends Component{
               parking={this.state.parking}
               city={this.state.city}    
               price={this.state.price}
-            ></StructuresList>
+            ></StructureList>
           </View>
           <View style={styles.footer}>
             <Text>Footer dell'applicazione</Text>
