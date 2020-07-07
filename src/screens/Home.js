@@ -102,7 +102,7 @@ export default class Home extends Component{
                city={this.state.city}    
                price={this.state.price}
             ></StructureListDB> */}
-            <StructureList
+            <StructuresList
               kitchen={this.state.kitchen}
               fullBoard={this.state.fullBoard}
               airConditioner={this.state.airConditioner}
@@ -110,7 +110,7 @@ export default class Home extends Component{
               parking={this.state.parking}
               city={this.state.city}    
               price={this.state.price}
-            ></StructureList>
+            ></StructuresList>
           </View>
           <View style={styles.footer}>
             <Text>Footer dell'applicazione</Text>
