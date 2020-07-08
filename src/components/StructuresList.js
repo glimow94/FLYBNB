@@ -18,7 +18,7 @@ class StructuresList extends Component {
    }
    
    componentDidMount = () => {
-    const url = `http://localhost:3055/structures`;
+    const url = `http://192.168.1.14:3055/structures`;
     axios(url, {
         method: 'GET',
         headers: {

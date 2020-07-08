@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import Home from './Home';
+
 
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {
@@ -16,6 +16,8 @@ import {
 
 import colors from "../style/colors/index";
 import LoginButton from "../components/buttons/LoginButton"
+import Login from './Login';
+import Home from './Home';
 
 export default function LoggedOut(){ 
   
@@ -34,11 +36,11 @@ const navigation = useNavigation();
         <View >
           <LoginButton 
             text="Accedi"
-            onPress={()=>navigation.navigate(Home)}
+            onPress={()=>navigation.navigate(Login)}
           />
         </View>
         <LoginButton 
-          text="Accedi con Facebook"
+          text="Iscriviti"
         />
       </View>
     </View>

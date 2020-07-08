@@ -9,10 +9,12 @@ import { Icon } from 'react-native-elements';
 import Profile from "./Profile"
 import Home from "./Home"
 import Structure from "../screens/Structure"
+import Login from './Login';
 
 const Tab = createMaterialBottomTabNavigator();
 
 const HomeStack = createStackNavigator();
+const LoggedOutStack = createStackNavigator();
 
 export default class MainTabScreen extends Component{
     render()
@@ -26,7 +28,7 @@ export default class MainTabScreen extends Component{
       >
         <Tab.Screen
           name="Logout"
-          component={LoggedOut}
+          component={LoggedOutStackScreen}
           options={{
             tabBarColor :colors.white,
             tabBarLabel: 'Accesso',
@@ -70,4 +72,10 @@ const HomeStackScreen = ({navigation}) =>(
     </HomeStack.Navigator>
 );
 
+const LoggedOutStackScreen = ({navigation}) =>(
+  <LoggedOutStack.Navigator >
+    <LoggedOutStack.Screen name="Accedi" component={LoggedOut} />
+    <LoggedOutStack.Screen name="Login" component={Login} />
+  </LoggedOutStack.Navigator>
+);
 
