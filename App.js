@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View  } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator  } from 'react-native';
 import { Icon } from 'react-native-elements';
 //navigazione
 import { NavigationContainer } from '@react-navigation/native';
@@ -16,6 +16,7 @@ import Profile from "./src/screens/Profile"
 import Explore from "./src/screens/Explore"
 import MainTab from "./src/screens/MainTab"
 
+import { UserContext }from "./src/components/context"
 
 
 
@@ -49,14 +50,33 @@ const Drawer = createDrawerNavigator();
 
 
 export default function App() {
+  /* isLoading serve per l'effetto di caricamento
+     userToken è il token identificativo dell'utente*/
+  const [userToken, setUserToken] = React.useState(null);
+
+  const userContext = React.useMemo(()=>({
+    signIn: () =>{
+      setUserToken('hjkd')
+    },
+    signOut: () =>{
+      setUserToken(null)
+    },
+    signUp: () => {
+      setUserToken('hjkd')
+    }
+  }))
+
   return (
-    <NavigationContainer>
+    
+      <NavigationContainer>
       <Drawer.Navigator initialRouteName="Home">
         <Drawer.Screen name="Logout" component={MainTab}/>
         <Drawer.Screen name="Home" component={MainTab}/>
         <Drawer.Screen name='Profilo' component={Profile}/>
       </Drawer.Navigator>
     </NavigationContainer>
+   
+    
   );
 }
 
