@@ -128,6 +128,7 @@ const styles = StyleSheet.create({
       height:'100%'
     },
     searchHeader:{
+      marginTop: 10,
       flexDirection:'row',
       padding:0,
       backgroundColor: colors.green01

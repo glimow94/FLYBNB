@@ -6,14 +6,17 @@ import BookingButton from "../components/buttons/bookingButton";
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
 
-export default class StructuresList extends Component {
+
+class StructuresList extends Component {
+  
    constructor(props){
+     
      super(props);
      this.state = {
       data: []
       }
    }
-
+   
    componentDidMount = () => {
     const url = `http://localhost:3055/structures`;
     axios(url, {
@@ -86,6 +89,9 @@ export default class StructuresList extends Component {
   }
 
   render(){
+    
+    const { navigation } = this.props;
+
     return (
       
       <View style={styles.container}>
@@ -97,18 +103,36 @@ export default class StructuresList extends Component {
             <Text>{item.title}</Text>
             <Text>{item.place}</Text>
             <Text style={styles.services}>Servizi inclusi :</Text>
-            <BookingButton text={parseInt(item.price)+'€ a Notte'}></BookingButton>
+            <BookingButton 
+              text={parseInt(item.price)+'€ a Notte'} 
+              onPress={()=>navigation.navigate('Structure',{
+                  /* parametri da passare alla schermata successiva */
+                  itemTitle: item.title,
+                  itemPrice: item.price,
+                  itemID: item.id,
+                  ItemPlace: item.place,
+                  itemKitchen: item.kitchen,
+                  itemFullBoard: item.fullBoard,
+                  itemAirConditioner: item.airConditioner,
+                  itemWifi: item.wifi,
+                  itemParking: item.parking,
+              })}></BookingButton>
           </View>}
           contentContainerStyle={{paddingTop:40}}
           ListFooterComponent={
           <View styles={styles.footer}>
-            <Text styles={styles.footerText}>*la disponibilità può variare in base alle date di permanenza</Text>
+            <Text styles={styles.footerText}>*la disponibilità può variare in base alle date in cui si intende prenotare</Text>
           </View>
           }
         />
       </View>
     );
   }
+}
+
+export default function(props) {
+  const navigation = useNavigation();
+  return <StructuresList {...props} navigation={navigation} />;
 }
 
 const styles = StyleSheet.create({
