@@ -68,11 +68,6 @@ export default function App() {
   
   const loginReducer = (prevState, action) => {
     switch(action.type){
-      case 'RETRIEVE_TOKEN' : //da usare nel caso in cui l'utente rientra velocemente nell'app dopo averla chiusa
-        return{
-          ...prevState,
-          userToken: action.Token,
-        };
       case 'LOGIN' :
         return{
           ...prevState,
@@ -101,7 +96,7 @@ export default function App() {
     signIn: (email,password) =>{
       let userToken;
       userToken=null;
-      if(email == 'myusername' && password == 'mypassword'){
+      if(email == 'a' && password == 'a'){
         userToken = email;
       }
       dispatch({type : 'LOGIN', id: email, token : userToken })
@@ -117,6 +112,8 @@ export default function App() {
 
   }), [])
 
+  //se il token non è null allora è stato effettuato il login, quindi viene renderizzato MainTab
+  //altrimenti viene renderizzato NoLoggedStack che comprende la pagina di login/signIn e la  in cui si possono solo vedere le strutture
   return (
     <UserContext.Provider value = {userContext}>
       <NavigationContainer>

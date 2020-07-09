@@ -17,7 +17,7 @@ import {
 import colors from "../style/colors/index";
 import LoginButton from "../components/buttons/LoginButton"
 import Login from './Login';
-import Home from './Home';
+import Signup from './Signup'
 
 export default function LoggedOut(){ 
   
@@ -41,6 +41,7 @@ const navigation = useNavigation();
         </View>
         <LoginButton 
           text="Iscriviti"
+          onPress={()=>navigation.navigate(Signup)}
         />
       </View>
     </View>
