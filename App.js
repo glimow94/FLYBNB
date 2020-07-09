@@ -15,6 +15,7 @@ import Structure from "./src/screens/Structure";
 import Profile from "./src/screens/Profile"
 import Explore from "./src/screens/Explore"
 import MainTab from "./src/screens/MainTab"
+import NoLoggedStack from "./src/screens/NoLoggedStack"
 
 import { UserContext }from "./src/components/context"
 
@@ -52,31 +53,78 @@ const Drawer = createDrawerNavigator();
 export default function App() {
   /* isLoading serve per l'effetto di caricamento
      userToken è il token identificativo dell'utente*/
-  const [userToken, setUserToken] = React.useState(null);
+
+  //const [userToken, setUserToken] = React.useState(null);
+
+  //UTILIZZIAMO REDUX PER GESTIRE IL LOGIN
+  const initialLoginState = {
+    email: null,
+    userToken: null,
+  }
+
+  //funzione reducer per gestione Login
+  // ...prevState è il valore dello stato  alla callback setState prima che venga eseguita
+  //NB: le 'action' in redux inviano informazioni allo STORE js (lo stato dello store si modifica solo in risposta ad un'azione)
+  
+  const loginReducer = (prevState, action) => {
+    switch(action.type){
+      case 'RETRIEVE_TOKEN' : //da usare nel caso in cui l'utente rientra velocemente nell'app dopo averla chiusa
+        return{
+          ...prevState,
+          userToken: action.Token,
+        };
+      case 'LOGIN' :
+        return{
+          ...prevState,
+          email: action.id, //action.email??
+          userToken: action.token,
+        };
+      case 'LOGOUT' :
+        return{
+          ...prevState,
+          email: null,
+          userToken: null
+        };
+      case 'REGISTER' :
+        return{
+          ...prevState,
+          email: action.id, //action.email??
+          usertoken: action.token,
+        };  
+    }
+  }
+  //NB : in redux la funzione dispatch innesca un cambiamento dello stato
+  const [loginState,dispatch] = React.useReducer(loginReducer,initialLoginState)
 
   const userContext = React.useMemo(()=>({
-    signIn: () =>{
-      setUserToken('hjkd')
+
+    signIn: (email,password) =>{
+      let userToken;
+      userToken=null;
+      if(email == 'myusername' && password == 'mypassword'){
+        userToken = email;
+      }
+      dispatch({type : 'LOGIN', id: email, token : userToken })
     },
+
     signOut: () =>{
-      setUserToken(null)
+      dispatch({type:'LOGOUT'});
     },
+
     signUp: () => {
       setUserToken('hjkd')
-    }
-  }))
+    },
+
+  }), [])
 
   return (
-    
+    <UserContext.Provider value = {userContext}>
       <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home">
-        <Drawer.Screen name="Logout" component={MainTab}/>
-        <Drawer.Screen name="Home" component={MainTab}/>
-        <Drawer.Screen name='Profilo' component={Profile}/>
-      </Drawer.Navigator>
-    </NavigationContainer>
-   
-    
+        { loginState.userToken != null ? 
+          <MainTab></MainTab> : <NoLoggedStack></NoLoggedStack>
+        }
+      </NavigationContainer>
+    </UserContext.Provider>
   );
 }
 
