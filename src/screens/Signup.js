@@ -5,7 +5,8 @@ import NextButton from "../components/buttons/Button1";
 import BirthDayPicker from "../components/BirthdayPicker"
 import CitySelector from "../components/CitySelector"
 import { UserContext } from "../components/context";
-
+import { useNavigation } from "@react-navigation/native";
+import Login from './Login';
 
 const Signup = ({navigation})=>{
 
@@ -17,7 +18,7 @@ const Signup = ({navigation})=>{
         birthYear:'',
         gender:'',// 0 = uomo , 1 = donna
         fiscal_code:'',
-        city:'Città',
+        city:'',
         address:'',
         email:'',
         password:''
@@ -27,9 +28,13 @@ const Signup = ({navigation})=>{
 
     
 
-    const loginCheck = (email,password)=>{
+    const loginCheck = ()=>{
         //if textInputUsername && textInputPassw == Username && Passw then :
-        signIn(email,password);
+        signUp (newUserData.name, newUserData.surname, newUserData.birthDay,
+            newUserData.birthMonth, newUserData.birthYear, newUserData.gender,
+            newUserData.fiscal_code, newUserData.city, newUserData.address,
+            newUserData.email, newUserData.password);
+            navigation.navigate(Login);
     }
 
     const changeName = (val) => {
@@ -190,6 +195,7 @@ const Signup = ({navigation})=>{
             <View style = {styles.NextButton}>
                     <NextButton 
                         text = "Iscriviti"
+                        onPress = {()=> {loginCheck()}}
                     ></NextButton>
             </View>
         </View>

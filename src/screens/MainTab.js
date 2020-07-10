@@ -13,6 +13,7 @@ import Login from './Login';
 import BookingStructure from './BookingStructure'
 import Trip from './Trip';
 
+
 const Tab = createMaterialBottomTabNavigator();
 
 const HomeStack = createStackNavigator();
