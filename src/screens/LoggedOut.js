@@ -51,16 +51,18 @@ const navigation = useNavigation();
 const styles = StyleSheet.create({
     wrapper: {
       flex: 1,
+      alignItems:'center',
+      alignContent:'center',
       backgroundColor: colors.green01 
     },
     welcomeWrapper: {
       flex: 1,
-      display: "flex",
       marginTop: 30,
       padding: 20,
     },
     logo: {
       flex:1,
+      width:400,
       marginTop: 20,
       marginBottom: 20,
       resizeMode:'contain'

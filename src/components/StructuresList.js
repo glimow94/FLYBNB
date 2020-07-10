@@ -143,6 +143,8 @@ const styles = StyleSheet.create({
     borderTopWidth: 2,
     flexGrow:1,
     justifyContent:'center',
+    alignContent:'center',
+    alignItems:'center',
     borderBottomWidth:2,
     borderBottomColor:colors.white
     

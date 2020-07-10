@@ -50,7 +50,7 @@ export default class BirthdayPicker extends React.Component {
         "Novembre",
         "Dicembre" */
     ];
-    for(var i = 1; i < 13;i++){
+    for(var i = 1; i < 13;i++){ //uso i numeri al posto dei nomi dei mesi
         monthNames.push(`${i}`)
     }
     return monthNames

@@ -110,6 +110,15 @@ export default function App() {
       setUserToken('hjkd')
     },
 
+    loginCheck:()=>{
+      if(loginState.userToken!=null){
+        return true;
+      }
+      else{
+        return false
+      }
+    }
+
   }), [])
 
   //se il token non è null allora è stato effettuato il login, quindi viene renderizzato MainTab

@@ -4,7 +4,7 @@ import colors from '../style/colors';
 import DateSelector from '../components/DateSelector'
 import BookingButton from '../components/buttons/bookingButton'
 
-export default function Structure({ route}){
+export default function Structure({ route }){
     const { 
       itemTitle,
       itemPrice,

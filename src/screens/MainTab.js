@@ -10,6 +10,7 @@ import Profile from "./Profile"
 import Home from "./Home"
 import Structure from "../screens/Structure"
 import Login from './Login';
+import Trip from './Trip'
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -27,11 +28,11 @@ export default class MainTabScreen extends Component{
         style={{ backgroundColor: colors.black }}
       >
         <Tab.Screen
-          name="Logout"
-          component={LoggedOutStackScreen}
+          name="Bookings"
+          component={Trip}
           options={{
             tabBarColor :colors.white,
-            tabBarLabel: 'Accesso',
+            tabBarLabel: 'Prenotazioni',
             tabBarIcon: ({ color }) => (
               <Icon name="work" color={color} size={26} />
             ),
