@@ -4,6 +4,7 @@ import colors from "../style/colors/index";
 import NextButton from "../components/buttons/Button1";
 import BirthDayPicker from "../components/BirthdayPicker"
 import CitySelector from "../components/CitySelector"
+import { UserContext } from "../components/context";
 
 const Signup = ({navigation})=>{
 
@@ -15,17 +16,20 @@ const Signup = ({navigation})=>{
         birthYear:'',
         gender:'',
         fiscal_code:'',
-        city:'Città',
+        city:'',
         address:'',
         email:'',
         password:''
     })
 
-    
+    const { signUp } = React.useContext(UserContext)
 
-    const loginCheck = (email,password)=>{
+    const loginCheck = ()=>{
         //if textInputUsername && textInputPassw == Username && Passw then :
-        signIn(email,password);
+        signUp (newUserData.name, newUserData.surname, newUserData.birthDay,
+            newUserData.birthMonth, newUserData.birthYear, newUserData.gender,
+            newUserData.fiscal_code, newUserData.city, newUserData.address,
+            newUserData.email, newUserData.password);
     }
 
     const changeName = (val) => {
@@ -186,6 +190,7 @@ const Signup = ({navigation})=>{
             <View style = {styles.NextButton}>
                     <NextButton 
                         text = "Iscriviti"
+                        onPress = {()=> {loginCheck()}}
                     ></NextButton>
             </View>
         </View>

@@ -18,7 +18,7 @@ import MainTab from "./src/screens/MainTab"
 import NoLoggedStack from "./src/screens/NoLoggedStack"
 
 import { UserContext }from "./src/components/context"
-
+import axios from "axios";
 
 
 const HomeStack = createStackNavigator();
@@ -96,11 +96,8 @@ export default function App() {
     signIn: (email,password) =>{
       let userToken;
       userToken=null;
-<<<<<<< HEAD
+
       if(email == '' && password == ''){
-=======
-      if(email == 'a' && password == 'a'){
->>>>>>> 0e2ba629a07ea053907bcea9392d9792edf0a48a
         userToken = email;
       }
       dispatch({type : 'LOGIN', id: email, token : userToken })
@@ -110,8 +107,30 @@ export default function App() {
       dispatch({type:'LOGOUT'});
     },
 
-    signUp: () => {
-      setUserToken('hjkd')
+    signUp: (name, surname, birthDay, birthMonth, birthYear,
+            gender, fiscal_code, city, address, email, password) => {
+
+              const url = `http://192.168.43.188:3055/users/registration`;
+              axios.post(url, {
+                  method: 'POST',
+                  headers: {
+                    'content-type': 'application/json',
+                  },
+                  name: name,
+                  surname: surname,
+                  email: email,
+                  date: birthDay+"/"+birthMonth+"/"+birthYear,
+                  gender: gender,
+                  city: city,
+                  address: address,
+                  password: password
+                })
+                .then(res => {
+                  console.log(res);
+                  })
+                .catch(function (error) {
+                  console.log(error);
+                });
     },
 
     loginCheck:()=>{
