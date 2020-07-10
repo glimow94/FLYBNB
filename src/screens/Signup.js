@@ -5,6 +5,8 @@ import NextButton from "../components/buttons/Button1";
 import BirthDayPicker from "../components/BirthdayPicker"
 import CitySelector from "../components/CitySelector"
 import { UserContext } from "../components/context";
+import { useNavigation } from "@react-navigation/native";
+import Login from './Login';
 
 const Signup = ({navigation})=>{
 
@@ -30,6 +32,7 @@ const Signup = ({navigation})=>{
             newUserData.birthMonth, newUserData.birthYear, newUserData.gender,
             newUserData.fiscal_code, newUserData.city, newUserData.address,
             newUserData.email, newUserData.password);
+            navigation.navigate(Login);
     }
 
     const changeName = (val) => {
