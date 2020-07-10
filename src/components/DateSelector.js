@@ -71,7 +71,8 @@ export default class DateSelector extends Component {
         <CalendarButton text="Date" onPress={this.showHideCalendar}></CalendarButton>
         
         {   
-          this.state.status ? <View style={styles.container}>
+          this.state.status ? 
+          <View style={styles.container}>
             <CalendarPicker
                 startFromMonday={true}
                 allowRangeSelection={true}
@@ -96,14 +97,14 @@ export default class DateSelector extends Component {
                 todayBackgroundColor="#e6ffe6"
                 selectedDayColor="#FF6347"
                 selectedDayTextColor="#000000"
-                scaleFactor={375}
+                scaleFactor={450}
                 textStyle={{
                     color: '#000000',
                 }}
                 onDateChange={this.onDateChange}
             />
             <ConfirmButton text="OK" onPress={this.showHideCalendar}></ConfirmButton>
-            </View> : null
+          </View> : null
         }
         
         {
@@ -122,7 +123,11 @@ export default class DateSelector extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.white,
+    height:'100%',
     alignItems: 'center',
+    alignSelf:'center',
+    alignContent:'center',
+    bottom: 300
 
   },
   checkInOutText:{

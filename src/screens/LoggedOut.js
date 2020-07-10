@@ -17,7 +17,7 @@ import {
 import colors from "../style/colors/index";
 import LoginButton from "../components/buttons/LoginButton"
 import Login from './Login';
-import Home from './Home';
+import Signup from './Signup'
 
 export default function LoggedOut(){ 
   
@@ -41,6 +41,7 @@ const navigation = useNavigation();
         </View>
         <LoginButton 
           text="Iscriviti"
+          onPress={()=>navigation.navigate(Signup)}
         />
       </View>
     </View>
@@ -50,16 +51,18 @@ const navigation = useNavigation();
 const styles = StyleSheet.create({
     wrapper: {
       flex: 1,
+      alignItems:'center',
+      alignContent:'center',
       backgroundColor: colors.green01 
     },
     welcomeWrapper: {
       flex: 1,
-      display: "flex",
       marginTop: 30,
       padding: 20,
     },
     logo: {
       flex:1,
+      width:400,
       marginTop: 20,
       marginBottom: 20,
       resizeMode:'contain'

@@ -5,11 +5,6 @@ import NextButton from "../components/buttons/Button1";
 
 import { UserContext } from "../components/context";
 
-const DATA={ //username e password di prova, come se fosse il database
-    username: 'flybnb',
-    password: 'chucknorris',
-    id: '007' //id di user sarà il token da passare alla funzione signIn 
-}
 const Login = ({navigation})=>{
 
     const [data,setData] = React.useState({
@@ -40,7 +35,7 @@ const Login = ({navigation})=>{
 
     }
     return (
-        <KeyboardAvoidingView style={styles.wrapper} behavior="padding">
+        <View style={styles.wrapper}>
             <Text style={styles.loginHeader}>Accedi ad un profilo esistente</Text>
             <View style={styles.scrollViewWrapper}>
                 <ScrollView styles={styles.scrollView}>
@@ -77,12 +72,13 @@ const Login = ({navigation})=>{
                 </View>
                 
             </View>
-        </KeyboardAvoidingView>
+        </View>
     );
 }
 const styles = StyleSheet.create({
     wrapper: {
         display: "flex",
+        alignItems:'center',
         flex: 1,
         backgroundColor: colors.green01
       },
@@ -103,7 +99,8 @@ const styles = StyleSheet.create({
         margin: 40
       },
       scrollView:{
-         marginBottom: 70
+         marginBottom: 70,
+         height: '80%'
       },
       NextButton:{
           alignItems:'flex-end',
@@ -117,13 +114,14 @@ const styles = StyleSheet.create({
           color: colors.white,
           fontWeight: "700", 
           marginTop: 15,
-          marginBottom: 10
+          marginBottom: 5
       },
       inputField: {
         borderBottomWidth: 1,
         paddingTop: 10,
         paddingBottom: 5,
-        height: 20,
+        height: 40,
+        width:200,
         backgroundColor: colors.green01,
         borderBottomColor: colors.white
     }
