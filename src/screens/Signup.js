@@ -4,6 +4,8 @@ import colors from "../style/colors/index";
 import NextButton from "../components/buttons/Button1";
 import BirthDayPicker from "../components/BirthdayPicker"
 import CitySelector from "../components/CitySelector"
+import { UserContext } from "../components/context";
+
 
 const Signup = ({navigation})=>{
 
@@ -13,13 +15,15 @@ const Signup = ({navigation})=>{
         birthDay: '',
         birthMonth: '',
         birthYear:'',
-        gender:'',
+        gender:'',// 0 = uomo , 1 = donna
         fiscal_code:'',
         city:'Città',
         address:'',
         email:'',
         password:''
     })
+
+    const { signUp } = React.useContext(UserContext)
 
     
 

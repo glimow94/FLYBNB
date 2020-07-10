@@ -5,7 +5,7 @@ import { Icon } from 'react-native-elements';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-
+import AsyncStorage from '@react-native-community/async-storage';
 
 //screens e components
 import LoggedOut from "./src/screens/LoggedOut";
@@ -57,6 +57,9 @@ export default function App() {
   //const [userToken, setUserToken] = React.useState(null);
 
   //UTILIZZIAMO REDUX PER GESTIRE IL LOGIN
+  // if Async.getItem('useryoken')!= null allora initialLoginState.userToken = Async.getitem(usertoken)
+  //il problema è che App.js lavora con loginState mentre Structure lavora con Async.Storage direttamente
+  //app ad ogni refresh setta userToken = null mentre structure prende l'asyncStorage che rimane permanente fino al logout
   const initialLoginState = {
     email: null,
     userToken: null,
@@ -90,19 +93,31 @@ export default function App() {
   }
   //NB : in redux la funzione dispatch innesca un cambiamento dello stato
   const [loginState,dispatch] = React.useReducer(loginReducer,initialLoginState)
-
   const userContext = React.useMemo(()=>({
 
-    signIn: (email,password) =>{
+    signIn: async(email,password) =>{
       let userToken;
       userToken=null;
       if(email == 'a' && password == 'a'){
-        userToken = email;
+    
+        try{ //salvo il token nell'asyncstorage per usarlo globalmente nell'app
+        //grazie all'asyncstorage il token rimarrà salvato nell'app 
+        //dell'utente fino a quando non effettua il logout!
+          await AsyncStorage.setItem('userToken',email)
+          userToken=AsyncStorage.getItem('userToken')
+        } catch(e){
+          console.log(e)
+        }
       }
       dispatch({type : 'LOGIN', id: email, token : userToken })
     },
 
-    signOut: () =>{
+    signOut: async() =>{
+      try{ //tolgo il token nell'asyncstorage quando faccio il logout
+          await AsyncStorage.removeItem('userToken')
+        } catch(e){
+          console.log(e)
+        }
       dispatch({type:'LOGOUT'});
     },
 
@@ -110,13 +125,10 @@ export default function App() {
       setUserToken('hjkd')
     },
 
-    loginCheck:()=>{
-      if(loginState.userToken!=null){
-        return true;
-      }
-      else{
-        return false
-      }
+    getUserToken:()=>{
+      console.log(loginState.userToken)
+      return loginState.userToken
+
     }
 
   }), [])
@@ -126,8 +138,8 @@ export default function App() {
   return (
     <UserContext.Provider value = {userContext}>
       <NavigationContainer>
-        { loginState.userToken != null ? 
-          <MainTab></MainTab> : <NoLoggedStack></NoLoggedStack>
+        { loginState.userToken == null ? 
+           <NoLoggedStack></NoLoggedStack> : <MainTab></MainTab>
         }
       </NavigationContainer>
     </UserContext.Provider>

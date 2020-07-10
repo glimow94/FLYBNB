@@ -10,7 +10,8 @@ import Profile from "./Profile"
 import Home from "./Home"
 import Structure from "../screens/Structure"
 import Login from './Login';
-import Trip from './Trip'
+import BookingStructure from './BookingStructure'
+import Trip from './Trip';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -28,7 +29,7 @@ export default class MainTabScreen extends Component{
         style={{ backgroundColor: colors.black }}
       >
         <Tab.Screen
-          name="Bookings"
+          name="Trip"
           component={Trip}
           options={{
             tabBarColor :colors.white,
@@ -70,6 +71,7 @@ const HomeStackScreen = ({navigation}) =>(
     <HomeStack.Navigator >
       <HomeStack.Screen name="Home" component={Home} />
       <HomeStack.Screen name="Structure" component={Structure} />
+      <HomeStack.Screen name="BookingStructure" component={BookingStructure} />
     </HomeStack.Navigator>
 );
 

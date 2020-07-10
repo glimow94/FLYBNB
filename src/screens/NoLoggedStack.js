@@ -11,6 +11,7 @@ import LoggedOut from './LoggedOut';
 import Login from './Login';
 import Signup from './Signup';
 import Structure from "../screens/Structure"
+import Trip from "../screens/Trip"
 
 
 const Stack = createStackNavigator();
@@ -56,9 +57,10 @@ export default class NoLoggedScreen extends Component{
 
 
 const HomeStackScreen = ({navigation}) =>(
-    <HomeStack.Navigator >
+    <HomeStack.Navigator>
       <HomeStack.Screen name="Home" component={Home} />
       <HomeStack.Screen name="Structure" component={Structure} />
+      <HomeStack.Screen name = "Login" component={Login} />
     </HomeStack.Navigator>
 );
 
@@ -67,5 +69,9 @@ const NoLoggedStack = ({navigation}) => (
         <Stack.Screen name = "Accedi" component={LoggedOut} />
         <Stack.Screen name = "Login" component={Login} />        
         <Stack.Screen name = "Signup" component={Signup} /> 
+        <Stack.Screen name="Home" component={Home} />
+
+        
+
     </Stack.Navigator>
 );

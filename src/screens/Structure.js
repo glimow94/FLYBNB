@@ -1,8 +1,15 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, Button} from 'react-native';
 import colors from '../style/colors';
 import DateSelector from '../components/DateSelector'
 import BookingButton from '../components/buttons/bookingButton'
+import AsyncStorage from '@react-native-community/async-storage';
+
+import { useNavigation } from '@react-navigation/native';
+
+import Login from './Login'
+
+import BookingStructure from './BookingStructure';
 
 export default function Structure({ route }){
     const { 
@@ -15,6 +22,38 @@ export default function Structure({ route }){
       itemAirConditioner,
       itemWifi,
       itemParking } = route.params;
+
+      const navigation = useNavigation();
+      
+      async function getToken(){
+        try{
+          const myToken = await AsyncStorage.getItem('userToken')
+          if(myToken!=null){
+            //abbiamo il token
+            console.log(myToken)
+            navigation.navigate(BookingStructure)
+          }
+          else{
+            navigation.navigate(Login)
+          }
+        }catch(e){
+          console.log(e)
+        }
+      }
+      /* const getToken = async()=>{
+        var userToken = null
+        try{
+          userToken = await AsyncStorage.getItem('userToken');
+          console.log(userToken)
+        }catch(e){
+          console.log(e)
+        }
+        if (userToken != null){
+          myToken=userToken
+        }
+      } */
+      
+
     return (
       <View style={styles.container}>
 
@@ -42,8 +81,11 @@ export default function Structure({ route }){
           </View>   
         </View>
         <DateSelector></DateSelector>
-
-        <BookingButton text="PRENOTA"></BookingButton>
+        {
+          <BookingButton text="PRENOTA" onPress={getToken}></BookingButton> 
+                             
+        }
+        
 
       </View>
     )

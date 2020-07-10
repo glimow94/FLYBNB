@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import colors from '../style/colors/index'
-export default function Trip(){
+export default function BookingStructure(){
     return (
       <View style={styles.container}>
-        <Text>Trip</Text>
+        <Text>PRENOTA QUESTA STRUTTURA</Text>
       </View>
     )
 }
