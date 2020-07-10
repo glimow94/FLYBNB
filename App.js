@@ -101,7 +101,7 @@ export default function App() {
     signIn: (email,password) =>{
       let userToken;
       userToken=null;
-      if(email == 'myusername' && password == 'mypassword'){
+      if(email == '' && password == ''){
         userToken = email;
       }
       dispatch({type : 'LOGIN', id: email, token : userToken })

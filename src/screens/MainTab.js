@@ -10,6 +10,7 @@ import Profile from "./Profile"
 import Home from "./Home"
 import Structure from "../screens/Structure"
 import Login from './Login';
+import Structures from '../components/Structures'
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -54,6 +55,18 @@ export default class MainTabScreen extends Component{
           options={{
             
             tabBarLabel: 'Profilo',
+            tabBarColor: colors.white,
+            tabBarIcon: ({ color }) => (
+              <Icon name="account-circle" color={color} size={26} />
+            ),
+          }}
+        />
+                <Tab.Screen
+          name="Test"
+          component={Structures}
+          options={{
+            
+            tabBarLabel: 'Test',
             tabBarColor: colors.white,
             tabBarIcon: ({ color }) => (
               <Icon name="account-circle" color={color} size={26} />

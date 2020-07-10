@@ -6,7 +6,6 @@ import BookingButton from "../components/buttons/bookingButton";
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
 
-
 class StructuresList extends Component {
   
    constructor(props){
@@ -18,15 +17,12 @@ class StructuresList extends Component {
    }
    
    componentDidMount = () => {
-    const url = `http://192.168.1.14:3055/structures`;
-    axios(url, {
+    const url = `http://192.168.43.188:3055/structures`;
+    axios.get(url, {
         method: 'GET',
         headers: {
           'content-type': 'application/json',
-        },
-        params: {
-         code: 'structures'
-        },
+        }
       })
       .then(res => {
         console.log(res.data);
