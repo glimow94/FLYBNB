@@ -1,4 +1,4 @@
-import React from 'react';
+import React , {useEffect}from 'react';
 import { StyleSheet, Text, View, ActivityIndicator  } from 'react-native';
 import { Icon } from 'react-native-elements';
 //navigazione
@@ -64,7 +64,22 @@ export default function App() {
     email: null,
     userToken: null,
   }
+  useEffect(async() => {
+    var userToken = null;
+    // code to run on component mount
+    try{ //salvo il token nell'asyncstorage per usarlo globalmente nell'app
+        //grazie all'asyncstorage il token rimarrà salvato nell'app 
+        //dell'utente fino a quando non effettua il logout!
+          await AsyncStorage.getItem('userToken')
+          userToken = AsyncStorage.getItem('userToken')
+          
+          
+        } catch(e){
+          console.log(e)
+        }
+        dispatch({type : 'LOGIN', id: userToken, token : userToken })
 
+  }, [])
   //funzione reducer per gestione Login
   // ...prevState è il valore dello stato  alla callback setState prima che venga eseguita
   //NB: le 'action' in redux inviano informazioni allo STORE js (lo stato dello store si modifica solo in risposta ad un'azione)
@@ -124,7 +139,7 @@ export default function App() {
     signUp: (name, surname, birthDay, birthMonth, birthYear,
             gender, fiscal_code, city, address, email, password) => {
 
-              const url = `http://192.168.43.188:3055/users/registration`;
+              const url = `http://192.168.1.14:3055/users/registration`;
               axios.post(url, {
                   method: 'POST',
                   headers: {
