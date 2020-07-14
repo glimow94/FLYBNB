@@ -62,7 +62,6 @@ export default class CitySelector extends Component{
               <View style={styles.container}>
             { this.props.status1 ?
               <View>
-               <Button title="Annulla" style={styles.cancelButton}></Button>
 
                 <Picker mode="dropdown" 
                     style={styles.pickerstyle}                  

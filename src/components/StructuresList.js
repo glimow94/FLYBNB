@@ -107,11 +107,16 @@ class StructuresList extends Component {
                   itemPrice: item.price,
                   itemID: item.id,
                   ItemPlace: item.place,
+                  ItemStreet: item.street,
+                  ItemBeds: item.beds,
+                  ItemType: item.type,
                   itemKitchen: item.kitchen,
-                  itemFullBoard: item.fullBoard,
+                  itemFullBoard: item.fullboard,
                   itemAirConditioner: item.airConditioner,
                   itemWifi: item.wifi,
                   itemParking: item.parking,
+                  itemDescription: item.description,
+                  locationDescription: item.location_description,
               })}></BookingButton>
           </View>}
           contentContainerStyle={{paddingTop:40}}

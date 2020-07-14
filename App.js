@@ -57,33 +57,32 @@ export default function App() {
   //const [userToken, setUserToken] = React.useState(null);
 
   //UTILIZZIAMO REDUX PER GESTIRE IL LOGIN
-  // if Async.getItem('useryoken')!= null allora initialLoginState.userToken = Async.getitem(usertoken)
-  //il problema è che App.js lavora con loginState mentre Structure lavora con Async.Storage direttamente
-  //app ad ogni refresh setta userToken = null mentre structure prende l'asyncStorage che rimane permanente fino al logout
   const initialLoginState = {
     email: null,
     userToken: null,
   }
-  useEffect(async() => {
+  useEffect(() => {
     var userToken = null;
     // code to run on component mount
-    try{ //salvo il token nell'asyncstorage per usarlo globalmente nell'app
-        //grazie all'asyncstorage il token rimarrà salvato nell'app 
-        //dell'utente fino a quando non effettua il logout!
-          await AsyncStorage.getItem('userToken')
-          userToken = AsyncStorage.getItem('userToken')
-          
-          
-        } catch(e){
-          console.log(e)
+    async function getToken(){
+      try{
+        const oldToken = await AsyncStorage.getItem('userToken')
+        if(oldToken!=null){
+          //abbiamo il token
+          userToken=oldToken
+          dispatch({type : 'LOGIN', id: userToken, token : userToken })
         }
-        dispatch({type : 'LOGIN', id: userToken, token : userToken })
+      }catch(e){
+        console.log(e)
+      }
+    }
+    getToken()
 
   }, [])
   //funzione reducer per gestione Login
   // ...prevState è il valore dello stato  alla callback setState prima che venga eseguita
   //NB: le 'action' in redux inviano informazioni allo STORE js (lo stato dello store si modifica solo in risposta ad un'azione)
-  
+  //gli oggetti dello STORE sono accessibili globalmente nell'app richiamando AsyncStorage.getItem('item')
   const loginReducer = (prevState, action) => {
     switch(action.type){
       case 'LOGIN' :
