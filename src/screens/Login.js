@@ -2,10 +2,13 @@ import React, { Component } from "react";
 import { View, Text, TextInput,ScrollView, StyleSheet, KeyboardAvoidingView } from "react-native";
 import colors from "../style/colors/index";
 import NextButton from "../components/buttons/Button1";
+import { useNavigation } from '@react-navigation/native';
 
 import { UserContext } from "../components/context";
+import Signup from './Signup'
 
-const Login = ({navigation})=>{
+const Login = ()=>{
+    const navigation = useNavigation();
 
     const [data,setData] = React.useState({
         email:'',
@@ -56,8 +59,10 @@ const Login = ({navigation})=>{
                             onChangeText={(val)=>changePassw(val)}
                         ></TextInput>
                     </View>
-                    
+                    <Text>    Non hai un account? <Text onPress={()=> navigation.navigate(Signup)} style={{color: colors.red, fontSize:14, fontWeight: 700}} >Iscriviti</Text></Text>
+
                 </ScrollView>
+
                 <View style = {styles.NextButton}>
                     <NextButton 
                         text = "Accedi"
@@ -68,7 +73,7 @@ const Login = ({navigation})=>{
                             */
                           ()=> loginCheck(data.email,data.password)
                         }
-                    ></NextButton>
+                    ></NextButton>                    
                 </View>
                 
             </View>
@@ -104,6 +109,7 @@ const styles = StyleSheet.create({
       },
       NextButton:{
           alignItems:'flex-end',
+          
       },
       InputWrapper: {
         display: "flex",

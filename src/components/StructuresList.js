@@ -10,14 +10,16 @@ class StructuresList extends Component {
   
    constructor(props){
      
-     super(props);
-     this.state = {
-      data: []
-      }
+    super(props);
+    this.state = {
+      data: [],
+      isLoading: true
+    }
    }
-   
+   _isMounted = false;
    componentDidMount = () => {
-    const url = `http://192.168.1.14:3055/structures`;
+     this._isMounted = true;
+    const url = `http://localhost:3055/structures`;
     axios.get(url, {
         method: 'GET',
         headers: {
@@ -26,9 +28,13 @@ class StructuresList extends Component {
       })
       .then(res => {
         console.log(res.data);
-        const structures = res.data;
-        this.setState({data: structures});
-        console.log(this.state.data);
+        if(this._isMounted){
+          const structures = res.data;
+          this.setState({
+            isLoading:false,
+            data: structures
+          })
+        }
     })
   }
 
@@ -84,6 +90,23 @@ class StructuresList extends Component {
 
   }
 
+  //filtro della searchBar
+  dataStructureNameFilter(DATA){
+    var newData = []
+    var selectedName = this.props.selectedStructureName.toUpperCase()
+
+    if(selectedName != null && !selectedName.trim()==''){
+      DATA.forEach(function (item){
+        if(item.title.toUpperCase().includes(selectedName)){
+          newData.push(item)
+        }
+      })
+      return newData
+    }
+
+    else return DATA
+  }
+
   render(){
     
     const { navigation } = this.props;
@@ -92,7 +115,7 @@ class StructuresList extends Component {
       
       <View style={styles.container}>
         <FlatList
-          data={this.dataServicesFilter(this.dataCityFilter(this.dataPriceFilter(this.state.data)))}
+          data={this.dataServicesFilter(this.dataCityFilter(this.dataPriceFilter(this.dataStructureNameFilter(this.state.data))))}
           keyExtractor = {(item, index) => index.toString()}
           renderItem = {({item}) =>
           <View style={styles.item}>

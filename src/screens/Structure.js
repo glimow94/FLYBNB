@@ -41,6 +41,7 @@ export default function Structure({ route }){
         activeImage : 0,
         horizontalScroll: true
       })
+      const navigation = useNavigation();
 
       useEffect(() => {
         if(Platform.OS == 'android'){
@@ -51,7 +52,6 @@ export default function Structure({ route }){
     
       }, [])
 
-      const navigation = useNavigation();
       
       async function getToken(){
         try{

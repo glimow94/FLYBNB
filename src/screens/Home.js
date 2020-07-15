@@ -35,10 +35,12 @@ export default class Home extends Component{
       parking:false,
       city:'Luogo',
       price: 'Prezzo',
-      //status per gestire l'apertura e chiusura dei componenti che filtrano i risultati delle strutture
+      //status per gestire la comparsa/scomparsa dei componenti che filtrano la lista delle strutture
       status1 : false,
       status2: false,
       status3:false,
+      //valore della barra di ricerca SearchBar.js
+      selectedName: ''
     }
   }
   
@@ -57,7 +59,9 @@ export default class Home extends Component{
               style={styles.logo}
               source={require('../img/logo_green.png')}
             />
-            <SearchBar></SearchBar>
+            <SearchBar
+              updateState={this.updateState.bind(this)}
+            ></SearchBar>
           </View>
 
           <Text style={styles.titleStyle}>
@@ -110,6 +114,7 @@ export default class Home extends Component{
               parking={this.state.parking}
               city={this.state.city}    
               price={this.state.price}
+              selectedStructureName={this.state.selectedName}
             ></StructuresList>
           </View>
           <View style={styles.footer}>

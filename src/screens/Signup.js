@@ -13,9 +13,9 @@ const Signup = ({navigation})=>{
     const [newUserData,setData] = React.useState({
         name:'',
         surname:'',
-        birthDay: '',
-        birthMonth: '',
-        birthYear:'',
+        birthDay: '1',
+        birthMonth: '1',
+        birthYear:'2000',
         gender: '0',// 0 = uomo , 1 = donna
         city:'',
         address:'',
@@ -265,9 +265,9 @@ const Signup = ({navigation})=>{
                 <View style={styles.birthdatePickers}>
                 <Text style={styles.label}>NATO IL (GG/MM/AA)</Text>
                         <BirthDayPicker
-                            selectedYear={2020}
-                            selectedMonth={1}
-                            selectedDay={27}                            
+                            selectedYear={newUserData.birthYear}
+                            selectedMonth={newUserData.birthMonth}
+                            selectedDay={newUserData.birthDay}                            
                             onYearValueChange={(year,i)=>changeBirthYear(year)}
                             onMonthValueChange={(month,i) => changeBirthMonth(month)}
                             onDayValueChange={(day,i) =>changeBirthDay(day)}
@@ -317,7 +317,6 @@ const Signup = ({navigation})=>{
                                     {borderColor:newUserData.passwColor},
                                     styles.inputField]
                                 }
-                                onCh
                                 onChangeText={(val)=>changePassw(val)}
                             ></TextInput>
                             {   newUserData.passwordAlert==true ? 

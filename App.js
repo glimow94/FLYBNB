@@ -138,7 +138,7 @@ export default function App() {
     signUp: (name, surname, birthDay, birthMonth, birthYear,
             gender, fiscal_code, city, address, email, password) => {
 
-              const url = `http://192.168.1.14:3055/users/registration`;
+              const url = `http://localhost:3055/users/registration`;
               axios.post(url, {
                   method: 'POST',
                   headers: {

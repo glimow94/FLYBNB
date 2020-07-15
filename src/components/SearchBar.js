@@ -2,25 +2,38 @@ import React, { Component } from "react";
 import { View, TextInput, SafeAreaView, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import colors from "../style/colors/index";
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
-export default function SearchBar(){
- 
-    return (
-      <SafeAreaView style={{flex:1, marginTop:20}}>
-        <View style={styles.view1}>
-          <View style={styles.searchBarStyle}>
-            <Icon name="ios-search" size={20} style={styles.iconstyle} />
-            <TextInput 
-                underlineColorAndroid="transparent"
-                placeholder="Cerca struttura"
-                placeholderTextColor="grey"
-                style={styles.inputStyle}
-            />
+export default class SearchBar extends Component{
+  constructor(props){
+    super(props);
+    this.state={
+      structureName: ''
+    }
+  }
+  changeName(val){
+    this.props.updateState({
+      selectedName : val
+    })
+    //console.log(this.state.structureName)
+  }
+  render()
+    {
+      return (
+        <SafeAreaView style={{flex:1, marginTop:20}}>
+          <View style={styles.view1}>
+            <View style={styles.searchBarStyle}>
+              <Icon name="ios-search" size={20} style={styles.iconstyle} />
+              <TextInput 
+                  underlineColorAndroid="transparent"
+                  placeholder="Cerca struttura"
+                  placeholderTextColor="grey"
+                  style={styles.inputStyle}
+                  onChangeText={ val =>this.changeName(val)}
+              />
+            </View>
           </View>
-        </View>
-      </SafeAreaView>
-    );
+        </SafeAreaView>
+    );}
 }
 
 
