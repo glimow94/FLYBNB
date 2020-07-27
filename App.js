@@ -112,18 +112,28 @@ export default function App() {
     signIn: async(email,password) =>{
       let userToken;
       userToken=null;
-      if(email == 'a' && password == 'a'){
-    
-        try{ //salvo il token nell'asyncstorage per usarlo globalmente nell'app
-        //grazie all'asyncstorage il token rimarrà salvato nell'app 
-        //dell'utente fino a quando non effettua il logout!
-          await AsyncStorage.setItem('userToken',email)
-          userToken=AsyncStorage.getItem('userToken')
-        } catch(e){
-          console.log(e)
-        }
-      }
-      dispatch({type : 'LOGIN', id: email, token : userToken })
+      const url = `http://localhost:3055/users/login`;
+
+      axios.post(url, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+          },
+          email: email,
+          password: password
+        })
+        .then(res => {
+          console.log(res.status);
+          if(res.status == 200){
+            console.log("login success");
+            AsyncStorage.setItem('userToken',email)
+            userToken=AsyncStorage.getItem('userToken')
+            dispatch({type : 'LOGIN', id: email, token : userToken })
+          }
+          })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
 
     signOut: async() =>{

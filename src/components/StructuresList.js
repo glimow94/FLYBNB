@@ -27,7 +27,7 @@ class StructuresList extends Component {
         }
       })
       .then(res => {
-        console.log(res.data);
+        //console.log(res.data);
         if(this._isMounted){
           const structures = res.data;
           this.setState({
