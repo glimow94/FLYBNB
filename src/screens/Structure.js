@@ -58,6 +58,7 @@ export default function Structure({ route }){
           const myToken = await AsyncStorage.getItem('userToken')
           if(myToken!=null){
             //abbiamo il token
+            console.log("ecco il token")
             console.log(myToken)
             navigation.navigate(BookingStructure)
           }
