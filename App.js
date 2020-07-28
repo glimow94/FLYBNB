@@ -12,12 +12,12 @@ import LoggedOut from "./src/screens/LoggedOut";
 import colors from "./src/style/colors/index"
 import Home from './src/screens/Home';
 import Structure from "./src/screens/Structure";
-import Profile from "./src/screens/Profile"
-import Explore from "./src/screens/Explore"
-import MainTab from "./src/screens/MainTab"
-import NoLoggedStack from "./src/screens/NoLoggedStack"
+import Profile from "./src/screens/Profile";
+import Explore from "./src/screens/Explore";
+import MainTab from "./src/screens/MainTab";
+import NoLoggedStack from "./src/screens/NoLoggedStack";
 
-import { UserContext }from "./src/components/context"
+import { UserContext }from "./src/components/context";
 import axios from "axios";
 
 

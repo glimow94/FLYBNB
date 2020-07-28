@@ -6,6 +6,11 @@ import ConfirmButton from '../components/buttons/confirmButton';
 import CalendarButton from '../components/buttons/Button1'
 //definisco la funzione 'changeDateFormat' per convertire una stringa di data 
 // da "Day Mon DayNumber Year" in "DD-MM-YYYY"
+var months = [
+  'Jan', 'Feb', 'Mar', 'Apr', 'May',
+  'Jun', 'Jul', 'Aug', 'Sep',
+  'Oct', 'Nov', 'Dec'
+]; //mesi dell'anno che mi servono per convertire il mese della data nel suo corrispondente numero MM
 
 export default class DateSelector extends Component {
   constructor(props) {
@@ -38,19 +43,23 @@ export default class DateSelector extends Component {
       }
   }
 
-  showHideText=()=>{
-
-  }
-
+  monthNameToNum(monthname) {
+    var month = months.indexOf(monthname);
+    return month!=-1 ? month + 1 : undefined;
+}
+  
   onDateChange(date, type) {
+    var date_mod = date.toString().replace("12:00:00 GMT+0200","").slice(4);
+    var month_num = this.monthNameToNum(date_mod.substr(0,3));
+    var date_mod_format = date_mod.substr(4,2)+"/"+month_num+"/"+date_mod.substr(6,5); //data in formato DD/MonthName/AAAA
     //function to handle the date change 
     if (type === 'END_DATE') {
       this.setState({
-        selectedEndDate: date,
+        selectedEndDate: date_mod_format.replace(/ /g, ''),
       });
     } else {
       this.setState({
-        selectedStartDate: date,
+        selectedStartDate: date_mod_format.replace(/ /g, ''),
         selectedEndDate: null,
       });
     }
@@ -63,8 +72,8 @@ export default class DateSelector extends Component {
     const { selectedStartDate, selectedEndDate } = this.state;
     const minDate = new Date(); // Min date
     const maxDate = new Date(2050, 6, 3); // Max date
-    const startDate = selectedStartDate ? selectedStartDate.toString().replace("12:00:00 GMT+0200","").slice(4) : ''; //Start date
-    const endDate = selectedEndDate ? selectedEndDate.toString().replace("12:00:00 GMT+0200","").slice(4) : ''; //End date
+    const startDate = selectedStartDate ? selectedStartDate: ''; //Start date
+    const endDate = selectedEndDate ? selectedEndDate : ''; //End date
 
     return (
       <View>
@@ -127,7 +136,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf:'center',
     alignContent:'center',
-    bottom: 300
+    bottom: 100
 
   },
   checkInOutText:{

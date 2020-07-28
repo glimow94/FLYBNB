@@ -59,7 +59,12 @@ export default function Structure({ route }){
           if(myToken!=null){
             //abbiamo il token
             console.log(myToken)
-            navigation.navigate(BookingStructure)
+            navigation.navigate('BookingStructure',{
+              /* parametri da passare alla schermata successiva */
+              itemTitle: itemTitle,
+              itemPrice: itemPrice,
+              itemID: itemID
+            })
           }
           else{
             navigation.navigate(Login)
