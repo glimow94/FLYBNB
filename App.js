@@ -124,11 +124,13 @@ export default function App() {
         })
         .then(res => {
           console.log(res.status);
+          console.log(res.data[0]);
+          console.log(res.data[0].id);
           if(res.status == 200){
             console.log("login success");
-            AsyncStorage.setItem('userToken',email)
-            userToken=AsyncStorage.getItem('userToken')
-            dispatch({type : 'LOGIN', id: email, token : userToken })
+            AsyncStorage.setItem('userToken', res.data[0].id);
+            userToken=AsyncStorage.getItem('userToken');
+            dispatch({type : 'LOGIN', id: email, token : userToken });
           }
           })
         .catch(function (error) {
