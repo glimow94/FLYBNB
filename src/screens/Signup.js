@@ -360,7 +360,6 @@ const styles = StyleSheet.create({
         display: "flex",
         alignContent:'center',
         alignItems:'center',
-        flex: 1,
         backgroundColor: colors.green01
     },
     scrollViewWrapper: {

@@ -144,7 +144,7 @@ export default class AddStructure extends Component{
                     <Text style={[{width:150},styles.label]}>NOME STRUTTURA</Text>
                                 <TextInput
                                     autoCorrect={false}
-                                    style = {[{borderColor: this.state.titleColor},styles.inputField]}
+                                    style = {[{borderColor: this.state.titleColor, width: 320},styles.inputField]}
                                     onChangeText={val => this.changeTitle(val)}
                                 ></TextInput>
                     {   this.state.titleAlert==true ? 
@@ -305,8 +305,7 @@ const styles = StyleSheet.create({
         display: "flex",
         alignContent:'center',
         alignItems:'center',
-        flex: 1,
-        backgroundColor: colors.green01
+        backgroundColor: colors.green01,
     },
     titleHeader:{
         fontSize: 28,
