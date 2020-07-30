@@ -133,7 +133,7 @@ export default function Structure({ route }){
 
               <View style={styles.mainInfo}>
                   <View style={{flexDirection:'row'}}>
-                    <Text style = {styles.important}>{ItemType}</Text>
+                    <Text style = {styles.important}>{ItemType} - {itemTitle}</Text>
                   </View>
                   <View style={styles.description}>
                     <Text>{itemDescription}</Text>
@@ -244,10 +244,10 @@ const styles = StyleSheet.create({
 
   },
   title:{
-    fontSize: 18,
-    fontWeight: '700',
-    textAlign:'center',
-    marginTop:25
+    fontSize: 28,
+    color: colors.white,
+    fontWeight: "300",
+    marginTop: 20
   },
   normalText:{
     fontSize:16,

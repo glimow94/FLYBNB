@@ -242,7 +242,7 @@ const Signup = ({navigation})=>{
                         <Text style={[{width:150},styles.label]}>NOME</Text>
                         <TextInput
                             autoCorrect={false}
-                            style = {[{backgroundColor: newUserData.nameColor},styles.inputField]}
+                            style = {[{borderColor: newUserData.nameColor},styles.inputField]}
                             onChangeText={(val) => changeName(val)}
                         ></TextInput>
                         {   newUserData.nameAlert==true ? 
@@ -253,7 +253,7 @@ const Signup = ({navigation})=>{
                         <Text style={[{width:150},styles.label]}>COGNOME</Text>
                         <TextInput
                             autoCorrect={false}
-                            style = {styles.inputField}
+                            style = {[{borderColor: newUserData.surnameColor},styles.inputField]}
                             onChangeText={(val) => changeSurname(val)}
                         ></TextInput>
                         {   newUserData.surnameAlert==true ? 

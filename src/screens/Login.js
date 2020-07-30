@@ -5,8 +5,7 @@ import NextButton from "../components/buttons/Button1";
 import { useNavigation } from '@react-navigation/native';
 
 import { UserContext } from "../components/context";
-import Signup from './Signup'
-
+import Signup from './Signup';
 const Login = ()=>{
     const navigation = useNavigation();
 
@@ -59,7 +58,7 @@ const Login = ()=>{
                             onChangeText={(val)=>changePassw(val)}
                         ></TextInput>
                     </View>
-                    <Text>    Non hai un account? <Text onPress={()=> navigation.navigate(Signup)} style={{color: colors.red, fontSize:14, fontWeight: 700}} >Iscriviti</Text></Text>
+                    <Text>    Non hai un account? <Text onPress={()=> navigation.navigate(Signup)} style={{color: colors.red, fontSize:14, fontWeight: "700"}} >Iscriviti</Text></Text>
 
                 </ScrollView>
 

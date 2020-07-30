@@ -35,7 +35,8 @@ export default class Home extends Component{
       parking:false,
       city:'Luogo',
       price: 'Prezzo',
-      //status per gestire la comparsa/scomparsa dei componenti che filtrano la lista delle strutture
+      //status per gestire la comparsa/scomparsa dei componenti che appiono quando si premono i bottoni dei filtri  
+      parentType:'Home', //questo parametro cambia il bottone per cambiare città a seconda che ci si trovi in Home oppure in SignUp o AddStructure(la pagina per aggiungere una struttura)
       status1 : false,
       status2: false,
       status3:false,
@@ -75,6 +76,7 @@ export default class Home extends Component{
                   status1={this.state.status1}
                   status2={this.state.status2}
                   status3={this.state.status3}
+                  parentType={this.state.parentType}
                 ></CitySelector>
                 <PriceSelector
                   updateState={this.updateState.bind(this)}
@@ -82,6 +84,7 @@ export default class Home extends Component{
                   status1={this.state.status1}
                   status2={this.state.status2}
                   status3={this.state.status3}
+                
                 ></PriceSelector>
                 <FilterSelector 
                   updateState={this.updateState.bind(this)} 

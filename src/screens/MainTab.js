@@ -6,19 +6,19 @@ import LoggedOut from "./LoggedOut";
 import colors from "../style/colors/index"
 import { Icon } from 'react-native-elements';
 
-import Profile from "./Profile"
-import Home from "./Home"
+import Profile from "./Profile";
+import Home from "./Home";
 import Structure from "../screens/Structure"
 import Login from './Login';
-import BookingStructure from './BookingStructure'
+import BookingStructure from './BookingStructure';
 import Trip from './Trip';
-
+import AddStructure from './AddStructure';
 
 const Tab = createMaterialBottomTabNavigator();
 
 const HomeStack = createStackNavigator();
 const LoggedOutStack = createStackNavigator();
-
+const ProfileStack = createStackNavigator();
 export default class MainTabScreen extends Component{
     render()
     {    return (
@@ -53,7 +53,7 @@ export default class MainTabScreen extends Component{
         />
         <Tab.Screen
           name="Profile"
-          component={Profile}
+          component={ProfileStackScreen}
           options={{
             
             tabBarLabel: 'Profilo',
@@ -75,7 +75,12 @@ const HomeStackScreen = ({navigation}) =>(
       <HomeStack.Screen name="BookingStructure" component={BookingStructure} />
     </HomeStack.Navigator>
 );
-
+const ProfileStackScreen = ({navigation}) =>(
+  <ProfileStack.Navigator>
+    <ProfileStack.Screen name = "Profile"  component={Profile}/>
+    <ProfileStack.Screen name = "AddStructure"  component={AddStructure}/>
+  </ProfileStack.Navigator>
+);
 const LoggedOutStackScreen = ({navigation}) =>(
   <LoggedOutStack.Navigator >
     <LoggedOutStack.Screen name="Accedi" component={LoggedOut} />

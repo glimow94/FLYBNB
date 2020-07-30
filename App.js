@@ -112,7 +112,7 @@ export default function App() {
     signIn: async(email,password) =>{
       let userToken;
       userToken=null;
-      const url = `http://localhost:3055/users/login`;
+      const url = `http://127.0.0.1:3055/users/login`;
 
       axios.post(url, {
           method: 'POST',
@@ -129,6 +129,7 @@ export default function App() {
           if(res.status == 200){
             console.log("login success");
             AsyncStorage.setItem('userToken', res.data[0].id);
+            AsyncStorage.multiSet([['name',res.data[0].name], ['birthdate', res.data[0].date], ['city', res.data[0].city]])
             userToken=AsyncStorage.getItem('userToken');
             dispatch({type : 'LOGIN', id: email, token : userToken });
           }
@@ -150,7 +151,7 @@ export default function App() {
     signUp: (name, surname, birthDay, birthMonth, birthYear,
             gender, fiscal_code, city, address, email, password) => {
 
-              const url = `http://localhost:3055/users/registration`;
+              const url = `http://127.0.0.1:3055/users/registration`;
               axios.post(url, {
                   method: 'POST',
                   headers: {
