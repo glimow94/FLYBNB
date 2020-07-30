@@ -5,6 +5,23 @@ import colors from "../style/colors/index";
 import BookingButton from "../components/buttons/bookingButton";
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
+import AsyncStorage from '@react-native-community/async-storage';
+
+async function getToken(){
+  try{
+    const myToken = await AsyncStorage.getItem('userToken')
+    console.log("user Token")
+    console.log(myToken)
+    if(myToken!=null){
+      //abbiamo il token
+      return myToken;
+    }else{
+      return null;
+    }
+  }catch(e){
+    console.log(e)
+  }
+}
 
 class StructuresList extends Component {
   
@@ -13,29 +30,59 @@ class StructuresList extends Component {
     super(props);
     this.state = {
       data: [],
-      isLoading: true
+      isLoading: true,
+      userToken: null,
     }
    }
    _isMounted = false;
    componentDidMount = () => {
-     this._isMounted = true;
-    const url = `http://127.0.0.1:3055/structures`;
-    axios.get(url, {
-        method: 'GET',
-        headers: {
-          'content-type': 'application/json',
-        }
-      })
-      .then(res => {
-        //console.log(res.data);
-        if(this._isMounted){
-          const structures = res.data;
-          this.setState({
-            isLoading:false,
-            data: structures
+    this._isMounted = true;
+    console.log("usertoken FINALE");
+    const itemToken = AsyncStorage.getItem('userToken')
+    itemToken.then(token => {
+      this.setState({userToken: token})
+      console.log("token state");
+      console.log(this.state.userToken);
+      if(token != null){
+        console.log(token);
+        const url = `http://localhost:3055/structures/${this.state.userToken}`;
+        axios.get(url, {
+            method: 'GET',
+            headers: {
+              'content-type': 'application/json',
+            }
           })
-        }
-    })
+          .then(res => {
+            console.log(res.data);
+            if(this._isMounted){
+              const structures = res.data;
+              this.setState({
+                isLoading:false,
+                data: structures
+              })
+            }
+        })
+      }else{
+        console.log("userToken è null");
+        const url = `http://localhost:3055/structures`;
+        axios.get(url, {
+            method: 'GET',
+            headers: {
+              'content-type': 'application/json',
+            }
+          })
+          .then(res => {
+            console.log(res.data);
+            if(this._isMounted){
+              const structures = res.data;
+              this.setState({
+                isLoading:false,
+                data: structures
+              })
+            }
+        })
+      }
+      });
   }
 
   dataCityFilter(DATA){
@@ -120,12 +167,16 @@ class StructuresList extends Component {
           renderItem = {({item}) =>
           <View style={styles.item}>
             <Text>{item.title}</Text>
+            <Text>{item.email}</Text>
             <Text>{item.place}</Text>
             <Text style={styles.services}>Servizi inclusi :</Text>
             <BookingButton 
               text={parseInt(item.price)+'€ a Notte'} 
               onPress={()=>navigation.navigate('Structure',{
                   /* parametri da passare alla schermata successiva */
+                  itemName: item.name,
+                  itemSurname: item.surname,
+                  itemEmail: item.email,
                   itemTitle: item.title,
                   itemPrice: item.price,
                   itemID: item.id,

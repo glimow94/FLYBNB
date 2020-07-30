@@ -21,7 +21,10 @@ const images =[
 
 ]
 export default function Structure({ route }){
-    const { 
+    const {
+      itemName,
+      itemSurname,
+      itemEmail, 
       itemTitle,
       itemPrice,
       itemID,
@@ -60,6 +63,7 @@ export default function Structure({ route }){
             //abbiamo il token
             console.log("ecco il token")
             console.log(myToken)
+            console.log(itemID);
             navigation.navigate('BookingStructure',{
               /* parametri da passare alla schermata successiva */
               itemTitle: itemTitle,
