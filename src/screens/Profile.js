@@ -63,17 +63,16 @@ export default function Profile(){
         <Text style={styles.titleHeader}>Area Personale</Text>
 
         <View style={styles.profileCard}>
-          <Image
-                style={styles.logo}
-                source={require('../img/person.png')}
-          />
-
-          <View style={styles.userInfoBox}>
+           <View style={styles.userInfoBox}>
+            <Image
+                  style={styles.logo}
+                  source={require('../img/person.png')}
+            />
             <Text>{userData.name} {userData.surname}</Text>
             <Text>{userData.city}</Text>
             <Text>Nato il {userData.birthdate}</Text>
+            <Text onPress={signOut_} style={{color: colors.red, fontSize:14, fontWeight: "700", alignSelf:'center'}} >Logout</Text>
           </View>
-          <Text onPress={signOut_} style={{color: colors.red, fontSize:14, fontWeight: "700"}} >Logout</Text>
         </View>
 
         <View style={styles.profileInfo}>
@@ -108,6 +107,7 @@ const styles = StyleSheet.create({
       height:64,
       marginTop: 0,
       marginBottom: 0,
+      alignSelf:'center'
     },
     userInfoBox:{
       margin: 10,
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
       padding: 15,
       borderWidth: 2,
       borderColor: colors.black,
-      borderRadius: 10,
+      borderRadius: 4,
 
     },
     titleHeader:{
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
       alignItems: 'center'
     },
     infoBox:{
-      borderRadius: 20,
+      borderRadius: 4,
       borderWidth: 2,
       borderColor: colors.black,
       padding:20,

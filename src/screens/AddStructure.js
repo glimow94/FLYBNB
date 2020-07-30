@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, TextInput,ScrollView, StyleSheet, Picker,Button, TextPropTypes  } from "react-native";
+import { View, Text, TextInput,ScrollView, StyleSheet, Picker,Button,Dimensions, TextPropTypes  } from "react-native";
 import { CheckBox } from 'react-native-elements';
 import colors from "../style/colors/index";
 import NextButton from "../components/buttons/Button1";
@@ -8,7 +8,10 @@ import CitySelector from "../components/CitySelector"
 import { UserContext } from "../components/context";
 import { useNavigation } from "@react-navigation/native";
 import Login from './Login';
-//pagina di registrazione utente
+
+const {width} = Dimensions.get('window');
+
+//pagina di registrazione struttura
 export default class AddStructure extends Component{
     constructor(props){
         super(props);
@@ -144,7 +147,7 @@ export default class AddStructure extends Component{
                     <Text style={[{width:150},styles.label]}>NOME STRUTTURA</Text>
                                 <TextInput
                                     autoCorrect={false}
-                                    style = {[{borderColor: this.state.titleColor, width: 320},styles.inputField]}
+                                    style = {[{borderColor: this.state.titleColor},styles.inputField]}
                                     onChangeText={val => this.changeTitle(val)}
                                 ></TextInput>
                     {   this.state.titleAlert==true ? 
@@ -316,7 +319,8 @@ const styles = StyleSheet.create({
     },
     scrollViewWrapper: {
         margin: 10,
-        flex: 1
+        flex: 1,
+        width: width*0.8
     },
     label:{
         color: colors.white,
@@ -333,6 +337,7 @@ const styles = StyleSheet.create({
     },
     pickerstyle:{
         marginTop: 5,
+        width:200
     },
     serviceLabel:{
         alignSelf:'center', 

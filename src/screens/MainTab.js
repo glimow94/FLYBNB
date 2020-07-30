@@ -29,17 +29,7 @@ export default class MainTabScreen extends Component{
         shifting={true}
         style={{ backgroundColor: colors.black }}
       >
-        <Tab.Screen
-          name="Trip"
-          component={Trip}
-          options={{
-            tabBarColor :colors.white,
-            tabBarLabel: 'Prenotazioni',
-            tabBarIcon: ({ color }) => (
-              <Icon name="work" color={color} size={26} />
-            ),
-          }}
-        />
+        
         <Tab.Screen
           name="Home"
           component={HomeStackScreen}

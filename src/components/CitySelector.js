@@ -1,5 +1,5 @@
 import React, { Component, useCallback } from 'react';
-import { StyleSheet, Text, View, Button , Picker } from 'react-native';
+import { StyleSheet, Text, View, Button , Picker ,Dimensions} from 'react-native';
 import colors from '../style/colors';
 import CityButton from "../components/buttons/Button1"
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -8,6 +8,7 @@ import comuni from '../components/comuni'
 import db from '../components/database_region_city'
 import ConfirmButton from './buttons/confirmButton';
 
+const {width} = Dimensions.get('window');
 
 export default class CitySelector extends Component{
     constructor(props) {
@@ -179,14 +180,15 @@ export default class CitySelector extends Component{
        flexDirection:'column',
      },
      pickerstyle:{
-      
+      width: width*0.6
      },
      cancelButton:{
        width:'50'
      },
      alternativeCityButton:{
-       borderBottomWidth: 1,
-       marginTop: 15,
-       borderBottomColor: colors.white
+      width: 200,
+      borderBottomWidth: 1,
+      marginTop: 15,
+      borderBottomColor: colors.white
      }
    })
