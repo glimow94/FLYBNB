@@ -71,10 +71,4 @@ const ProfileStackScreen = ({navigation}) =>(
     <ProfileStack.Screen name = "AddStructure"  component={AddStructure}/>
   </ProfileStack.Navigator>
 );
-const LoggedOutStackScreen = ({navigation}) =>(
-  <LoggedOutStack.Navigator >
-    <LoggedOutStack.Screen name="Accedi" component={LoggedOut} />
-    <LoggedOutStack.Screen name="Login" component={Login} />
-  </LoggedOutStack.Navigator>
-);
 

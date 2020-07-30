@@ -19,7 +19,7 @@ class StructuresList extends Component {
    _isMounted = false;
    componentDidMount = () => {
      this._isMounted = true;
-    const url = `http://127.0.0.1:3055/structures`;
+    const url = `http://192.168.1.14:3055/structures`;
     axios.get(url, {
         method: 'GET',
         headers: {

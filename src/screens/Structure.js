@@ -13,7 +13,7 @@ import BookingStructure from './BookingStructure';
 import { color } from 'react-native-reanimated';
 
 const {width} = Dimensions.get('window');
-const height =  width*0.4//40% di width
+const height =  width*0.8//40% di width
 const images =[
   'https://res.cloudinary.com/flybnb94/image/upload/v1594675659/flyBNB/prova_csplvy.jpg',
   'https://thumbnails.trvl-media.com/l3Y9880qRaNDeRcV0mCacf5zBdc=/500x333/smart/filters:quality(80)/images.trvl-media.com/hotels/17000000/16620000/16611100/16611049/063cc6c0_z.jpg',
@@ -39,14 +39,14 @@ export default function Structure({ route }){
 
       const [state,setState] = React.useState({
         activeImage : 0,
-        horizontalScroll: true
+        horizontalScroll: true,
       })
       const navigation = useNavigation();
 
       useEffect(() => {
         if(Platform.OS == 'android'){
           setState({
-            horizontalScroll: false
+            horizontalScroll: false,
           })
         }
     
@@ -68,7 +68,8 @@ export default function Structure({ route }){
             })
           }
           else{
-            navigation.navigate(Login)
+            alert('non sei loggato')
+            /* navigation.navigate(Login) */
           }
         }catch(e){
           console.log(e)
@@ -100,10 +101,10 @@ export default function Structure({ route }){
     
     return (
     <ScrollView style={styles.container}>
-      <View style={styles.wrapper}>
+      
       <Text style={styles.title}>{itemTitle}</Text>
 
-      <View style={{padding: 30}}>
+      <View style={styles.imageScrollWrapper}>
             <ScrollView 
               pagingEnabled 
               horizontal
@@ -165,7 +166,7 @@ export default function Structure({ route }){
           <View style={styles.BookingButton}>
                 <BookingButton text="PRENOTA" onPress={getToken}></BookingButton> 
           </View>
-      </View>
+     
       
       </ScrollView>
     )
@@ -176,25 +177,26 @@ const styles = StyleSheet.create({
     flex:1,
     height:'100%',
     backgroundColor: colors.green01,
+    
   },
-  wrapper:{
-      flex:1,
-      height:'100%',
-      backgroundColor: colors.green01,
-      alignContent:'center',
-      alignItems:'center'
-  },
+ 
     Image:{
       width: width*0.9,
-      height: height*0.9,
-      resizeMode:'cover',
+      height: '100%',
+      borderRadius:15,
+    },
+    imageScrollWrapper:{
+      height: '30%',
+      marginBottom: 20,
+      backgroundColor: colors.white,
+      borderRadius: 20,
+      alignSelf:'center'
     },
     imageScrollView:{
       width: width*0.9,
-      height: height*0.9,
-      borderWidth: 3, 
-      borderColor: colors.white, 
-      borderRadius: 40
+      height: height,
+      margin: 5,
+      
     },
     pagination:{
       flexDirection: 'row', 
@@ -247,7 +249,8 @@ const styles = StyleSheet.create({
     fontSize: 28,
     color: colors.white,
     fontWeight: "300",
-    marginTop: 20
+    margin: 20,
+    alignSelf:'center'
   },
   normalText:{
     fontSize:16,

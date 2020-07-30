@@ -19,6 +19,7 @@ export default class DateSelector extends Component {
       //set del valore di inizio e fine data
       selectedStartDate: null,
       selectedEndDate: null,
+      selectedStartDateOriginal : null,
       // status è il valore che rende visibile/invisibile il calendario
       status: false,
       status2:true,
@@ -53,15 +54,29 @@ export default class DateSelector extends Component {
     var month_num = this.monthNameToNum(date_mod.substr(0,3));
     var date_mod_format = date_mod.substr(4,2)+"/"+month_num+"/"+date_mod.substr(6,5); //data in formato DD/MonthName/AAAA
     //function to handle the date change 
+    var final_date = date_mod_format.replace(/ /g, '');
+    var diffDays = ''; //variabile che conterrà i giorni fra il checkin e il checkout utile a calcolare il prezzo totale
+    
     if (type === 'END_DATE') {
+      diffDays = parseInt((date - this.state.selectedStartDateOriginal) / (1000 * 60 * 60 * 24), 10); 
       this.setState({
-        selectedEndDate: date_mod_format.replace(/ /g, ''),
+        selectedEndDate: final_date,
+        status: false
       });
+      this.props.updateState({
+        checkOut: final_date,
+        diffDays: diffDays
+      })
+
     } else {
       this.setState({
-        selectedStartDate: date_mod_format.replace(/ /g, ''),
+        selectedStartDate: final_date,
         selectedEndDate: null,
+        selectedStartDateOriginal: date
       });
+      this.props.updateState({
+        checkIn: final_date
+      })
     }
   }
 
@@ -118,15 +133,6 @@ export default class DateSelector extends Component {
             <ConfirmButton text="OK" onPress={this.showHideCalendar}></ConfirmButton>
           </View> : null
         }
-        
-        {
-        
-           this.state.status2 ?   <View style={styles.checkInOutText}>
-                <Text style={{padding:6}}>Check-In:</Text>
-                <Text style={{padding:0, color: colors.white, fontSize:16}}>{startDate}</Text>
-                <Text style={{padding:6}}>Check-Out: </Text>
-                <Text style={{padding:0, color: colors.white, fontSize:16}}>{endDate}</Text>
-              </View>:null}
       </View>
     );
   }

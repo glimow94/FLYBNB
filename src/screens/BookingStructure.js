@@ -1,24 +1,53 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import colors from '../style/colors/index'
-import DateSelector from '../components/DateSelector'
-const BookingStructure=({route})=>{
-  const { 
-    itemTitle,
-    itemPrice,
-    itemID,
-   } = route.params;
+import {View, Text, StyleSheet, Button} from 'react-native';
+import colors from '../style/colors/index';
+import DateSelector from '../components/DateSelector';
+import { useNavigation } from '@react-navigation/native';
+
+
+export default class BookingStructure extends Component{
+  constructor(props){
+    super(props);
+    this.state={
+      checkIn:'',
+      checkOut: '',
+      diffDays: 0,
+    }
+  }
+  
+  updateState(filterStatus){
+    this.setState(filterStatus)
+  } 
+   render(){
+    const {itemID,itemPrice,itemTitle} = this.props.route.params;
+    
     return (
       <View style={styles.container}>
         <Text style={styles.textHeader}>Prenotazione Struttura:</Text>
         <Text style={styles.texTitle}> {itemTitle}</Text>
-        <Text style={styles.textInfo}>seleziona date di soggiorno e completa tutti i campi</Text>
-        <DateSelector></DateSelector>
-        <Text>Prezzo/notte : {itemPrice}</Text>
-        <Text>ID struttura: {itemID}</Text>
-        <Text>Prezzo Totale:</Text>
+        <Text style={styles.subtitle}>seleziona date di soggiorno e completa tutti i campi</Text>
+        <DateSelector
+          updateState={this.updateState.bind(this)} 
+        ></DateSelector>
+        <View style={styles.datesBox}>
+                <Text style={styles.dateText}>Check-In:</Text>
+                <Text style={styles.dateStyle}>{this.state.checkIn}</Text>
+                <Text style={styles.dateText}>Check-Out: </Text>
+                <Text style={styles.dateStyle}>{this.state.checkOut}</Text>
+        </View>
+        <Text style={styles.textInfo}>Prezzo/notte : {itemPrice}€</Text>
+        <Text style={styles.textInfo}>ID struttura: {itemID}</Text>
+        <Text style={styles.textInfo}>Prezzo Totale: <Text style={{color: colors.red}}>{itemPrice*this.state.diffDays}€</Text></Text>
+        <Text> Permanenza: {this.state.diffDays}giorni</Text>
+        
+        <View style={{marginTop: 20, width:300}}>
+          <Button title="CONFERMA" color={colors.orange} ></Button>
+        </View>
+      
       </View>
     )
+   }
+    
 }
 
 const styles = StyleSheet.create({
@@ -36,18 +65,43 @@ const styles = StyleSheet.create({
       marginTop:30
     },
     texTitle:{
-      fontSize: 18,
+      fontSize: 20,
       color: colors.white,
-      fontWeight: "300",
-      marginTop:5,
+      fontWeight: "700",
+      margin:20,
       marginBottom: 5
     },
-    textInfo:{
+    subtitle:{
       fontSize: 14,
       color: colors.white,
       fontWeight: "300",
       marginBottom: 30
+    },
+    datesBox:{
+      position: 'relative',
+      flexDirection:'row',
+      alignContent:'center',
+      alignItems:'center',
+      margin: 20,
+      padding:5,
+      
+    },
+    textInfo:{
+      fontSize: 20,
+      color: colors.black,
+      fontWeight: "700",
+      margin: 5
+    },
+    dateText:{
+      padding:6,
+      fontWeight: "500"
+    },
+    
+    dateStyle:{
+      padding:0, 
+      color: colors.white,
+      fontWeight:"700",
+      fontSize:16
     }
 });
 
-export default BookingStructure

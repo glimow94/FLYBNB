@@ -112,7 +112,7 @@ export default function App() {
     signIn: async(email,password) =>{
       let userToken;
       userToken=null;
-      const url = `http://127.0.0.1:3055/users/login`;
+      const url = `http://192.168.1.14:3055/users/login`;
 
       axios.post(url, {
           method: 'POST',
@@ -151,7 +151,7 @@ export default function App() {
     signUp: (name, surname, birthDay, birthMonth, birthYear,
             gender, fiscal_code, city, address, email, password) => {
 
-              const url = `http://127.0.0.1:3055/users/registration`;
+              const url = `http://192.168.1.14:3055/users/registration`;
               axios.post(url, {
                   method: 'POST',
                   headers: {
