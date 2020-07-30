@@ -77,7 +77,10 @@ export default class DateSelector extends Component {
 
     return (
       <View>
-        <CalendarButton text="Date" onPress={this.showHideCalendar}></CalendarButton>
+        <View style={{alignContent:'center', alignItems:'center'}}>
+          <CalendarButton text="Date" onPress={this.showHideCalendar}></CalendarButton>
+        </View>
+        
         
         {   
           this.state.status ? 

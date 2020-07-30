@@ -38,20 +38,25 @@ export default function Profile(){
   async function getUserData(){
     var user_name = '';
     var user_city='';
+    var user_surname='';
+    var user_email = '';
     var user_birthdate='';
     try{
       user_name = await AsyncStorage.getItem('name');
+      user_surname = await AsyncStorage.getItem('surname');
       user_city = await AsyncStorage.getItem('city');
       user_birthdate = await AsyncStorage.getItem('birthdate');
+      user_email = await (await AsyncStorage.getItem('email')).toLowerCase();
     }catch(e){
       console.log(e)
     }
     setUserData({
       ...userData,
       name: user_name,
-      surname:'',
+      surname: user_surname,
       city: user_city,
-      birthdate: user_birthdate
+      birthdate: user_birthdate,
+      email: user_email
     })
   }
 //funzione che al caricamento dello screen 'Profile' carica le info dell'utente dall'asyncstorage
@@ -68,9 +73,9 @@ export default function Profile(){
                   style={styles.logo}
                   source={require('../img/person.png')}
             />
-            <Text>{userData.name} {userData.surname}</Text>
-            <Text>{userData.city}</Text>
-            <Text>Nato il {userData.birthdate}</Text>
+            <Text style={styles.profileTextInfo}>{userData.name} {userData.surname}</Text>
+            <Text style={styles.profileTextInfo}>{userData.city}</Text>
+            <Text style={styles.profileTextInfo}>{userData.email}</Text>
             <Text onPress={signOut_} style={{color: colors.red, fontSize:14, fontWeight: "700", alignSelf:'center'}} >Logout</Text>
           </View>
         </View>
@@ -129,6 +134,11 @@ const styles = StyleSheet.create({
       margin: 30,
       alignContent:'center',
       alignItems: 'center'
+    },
+    profileTextInfo:{
+      alignSelf:'center',
+      margin: 2,
+      fontWeight:"500"
     },
     infoBox:{
       borderRadius: 4,

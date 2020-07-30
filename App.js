@@ -129,7 +129,7 @@ export default function App() {
           if(res.status == 200){
             console.log("login success");
             AsyncStorage.setItem('userToken', res.data[0].id);
-            AsyncStorage.multiSet([['name',res.data[0].name], ['birthdate', res.data[0].date], ['city', res.data[0].city]])
+            AsyncStorage.multiSet([['name',res.data[0].name],['surname',res.data[0].surname],['email', res.data[0].email],['birthdate', res.data[0].date], ['city', res.data[0].city]])
             userToken=AsyncStorage.getItem('userToken');
             dispatch({type : 'LOGIN', id: email, token : userToken });
           }

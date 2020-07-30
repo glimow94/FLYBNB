@@ -180,7 +180,7 @@ export default class CitySelector extends Component{
        flexDirection:'column',
      },
      pickerstyle:{
-      width: width*0.6
+      width: width*0.3
      },
      cancelButton:{
        width:'50'
