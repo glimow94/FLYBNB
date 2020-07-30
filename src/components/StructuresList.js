@@ -7,21 +7,6 @@ import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
 import AsyncStorage from '@react-native-community/async-storage';
 
-async function getToken(){
-  try{
-    const myToken = await AsyncStorage.getItem('userToken')
-    console.log("user Token")
-    console.log(myToken)
-    if(myToken!=null){
-      //abbiamo il token
-      return myToken;
-    }else{
-      return null;
-    }
-  }catch(e){
-    console.log(e)
-  }
-}
 
 class StructuresList extends Component {
   
@@ -37,14 +22,13 @@ class StructuresList extends Component {
    _isMounted = false;
    componentDidMount = () => {
     this._isMounted = true;
-    console.log("usertoken FINALE");
+    //get current token
     const itemToken = AsyncStorage.getItem('userToken')
     itemToken.then(token => {
       this.setState({userToken: token})
       console.log("token state");
       console.log(this.state.userToken);
-      if(token != null){
-        console.log(token);
+      if(this.state.userToken != null){
         const url = `http://localhost:3055/structures/${this.state.userToken}`;
         axios.get(url, {
             method: 'GET',
