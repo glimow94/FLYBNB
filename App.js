@@ -128,8 +128,7 @@ export default function App() {
           console.log(res.data[0].id);
           if(res.status == 200){
             console.log("login success");
-            AsyncStorage.setItem('userToken', res.data[0].id);
-            AsyncStorage.multiSet([['name',res.data[0].name],['surname',res.data[0].surname],['email', res.data[0].email],['birthdate', res.data[0].date], ['city', res.data[0].city]])
+            AsyncStorage.multiSet([['userToken', res.data[0].id.toString()],['name',res.data[0].name],['surname',res.data[0].surname],['email', res.data[0].email],['birthdate', res.data[0].date], ['city', res.data[0].city]])
             userToken=AsyncStorage.getItem('userToken');
             dispatch({type : 'LOGIN', id: email, token : userToken });
           }
@@ -183,7 +182,7 @@ export default function App() {
   }), [])
 
   //se il token non è null allora è stato effettuato il login, quindi viene renderizzato MainTab
-  //altrimenti viene renderizzato NoLoggedStack che comprende la pagina di login/signIn e la  in cui si possono solo vedere le strutture
+  //altrimenti viene renderizzato NoLoggedStack che comprende la pagina di login/signIn e la Home in cui si possono solo vedere le strutture
   return (
     <UserContext.Provider value = {userContext}>
       <NavigationContainer>

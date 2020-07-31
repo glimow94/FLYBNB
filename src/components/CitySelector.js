@@ -25,7 +25,8 @@ export default class CitySelector extends Component{
           status2: false,
           marginTop: 5,
           bottom: 20,
-          width: null
+          width: null,
+          pickerWidth: 250
         };
     }
     updateCity(data){
@@ -52,9 +53,11 @@ export default class CitySelector extends Component{
           this.setState({
             marginTop: 20,
             bottom: 0,
-            width: 108
+            width: 108,
+            pickerWidth: 120
           })
         }
+
     }
     showProvinces=()=>{
         if(this.state.status2==true){
@@ -77,7 +80,7 @@ export default class CitySelector extends Component{
               <View>
 
                 <Picker mode="dropdown" 
-                    style={styles.pickerstyle}                  
+                    style={[{width:this.state.pickerWidth},styles.pickerstyle]}                  
                     onValueChange={itemValue => this.setState({
                                                   region: itemValue,
                                                   province: 'seleziona provincia',
@@ -102,7 +105,7 @@ export default class CitySelector extends Component{
                   this.state.status2 ? 
                   <Picker 
                     mode="dropdown" 
-                    style={styles.pickerstyle}
+                    style={[{width:this.state.pickerWidth},styles.pickerstyle]}
                     onValueChange={
                       itemValue => this.setState({
                       province: itemValue,
@@ -134,7 +137,7 @@ export default class CitySelector extends Component{
                   this.state.status3 ? 
                   <Picker 
                     mode="dropdown" 
-                    style={styles.pickerstyle}
+                    style={[{width:this.state.pickerWidth},styles.pickerstyle]}
                     onValueChange={itemValue => this.updateCity({
                       city:itemValue,
                       status1:false
@@ -178,9 +181,6 @@ export default class CitySelector extends Component{
    const styles = StyleSheet.create({
      container: {
        flexDirection:'column',
-     },
-     pickerstyle:{
-      width: width*0.3
      },
      cancelButton:{
        width:'50'
