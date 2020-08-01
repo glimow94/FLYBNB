@@ -27,7 +27,7 @@ export default class AddStructure extends Component{
             location_description:'',
             beds:'',
             price:'',
-            fullboard: false,
+            fullBoard: false,
             wifi: false,
             parking:false,
             kitchen:false,
@@ -76,6 +76,8 @@ export default class AddStructure extends Component{
         this.setState({
             type:val
         })
+        console.log(val)
+        console.log(this.state.type)
     }
 
     changeStreet = (val) => {
