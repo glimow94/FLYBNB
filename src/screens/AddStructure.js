@@ -28,7 +28,7 @@ export default class AddStructure extends Component{
             location_description:'',
             beds:'',
             price:'',
-            fullboard: false,
+            fullBoard: false,
             wifi: false,
             parking:false,
             kitchen:false,

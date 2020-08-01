@@ -47,9 +47,9 @@ static contextType = UserContext
     var user_surname='';
     var user_email = '';
     var user_birthdate='';
-    var userToken='';
+    var userToken= '';
     try{
-      userToken = await AsyncStorage.getItem('userToken')
+      userToken = await AsyncStorage.getItem('userToken');
       user_name = await AsyncStorage.getItem('name');
       user_surname = await AsyncStorage.getItem('surname');
       user_city = await AsyncStorage.getItem('city');
@@ -63,7 +63,8 @@ static contextType = UserContext
       surname:user_surname,
       city:user_city,
       birthdate:user_birthdate,
-      email:user_email
+      email:user_email,
+      userToken:userToken
     })
   }
   showHideBookings=()=>{
@@ -127,7 +128,7 @@ static contextType = UserContext
                 <Text>Le mie strutture:{this.state.structuresId}</Text> 
                 <UserStructures></UserStructures>
                </View>}
-              <Text style={styles.structureButton} onPress={()=> this.props.navigation.navigate('AddStructure',{userToken: this.state.userToken})} > Aggiungi +</Text>
+              <Text style={styles.structureButton} onPress={()=> this.props.navigation.navigate('AddStructure',{userToken: this.state.userToken})} >Aggiungi +</Text>
               </View> : null
           }
         </View>
