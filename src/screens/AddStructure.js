@@ -13,7 +13,9 @@ const {width} = Dimensions.get('window');
 
 //pagina di registrazione struttura
 export default class AddStructure extends Component{
+    
     constructor(props){
+        const {userToken} = props.route.params;
         super(props);
         this.state={
             title : '',
@@ -139,8 +141,6 @@ export default class AddStructure extends Component{
         this.setState(filterStatus)
     } 
     render(){
-        const {userToken} = this.props.route.params;
-
         return (
             <View style={styles.wrapper}>
                 <Text style={styles.titleHeader}>Aggiungi una nuova Struttura</Text>
