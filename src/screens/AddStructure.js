@@ -140,6 +140,13 @@ export default class AddStructure extends Component{
         this.setState(filterStatus)
     }
 
+    componentDidMount = () => {
+        const {userToken} = this.props.route.params;
+        console.log('userTokenAddStructure')
+        console.log(userToken)
+        this.setState({user_id: userToken})
+
+    }
     postData = () => {
         const url = `http://localhost:3055/structures/add`;
         axios.post(url, {
@@ -158,7 +165,7 @@ export default class AddStructure extends Component{
             location_description: this.state.location_description,
             beds: this.state.beds,
             price: this.state.price,
-            fullboard: this.state.fullboard,
+            fullboard: this.state.fullBoard,
             wifi: this.state.wifi,
             parking: this.state.parking,
             kitchen: this.state.kitchen,
@@ -173,10 +180,6 @@ export default class AddStructure extends Component{
     }
 
     render(){
-
-        const {userToken} = this.props.route.params;
-        console.log('userTokenAddStructure')
-        console.log(userToken)
 
         return (
             <View style={styles.wrapper}>
