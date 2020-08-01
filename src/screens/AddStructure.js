@@ -56,7 +56,7 @@ export default class AddStructure extends Component{
 
         }
     }
-    
+
     changeTitle = (val) => {
         
         if(!val || val.trim().length === 0){
@@ -173,6 +173,8 @@ export default class AddStructure extends Component{
     }
 
     render(){
+        const {userToken} = this.props.route.params;
+
         return (
             <View style={styles.wrapper}>
                 <Text style={styles.titleHeader}>Aggiungi una nuova Struttura</Text>

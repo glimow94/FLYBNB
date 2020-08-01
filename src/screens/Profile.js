@@ -1,6 +1,7 @@
 import React, {Component, useEffect} from 'react';
-import {View, Text, StyleSheet, Image, Dimensions} from 'react-native';
+import {View, Text, StyleSheet, Image, Dimensions, ScrollView} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import UserStructures from '../components/UserStructureList'
 import AddButton from '../components/buttons/Button1'
 import { useNavigation } from '@react-navigation/native';
 
@@ -11,37 +12,44 @@ import LogoutButton from "../components/buttons/Button1"
 import { color } from 'react-native-reanimated';
 
 import AddStructure from './AddStructure';
+import { render } from 'react-dom';
 
 
 const {width} = Dimensions.get('window');
 const height =  width*0.4//40% di width
 
-export default function Profile(){
+class Profile extends Component{
+static contextType = UserContext
 
-  const navigation = useNavigation();
 
-  const [userData,setUserData] = React.useState({
-    structuresId: ['1','04'],
-    bookingsId: [],
-    name:'',
-    surname:'',
-    city:'',
-    birthdate:''
-  })
-
-  const { signOut } = React.useContext(UserContext)
-
-  function signOut_(){
-    signOut()
+  constructor(props){
+    super(props);
+    this.state={
+      structuresList:0, //se questo valore è 0 l'utente non ha struttre e viene mostrato un avviso altrimenti se è 1 viene mostrata la lista delle strutture
+      bookingsId: [],
+      name:'',
+      surname:'',
+      city:'',
+      birthdate:'' ,
+      email:'',
+      userToken:'',
+      //status per visualizzare le prenotazioni oppure le strutture personali
+      status: true,
+      status2: false
+    }
   }
+  
 
-  async function getUserData(){
+//funzione che al caricamento dello screen 'Profile' carica le info dell'utente dall'asyncstorage
+  async componentDidMount(){
     var user_name = '';
     var user_city='';
     var user_surname='';
     var user_email = '';
     var user_birthdate='';
+    var userToken='';
     try{
+      userToken = await AsyncStorage.getItem('userToken')
       user_name = await AsyncStorage.getItem('name');
       user_surname = await AsyncStorage.getItem('surname');
       user_city = await AsyncStorage.getItem('city');
@@ -50,19 +58,35 @@ export default function Profile(){
     }catch(e){
       console.log(e)
     }
-    setUserData({
-      ...userData,
+    this.setState({
       name: user_name,
-      surname: user_surname,
-      city: user_city,
-      birthdate: user_birthdate,
-      email: user_email
+      surname:user_surname,
+      city:user_city,
+      birthdate:user_birthdate,
+      email:user_email
     })
   }
-//funzione che al caricamento dello screen 'Profile' carica le info dell'utente dall'asyncstorage
-  useEffect(() => {
-    getUserData();
-  }, [])
+  showHideBookings=()=>{
+    if(this.state.status==false){
+      this.setState({
+        status:true,
+        status2:false
+      })
+    }
+  }
+  showHideStructures=()=>{
+    if(this.state.status2==false){
+      this.setState({
+        status2:true,
+        status:false
+      })
+    }
+  }
+  render(){
+  
+
+  const {signOut} = this.context
+
     return (
       <View style={styles.container}>
         <Text style={styles.titleHeader}>Area Personale</Text>
@@ -73,26 +97,45 @@ export default function Profile(){
                   style={styles.logo}
                   source={require('../img/person.png')}
             />
-            <Text style={styles.profileTextInfo}>{userData.name} {userData.surname}</Text>
-            <Text style={styles.profileTextInfo}>{userData.city}</Text>
-            <Text style={styles.profileTextInfo}>{userData.email}</Text>
-            <Text onPress={signOut_} style={{color: colors.red, fontSize:14, fontWeight: "700", alignSelf:'center'}} >Logout</Text>
+            <Text style={styles.profileTextInfo}>{this.state.name} {this.state.surname}</Text>
+            <Text style={styles.profileTextInfo}>{this.state.city}</Text>
+            <Text style={styles.profileTextInfo}>{this.state.email}</Text>
+            <Text onPress={signOut} style={{color: colors.red, fontSize:14, fontWeight: "700", alignSelf:'center'}} >Logout</Text>
           </View>
         </View>
 
-        <View style={styles.profileInfo}>
-          <View style={styles.infoBox}>
-            { userData.bookingsId.length == 0 ? <Text>Nessuna prenotazione effettuata</Text> : <Text>Prenotazioni effettuate: </Text> }
+        <View style={styles.menu}>
+          <View style={styles.menuButton1}>
+            <Text style={styles.menuText} onPress={this.showHideBookings}>PRENOTAZIONI</Text>
           </View>
-          <View style={styles.infoBox}>
-            { userData.structuresId.length == 0 ? <Text>Diventa host aggiungendo una nuova struttura</Text> : <Text>Le mie strutture:{userData.structuresId}</Text> }
-            <Text style={styles.structureButton} onPress={()=> navigation.navigate(AddStructure)} > Aggiungi +</Text>
+          <View style={styles.menuButton2}>
+            <Text style={styles.menuText} onPress={this.showHideStructures}>STRUTTURE</Text>
           </View>
 
+        </View>
+        <View style={styles.profileInfo}>
+          
+          {this.state.status? 
+              <View style={styles.infoBox}>
+                { this.state.bookingsId.length == 0 ? <Text>Nessuna prenotazione effettuata</Text> : <Text>Prenotazioni effettuate: </Text> }
+              </View>:null
+          }
+          {this.state.status2 ? 
+              <View style={styles.infoBox}>
+                { this.state.structuresList.length == 0 ? <Text>Diventa host aggiungendo una nuova struttura</Text>
+              :<View>
+                <Text>Le mie strutture:{this.state.structuresId}</Text> 
+                <UserStructures></UserStructures>
+               </View>}
+              <Text style={styles.structureButton} onPress={()=> this.props.navigation.navigate('AddStructure',{userToken: this.state.userToken})} > Aggiungi +</Text>
+              </View> : null
+          }
         </View>
 
       </View>
     )
+  }
+    
 }
 
 const styles = StyleSheet.create({
@@ -130,6 +173,50 @@ const styles = StyleSheet.create({
       margin: 20,
       alignSelf:'center'
     },
+    menu:{
+      flexDirection: 'row',
+      alignContent:'center',
+      alignItems:'center',
+      alignSelf:'center',
+      marginTop: 10
+    },
+    menuButton1:{
+      height:30,
+      width:150,
+      backgroundColor: colors.blue,
+      alignContent:'center',
+      alignItems:'center',
+      justifyContent:'center',
+      borderColor: colors.white,
+      borderWidth:2,
+      borderRadius: 10,
+      borderTopRightRadius:0,
+      borderBottomRightRadius:0,
+      borderRightWidth:1,
+      margin:0
+    },
+    menuButton2:{
+      height:30,
+      width:150,
+      backgroundColor: colors.blue,
+      alignContent:'center',
+      alignItems:'center',
+      justifyContent:'center',
+      borderColor: colors.white,
+      borderWidth:2,
+      borderRadius: 10,
+      borderTopLeftRadius:0,
+      borderBottomLeftRadius:0,
+      borderLeftWidth:0,
+      margin:0,
+    },
+    menuText:{
+      alignSelf:'center',
+      color: colors.white,
+      margin:5,
+      justifyContent:"center",
+      fontWeight:"600"
+    },
     profileInfo:{
       margin: 30,
       alignContent:'center',
@@ -164,3 +251,5 @@ const styles = StyleSheet.create({
       borderRadius: 10
     }
 });
+
+export default Profile
