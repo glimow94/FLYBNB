@@ -76,8 +76,6 @@ export default class AddStructure extends Component{
         this.setState({
             type:val
         })
-        console.log(val)
-        console.log(this.state.type)
     }
 
     changeStreet = (val) => {
