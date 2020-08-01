@@ -18,7 +18,7 @@ export default class AddStructure extends Component{
         super(props);
         this.state={
             title : '',
-            user_id: '15',
+            user_id: '',
             type:'B&B',
             city:'',
             street:'',
@@ -145,7 +145,7 @@ export default class AddStructure extends Component{
         axios.post(url, {
             method: 'POST',
             headers: {
-              'content-type': 'application/json',
+              'content-type': 'application/json',   
             },
             user_id: this.state.user_id,
             title: this.state.title,
@@ -173,7 +173,10 @@ export default class AddStructure extends Component{
     }
 
     render(){
+
         const {userToken} = this.props.route.params;
+        console.log('userTokenAddStructure')
+        console.log(userToken)
 
         return (
             <View style={styles.wrapper}>

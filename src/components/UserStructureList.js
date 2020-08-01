@@ -30,26 +30,7 @@ class StructuresList extends Component {
       console.log("token state");
       console.log(this.state.userToken);
       if(this.state.userToken != null){
-        const url = `http://192.168.1.14:3055/structures/${this.state.userToken}`;
-        axios.get(url, {
-            method: 'GET',
-            headers: {
-              'content-type': 'application/json',
-            }
-          })
-          .then(res => {
-            console.log(res.data);
-            if(this._isMounted){
-              const structures = res.data;
-              this.setState({
-                isLoading:false,
-                data: structures
-              })
-            }
-        })
-      }else{
-        console.log("userToken è null");
-        const url = `http://192.168.1.14:3055/structures`;
+        const url = `http://localhost:3055/structures/profile/${this.state.userToken}`;
         axios.get(url, {
             method: 'GET',
             headers: {
@@ -70,16 +51,6 @@ class StructuresList extends Component {
       });
   }
 
-  structuresFilterByToken(DATA){
-      var newData = [];
-      var userToken = this.state.userToken;
-      DATA.forEach(function (item){
-        if(item.user_id==29)
-          newData.push(item)
-      })
-      return newData
-  }
-
   render(){
     
     const { navigation } = this.props;
@@ -88,7 +59,7 @@ class StructuresList extends Component {
       
       <View style={styles.container}>
         <FlatList
-          data={this.structuresFilterByToken(this.state.data)}
+          data= {this.state.data}
           keyExtractor = {(item, index) => index.toString()}
           renderItem = {({item}) =>
           <View style={styles.item}>
