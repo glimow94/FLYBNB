@@ -90,6 +90,7 @@ static contextType = UserContext
 
     return (
       <View style={styles.container}>
+      <ScrollView style={styles.scrollViewWrapper}>
         <Text style={styles.titleHeader}>Area Personale</Text>
 
         <View style={styles.profileCard}>
@@ -132,6 +133,8 @@ static contextType = UserContext
               </View> : null
           }
         </View>
+
+      </ScrollView>
 
       </View>
     )
