@@ -8,6 +8,7 @@ import CitySelector from "../components/CitySelector"
 import { UserContext } from "../components/context";
 import { useNavigation } from "@react-navigation/native";
 import Login from './Login';
+import axios from "axios";
 
 const {width} = Dimensions.get('window');
 
@@ -19,7 +20,7 @@ export default class AddStructure extends Component{
         super(props);
         this.state={
             title : '',
-            user_id:'',
+            user_id: '',
             type:'B&B',
             city:'',
             street:'',
@@ -139,8 +140,49 @@ export default class AddStructure extends Component{
     }
     updateState(filterStatus){
         this.setState(filterStatus)
-    } 
+    }
+
+    componentDidMount = () => {
+        const {userToken} = this.props.route.params;
+        console.log('userTokenAddStructure')
+        console.log(userToken)
+        this.setState({user_id: userToken})
+
+    }
+    postData = () => {
+        const url = `http://localhost:3055/structures/add`;
+        axios.post(url, {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',   
+            },
+            user_id: this.state.user_id,
+            title: this.state.title,
+            //type: this.state.type,
+            place: this.state.city,
+            street: this.state.street,
+            number: this.state.number,
+            post_code: this.state.post_code,
+            description: this.state.description,
+            location_description: this.state.location_description,
+            beds: this.state.beds,
+            price: this.state.price,
+            fullboard: this.state.fullBoard,
+            wifi: this.state.wifi,
+            parking: this.state.parking,
+            kitchen: this.state.kitchen,
+            airConditioner: this.state.airConditioner 
+          })
+          .then(res => {
+            console.log(res);
+            })
+          .catch(function (error) {
+            console.log(error);
+          });
+    }
+
     render(){
+
         return (
             <View style={styles.wrapper}>
                 <Text style={styles.titleHeader}>Aggiungi una nuova Struttura</Text>
@@ -296,13 +338,15 @@ export default class AddStructure extends Component{
                         onChangeText={val => this.changeLocationDescription(val)}
                     />
                     <View style={{marginTop: 5}}>
-                        <Button title="CONFERMA" color={colors.orange} ></Button>
+                        <Button title="CONFERMA" color={colors.orange} onPress = {()=> {this.postData()}}></Button>
                     </View>
                     
                 </ScrollView>
             </View>
         );
     }
+
+
 }
 const styles = StyleSheet.create({
     wrapper: {

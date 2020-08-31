@@ -29,7 +29,7 @@ class StructuresList extends Component {
       console.log("token state");
       console.log(this.state.userToken);
       if(this.state.userToken != null){
-        const url = `http://192.168.1.14:3055/structures/${this.state.userToken}`;
+        const url = `http://localhost:3055/structures/${this.state.userToken}`;
         axios.get(url, {
             method: 'GET',
             headers: {
@@ -48,7 +48,7 @@ class StructuresList extends Component {
         })
       }else{
         console.log("userToken è null");
-        const url = `http://192.168.1.14:3055/structures`;
+        const url = `http://localhost:3055/structures`;
         axios.get(url, {
             method: 'GET',
             headers: {
