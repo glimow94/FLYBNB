@@ -77,7 +77,7 @@ export default class AddStructure extends Component{
     }
     changeType = (val) => {
         this.setState({
-            type:val
+            type : val
         })
     }
 
@@ -158,7 +158,7 @@ export default class AddStructure extends Component{
             },
             user_id: this.state.user_id,
             title: this.state.title,
-            //type: this.state.type,
+            type: this.state.type,
             place: this.state.city,
             street: this.state.street,
             number: this.state.number,
