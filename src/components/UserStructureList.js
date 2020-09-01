@@ -62,33 +62,34 @@ class StructuresList extends Component {
           data= {this.state.data}
           keyExtractor = {(item, index) => index.toString()}
           renderItem = {({item}) =>
-          <View style={styles.item}>
-            <Text>{item.title}</Text>
-            <Text>{item.place}</Text>
-            <Text style={styles.services}>Servizi inclusi :</Text>
-            <BookingButton 
-              text={parseInt(item.price)+'€ a Notte'} 
-              onPress={()=>navigation.navigate('Structure',{
-                  /* parametri da passare alla schermata successiva */
-                  itemName: item.name,
-                  itemSurname: item.surname,
-                  itemEmail: item.email,
-                  itemTitle: item.title,
-                  itemPrice: item.price,
-                  itemID: item.id,
-                  ItemPlace: item.place,
-                  ItemStreet: item.street,
-                  ItemBeds: item.beds,
-                  ItemType: item.type,
-                  itemKitchen: item.kitchen,
-                  itemFullBoard: item.fullboard,
-                  itemAirConditioner: item.airConditioner,
-                  itemWifi: item.wifi,
-                  itemParking: item.parking,
-                  itemDescription: item.description,
-                  locationDescription: item.location_description,
-              })}></BookingButton>
-          </View>}
+            <View style={styles.item}>
+              <Text
+                style={styles.titleStructure}
+                onPress={()=>navigation.navigate('UserStructure',{
+                    /* parametri da passare alla schermata successiva */
+                    itemName: item.name,
+                    itemSurname: item.surname,
+                    itemEmail: item.email,
+                    itemTitle: item.title,
+                    itemPrice: item.price,
+                    itemID: item.id,
+                    ItemPlace: item.place,
+                    ItemStreet: item.street,
+                    ItemBeds: item.beds,
+                    ItemType: item.type,
+                    itemKitchen: item.kitchen,
+                    itemFullBoard: item.fullboard,
+                    itemAirConditioner: item.airConditioner,
+                    itemWifi: item.wifi,
+                    itemParking: item.parking,
+                    itemDescription: item.description,
+                    locationDescription: item.location_description,
+                })}>
+                {item.title} 
+              </Text>
+              <Text>{item.place}</Text>
+              <Text style={styles.editButton} onPress={()=> this.props.navigation.navigate('EditStructure',{userToken: this.state.userToken})} >Modifica</Text>
+            </View>}
           contentContainerStyle={{paddingTop:40}}
         />
       </View>
@@ -103,23 +104,31 @@ export default function(props) {
 
 const styles = StyleSheet.create({
   container: {
-   
     
   },
   item: {
-   
+   borderColor: colors.black,
+   borderWidth:2,
+   borderRadius: 8,
+   padding: 5,
+   marginTop: 4,
   },
-  title: {
-    fontSize: 18,
-    paddingBottom: 8
+  titleStructure:{
+    fontSize: 20,
+    color: colors.black,
   },
-  price:{
-    paddingTop:8,
-    paddingBottom:8
-  },
-  footer:{
-    marginBottom:10
-  },
-  footerText:{
+  editButton:{
+    color: colors.red, 
+    fontSize:12, 
+    fontWeight: "700",
+    padding:4,
+    width: 80,
+    textAlign:'center',
+    alignSelf:'flex-end',
+    margin: 2,
+    backgroundColor: colors.white,
+    borderColor: colors.black,
+    borderWidth: 1,
+    borderRadius: 10
   }
 });

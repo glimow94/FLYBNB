@@ -20,7 +20,7 @@ const images =[
   'https://res.cloudinary.com/flybnb94/image/upload/v1594675659/flyBNB/prova_csplvy.jpg',
 
 ]
-export default function Structure({ route }){
+export default function UserStructure({ route }){
     const {
       itemName,
       itemSurname,
@@ -56,52 +56,22 @@ export default function Structure({ route }){
       }, [])
 
       
-      async function getToken(){
-        try{
-          const myToken = await AsyncStorage.getItem('userToken');
-          const clientMail = await AsyncStorage.getItem('email');
-          const clientName = await AsyncStorage.getItem('name');
-          const clientSurname = await AsyncStorage.getItem('surname');
-          if(myToken!=null){
-            //abbiamo il token
-            console.log("ecco il token")
-            console.log(myToken)
-            console.log(itemID);
-            navigation.navigate('BookingStructure',{
+    function navigate(){
+            navigation.navigate('EditStructure',{
               /* parametri da passare alla schermata successiva */
               itemTitle: itemTitle,
               itemPrice: itemPrice,
-              itemID: itemID,
-              userID: myToken,
-              clientMail: clientMail,//email dell'ospite
+              itemID: itemID,//email dell'ospite
               ownerMail: itemEmail,//email del proprietario di casa
               ownerName: itemName,
               ownerSurname: itemSurname,
-              clientName: clientName,
-              clientSurname: clientSurname,
               city: ItemPlace, //citta, ci servirà anche per calcolare le tasse di soggiorno
               street: ItemStreet,
               beds: ItemBeds
             })
-          }
-          else{
-            alert('non sei loggato')
-            /* navigation.navigate(Login) */
-          }
-        }catch(e){
-          console.log(e)
-        }
-      }
+    }
+      
 
-      const imageChanged = ({nativeEvent}) => {
-        const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width );
-        //contentOffSet misura quanto una view (in questo caso l'img della scrollView) è stata spostataa dall'origine tramite evento di tocco/trascinamento
-        if(slide !== state.activeImage){
-          setState({
-            activeImage: slide
-          })
-        }
-      }
       /* const getToken = async()=>{
         var userToken = null
         try{
@@ -121,33 +91,7 @@ export default function Structure({ route }){
       
       <Text style={styles.title}>{itemTitle}</Text>
       
-      <View style={styles.imageScrollWrapper}>
-            <ScrollView 
-              pagingEnabled 
-              horizontal
-              onScroll={imageChanged}
-              showsHorizontalScrollIndicator={state.horizontalScroll}
-              style={styles.imageScrollView}>
-                {
-                  images.map((image,index)=>(
-                    <Image
-                      key={index}
-                      source={{uri: image}}
-                      style={styles.Image}
-                    ></Image>
-                  ))
-                }
-            </ScrollView>
-            <View style={styles.pagination}>
-              {
-                images.map((i,k)=>(
-                  <Text key={k} style={k == state.activeImage? styles.paginActiveDot :styles.paginDot}>⬤</Text>
-                ))
-              }
-            </View>
-      </View>
       <View style={{flexDirection:'row', alignSelf:'center'}}>
-              <Text style={styles.normalText}>Proprietario: </Text><Text style = {styles.ownerInfo}> {itemName} {itemSurname}, {itemEmail}</Text>
       </View>
          
          <View style={styles.structureInfo}>
@@ -187,10 +131,9 @@ export default function Structure({ route }){
               </View>   
           </View>
           
-          <View style={styles.BookingButton}>
-                <BookingButton text="PRENOTA" onPress={getToken}></BookingButton> 
-          </View>
-     
+          <Text style={styles.structureButton} onPress={()=> navigate()} >Modifica</Text>
+
+
       
       </ScrollView>
     )
@@ -307,5 +250,19 @@ const styles = StyleSheet.create({
     marginTop: 0,
     marginBottom: 0,
   },
+  structureButton:{
+    color: colors.white, 
+    fontSize:14, 
+    fontWeight: "700",
+    padding:4,
+    width: 90,
+    textAlign:'center',
+    alignSelf:'center',
+    margin: 5,
+    backgroundColor: colors.blue,
+    borderColor: colors.black,
+    borderWidth: 3,
+    borderRadius: 10
+  }
  
 });

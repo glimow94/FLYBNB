@@ -13,6 +13,8 @@ import Login from './Login';
 import BookingStructure from './BookingStructure';
 import Trip from './Trip';
 import AddStructure from './AddStructure';
+import UserStructure from './UserStructure';
+import EditStructure from './EditStructure';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -69,6 +71,9 @@ const ProfileStackScreen = ({navigation}) =>(
   <ProfileStack.Navigator>
     <ProfileStack.Screen name = "Profile"  component={Profile}/>
     <ProfileStack.Screen name = "AddStructure"  component={AddStructure}/>
+    <ProfileStack.Screen name = "UserStructure"  component={UserStructure}/>
+    <ProfileStack.Screen name = "EditStructure"  component={EditStructure}/>
+
   </ProfileStack.Navigator>
 );
 

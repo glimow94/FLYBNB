@@ -35,7 +35,8 @@ static contextType = UserContext
       userToken:'',
       //status per visualizzare le prenotazioni oppure le strutture personali
       status: true,
-      status2: false
+      status2: false,
+      status3: false,
     }
   }
   
@@ -71,7 +72,8 @@ static contextType = UserContext
     if(this.state.status==false){
       this.setState({
         status:true,
-        status2:false
+        status2:false,
+        status3: false
       })
     }
   }
@@ -79,6 +81,16 @@ static contextType = UserContext
     if(this.state.status2==false){
       this.setState({
         status2:true,
+        status3: false,
+        status:false
+      })
+    }
+  }
+  showHideRequests=()=>{
+    if(this.state.status3==false){
+      this.setState({
+        status3:true,
+        status2:false,
         status:false
       })
     }
@@ -110,8 +122,11 @@ static contextType = UserContext
           <View style={styles.menuButton1}>
             <Text style={styles.menuText} onPress={this.showHideBookings}>PRENOTAZIONI</Text>
           </View>
-          <View style={styles.menuButton2}>
+          <View style={styles.menuButton3}>
             <Text style={styles.menuText} onPress={this.showHideStructures}>STRUTTURE</Text>
+          </View>
+          <View style={styles.menuButton2}>
+            <Text style={styles.menuText} onPress={this.showHideRequests}>RICHIESTE</Text>
           </View>
 
         </View>
@@ -126,11 +141,15 @@ static contextType = UserContext
               <View style={styles.infoBox}>
                 { this.state.structuresList.length == 0 ? <Text>Diventa host aggiungendo una nuova struttura</Text>
               :<View>
-                <Text>Le mie strutture:{this.state.structuresId}</Text> 
                 <UserStructures></UserStructures>
                </View>}
               <Text style={styles.structureButton} onPress={()=> this.props.navigation.navigate('AddStructure',{userToken: this.state.userToken})} >Aggiungi +</Text>
               </View> : null
+          }
+          {this.state.status3? 
+              <View style={styles.infoBox}>
+                { this.state.notifications == 0 ? <Text>Nessuna Notifica</Text> : <Text>Richieste in sospeso: </Text> }
+              </View>:null
           }
         </View>
 
@@ -186,7 +205,7 @@ const styles = StyleSheet.create({
     },
     menuButton1:{
       height:30,
-      width:150,
+      width:110,
       backgroundColor: colors.blue,
       alignContent:'center',
       alignItems:'center',
@@ -201,7 +220,7 @@ const styles = StyleSheet.create({
     },
     menuButton2:{
       height:30,
-      width:150,
+      width:110,
       backgroundColor: colors.blue,
       alignContent:'center',
       alignItems:'center',
@@ -214,15 +233,29 @@ const styles = StyleSheet.create({
       borderLeftWidth:0,
       margin:0,
     },
+    menuButton3:{
+      height:30,
+      width:110,
+      backgroundColor: colors.blue,
+      alignContent:'center',
+      alignItems:'center',
+      justifyContent:'center',
+      borderColor: colors.white,
+      borderWidth:2,
+      borderLeftWidth:0,
+      borderRightWidth:1,
+      margin:0,
+    },
     menuText:{
       alignSelf:'center',
       color: colors.white,
-      margin:5,
+      fontSize: 12,
+      margin:4,
       justifyContent:"center",
       fontWeight:"600"
     },
     profileInfo:{
-      margin: 30,
+      margin: 10,
       alignContent:'center',
       alignItems: 'center'
     },
@@ -235,7 +268,7 @@ const styles = StyleSheet.create({
       borderRadius: 4,
       borderWidth: 2,
       borderColor: colors.black,
-      padding:20,
+      padding:5,
       backgroundColor: colors.white,
       marginBottom:20,
       width: width*0.9

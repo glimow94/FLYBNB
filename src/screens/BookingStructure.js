@@ -19,12 +19,25 @@ export default class BookingStructure extends Component{
     this.setState(filterStatus)
   } 
    render(){
-    const {itemID,itemPrice,itemTitle} = this.props.route.params;
+    const {
+      itemID, //id della struttura
+      itemPrice,//prezzo della struttura(a notte)
+      itemTitle,//nome struttura
+      userID, //id dell'utente cliente
+      clientMail,//email dell'utente cliente
+      ownerMail, //email dell'utente proprietario dell'alloggio
+      ownerName, //nome dell'utente proprietario dell'alloggio
+      ownerSurname, //cognome proprietario
+      clientName,//nome del cliente
+      clientSurname,//cognome del cliente
+      city,//citta in cui si trova l'alloggio(per calcolo tasse...)
+      street, //indirizzo struttura
+      beds
+    } = this.props.route.params;
     
     return (
       <View style={styles.container}>
-        <Text style={styles.textHeader}>Prenotazione Struttura:</Text>
-        <Text style={styles.texTitle}> {itemTitle}</Text>
+        <Text style={styles.textHeader}>Prenotazione Struttura</Text>
         <Text style={styles.subtitle}>seleziona date di soggiorno e completa tutti i campi</Text>
         <DateSelector
           updateState={this.updateState.bind(this)} 
@@ -35,10 +48,15 @@ export default class BookingStructure extends Component{
                 <Text style={styles.dateText}>Check-Out: </Text>
                 <Text style={styles.dateStyle}>{this.state.checkOut}</Text>
         </View>
+        <Text style={styles.texTitle}> {itemTitle}</Text>
+        <Text style={styles.textInfo}>{city}, {street} </Text>
+        <Text style={styles.textInfo}>Letti: {beds} </Text>
         <Text style={styles.textInfo}>Prezzo/notte : {itemPrice}€</Text>
-        <Text style={styles.textInfo}>ID struttura: {itemID}</Text>
-        <Text style={styles.textInfo}>Prezzo Totale: <Text style={{color: colors.red}}>{itemPrice*this.state.diffDays}€</Text></Text>
-        <Text> Permanenza: {this.state.diffDays}giorni</Text>
+        <Text style={styles.textInfo}>Tasse soggiorno: {(city.length/2)*this.state.diffDays} €</Text>
+        <Text style={styles.textInfo}>Prezzo Totale: <Text style={{color: colors.white, fontSize: 30}}>{itemPrice*this.state.diffDays + (city.length/2)*this.state.diffDays} €</Text></Text>
+        <Text> Permanenza: {this.state.diffDays} giorni</Text>
+        <Text>ID struttura: {itemID}</Text>
+
         
         <View style={{marginTop: 20, width:300}}>
           <Button title="CONFERMA" color={colors.orange} ></Button>
@@ -65,11 +83,10 @@ const styles = StyleSheet.create({
       marginTop:30
     },
     texTitle:{
-      fontSize: 20,
+      fontSize: 30,
       color: colors.white,
       fontWeight: "700",
-      margin:20,
-      marginBottom: 5
+      margin:5,
     },
     subtitle:{
       fontSize: 14,
@@ -82,7 +99,7 @@ const styles = StyleSheet.create({
       flexDirection:'row',
       alignContent:'center',
       alignItems:'center',
-      margin: 20,
+      margin:10,
       padding:5,
       
     },
