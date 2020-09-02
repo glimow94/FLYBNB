@@ -28,10 +28,10 @@ export default function Structure({ route }){
       itemTitle,
       itemPrice,
       itemID,
-      ItemPlace,
-      ItemStreet,
-      ItemType,
-      ItemBeds,
+      itemPlace,
+      itemStreet,
+      itemType,
+      itemBeds,
       itemKitchen,
       itemFullBoard,
       itemAirConditioner,
@@ -79,9 +79,9 @@ export default function Structure({ route }){
               ownerSurname: itemSurname,
               clientName: clientName,
               clientSurname: clientSurname,
-              city: ItemPlace, //citta, ci servirà anche per calcolare le tasse di soggiorno
-              street: ItemStreet,
-              beds: ItemBeds
+              city: itemPlace, //citta, ci servirà anche per calcolare le tasse di soggiorno
+              street: itemStreet,
+              beds: itemBeds
             })
           }
           else{
@@ -154,7 +154,7 @@ export default function Structure({ route }){
 
               <View style={styles.mainInfo}>
                   <View style={{flexDirection:'row'}}>
-                    <Text style = {styles.important}>{ItemType} - {itemTitle}</Text>
+                    <Text style = {styles.important}>{itemType} - {itemTitle}</Text>
 
                   </View>
                   <View style={styles.description}>
@@ -165,11 +165,11 @@ export default function Structure({ route }){
                   </View>
                   
                   <View style={{flexDirection:'row'}}>
-                     <Text style={styles.normalText}>Indirizzo: </Text><Text style = {styles.important}>{ItemPlace}, {ItemStreet}</Text>
+                     <Text style={styles.normalText}>Indirizzo: </Text><Text style = {styles.important}>{itemPlace}, {itemStreet}</Text>
                   </View>
                   
                   <View style={{flexDirection:'row'}}>
-                    <Text style={styles.normalText}>Letti (per singola persona): </Text><Text style = {styles.important}> {ItemBeds}</Text>
+                    <Text style={styles.normalText}>Letti (per singola persona): </Text><Text style = {styles.important}> {itemBeds}</Text>
                   </View>
 
 

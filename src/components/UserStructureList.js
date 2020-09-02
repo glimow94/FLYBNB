@@ -66,29 +66,55 @@ class StructuresList extends Component {
               <Text
                 style={styles.titleStructure}
                 onPress={()=>navigation.navigate('UserStructure',{
-                    /* parametri da passare alla schermata successiva */
-                    itemName: item.name,
-                    itemSurname: item.surname,
-                    itemEmail: item.email,
-                    itemTitle: item.title,
-                    itemPrice: item.price,
-                    itemID: item.id,
-                    ItemPlace: item.place,
-                    ItemStreet: item.street,
-                    ItemBeds: item.beds,
-                    ItemType: item.type,
-                    itemKitchen: item.kitchen,
-                    itemFullBoard: item.fullboard,
-                    itemAirConditioner: item.airConditioner,
-                    itemWifi: item.wifi,
-                    itemParking: item.parking,
-                    itemDescription: item.description,
-                    locationDescription: item.location_description,
+                  /* parametri da passare alla schermata successiva */
+                  userToken: this.state.userToken,
+                  itemName: item.name,
+                  temSurname: item.surname,
+                  itemEmail: item.email,
+                  itemTitle: item.title,
+                  itemPrice: item.price,
+                  itemID: item.id,
+                  itemPlace: item.place,
+                  itemStreet: item.street,
+                  itemNumber: item.number,
+                  itemPostCode: item.post_code,
+                  itemBeds: item.beds,
+                  itemType: item.type,
+                  itemKitchen: item.kitchen,
+                  itemFullBoard: item.fullboard,
+                  itemAirConditioner: item.airConditioner,
+                  itemWifi: item.wifi,
+                  itemParking: item.parking,
+                  itemDescription: item.description,
+                  locationDescription: item.location_description,
                 })}>
                 {item.title} 
               </Text>
               <Text>{item.place}</Text>
-              <Text style={styles.editButton} onPress={()=> this.props.navigation.navigate('EditStructure',{userToken: this.state.userToken})} >Modifica</Text>
+              <Text style={styles.editButton} 
+                onPress={()=> navigation.navigate('EditStructure',{
+                  /* parametri da passare alla schermata successiva */
+                  userToken: this.state.userToken,
+                  itemName: item.name,
+                  temSurname: item.surname,
+                  itemEmail: item.email,
+                  itemTitle: item.title,
+                  itemPrice: item.price,
+                  itemID: item.id,
+                  itemPlace: item.place,
+                  itemStreet: item.street,
+                  itemNumber: item.number,
+                  itemPostCode: item.post_code,
+                  itemBeds: item.beds,
+                  itemType: item.type,
+                  itemKitchen: item.kitchen,
+                  itemFullBoard: item.fullboard,
+                  itemAirConditioner: item.airConditioner,
+                  itemWifi: item.wifi,
+                  itemParking: item.parking,
+                  itemDescription: item.description,
+                  locationDescription: item.location_description,
+              })} >Modifica</Text>
             </View>}
           contentContainerStyle={{paddingTop:40}}
         />
@@ -104,7 +130,10 @@ export default function(props) {
 
 const styles = StyleSheet.create({
   container: {
-    
+    flexGrow:1,
+    justifyContent:'center',
+    alignContent:'center',
+    alignItems:'center',
   },
   item: {
    borderColor: colors.black,
@@ -112,6 +141,7 @@ const styles = StyleSheet.create({
    borderRadius: 8,
    padding: 5,
    marginTop: 4,
+   width: 300
   },
   titleStructure:{
     fontSize: 20,

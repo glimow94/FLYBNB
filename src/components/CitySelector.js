@@ -15,9 +15,9 @@ export default class CitySelector extends Component{
         super(props);
         this.state = {
           //set del valore di inizio e fine data
-          region: 'Seleziona Regione',
+          region: 'Regione',
           province: 'seleziona provincia',
-          province_code: 'Pa',
+          province_code: '',
           city_code: '',
           // status(1/2/3) è il valore che rende visibile/invisibile il menu delle regioni,province o città
           status1: false,
@@ -78,29 +78,29 @@ export default class CitySelector extends Component{
               <View style={[{marginTop: this.state.marginTop, position: this.state.position, bottom: this.state.bottom, width: this.state.width},styles.container]}>
             { this.props.status1 ?
               <View>
-
-                <Picker mode="dropdown" 
-                    style={[{width:this.state.pickerWidth},styles.pickerstyle]}                  
-                    onValueChange={itemValue => this.setState({
-                                                  region: itemValue,
-                                                  province: 'seleziona provincia',
-                                                  city:'seleziona comune',
-                                                  status2: true
-                                                })
+                <View style={{flexDirection:'row'}}>
+                  <Picker mode="dropdown" 
+                      style={[{width:this.state.pickerWidth},styles.pickerstyle]}                  
+                      onValueChange={itemValue => this.setState({
+                                                    region: itemValue,
+                                                    province: 'Provincia',
+                                                    city:'Comune',
+                                                    status2: true
+                                                  })
                       }     
 
-                >
-                  <Picker.Item label={this.state.region} value ={this.state.region}></Picker.Item>
+                  >
+                    <Picker.Item label={this.state.region} value ={this.state.region}></Picker.Item>
 
-                  {
-                    db.map((item) =>{
-                      return(
-                        <Picker.Item  label={item.nome} value={item.nome} key={item.nome}/> 
-                      );
-                    })
-                  }
-                </Picker>
-
+                    {
+                      db.map((item) =>{
+                        return(
+                          <Picker.Item  label={item.nome} value={item.nome} key={item.nome}/> 
+                        );
+                      })
+                    }
+                  </Picker>{this.props.parentType=='AddStructure'?<Text style={styles.cancelButton} onPress={this.showHide}>X</Text>: null}
+                </View>
                 {
                   this.state.status2 ? 
                   <Picker 
@@ -109,7 +109,7 @@ export default class CitySelector extends Component{
                     onValueChange={
                       itemValue => this.setState({
                       province: itemValue,
-                      city:'seleziona comune',
+                      city:'Comune',
                       status3: true
                     })}
                   >
@@ -169,7 +169,7 @@ export default class CitySelector extends Component{
                     )
                   }
                   </Picker> : null
-                }
+                } 
            </View> : null
             }
             </View>
@@ -190,5 +190,10 @@ export default class CitySelector extends Component{
       borderBottomWidth: 1,
       marginTop: 15,
       borderBottomColor: colors.white
+     },
+     cancelButton:{
+      color:colors.red,
+      fontSize: 18,
+      fontWeight: "700"  
      }
    })

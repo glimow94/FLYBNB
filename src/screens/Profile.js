@@ -140,7 +140,7 @@ static contextType = UserContext
           {this.state.status2 ? 
               <View style={styles.infoBox}>
                 { this.state.structuresList.length == 0 ? <Text>Diventa host aggiungendo una nuova struttura</Text>
-              :<View>
+              :<View style={styles.structuresList}>
                 <UserStructures></UserStructures>
                </View>}
               <Text style={styles.structureButton} onPress={()=> this.props.navigation.navigate('AddStructure',{userToken: this.state.userToken})} >Aggiungi +</Text>
@@ -276,7 +276,6 @@ const styles = StyleSheet.create({
     structureButton:{
       color: colors.white, 
       fontSize:14, 
-      fontWeight: "700",
       padding:4,
       width: 90,
       textAlign:'center',
@@ -284,8 +283,13 @@ const styles = StyleSheet.create({
       margin: 5,
       backgroundColor: colors.blue,
       borderColor: colors.black,
-      borderWidth: 3,
-      borderRadius: 10
+      borderWidth: 2,
+      borderRadius: 8
+    },
+    structuresList:{
+      flex:1,
+      alignContent:'center',
+      width:'100%'
     }
 });
 

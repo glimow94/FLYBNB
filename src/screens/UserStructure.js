@@ -22,16 +22,19 @@ const images =[
 ]
 export default function UserStructure({ route }){
     const {
+      userToken,
       itemName,
       itemSurname,
       itemEmail, 
       itemTitle,
       itemPrice,
       itemID,
-      ItemPlace,
-      ItemStreet,
-      ItemType,
-      ItemBeds,
+      itemPlace,
+      itemStreet,
+      itemNumber,
+      itemPostCode,
+      itemType,
+      itemBeds,
       itemKitchen,
       itemFullBoard,
       itemAirConditioner,
@@ -57,18 +60,26 @@ export default function UserStructure({ route }){
 
       
     function navigate(){
-            navigation.navigate('EditStructure',{
-              /* parametri da passare alla schermata successiva */
-              itemTitle: itemTitle,
-              itemPrice: itemPrice,
-              itemID: itemID,//email dell'ospite
-              ownerMail: itemEmail,//email del proprietario di casa
-              ownerName: itemName,
-              ownerSurname: itemSurname,
-              city: ItemPlace, //citta, ci servirà anche per calcolare le tasse di soggiorno
-              street: ItemStreet,
-              beds: ItemBeds
-            })
+      navigation.navigate('EditStructure',{
+        /* parametri da passare alla schermata successiva */
+        userToken: userToken,
+        itemTitle: itemTitle,
+        itemPrice: itemPrice,
+        itemID: itemID,
+        itemPlace: itemPlace,
+        itemStreet: itemStreet,
+        itemNumber: itemNumber,
+        itemPostCode: itemPostCode,
+        itemBeds: itemBeds,
+        itemType: itemType,
+        itemKitchen: itemKitchen,
+        itemFullBoard: itemFullBoard,
+        itemAirConditioner: itemAirConditioner,
+        itemWifi: itemWifi,
+        itemParking: itemParking,
+        itemDescription: itemDescription,
+        locationDescription: locationDescription,
+      })
     }
       
 
@@ -98,7 +109,7 @@ export default function UserStructure({ route }){
 
               <View style={styles.mainInfo}>
                   <View style={{flexDirection:'row'}}>
-                    <Text style = {styles.important}>{ItemType} - {itemTitle}</Text>
+                    <Text style = {styles.important}>{itemType} - {itemTitle}</Text>
 
                   </View>
                   <View style={styles.description}>
@@ -109,11 +120,11 @@ export default function UserStructure({ route }){
                   </View>
                   
                   <View style={{flexDirection:'row'}}>
-                     <Text style={styles.normalText}>Indirizzo: </Text><Text style = {styles.important}>{ItemPlace}, {ItemStreet}</Text>
+                     <Text style={styles.normalText}>Indirizzo: </Text><Text style = {styles.important}>{itemPlace}, {itemStreet}</Text>
                   </View>
                   
                   <View style={{flexDirection:'row'}}>
-                    <Text style={styles.normalText}>Letti (per singola persona): </Text><Text style = {styles.important}> {ItemBeds}</Text>
+                    <Text style={styles.normalText}>Letti (per singola persona): </Text><Text style = {styles.important}> {itemBeds}</Text>
                   </View>
 
 

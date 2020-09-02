@@ -16,7 +16,6 @@ const {width} = Dimensions.get('window');
 export default class EditStructure extends Component{
     
     constructor(props){
-        const {userToken} = props.route.params;
         super(props);
         this.state={
             title : '',
@@ -51,7 +50,7 @@ export default class EditStructure extends Component{
         capColor: colors.white,
 
         //stati che in realtà in questa pagina nons ervono ma servono a cityselector perche' in Home funziona in un altro modo....problema  da risolvere
-        status1: true,
+        status1: false,
         status2:false,
         status3:false,
         parentType: 'AddStructure'
@@ -143,10 +142,48 @@ export default class EditStructure extends Component{
     }
 
     componentDidMount = () => {
-        const {userToken} = this.props.route.params;
+        const {
+            userToken,
+            itemName,
+            itemSurname,
+            itemEmail, 
+            itemTitle,
+            itemPrice,
+            itemID,
+            itemPlace,
+            itemStreet,
+            itemNumber,
+            itemPostCode,
+            itemType,
+            itemBeds,
+            itemKitchen,
+            itemFullBoard,
+            itemAirConditioner,
+            itemWifi,
+            itemParking,
+            itemDescription,
+            locationDescription
+        } = this.props.route.params;
         console.log('userTokenAddStructure')
-        console.log(userToken)
-        this.setState({user_id: userToken})
+        console.log(itemName)
+        this.setState({
+            user_id: userToken,
+            title: itemTitle,
+            type:itemType,
+            city:itemPlace,
+            street:itemStreet,
+            number:itemNumber,
+            post_code:itemPostCode,
+            description:itemDescription,
+            location_description:locationDescription,
+            beds:itemBeds,
+            price:itemPrice,
+            fullBoard: itemFullBoard,
+            wifi: itemWifi,
+            parking:itemParking,
+            kitchen:itemKitchen,
+            airConditioner:itemAirConditioner,
+        })
 
     }
     postData = () => {
@@ -190,6 +227,7 @@ export default class EditStructure extends Component{
 
                     <Text style={[{width:150},styles.label]}>NOME STRUTTURA</Text>
                                 <TextInput
+                                    defaultValue={this.state.title}
                                     autoCorrect={false}
                                     style = {[{borderColor: this.state.titleColor},styles.inputField]}
                                     onChangeText={val => this.changeTitle(val)}
@@ -210,17 +248,19 @@ export default class EditStructure extends Component{
                     ></CitySelector>
                     <Text style={[{width:150},styles.label]}>INDIRIZZO</Text>
                         <TextInput
+                            defaultValue={this.state.street}
                             autoCorrect={false}
                             style = {[{borderColor: this.state.streetColor},styles.inputField]}
                             onChangeText={val => this.changeStreet(val)}
                         ></TextInput>
                     {   this.state.streetAlert==true ? 
-                                    <Text style={{color: '#DC143C'}}>Inserisci una via valida </Text> : null
+                                    <Text style={{color: '#DC143C'}}>Inserisci una via </Text> : null
                     }
                     <View style={{flexDirection:"row"}}>
                         <View style={{flexDirection:'column'}}>
                             <Text style={[{width:150, color: this.state.numberColor},styles.label]}>N° Civico</Text>
                                 <TextInput
+                                    defaultValue={this.state.number}
                                     underlineColorAndroid='transparent'  
                                     keyboardType={'numeric'}
                                     autoCorrect={false}
@@ -232,6 +272,7 @@ export default class EditStructure extends Component{
                         <View style={{flexDirection:'column'}}>
                             <Text style={[{width:150, color: this.state.capColor},styles.label]}>CAP</Text>
                                 <TextInput
+                                    defaultValue={this.state.post_code}
                                     underlineColorAndroid='transparent'  
                                     keyboardType={'numeric'}
                                     autoCorrect={false}
@@ -244,9 +285,10 @@ export default class EditStructure extends Component{
                     
                     <Text style={[{width:150},styles.label]}>TIPOLOGIA</Text>
                     <View style={styles.typePicker}>
-                        <Picker 
+                        <Picker
                             mode="dropdown" 
-                            style={styles.pickerstyle}            
+                            style={styles.pickerstyle}
+                            selectedValue={this.state.type}           
                             onValueChange={val => this.changeType(val)}>
                             <Picker.Item label='B&B' value ={'B&B'}></Picker.Item>
                             <Picker.Item label='Casa Vacanze' value ={'Casa Vacanze'}></Picker.Item>
@@ -323,7 +365,8 @@ export default class EditStructure extends Component{
                     </View>
                     <Text style={styles.label}>DESCRIZIONE STRUTTURA</Text>
                     <TextInput
-                        multiline={true}
+                        defaultValue={this.state.description}
+                        //multiline={true}
                         numberOfLines={6}
                         style={styles.description}
                         maxLength={400}
@@ -331,14 +374,15 @@ export default class EditStructure extends Component{
                     />
                     <Text style={styles.label}>DESCRIZIONE POSIZIONE </Text>
                     <TextInput
-                        multiline={true}
+                        defaultValue={this.state.location_description}
+                        //multiline={true}
                         numberOfLines={6}
                         style={styles.description}
                         maxLength={400}
                         onChangeText={val => this.changeLocationDescription(val)}
                     />
                     <View style={{marginTop: 5}}>
-                        <Button title="CONFERMA" color={colors.orange} onPress = {()=> {this.postData()}}></Button>
+                        <Button title="MODIFICA" color={colors.orange} onPress = {()=> {this.postData()}}></Button>
                     </View>
                     
                 </ScrollView>
