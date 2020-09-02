@@ -160,6 +160,7 @@ class StructuresList extends Component {
                   /* parametri da passare alla schermata successiva */
                   itemName: item.name,
                   itemSurname: item.surname,
+                  ownerID: item.user_id,
                   itemEmail: item.email,
                   itemTitle: item.title,
                   itemPrice: item.price,

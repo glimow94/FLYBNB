@@ -48,7 +48,9 @@ export default class EditStructure extends Component{
         //post_code=CAP
         capAlert: false,
         capColor: colors.white,
-
+        //prezzo
+        priceAlert: false,
+        priceColor: colors.white,
         //stati che in realtà in questa pagina nons ervono ma servono a cityselector perche' in Home funziona in un altro modo....problema  da risolvere
         status1: false,
         status2:false,
@@ -124,6 +126,21 @@ export default class EditStructure extends Component{
                 post_code: val,
                 capColor: colors.white,
                 capAlert: false
+            })
+        }
+    }
+    changePrice = (val) => {
+        if(!val || val.trim().length === 0){
+            this.setState({
+                priceColor: '#DC143C',
+                priceAlert:true
+            })
+        }
+        else{
+            this.setState({
+                price: val,
+                priceColor: colors.white,
+                priceAlert: false
             })
         }
     }
@@ -282,6 +299,21 @@ export default class EditStructure extends Component{
                                 
                         </View>
                     </View>
+                    <View style={{flexDirection:'column'}}>
+                            <Text style={[{width:150, color: this.state.capColor},styles.label]}>PREZZO PER NOTTE</Text>
+                                <TextInput
+                                    underlineColorAndroid='transparent'  
+                                    defaultValue={this.state.price}
+                                    keyboardType={'numeric'}
+                                    autoCorrect={false}
+                                    style = {[{borderColor: this.state.priceColor, width: 100},styles.inputField]}
+                                    onChangeText={val => this.changePrice(val)}
+                                ></TextInput>
+                        {   this.state.priceAlert==true ? 
+                                <Text style={{color: '#DC143C'}}>Inserisci un prezzo </Text> : null
+                        }
+                    </View>
+
                     
                     <Text style={[{width:150},styles.label]}>TIPOLOGIA</Text>
                     <View style={styles.typePicker}>
@@ -366,7 +398,8 @@ export default class EditStructure extends Component{
                     <Text style={styles.label}>DESCRIZIONE STRUTTURA</Text>
                     <TextInput
                         defaultValue={this.state.description}
-                        //multiline={true}
+                        placeholder={this.state.description}
+                        multiline={true}
                         numberOfLines={6}
                         style={styles.description}
                         maxLength={400}
@@ -375,7 +408,8 @@ export default class EditStructure extends Component{
                     <Text style={styles.label}>DESCRIZIONE POSIZIONE </Text>
                     <TextInput
                         defaultValue={this.state.location_description}
-                        //multiline={true}
+                        placeholder={this.state.location_description}
+                        multiline={true}
                         numberOfLines={6}
                         style={styles.description}
                         maxLength={400}
@@ -453,6 +487,6 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white,
         borderWidth: 1,
         borderColor: colors.black,
-        borderRadius: 8
+        borderRadius: 8,
     }
 });

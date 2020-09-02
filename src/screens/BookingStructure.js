@@ -23,6 +23,7 @@ export default class BookingStructure extends Component{
       itemID, //id della struttura
       itemPrice,//prezzo della struttura(a notte)
       itemTitle,//nome struttura
+      ownerID,
       userID, //id dell'utente cliente
       clientMail,//email dell'utente cliente
       ownerMail, //email dell'utente proprietario dell'alloggio
@@ -51,10 +52,14 @@ export default class BookingStructure extends Component{
         <Text style={styles.texTitle}> {itemTitle}</Text>
         <Text style={styles.textInfo}>{city}, {street} </Text>
         <Text style={styles.textInfo}>Letti: {beds} </Text>
-        <Text style={styles.textInfo}>Prezzo/notte : {itemPrice}€</Text>
-        <Text style={styles.textInfo}>Tasse soggiorno: {(city.length/2)*this.state.diffDays} €</Text>
-        <Text style={styles.textInfo}>Prezzo Totale: <Text style={{color: colors.white, fontSize: 30}}>{itemPrice*this.state.diffDays + (city.length/2)*this.state.diffDays} €</Text></Text>
-        <Text> Permanenza: {this.state.diffDays} giorni</Text>
+        <View style={styles.priceInfo}>
+          <Text style={styles.numberOfDays}> {this.state.diffDays} Notti</Text>
+          <Text style={styles.textInfo}>Prezzo/notte : {itemPrice}€</Text>
+          <Text style={styles.textInfo}>Tasse soggiorno: {(city.length/2)*this.state.diffDays} €</Text>
+          <Text style={styles.textInfo}>Prezzo Totale: <Text style={styles.finalPrice}>{itemPrice*this.state.diffDays + (city.length/2)*this.state.diffDays} €</Text></Text>
+        </View>
+        
+        
         <Text>ID struttura: {itemID}</Text>
 
         
@@ -119,6 +124,21 @@ const styles = StyleSheet.create({
       color: colors.white,
       fontWeight:"700",
       fontSize:16
+    },
+    priceInfo:{
+      backgroundColor: colors.white,
+      opacity: 0.9,
+      borderRadius: 10,
+      padding: 5
+    },
+    finalPrice:{
+      color: colors.red, 
+      fontSize: 30
+    },
+    numberOfDays:{
+      fontSize: 18,
+      alignSelf:'center',
+      color: colors.orange
     }
 });
 

@@ -188,6 +188,7 @@ export default class CitySelector extends Component{
      alternativeCityButton:{
       width: 200,
       borderBottomWidth: 1,
+      height: 19,
       marginTop: 15,
       borderBottomColor: colors.white
      },
