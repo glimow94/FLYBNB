@@ -26,6 +26,7 @@ export default class AddStructure extends Component{
             street:'',
             number:'',
             post_code:'',
+            price:'',
             description:'',
             location_description:'',
             beds:'',
@@ -40,7 +41,7 @@ export default class AddStructure extends Component{
         //variabili per la validazione
         titleAlert: false,
         titleColor: colors.white,
-
+        //indirizzo
         streetAlert: false,
         streetColor: colors.white,
         //numero civico
@@ -49,12 +50,17 @@ export default class AddStructure extends Component{
         //post_code=CAP
         capAlert: false,
         capColor: colors.white,
-
-        //stati che in realtà in questa pagina nons ervono ma servono a cityselector perche' in Home funziona in un altro modo....problema  da risolvere
+        //prezzo
+        priceAlert: false,
+        priceColor: colors.white,
+        //numero di letti
+        bedsAlert: false,
+        bedsColor: colors.white,
+        //stati che in realtà in questa pagina non servono ma servono a cityselector che è un componente usato anche in Home e deve avere questi 3 status necessariamente, altrimenti da errore
         status1: true,
         status2:false,
         status3:false,
-        parentType: 'AddStructure'
+        parentType: 'AddStructure'//serve a cityselector per agire in modo diverso in base al componente padre che lo richiama (addStructure o Home)
 
         }
     }
@@ -125,6 +131,36 @@ export default class AddStructure extends Component{
                 post_code: val,
                 capColor: colors.white,
                 capAlert: false
+            })
+        }
+    }
+    changePrice = (val) => {
+        if(!val || val.trim().length === 0){
+            this.setState({
+                priceColor: '#DC143C',
+                priceAlert:true
+            })
+        }
+        else{
+            this.setState({
+                price: val,
+                priceColor: colors.white,
+                priceAlert: false
+            })
+        }
+    }
+    changeBeds = (val) => {
+        if(!val || val.trim().length === 0){
+            this.setState({
+                bedsColor: '#DC143C',
+                bedsAlert:true
+            })
+        }
+        else{
+            this.setState({
+                beds: val,
+                bedsColor: colors.white,
+                bedsAlert: false
             })
         }
     }
@@ -217,7 +253,7 @@ export default class AddStructure extends Component{
                     {   this.state.streetAlert==true ? 
                                     <Text style={{color: '#DC143C'}}>Inserisci una via valida </Text> : null
                     }
-                    <View style={{flexDirection:"row"}}>
+                    <View style={{flexDirection:"row", paddingBottom: 8}}>
                         <View style={{flexDirection:'column'}}>
                             <Text style={[{width:150, color: this.state.numberColor},styles.label]}>N° Civico</Text>
                                 <TextInput
@@ -241,7 +277,34 @@ export default class AddStructure extends Component{
                                 
                         </View>
                     </View>
-                    
+                    <View style={{flexDirection:"row",paddingBottom: 5}}>
+                        <View style={{flexDirection:'column'}}>
+                                <Text style={[{width:150, color: this.state.capColor},styles.label]}>PREZZO A NOTTE</Text>
+                                    <TextInput
+                                        underlineColorAndroid='transparent'  
+                                        keyboardType={'numeric'}
+                                        autoCorrect={false}
+                                        style = {[{borderColor: this.state.priceColor, width: 100},styles.inputField]}
+                                        onChangeText={val => this.changePrice(val)}
+                                    ></TextInput>
+                            {   this.state.priceAlert==true ? 
+                                    <Text style={{color: '#DC143C'}}>Inserisci un prezzo </Text> : null
+                            }
+                        </View>
+                        <View style={{flexDirection:'column'}}>
+                                <Text style={[{width:150, color: this.state.capColor},styles.label]}>POSTI LETTO</Text>
+                                    <TextInput
+                                        underlineColorAndroid='transparent'  
+                                        keyboardType={'numeric'}
+                                        autoCorrect={false}
+                                        style = {[{borderColor: this.state.bedsColor, width: 100},styles.inputField]}
+                                        onChangeText={val => this.changeBeds(val)}
+                                    ></TextInput>
+                            {   this.state.bedsAlert==true ? 
+                                    <Text style={{color: '#DC143C'}}>Inserisci il numero di letti </Text> : null
+                            }
+                        </View>
+                    </View>
                     <Text style={[{width:150},styles.label]}>TIPOLOGIA</Text>
                     <View style={styles.typePicker}>
                         <Picker 

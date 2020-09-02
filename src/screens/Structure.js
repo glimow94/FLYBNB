@@ -24,6 +24,7 @@ export default function Structure({ route }){
     const {
       itemName,
       itemSurname,
+      ownerID,
       itemEmail, 
       itemTitle,
       itemPrice,
@@ -71,6 +72,7 @@ export default function Structure({ route }){
               /* parametri da passare alla schermata successiva */
               itemTitle: itemTitle,
               itemPrice: itemPrice,
+              ownerID: ownerID,
               itemID: itemID,
               userID: myToken,
               clientMail: clientMail,//email dell'ospite
@@ -290,7 +292,8 @@ const styles = StyleSheet.create({
   ownerInfo:{
     color:colors.white,
     fontWeight: '400',
-    fontSize: 16
+    fontSize: 16,
+    margin: 5
   },
   BookingButton:{
     alignContent:'center',

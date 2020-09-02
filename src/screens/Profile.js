@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
       padding:5,
       backgroundColor: colors.white,
       marginBottom:20,
-      width: width*0.9
+      width: 340
     },
     structureButton:{
       color: colors.white, 
