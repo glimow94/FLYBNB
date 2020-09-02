@@ -13,8 +13,8 @@ export default class BookingStructure extends Component{
     this.state={
       user_id: '',
       title: '',
-      owner: '',
-      strcuture_id: '',
+      owner_id: '',
+      structure_id: '',
       checkIn: '',
       checkOut: '',
       city: '',
@@ -54,8 +54,8 @@ export default class BookingStructure extends Component{
     this.setState({
       user_id: userID,
       title: itemTitle,
-      owner: ownerID,
-      strcuture_id: itemID,
+      owner_id: ownerID,
+      structure_id: itemID,
       price: itemPrice,
       city: city,
       street: street,
@@ -73,12 +73,12 @@ export default class BookingStructure extends Component{
           'content-type': 'application/json',   
         },
         user_id: this.state.user_id,
-        owner: this.state.owner,
-        strcuture_id: this.state.strcuture_id,
+        owner_id: this.state.owner_id,
+        structure_id: this.state.structure_id,
         checkIn: this.state.checkIn,
         checkOut: this.state.checkOut,
         days: this.state.diffDays,
-        price: this.state.totPrice,
+        totPrice: this.state.totPrice,
         cityTax: this.state.cityTax,
         request: this.state.request
       })
@@ -94,39 +94,39 @@ export default class BookingStructure extends Component{
     
     return (
       <ScrollView>
-              <View style={styles.container}>
-        <Text style={styles.textHeader}>Prenotazione Struttura</Text>
-        <Text style={styles.subtitle}>seleziona date di soggiorno e completa tutti i campi</Text>
-        <DateSelector
-          updateState={this.updateState.bind(this)}
-          price = {this.state.price}
-          city = {this.state.city}
-        ></DateSelector>
-        <View style={styles.datesBox}>
-                <Text style={styles.dateText}>Check-In:</Text>
-                <Text style={styles.dateStyle}>{this.state.checkIn}</Text>
-                <Text style={styles.dateText}>Check-Out: </Text>
-                <Text style={styles.dateStyle}>{this.state.checkOut}</Text>
-        </View>
-        <Text style={styles.texTitle}> {this.state.itemTitle}</Text>
-        <Text style={styles.textInfo}>{this.state.city}, {this.state.street} </Text>
-        <Text style={styles.textInfo}>Letti: {this.state.beds} </Text>
-        <View style={styles.priceInfo}>
-          <Text style={styles.numberOfDays}> {this.state.diffDays} Notti</Text>
-          <Text style={styles.textInfo}>Prezzo/notte : {this.state.price}€</Text>
-          <Text style={styles.textInfo}>Tasse soggiorno: {this.state.cityTax} €</Text>
-          <Text style={styles.textInfo}>Prezzo Totale: <Text style={styles.finalPrice}>{this.state.totPrice} €</Text></Text>
-        </View>
-        
-        
-        <Text>ID struttura: {this.state.strcuture_id}</Text>
+        <View style={styles.container}>
+          <Text style={styles.textHeader}>Prenotazione Struttura</Text>
+          <Text style={styles.subtitle}>seleziona date di soggiorno e completa tutti i campi</Text>
+          <DateSelector
+            updateState={this.updateState.bind(this)}
+            price = {this.state.price}
+            city = {this.state.city}
+          ></DateSelector>
+          <View style={styles.datesBox}>
+                  <Text style={styles.dateText}>Check-In:</Text>
+                  <Text style={styles.dateStyle}>{this.state.checkIn}</Text>
+                  <Text style={styles.dateText}>Check-Out: </Text>
+                  <Text style={styles.dateStyle}>{this.state.checkOut}</Text>
+          </View>
+          <Text style={styles.texTitle}> {this.state.itemTitle}</Text>
+          <Text style={styles.textInfo}>{this.state.city}, {this.state.street} </Text>
+          <Text style={styles.textInfo}>Letti: {this.state.beds} </Text>
+          <View style={styles.priceInfo}>
+            <Text style={styles.numberOfDays}> {this.state.diffDays} Notti</Text>
+            <Text style={styles.textInfo}>Prezzo/notte : {this.state.price}€</Text>
+            <Text style={styles.textInfo}>Tasse soggiorno: {this.state.cityTax} €</Text>
+            <Text style={styles.textInfo}>Prezzo Totale: <Text style={styles.finalPrice}>{this.state.totPrice} €</Text></Text>
+          </View>
+          
+          
+          <Text>ID struttura: {this.state.structure_id}</Text>
 
-        
-        <View style={{marginTop: 20, width:300}}>
-          <Button title="CONFERMA" color={colors.orange} onPress = {()=> {this.postBooking()}} ></Button>
-        </View>
+          
+          <View style={{marginTop: 20, width:300}}>
+            <Button title="CONFERMA" color={colors.orange} onPress = {()=> {this.postBooking()}} ></Button>
+          </View>
       
-      </View>
+        </View>
       </ScrollView>
     )
   }

@@ -13,6 +13,7 @@ import { color } from 'react-native-reanimated';
 
 import AddStructure from './AddStructure';
 import { render } from 'react-dom';
+import BookingsList from '../components/BookingsList';
 
 
 const {width} = Dimensions.get('window');
@@ -134,7 +135,7 @@ static contextType = UserContext
           
           {this.state.status? 
               <View style={styles.infoBox}>
-                { this.state.bookingsId.length == 0 ? <Text>Nessuna prenotazione effettuata</Text> : <Text>Prenotazioni effettuate: </Text> }
+                <BookingsList></BookingsList>
               </View>:null
           }
           {this.state.status2 ? 
