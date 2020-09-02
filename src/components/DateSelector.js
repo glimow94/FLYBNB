@@ -56,16 +56,22 @@ export default class DateSelector extends Component {
     //function to handle the date change 
     var final_date = date_mod_format.replace(/ /g, '');
     var diffDays = ''; //variabile che conterrà i giorni fra il checkin e il checkout utile a calcolare il prezzo totale
-    
+    var cityTax= 0;
+    var totalPrice= 0;
+
     if (type === 'END_DATE') {
-      diffDays = parseInt((date - this.state.selectedStartDateOriginal) / (1000 * 60 * 60 * 24), 10); 
+      diffDays = parseInt((date - this.state.selectedStartDateOriginal) / (1000 * 60 * 60 * 24), 10);
+      totalPrice = this.props.price*diffDays + (this.props.city.length/2)*diffDays;
+      cityTax = (this.props.city.length/2)*diffDays;
       this.setState({
         selectedEndDate: final_date,
         status: false
       });
       this.props.updateState({
         checkOut: final_date,
-        diffDays: diffDays
+        diffDays: diffDays,
+        totPrice: totalPrice,
+        cityTax: cityTax
       })
 
     } else {
