@@ -3,79 +3,36 @@ import {View, Text, StyleSheet, Button} from 'react-native';
 import colors from '../style/colors/index';
 import DateSelector from '../components/DateSelector';
 import { useNavigation } from '@react-navigation/native';
+import { ScrollView } from 'react-native-gesture-handler';
+import axios from "axios";
 
 
 export default class BookingStructure extends Component{
   constructor(props){
     super(props);
     this.state={
-      checkIn:'',
+      user_id: '',
+      title: '',
+      owner: '',
+      strcuture_id: '',
+      checkIn: '',
       checkOut: '',
+      city: '',
+      street: '',
+      price: '',
+      totPrice: '',
+      cityTax: '',
+      request: '',
+      beds: '',
       diffDays: 0,
     }
   }
   
   updateState(filterStatus){
-    this.setState(filterStatus)
+    this.setState(filterStatus);
   }
 
   componentDidMount = () => {
-    const {
-      itemID, //id della struttura
-      itemPrice,//prezzo della struttura(a notte)
-      itemTitle,//nome struttura
-      userID, //id dell'utente cliente
-      clientMail,//email dell'utente cliente
-      ownerMail, //email dell'utente proprietario dell'alloggio
-      ownerName, //nome dell'utente proprietario dell'alloggio
-      ownerSurname, //cognome proprietario
-      clientName,//nome del cliente
-      clientSurname,//cognome del cliente
-      city,//citta in cui si trova l'alloggio(per calcolo tasse...)
-      street, //indirizzo struttura
-      beds
-    } = this.props.route.params;
-    console.log('userTokenAddStructure')
-    console.log(itemName)
-    this.setState({
-      user_id: userID,
-      owner: this.state.owner,
-      strcuture_id: itemID,
-      checkIn: this.state.checkIn,
-      checkOut: this.state.checkOut,
-      days: this.state.days,
-      price: this.state.price,
-      cityTax: this.state.cityTax,
-      request: this.state.request
-    })
-}
-
-  postBooking = () => {
-    const url = `http://localhost:3055/bookings/add`;
-    axios.post(url, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',   
-        },
-        user_id: this.state.user_id,
-        owner: this.state.owner,
-        strcuture_id: this.props,
-        checkIn: this.state.checkIn,
-        checkOut: this.state.checkOut,
-        days: this.state.days,
-        price: this.state.price,
-        cityTax: this.state.cityTax,
-        request: this.state.request
-      })
-      .then(res => {
-        console.log(res);
-        })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
-
-  render(){
     const {
       itemID, //id della struttura
       itemPrice,//prezzo della struttura(a notte)
@@ -92,13 +49,58 @@ export default class BookingStructure extends Component{
       street, //indirizzo struttura
       beds
     } = this.props.route.params;
+    console.log('userTokenAddStructure')
+    console.log()
+    this.setState({
+      user_id: userID,
+      title: itemTitle,
+      owner: ownerID,
+      strcuture_id: itemID,
+      price: itemPrice,
+      city: city,
+      street: street,
+      beds: beds,
+      request: 0
+    })
+}
+
+  postBooking = () => {
+    
+    const url = `http://localhost:3055/bookings/add`;
+    axios.post(url, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',   
+        },
+        user_id: this.state.user_id,
+        owner: this.state.owner,
+        strcuture_id: this.state.strcuture_id,
+        checkIn: this.state.checkIn,
+        checkOut: this.state.checkOut,
+        days: this.state.diffDays,
+        price: this.state.totPrice,
+        cityTax: this.state.cityTax,
+        request: this.state.request
+      })
+      .then(res => {
+        console.log(res);
+        })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  render(){
     
     return (
-      <View style={styles.container}>
+      <ScrollView>
+              <View style={styles.container}>
         <Text style={styles.textHeader}>Prenotazione Struttura</Text>
         <Text style={styles.subtitle}>seleziona date di soggiorno e completa tutti i campi</Text>
         <DateSelector
-          updateState={this.updateState.bind(this)} 
+          updateState={this.updateState.bind(this)}
+          price = {this.state.price}
+          city = {this.state.city}
         ></DateSelector>
         <View style={styles.datesBox}>
                 <Text style={styles.dateText}>Check-In:</Text>
@@ -106,18 +108,18 @@ export default class BookingStructure extends Component{
                 <Text style={styles.dateText}>Check-Out: </Text>
                 <Text style={styles.dateStyle}>{this.state.checkOut}</Text>
         </View>
-        <Text style={styles.texTitle}> {itemTitle}</Text>
-        <Text style={styles.textInfo}>{city}, {street} </Text>
-        <Text style={styles.textInfo}>Letti: {beds} </Text>
+        <Text style={styles.texTitle}> {this.state.itemTitle}</Text>
+        <Text style={styles.textInfo}>{this.state.city}, {this.state.street} </Text>
+        <Text style={styles.textInfo}>Letti: {this.state.beds} </Text>
         <View style={styles.priceInfo}>
           <Text style={styles.numberOfDays}> {this.state.diffDays} Notti</Text>
-          <Text style={styles.textInfo}>Prezzo/notte : {itemPrice}€</Text>
-          <Text style={styles.textInfo}>Tasse soggiorno: {(city.length/2)*this.state.diffDays} €</Text>
-          <Text style={styles.textInfo}>Prezzo Totale: <Text style={styles.finalPrice}>{itemPrice*this.state.diffDays + (city.length/2)*this.state.diffDays} €</Text></Text>
+          <Text style={styles.textInfo}>Prezzo/notte : {this.state.price}€</Text>
+          <Text style={styles.textInfo}>Tasse soggiorno: {this.state.cityTax} €</Text>
+          <Text style={styles.textInfo}>Prezzo Totale: <Text style={styles.finalPrice}>{this.state.totPrice} €</Text></Text>
         </View>
         
         
-        <Text>ID struttura: {itemID}</Text>
+        <Text>ID struttura: {this.state.strcuture_id}</Text>
 
         
         <View style={{marginTop: 20, width:300}}>
@@ -125,6 +127,7 @@ export default class BookingStructure extends Component{
         </View>
       
       </View>
+      </ScrollView>
     )
   }
     
