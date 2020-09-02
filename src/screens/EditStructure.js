@@ -133,6 +133,8 @@ export default class EditStructure extends Component{
         })
     }
     changeLocationDescription = (val) => {
+        console.log("location DESCRIPTION");
+        console.log(this.state.location_description);
         this.setState({
             location_description: val
         })
@@ -184,8 +186,8 @@ export default class EditStructure extends Component{
             kitchen:itemKitchen,
             airConditioner:itemAirConditioner,
         })
-
     }
+
     postData = () => {
         const url = `http://localhost:3055/structures/add`;
         axios.post(url, {
@@ -374,8 +376,9 @@ export default class EditStructure extends Component{
                     />
                     <Text style={styles.label}>DESCRIZIONE POSIZIONE </Text>
                     <TextInput
-                        defaultValue={this.state.location_description}
-                        //multiline={true}
+                        multiline={true}
+                        placeholder= {this.state.location_description}
+                        //defaultValue= {this.state.location_description}
                         numberOfLines={6}
                         style={styles.description}
                         maxLength={400}
@@ -453,6 +456,6 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white,
         borderWidth: 1,
         borderColor: colors.black,
-        borderRadius: 8
+        borderRadius: 8,
     }
 });

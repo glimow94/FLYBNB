@@ -17,8 +17,65 @@ export default class BookingStructure extends Component{
   
   updateState(filterStatus){
     this.setState(filterStatus)
-  } 
-   render(){
+  }
+
+  componentDidMount = () => {
+    const {
+      itemID, //id della struttura
+      itemPrice,//prezzo della struttura(a notte)
+      itemTitle,//nome struttura
+      userID, //id dell'utente cliente
+      clientMail,//email dell'utente cliente
+      ownerMail, //email dell'utente proprietario dell'alloggio
+      ownerName, //nome dell'utente proprietario dell'alloggio
+      ownerSurname, //cognome proprietario
+      clientName,//nome del cliente
+      clientSurname,//cognome del cliente
+      city,//citta in cui si trova l'alloggio(per calcolo tasse...)
+      street, //indirizzo struttura
+      beds
+    } = this.props.route.params;
+    console.log('userTokenAddStructure')
+    console.log(itemName)
+    this.setState({
+      user_id: userID,
+      owner: this.state.owner,
+      strcuture_id: itemID,
+      checkIn: this.state.checkIn,
+      checkOut: this.state.checkOut,
+      days: this.state.days,
+      price: this.state.price,
+      cityTax: this.state.cityTax,
+      request: this.state.request
+    })
+}
+
+  postBooking = () => {
+    const url = `http://localhost:3055/bookings/add`;
+    axios.post(url, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',   
+        },
+        user_id: this.state.user_id,
+        owner: this.state.owner,
+        strcuture_id: this.props,
+        checkIn: this.state.checkIn,
+        checkOut: this.state.checkOut,
+        days: this.state.days,
+        price: this.state.price,
+        cityTax: this.state.cityTax,
+        request: this.state.request
+      })
+      .then(res => {
+        console.log(res);
+        })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  render(){
     const {
       itemID, //id della struttura
       itemPrice,//prezzo della struttura(a notte)
@@ -59,12 +116,12 @@ export default class BookingStructure extends Component{
 
         
         <View style={{marginTop: 20, width:300}}>
-          <Button title="CONFERMA" color={colors.orange} ></Button>
+          <Button title="CONFERMA" color={colors.orange} onPress = {()=> {this.postBooking()}} ></Button>
         </View>
       
       </View>
     )
-   }
+  }
     
 }
 
