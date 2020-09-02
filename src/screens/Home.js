@@ -109,19 +109,22 @@ export default class Home extends Component{
                city={this.state.city}    
                price={this.state.price}
             ></StructureListDB> */}
-            <StructuresList
-              kitchen={this.state.kitchen}
-              fullBoard={this.state.fullBoard}
-              airConditioner={this.state.airConditioner}
-              wifi={this.state.wifi}
-              parking={this.state.parking}
-              city={this.state.city}    
-              price={this.state.price}
-              selectedStructureName={this.state.selectedName}
-            ></StructuresList>
-          </View>
-          <View style={styles.footer}>
-            <Text>Footer dell'applicazione</Text>
+            {
+              this.state.city != 'Luogo'?
+              <StructuresList
+                kitchen={this.state.kitchen}
+                fullBoard={this.state.fullBoard}
+                airConditioner={this.state.airConditioner}
+                wifi={this.state.wifi}
+                parking={this.state.parking}
+                city={this.state.city}    
+                price={this.state.price}
+                selectedStructureName={this.state.selectedName}
+              ></StructuresList>: <View styles={styles.footer}>
+                                    <Text style={styles.footerText}>BENVENUTO SU FLYBNB</Text>
+                                    <Text style={styles.footerText2}>Seleziona il luogo in cui intendi pernottare</Text>
+                                </View> 
+            }
           </View>
 
         </View>
@@ -171,12 +174,27 @@ const styles = StyleSheet.create({
       flex:1,
       top:10,
       width: '100%',
+      alignItems:'center',
       alignContent:'center'
 
     },
     footer:{
-      backgroundColor: colors.black,
-      height:'0%'
-     
+      marginBottom:10,
+      margin: 20
+    },
+    footerText:{
+        fontSize: 24,
+        color: colors.white,
+        fontWeight: "500",
+        paddingTop:20,
+        marginLeft:10
+    },
+    footerText2:{
+      fontSize: 20,
+        color: colors.white,
+        fontWeight: "300",
+        position: 'relative',
+        margin:10,
+        alignSelf:'center'
     }
 });

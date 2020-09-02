@@ -79,7 +79,7 @@ class StructuresList extends Component {
       })
       return newData
     }
-    else return DATA
+    else return null
   }
   dataServicesFilter(DATA){
     var newData = []
@@ -149,41 +149,36 @@ class StructuresList extends Component {
           data={this.dataServicesFilter(this.dataCityFilter(this.dataPriceFilter(this.dataStructureNameFilter(this.state.data))))}
           keyExtractor = {(item, index) => index.toString()}
           renderItem = {({item}) =>
-          <View style={styles.item}>
-            <Text>{item.title}</Text>
-            <Text>{item.email}</Text>
-            <Text>{item.place}</Text>
-            <Text style={styles.services}>Servizi inclusi :</Text>
-            <BookingButton 
-              text={parseInt(item.price)+'€ a Notte'} 
-              onPress={()=>navigation.navigate('Structure',{
-                  /* parametri da passare alla schermata successiva */
-                  itemName: item.name,
-                  itemSurname: item.surname,
-                  ownerID: item.user_id,
-                  itemEmail: item.email,
-                  itemTitle: item.title,
-                  itemPrice: item.price,
-                  itemID: item.id,
-                  itemPlace: item.place,
-                  itemStreet: item.street,
-                  itemBeds: item.beds,
-                  itemType: item.type,
-                  itemKitchen: item.kitchen,
-                  itemFullBoard: item.fullboard,
-                  itemAirConditioner: item.airConditioner,
-                  itemWifi: item.wifi,
-                  itemParking: item.parking,
-                  itemDescription: item.description,
-                  locationDescription: item.location_description,
-              })}></BookingButton>
-          </View>}
+              <View style={styles.item}>
+                <Text>{item.title}</Text>
+                <Text>{item.email}</Text>
+                <Text>{item.place}</Text>
+                <Text style={styles.services}>Servizi inclusi :</Text>
+                <BookingButton 
+                  text={parseInt(item.price)+'€ a Notte'} 
+                  onPress={()=>navigation.navigate('Structure',{
+                      /* parametri da passare alla schermata successiva */
+                      itemName: item.name,
+                      itemSurname: item.surname,
+                      ownerID: item.user_id,
+                      itemEmail: item.email,
+                      itemTitle: item.title,
+                      itemPrice: item.price,
+                      itemID: item.id,
+                      itemPlace: item.place,
+                      itemStreet: item.street,
+                      itemBeds: item.beds,
+                      itemType: item.type,
+                      itemKitchen: item.kitchen,
+                      itemFullBoard: item.fullboard,
+                      itemAirConditioner: item.airConditioner,
+                      itemWifi: item.wifi,
+                      itemParking: item.parking,
+                      itemDescription: item.description,
+                      locationDescription: item.location_description,
+                  })}></BookingButton>
+              </View>}
           contentContainerStyle={{paddingTop:40}}
-          ListFooterComponent={
-          <View styles={styles.footer}>
-            <Text styles={styles.footerText}>*la disponibilità può variare in base alle date in cui si intende prenotare</Text>
-          </View>
-          }
         />
       </View>
     );
@@ -198,13 +193,14 @@ export default function(props) {
 const styles = StyleSheet.create({
   container: {
     height:'80%',
+    width:'70%',
     marginBottom: '20%',
     borderTopColor: colors.white,
     borderTopWidth: 2,
     flexGrow:1,
-    justifyContent:'center',
+    /* justifyContent:'center',
     alignContent:'center',
-    alignItems:'center',
+    alignItems:'center', */
     borderBottomWidth:2,
     borderBottomColor:colors.white
     
@@ -225,9 +221,5 @@ const styles = StyleSheet.create({
     paddingTop:8,
     paddingBottom:8
   },
-  footer:{
-    marginBottom:10
-  },
-  footerText:{
-  }
+  
 });
