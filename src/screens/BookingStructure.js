@@ -199,6 +199,6 @@ const styles = StyleSheet.create({
       fontSize: 18,
       alignSelf:'center',
       color: colors.orange
-    }
+    },
 });
 
