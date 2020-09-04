@@ -120,7 +120,6 @@ export default function Structure({ route }){
     
     return (
     <ScrollView style={styles.container}>
-      
       <Text style={styles.title}>{itemTitle}</Text>
       
       <View style={styles.imageScrollWrapper}>
@@ -192,8 +191,6 @@ export default function Structure({ route }){
           <View style={styles.BookingButton}>
                 <BookingButton text="PRENOTA" onPress={getToken}></BookingButton> 
           </View>
-     
-      
       </ScrollView>
     )
 }
@@ -201,7 +198,6 @@ export default function Structure({ route }){
 const styles = StyleSheet.create({
   container:{
     flex:1,
-    height:'100%',
     backgroundColor: colors.green01,
     
   },
@@ -212,15 +208,14 @@ const styles = StyleSheet.create({
       borderRadius:15,
     },
     imageScrollWrapper:{
-      height: '30%',
+      height: 250,
       marginBottom: 20,
       backgroundColor: colors.white,
       borderRadius: 20,
       alignSelf:'center'
     },
     imageScrollView:{
-      width: width*0.9,
-      height: height,
+      width: width*0.6,
       margin: 5,
       
     },

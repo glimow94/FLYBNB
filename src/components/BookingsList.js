@@ -62,6 +62,7 @@ export default class StructuresList extends Component {
         <FlatList
           data= {this.state.data}
           keyExtractor = {(item, index) => index.toString()}
+          inverted={true}
           renderItem = {({item}) =>
             <View style={styles.item}>
 
