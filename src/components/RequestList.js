@@ -31,7 +31,7 @@ export default class StructuresList extends Component {
       console.log("token booking state");
       console.log(this.state.userToken);
       if(this.state.userToken != null){
-        const url = `http://localhost:3055/bookings/profile/${this.state.userToken}`;
+        const url = `http://localhost:3055/bookings/profile/request/${this.state.userToken}`;
         axios.get(url, {
             method: 'GET',
             headers: {
