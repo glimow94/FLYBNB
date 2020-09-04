@@ -18,6 +18,7 @@ export default class EditStructure extends Component{
     constructor(props){
         super(props);
         this.state={
+            id: '',
             title : '',
             user_id: '',
             type:'B&B',
@@ -186,6 +187,7 @@ export default class EditStructure extends Component{
         console.log('userTokenAddStructure')
         console.log(itemName)
         this.setState({
+            id: itemID,
             user_id: userToken,
             title: itemTitle,
             type:itemType,
@@ -206,7 +208,7 @@ export default class EditStructure extends Component{
     }
 
     postData = () => {
-        const url = `http://localhost:3055/structures/update`;
+        const url = `http://localhost:3055/structures/update/${this.state.id}`;
         axios.post(url, {
             method: 'POST',
             headers: {
