@@ -206,7 +206,7 @@ export default class EditStructure extends Component{
     }
 
     postData = () => {
-        const url = `http://localhost:3055/structures/add`;
+        const url = `http://localhost:3055/structures/update`;
         axios.post(url, {
             method: 'POST',
             headers: {
