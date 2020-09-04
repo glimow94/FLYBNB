@@ -1,6 +1,6 @@
 //componente che restituisce le strutture di uno specifico utente
 import React, { Component } from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text } from 'react-native';
+import { SafeAreaView, View, FlatList, StyleSheet, Text, Button } from 'react-native';
 import Constants from 'expo-constants';
 import colors from "../style/colors/index";
 import BookingButton from "../components/buttons/bookingButton";
@@ -96,10 +96,18 @@ export default class StructuresList extends Component {
                     </View>
                     
                 </View>
-
+                <View style={styles.buttonGroup}>
+                    <View style={styles.button}>
+                        <Button title="Accetta"color={'#32CD32'}></Button>
+                    </View>
+                    <View style={styles.button}>
+                        <Button title="Rifiuta" color={colors.red}></Button>
+                    </View>
+                </View>
             </View>}
           contentContainerStyle={{paddingTop:40}}
         />
+
       </View>
     );
   }
@@ -164,6 +172,15 @@ const styles = StyleSheet.create({
     fontWeight:"700",
     color: colors.blue
 
+  },
+  buttonGroup:{
+      alignSelf:'center',
+      flexDirection:'row-reverse',
+      width:'100%'
+  },
+  button:{
+      margin:4,
+      width: 85
   }
   
 });
