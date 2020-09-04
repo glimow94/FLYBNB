@@ -35,7 +35,7 @@ static contextType = UserContext
       email:'',
       userToken:'',
       //status per visualizzare le prenotazioni oppure le strutture personali
-      status: true,
+      status: false,
       status2: false,
       status3: false,
     }
