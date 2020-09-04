@@ -7,7 +7,7 @@ import DateSelector from "../components/DateSelector";
 import FilterSelector from "../components/FilterSelector";
 import StructuresList from "../components/StructuresList";
 import StructureLIstProva from "../components/provaStruttureLista"
-import StructureListDB from "../components/StructureListDB"
+import TypeSelector from "../components/TypeSelector"
 
 import {
   Text,
@@ -35,11 +35,17 @@ export default class Home extends Component{
       parking:false,
       city:'Luogo',
       price: 'Prezzo',
-      //status per gestire la comparsa/scomparsa dei componenti che appiono quando si premono i bottoni dei filtri  
-      parentType:'Home', //questo parametro cambia il bottone per cambiare città a seconda che ci si trovi in Home oppure in SignUp o AddStructure(la pagina per aggiungere una struttura)
+
+      //filtri per tupi di alloggio (beb o casa vacanze) e posti letto disponibili
+      type:'Qualsiasi',
+      beds:0, //se beds = 0 allora cerca alloggi con qualsiasi numero di posti letto
+
+      //status per gestire la comparsa/scomparsa dei componenti che appaiono quando si premono i bottoni dei filtri  
+      parentType:'Home', //questo parametro cambia lo stile del bottone per cambiare città a seconda che ci si trovi in Home oppure in SignUp o AddStructure(la pagina per aggiungere una struttura)
       status1 : false,
       status2: false,
       status3:false,
+      status4:false,
       //valore della barra di ricerca SearchBar.js
       selectedName: ''
     }
@@ -76,15 +82,25 @@ export default class Home extends Component{
                   status1={this.state.status1}
                   status2={this.state.status2}
                   status3={this.state.status3}
+                  status4={this.state.status4}
                   parentType={this.state.parentType}
                 ></CitySelector>
+                <TypeSelector
+                  updateState={this.updateState.bind(this)} 
+                  type={this.state.type}
+                  beds={this.state.beds}
+                  status1={this.state.status1}
+                  status2={this.state.status2}
+                  status3={this.state.status3}
+                  status4={this.state.status4}
+                ></TypeSelector>
                 <PriceSelector
                   updateState={this.updateState.bind(this)}
                   price={this.state.price}
                   status1={this.state.status1}
                   status2={this.state.status2}
                   status3={this.state.status3}
-                
+                  status4={this.state.status4}
                 ></PriceSelector>
                 <FilterSelector 
                   updateState={this.updateState.bind(this)} 
@@ -96,7 +112,9 @@ export default class Home extends Component{
                   status1={this.state.status1}
                   status2={this.state.status2}
                   status3={this.state.status3}
+                  status4={this.state.status4}
                 ></FilterSelector>
+                
           </View>
 
           <View style={styles.structuresList}>
@@ -110,7 +128,7 @@ export default class Home extends Component{
                price={this.state.price}
             ></StructureListDB> */}
             {
-              this.state.city != 'Luogo'?
+              this.state.city != 'Luogo'|| this.state.selectedName.length != 0?
               <StructuresList
                 kitchen={this.state.kitchen}
                 fullBoard={this.state.fullBoard}
@@ -119,10 +137,13 @@ export default class Home extends Component{
                 parking={this.state.parking}
                 city={this.state.city}    
                 price={this.state.price}
+                type={this.state.type}
+                beds={this.state.beds}
                 selectedStructureName={this.state.selectedName}
               ></StructuresList>: <View styles={styles.footer}>
                                     <Text style={styles.footerText}>BENVENUTO SU FLYBNB</Text>
-                                    <Text style={styles.footerText2}>Seleziona il luogo in cui intendi pernottare</Text>
+                                    <Text style={styles.footerText2}>Seleziona il luogo in cui intendi pernottare o cerca una struttura</Text>
+                                    
                                 </View> 
             }
           </View>

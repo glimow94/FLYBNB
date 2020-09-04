@@ -47,11 +47,10 @@ export default class CitySelector extends Component{
             this.props.updateState({status1:false})
         }
         else{
-            this.props.updateState({status1:true,status2:false,status3:false})
+            this.props.updateState({status1:true,status2:false,status3:false, status4:false})
         }
-        if(this.props.parentType=='Home'){//se dalla home clicco sul filtro del luogo, cambio lo stile
+        if(this.props.parentType=='Home'){//se clicco dalla home sul filtro del luogo, cambio lo stile rispetto a quando clicco dalla pagina addstructure
           this.setState({
-            marginTop: 20,
             bottom: 0,
             width: 108,
             pickerWidth: 120

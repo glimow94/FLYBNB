@@ -79,7 +79,7 @@ class StructuresList extends Component {
       })
       return newData
     }
-    else return null
+    else return DATA
   }
   dataServicesFilter(DATA){
     var newData = []
@@ -120,7 +120,35 @@ class StructuresList extends Component {
     else return DATA
 
   }
+  //filtro per il tipo di struttura (beb o casa vacanze)
+  dataTypeFilter(DATA){
+    var newData=[]
+    var type = this.props.type
+    if (type != 'Qualsiasi'){
+      DATA.forEach(function (item){
+        if(item.type===type)
+          newData.push(item)
+      })
+      return newData
+    }
+    else return DATA
+  }
+  //filtro per il numero di posti letto
+  dataBedsFilter(DATA){
+    var newData = []
+    var beds = this.props.beds
 
+    if(beds != 0){
+      DATA.forEach(function (item){
+        if(item.beds >= parseInt(beds)){
+          newData.push(item)
+        }
+      })
+      return newData
+    }
+    else return DATA
+
+  }
   //filtro della searchBar
   dataStructureNameFilter(DATA){
     var newData = []
@@ -146,13 +174,15 @@ class StructuresList extends Component {
       
       <View style={styles.container}>
         <FlatList
-          data={this.dataServicesFilter(this.dataCityFilter(this.dataPriceFilter(this.dataStructureNameFilter(this.state.data))))}
+          data={this.dataServicesFilter(this.dataCityFilter(this.dataPriceFilter(this.dataStructureNameFilter(this.dataTypeFilter(this.dataBedsFilter(this.state.data))))))}
           keyExtractor = {(item, index) => index.toString()}
           renderItem = {({item}) =>
               <View style={styles.item}>
                 <Text>{item.title}</Text>
                 <Text>{item.email}</Text>
                 <Text>{item.place}</Text>
+                <Text>{item.type}</Text>
+                <Text>{item.beds}</Text>
                 <Text style={styles.services}>Servizi inclusi :</Text>
                 <BookingButton 
                   text={parseInt(item.price)+'€ a Notte'} 

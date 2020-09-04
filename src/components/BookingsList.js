@@ -9,7 +9,7 @@ import axios from "axios";
 import AsyncStorage from '@react-native-community/async-storage';
 
 
-class StructuresList extends Component {
+export default class StructuresList extends Component {
   
    constructor(props){
      
@@ -18,6 +18,7 @@ class StructuresList extends Component {
       data: [],
       isLoading: true,
       userToken: null,
+      status:''
     }
    }
    _isMounted = false;
@@ -43,7 +44,7 @@ class StructuresList extends Component {
               const structures = res.data;
               this.setState({
                 isLoading:false,
-                data: structures
+                data: structures,
               })
             }
         })
@@ -65,26 +66,33 @@ class StructuresList extends Component {
             <View style={styles.item}>
 
                 <View style={styles.viewRow}>
-                    <Text
-                        style={styles.titleStructure}>
-                        {item.title}
-                    </Text>
-                    <Text>{item.name} </Text>
-                    <Text>{item.surname} </Text>
-                    <Text>{item.email}</Text>
+                    {
+                      item.request== 0 ? <Text style={styles.requestDontApproved}>In attesa di approvazione</Text>
+                      : <Text style={styles.requestApproved}>Prenotazione approvata</Text>
+                    }
+                    
+                  <Text style={styles.titleStructure}>{item.title}, {item.type} </Text>
+                  <Text style={styles.streetInfoText}>{item.place}, {item.street}, {item.number}</Text>
+                </View>
+                <View style={styles.checkInOut}>
+          
+                    <View style={{flexDirection:'column'}}>
+                      <Text style={styles.checkInOutText}>Check-In: </Text>
+                      <Text>{item.checkIn}</Text>
+                    </View>
+                    <View style={styles.checkoutBox}>
+                      <Text style={styles.checkInOutText}>Check-Out: </Text>
+                      <Text>{item.checkOut}</Text>
+                    </View>
+
                 </View>
                 <View style={styles.viewRow}>
-                    <Text>{item.type} </Text>
-                    <Text>{item.place} </Text>
-                </View>
-                <View style={styles.viewRow}>
-                    <Text>Check-In: {item.checkIn}; </Text>
-                    <Text>Check-Out: {item.checkIn}; </Text>
-                </View>
-                <View style={styles.viewRow}>
-                    <Text>days: {item.days}; </Text>
-                    <Text>price by night: {item.price} € </Text>
-                    <Text>total price: {item.totPrice} € </Text>
+                    
+                    <View style={styles.priceBox}>
+                      <Text style={styles.priceText}>Totale: </Text>
+                      <Text style={styles.price}>{item.totPrice} € </Text>
+                    </View>
+                    
                 </View>
 
             </View>}
@@ -95,10 +103,6 @@ class StructuresList extends Component {
   }
 }
 
-export default function(props) {
-  const navigation = useNavigation();
-  return <StructuresList {...props} navigation={navigation} />;
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -116,27 +120,48 @@ const styles = StyleSheet.create({
    width: 300,
   },
   titleStructure:{
-    fontSize: 20,
-    color: colors.black,
-  },
-  editButton:{
-    color: colors.red, 
-    fontSize:12, 
+    fontSize:16,
     fontWeight: "700",
-    padding:4,
-    width: 80,
-    textAlign:'center',
-    alignSelf:'flex-end',
-    margin: 2,
-    backgroundColor: colors.white,
-    borderColor: colors.black,
-    borderWidth: 1,
-    borderRadius: 10
+    color: colors.black,
+    margin:5,
+    marginLeft:0
   },
-  viewRow: {
-    paddingVertical: 15,
-    paddingHorizontal: 10,
-    flexDirection: "row",
-    justifyContent: 'space-around',
+  requestDontApproved:{
+    color:colors.red,
+    fontSize: 14,
+    fontWeight: "700"
+  },
+  streetInfoText:{
+    flexDirection:'row',
+    fontWeight:"700",
+    color:colors.black
+  },
+  checkInOut:{
+    flexDirection: 'row',
+    alignSelf:'center',
+    margin:10
+  },
+  checkoutBox:{
+    flexDirection:'column',
+    marginLeft:20
+  },
+  checkInOutText:{
+    fontWeight:"700"
+  },
+  priceBox:{
+    flexDirection:'row',
+    alignSelf:'center'
+  },
+  priceText:{
+    flexDirection:'row',
+    fontWeight:"700",
+    color:colors.black
+  },
+  price:{
+    fontSize: 16,
+    fontWeight:"700",
+    color: colors.blue
+
   }
+  
 });

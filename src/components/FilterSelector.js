@@ -31,7 +31,8 @@ export default class DateSelector extends Component {
           this.updateState({
               status3:true,
               status1:false,
-              status2:false
+              status2:false,
+              status4:false
             })
       }
   }
@@ -55,7 +56,7 @@ export default class DateSelector extends Component {
 
     return (
       <View>
-        <FilterButton text="Servizi" onPress={this.showHide}></FilterButton>
+        <FilterButton text="Altro" onPress={this.showHide}></FilterButton>
         
         {   
           this.props.status3 ? 
@@ -134,7 +135,6 @@ const styles = StyleSheet.create({
     wrapper:{
         flex:1,
         marginBottom: 325,
-        marginTop: 20
     },
   container: {
     flexDirection:'column',
