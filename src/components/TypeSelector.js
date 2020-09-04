@@ -80,7 +80,7 @@ export default class DateSelector extends Component {
                         <View style={styles.priceField}>
                             <TextInput
                                 underlineColorAndroid='transparent'  
-                                defaultValue={this.props.beds}
+                                defaultValue={this.props.beds.toString()}
                                 keyboardType={'numeric'}
                                 autoCorrect={false}
                                 style = {[{width: 100}]}
@@ -104,7 +104,7 @@ export default class DateSelector extends Component {
 const styles = StyleSheet.create({
     wrapper:{
         flex:1,
-        marginBottom: 400,
+        marginBottom: 200,
     },
   container: {
     position:'absolute',
