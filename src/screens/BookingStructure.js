@@ -25,6 +25,8 @@ export default class BookingStructure extends Component{
       request: '',
       beds: '',
       diffDays: 0,
+      //alert se si preme conferma senza aver selezionato le date
+      alert: false
     }
   }
   
@@ -65,36 +67,44 @@ export default class BookingStructure extends Component{
 }
 
   postBooking = () => {
-    
-    const url = `http://localhost:3055/bookings/add`;
-    axios.post(url, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',   
-        },
-        user_id: this.state.user_id,
-        owner_id: this.state.owner_id,
-        structure_id: this.state.structure_id,
-        checkIn: this.state.checkIn,
-        checkOut: this.state.checkOut,
-        days: this.state.diffDays,
-        totPrice: this.state.totPrice,
-        cityTax: this.state.cityTax,
-        request: this.state.request
-      })
-      .then(res => {
-        console.log(res);
+    if(this.state.checkOut.length !=0){
+      const url = `http://localhost:3055/bookings/add`;
+      axios.post(url, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',   
+          },
+          user_id: this.state.user_id,
+          owner_id: this.state.owner_id,
+          structure_id: this.state.structure_id,
+          checkIn: this.state.checkIn,
+          checkOut: this.state.checkOut,
+          days: this.state.diffDays,
+          totPrice: this.state.totPrice,
+          cityTax: this.state.cityTax,
+          request: this.state.request
         })
-      .catch(function (error) {
-        console.log(error);
-      });
+        .then(res => {
+          console.log(res);
+          })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+        this.props.navigation.navigate('Home')
+      }
+      else{
+        this.setState({
+          alert:true
+        })
+      }
   }
 
   render(){
     
     return (
-      <ScrollView>
         <View style={styles.container}>
+          <ScrollView>
           <Text style={styles.textHeader}>Prenotazione Struttura</Text>
           <Text style={styles.subtitle}>seleziona date di soggiorno e completa tutti i campi</Text>
           <DateSelector
@@ -121,13 +131,14 @@ export default class BookingStructure extends Component{
           
           <Text>ID struttura: {this.state.structure_id}</Text>
 
-          
-          <View style={{marginTop: 20, width:300}}>
+          {
+            this.state.alert ? <Text style={styles.alertText}>SELEZIONA LE DATE</Text> : null
+          }
+          <View>
             <Button title="CONFERMA" color={colors.orange} onPress = {()=> {this.postBooking()}} ></Button>
           </View>
-      
+        </ScrollView>
         </View>
-      </ScrollView>
     )
   }
     
@@ -152,6 +163,7 @@ const styles = StyleSheet.create({
       color: colors.white,
       fontWeight: "700",
       margin:5,
+      marginTop:0
     },
     subtitle:{
       fontSize: 14,
@@ -165,6 +177,7 @@ const styles = StyleSheet.create({
       alignContent:'center',
       alignItems:'center',
       margin:10,
+      marginBottom:0,
       padding:5,
       
     },
@@ -176,6 +189,7 @@ const styles = StyleSheet.create({
     },
     dateText:{
       padding:6,
+      paddingBottom:0,
       fontWeight: "500"
     },
     
@@ -199,6 +213,13 @@ const styles = StyleSheet.create({
       fontSize: 18,
       alignSelf:'center',
       color: colors.orange
+    },
+    alertText:{
+      color: colors.red,
+      backgroundColor: colors.white,
+      fontSize: 18,
+      marginBottom:2,
+      fontWeight: "700"
     }
 });
 

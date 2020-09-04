@@ -235,6 +235,8 @@ export default class EditStructure extends Component{
           .catch(function (error) {
             console.log(error);
           });
+
+          this.props.navigation.navigate('Profile')
     }
 
     render(){

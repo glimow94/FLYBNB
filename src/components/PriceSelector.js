@@ -28,7 +28,8 @@ export default class PriceSelector extends Component {
             this.props.updateState({
               status2:true,
               status1:false,
-              status3:false
+              status3:false,
+              status4:false
             })
         }
     }
@@ -104,6 +105,5 @@ const styles = StyleSheet.create({
     borderRadius: 10,  
     borderWidth: 2,  
     borderColor: colors.black,  
-    marginTop: 20  
 }  
 });
