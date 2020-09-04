@@ -73,6 +73,7 @@ export default class StructuresList extends Component {
                     }
                     
                   <Text style={styles.titleStructure}>{item.title}, {item.type} </Text>
+                  <Text style={styles.streetInfoText}>{item.name} {item.surname}, {item.email}</Text>
                   <Text style={styles.streetInfoText}>{item.place}, {item.street}, {item.number}</Text>
                 </View>
                 <View style={styles.checkInOut}>
