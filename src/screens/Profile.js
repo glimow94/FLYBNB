@@ -14,6 +14,7 @@ import { color } from 'react-native-reanimated';
 import AddStructure from './AddStructure';
 import { render } from 'react-dom';
 import BookingsList from '../components/BookingsList';
+import RequestList from '../components/RequestList';
 
 
 const {width} = Dimensions.get('window');
@@ -149,8 +150,8 @@ static contextType = UserContext
           }
           {this.state.status3? 
               <View style={styles.infoBox}>
-                { this.state.notifications == 0 ? <Text>Nessuna Notifica</Text> : <Text>Richieste in sospeso: </Text> }
-              </View>:null
+              <RequestList></RequestList>
+            </View>:null
           }
         </View>
 
