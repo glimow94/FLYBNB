@@ -50,7 +50,24 @@ export default class StructuresList extends Component {
         })
       }
       });
-  }
+      console.log(this.state.data)
+    }
+
+   async postResponse(itemID) {
+      const url = `http://localhost:3055/bookings/profile/response/${itemID}`;
+      axios.post(url, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',   
+          }
+        })
+        .then(res => {
+          console.log(res);
+          })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
 
   render(){
     
@@ -90,7 +107,8 @@ export default class StructuresList extends Component {
                 <View style={styles.viewRow}>
                     
                     <View style={styles.priceBox}>
-                      <Text>Tassa soggiorno:</Text>
+                      <Text style={styles.priceText}>Tassa soggiorno:</Text>
+                      <Text style={styles.price}>{item.cityTax} € </Text>
                       <Text style={styles.priceText}>Totale: </Text>
                       <Text style={styles.price}>{item.totPrice} € </Text>
                     </View>
@@ -98,7 +116,7 @@ export default class StructuresList extends Component {
                 </View>
                 <View style={styles.buttonGroup}>
                     <View style={styles.button}>
-                        <Button title="Accetta"color={'#32CD32'}></Button>
+                        <Button onPress = {()=> {this.postResponse(item.id)}} title="Accetta"color={'#32CD32'}></Button>
                     </View>
                     <View style={styles.button}>
                         <Button title="Rifiuta" color={colors.red}></Button>
