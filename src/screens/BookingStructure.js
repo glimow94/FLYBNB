@@ -13,6 +13,8 @@ export default class BookingStructure extends Component{
     this.state={
       user_id: '',
       title: '',
+      clientMail: '',
+      ownerMail: '',
       owner_id: '',
       structure_id: '',
       checkIn: '',
@@ -26,7 +28,8 @@ export default class BookingStructure extends Component{
       beds: '',
       diffDays: 0,
       //alert se si preme conferma senza aver selezionato le date
-      alert: false
+      alert: false,
+      data: [],
     }
   }
   
@@ -52,10 +55,12 @@ export default class BookingStructure extends Component{
       beds
     } = this.props.route.params;
     console.log('userTokenAddStructure')
-    console.log()
+
     this.setState({
       user_id: userID,
       title: itemTitle,
+      clientMail: clientMail,
+      ownerMail: ownerMail,
       owner_id: ownerID,
       structure_id: itemID,
       price: itemPrice,
@@ -63,6 +68,25 @@ export default class BookingStructure extends Component{
       street: street,
       beds: beds,
       request: 0
+    })
+
+    const url = `http://localhost:3055/bookings/profile/date/${itemID}`;
+    axios.get(url, {
+        method: 'GET',
+        headers: {
+          'content-type': 'application/json',
+        }
+      })
+      .then(res => {
+        console.log("ECCO LE DATE:");
+        console.log(res.data);
+        const dates = res.data;
+        this.setState({
+          data: dates
+        })
+        console.log(this.state.data);
+        console.log(this.state.clientMail);
+        console.log(this.state.ownerMail);
     })
 }
 
