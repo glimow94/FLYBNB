@@ -14,6 +14,8 @@ export default class BookingStructure extends Component{
     this.state={
       user_id: '',
       title: '',
+      clientMail: '',
+      ownerMail: '',
       owner_id: '',
       structure_id: '',
       checkIn: '',
@@ -28,14 +30,15 @@ export default class BookingStructure extends Component{
       diffDays: 0,
       //alert se si preme conferma senza aver selezionato le date
       alert: false,
-      disabledDates:[]
+      dates: [],
+      disabledDates: [],
     }
   }
   
   updateState(filterStatus){
     this.setState(filterStatus);
   }
-
+  //restituisce array di oggetti Date che comprendono le date fra il check in e il checkout per poi oscurarle nel selettore delle date di soggiorno
   getDateRange(start, end, dateFormat) {
         
         var dates = [],
@@ -86,10 +89,12 @@ export default class BookingStructure extends Component{
       beds
     } = this.props.route.params;
     console.log('userTokenAddStructure')
-    console.log()
+
     this.setState({
       user_id: userID,
       title: itemTitle,
+      clientMail: clientMail,
+      ownerMail: ownerMail,
       owner_id: ownerID,
       structure_id: itemID,
       price: itemPrice,
@@ -98,11 +103,41 @@ export default class BookingStructure extends Component{
       beds: beds,
       request: 0
     })
-    var dates = this.getDateRange('10-09-2020','20-09-2020','DD-MM-YYYY')
-    console.log(dates)
-    this.setState({
-      disabledDates:dates
+
+    const url = `http://localhost:3055/bookings/profile/date/${itemID}`;
+    axios.get(url, {
+        method: 'GET',
+        headers: {
+          'content-type': 'application/json',
+        }
+      })
+      .then(res => {
+        console.log("ECCO LE DATE:");
+        console.log(res.data);
+        const bookingdates = res.data;
+        this.setState({
+          dates: bookingdates
+        })
+        console.log(this.state.dates);
+        console.log(this.state.clientMail);
+        console.log(this.state.ownerMail);
+
+        var disabledDates_ = [];
+        if(bookingdates.length !=0){
+          for(var i = 0; i < bookingdates.length; i++){
+            var startDate = this.state.dates[i].checkIn;
+            var endDate = this.state.dates[i].checkOut;
+            disabledDates_.push(this.getDateRange(startDate,endDate,'DD-MM-YYYY')) 
+          }
+          this.setState({
+            disabledDates: disabledDates_.flat()
+          })
+        }
+
     })
+      
+    
+    
 }
 
   postBooking = () => {
