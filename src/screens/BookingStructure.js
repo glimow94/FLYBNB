@@ -32,6 +32,7 @@ export default class BookingStructure extends Component{
       alert: false,
       dates: [],
       disabledDates: [],
+      datesError: false
     }
   }
   
@@ -39,17 +40,14 @@ export default class BookingStructure extends Component{
     this.setState(filterStatus);
   }
   //restituisce array di oggetti Date che comprendono le date fra il check in e il checkout per poi oscurarle nel selettore delle date di soggiorno
-  getDateRange(start, end, dateFormat) {
-        
+  getDateRange(start, end, dateFormat,type) {
+        //se type = 1 restituisce le date in formato array di Oggetti Data
+        //altrimenti restituisce le date in formato stringa DD-MM-YYYY
         var dates = [],
             dates_objs = [],
             startDate = moment(start, dateFormat),
             endDate = moment(end,dateFormat),
             diff = endDate.diff(startDate, 'days');
-        console.log(startDate)
-        console.log(endDate)
-
-
         if(!startDate.isValid() || !endDate.isValid() || diff <= 0) {
             return;
         }
@@ -58,17 +56,19 @@ export default class BookingStructure extends Component{
             dates.push(endDate.subtract(1,'d').format(dateFormat));
         }
         //creo l'array di oggetti Date, convertendo il formato da DD-MM-YYYY ad MM-DD-YYYY
-        for(var i = 0; i < diff ; i++){
-          console.log(dates[i])
-          var month = dates[i].substring(3,5);
-          var day = dates[i].substring(0,2);
-          var year = dates[i].substring(6,10)
-          var date_string = month+"/"+day+"/"+year
-          var date_newFormat = new Date(date_string)
-          dates_objs.push(date_newFormat)
-
+        if(type == 1){
+          for(var i = 0; i < diff ; i++){
+            console.log(dates[i])
+            var month = dates[i].substring(3,5);
+            var day = dates[i].substring(0,2);
+            var year = dates[i].substring(6,10)
+            var date_string = month+"/"+day+"/"+year
+            var date_newFormat = new Date(date_string)
+            dates_objs.push(date_newFormat)
+          }
+          return dates_objs;
         }
-        return dates_objs;
+        if(type==0) return dates
     };
 
   componentDidMount = () => {
@@ -123,11 +123,11 @@ export default class BookingStructure extends Component{
         console.log(this.state.ownerMail);
 
         var disabledDates_ = [];
-        if(bookingdates.length !=0){
-          for(var i = 0; i < bookingdates.length; i++){
+        if(this.state.dates.length !=0){
+          for(var i = 0; i < this.state.dates.length; i++){
             var startDate = this.state.dates[i].checkIn;
             var endDate = this.state.dates[i].checkOut;
-            disabledDates_.push(this.getDateRange(startDate,endDate,'DD-MM-YYYY')) 
+            disabledDates_.push(this.getDateRange(startDate,endDate,'DD-MM-YYYY',1)) 
           }
           this.setState({
             disabledDates: disabledDates_.flat()
@@ -139,33 +139,65 @@ export default class BookingStructure extends Component{
     
     
 }
-
+  //funzione che controlla se fra il range di date selezionate ce ne sono alcune occupate
+  datesRangeCheck(){
+    //estraggo da dates, che mi da tutti i checkin e i checkout di quella struttura,un array con tutte le date occupate
+    // disableDates_ contiene l'array di date occupate per quella struttura
+    //selectedDatesRange conterrà le date che ha scelto l'utente
+    //confrontando i due array possiamo validare la scelta delle date da parte dell'utente in modo che non permettiamo che selezioni date occupate
+    var disabledDates_ = [];
+    var datesError = false; //se datesError = false allora può essere effettuata la prenotazione, altriemnti no perchè si è selezionato un range di date che ne contiene altre in cui la struttura è occupata
+    if(this.state.dates.length !=0){
+      for(var i = 0; i < this.state.dates.length; i++){
+        var startDate = this.state.dates[i].checkIn;
+        var endDate = this.state.dates[i].checkOut;
+        disabledDates_.push(this.getDateRange(startDate,endDate,'DD-MM-YYYY',0)) 
+      }
+    }
+    if(this.state.checkOut.length != 0){
+      var selectedDatesRange = this.getDateRange(this.state.checkIn, this.state.checkOut, 'DD-MM-YYYY',0);//date che ha scelto l'utente
+      for(var i = 0; i<selectedDatesRange.length ; i++){
+        if(disabledDates_.flat().indexOf(selectedDatesRange[i]) != -1 ){
+          datesError = true
+        }
+      }
+    }
+    console.log(datesError)
+    return datesError;
+  }
   postBooking = () => {
+    var datesCheck = this.datesRangeCheck()
     if(this.state.checkOut.length !=0){
-      const url = `http://localhost:3055/bookings/add`;
-      axios.post(url, {
-          method: 'POST',
-          headers: {
-            'content-type': 'application/json',   
-          },
-          user_id: this.state.user_id,
-          owner_id: this.state.owner_id,
-          structure_id: this.state.structure_id,
-          checkIn: this.state.checkIn,
-          checkOut: this.state.checkOut,
-          days: this.state.diffDays,
-          totPrice: this.state.totPrice,
-          cityTax: this.state.cityTax,
-          request: this.state.request
-        })
-        .then(res => {
-          console.log(res);
+      if(datesCheck == false){  
+        const url = `http://localhost:3055/bookings/add`;
+        axios.post(url, {
+            method: 'POST',
+            headers: {
+              'content-type': 'application/json',   
+            },
+            user_id: this.state.user_id,
+            owner_id: this.state.owner_id,
+            structure_id: this.state.structure_id,
+            checkIn: this.state.checkIn,
+            checkOut: this.state.checkOut,
+            days: this.state.diffDays,
+            totPrice: this.state.totPrice,
+            cityTax: this.state.cityTax,
+            request: this.state.request
           })
-        .catch(function (error) {
-          console.log(error);
-        });
-
-        this.props.navigation.navigate('Home')
+          .then(res => {
+            console.log(res);
+            })
+          .catch(function (error) {
+            console.log(error);
+          });
+          this.props.navigation.navigate('Home')
+        }
+        else{
+          this.setState({
+            datesError:true
+          })
+        }
       }
       else{
         this.setState({
@@ -208,6 +240,9 @@ export default class BookingStructure extends Component{
 
           {
             this.state.alert ? <Text style={styles.alertText}>SELEZIONA LE DATE</Text> : null
+          }
+          {
+            this.state.datesError ? <Text style={styles.alertText}>HAI SCELTO DELLE DATE NON DISPONIBILI</Text> : null
           }
           <View>
             <Button title="CONFERMA" color={colors.orange} onPress = {()=> {this.postBooking()}} ></Button>
