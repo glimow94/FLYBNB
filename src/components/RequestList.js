@@ -114,14 +114,14 @@ export default class StructuresList extends Component {
                     </View>
                     
                 </View>
-                <View style={styles.buttonGroup}>
+                {item.request == 0 ? <View style={styles.buttonGroup}>
                     <View style={styles.button}>
-                        <Button onPress = {()=> {this.postResponse(item.id)}} title="Accetta"color={'#32CD32'}></Button>
+                        <Button onPress = {()=> {this.postResponse(item.id)}} title="Accetta"color={colors.green02}></Button>
                     </View>
                     <View style={styles.button}>
                         <Button title="Rifiuta" color={colors.red}></Button>
                     </View>
-                </View>
+                </View>: null}
             </View>}
           contentContainerStyle={{paddingTop:40}}
         />
@@ -156,6 +156,11 @@ const styles = StyleSheet.create({
   },
   requestDontApproved:{
     color:colors.red,
+    fontSize: 14,
+    fontWeight: "700"
+  },
+  requestApproved:{
+    color:colors.green02,
     fontSize: 14,
     fontWeight: "700"
   },

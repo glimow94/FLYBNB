@@ -133,6 +133,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "700"
   },
+  requestApproved:{
+    color:colors.green02,
+    fontSize: 14,
+    fontWeight: "700"
+  },
   streetInfoText:{
     flexDirection:'row',
     fontWeight:"700",
