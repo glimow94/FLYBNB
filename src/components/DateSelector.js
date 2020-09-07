@@ -109,6 +109,7 @@ export default class DateSelector extends Component {
             <CalendarPicker
                 startFromMonday={true}
                 allowRangeSelection={true}
+                disabledDates={this.props.disabledDates}
                 minDate={minDate}
                 maxDate={maxDate}
                 weekdays={['Lun.','Mar.','Mer.','Gio.','Ven.','Sab.','Dom.',]}

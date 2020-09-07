@@ -67,7 +67,10 @@ static contextType = UserContext
       city:user_city,
       birthdate:user_birthdate,
       email:user_email,
-      userToken:userToken
+      userToken:userToken,
+      status:false,
+      status2:false,
+      status3:false
     })
   }
   showHideBookings=()=>{
@@ -97,6 +100,9 @@ static contextType = UserContext
       })
     }
   }
+  updateState(filterStatus){
+    this.setState(filterStatus)
+  } 
   render(){
   
 
@@ -150,7 +156,9 @@ static contextType = UserContext
           }
           {this.state.status3? 
               <View style={styles.infoBox}>
-              <RequestList></RequestList>
+              <RequestList
+                updateState={this.updateState.bind(this)} 
+              ></RequestList>
             </View>:null
           }
         </View>

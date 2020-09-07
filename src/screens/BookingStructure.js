@@ -5,6 +5,7 @@ import DateSelector from '../components/DateSelector';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import axios from "axios";
+import moment from "moment"
 
 
 export default class BookingStructure extends Component{
@@ -26,13 +27,46 @@ export default class BookingStructure extends Component{
       beds: '',
       diffDays: 0,
       //alert se si preme conferma senza aver selezionato le date
-      alert: false
+      alert: false,
+      disabledDates:[]
     }
   }
   
   updateState(filterStatus){
     this.setState(filterStatus);
   }
+
+  getDateRange(start, end, dateFormat) {
+        
+        var dates = [],
+            dates_objs = [],
+            startDate = moment(start, dateFormat),
+            endDate = moment(end,dateFormat),
+            diff = endDate.diff(startDate, 'days');
+        console.log(startDate)
+        console.log(endDate)
+
+
+        if(!startDate.isValid() || !endDate.isValid() || diff <= 0) {
+            return;
+        }
+
+        for(var i = 0; i < diff; i++) {
+            dates.push(endDate.subtract(1,'d').format(dateFormat));
+        }
+        //creo l'array di oggetti Date, convertendo il formato da DD-MM-YYYY ad MM-DD-YYYY
+        for(var i = 0; i < diff ; i++){
+          console.log(dates[i])
+          var month = dates[i].substring(3,5);
+          var day = dates[i].substring(0,2);
+          var year = dates[i].substring(6,10)
+          var date_string = month+"/"+day+"/"+year
+          var date_newFormat = new Date(date_string)
+          dates_objs.push(date_newFormat)
+
+        }
+        return dates_objs;
+    };
 
   componentDidMount = () => {
     const {
@@ -63,6 +97,11 @@ export default class BookingStructure extends Component{
       street: street,
       beds: beds,
       request: 0
+    })
+    var dates = this.getDateRange('10-09-2020','20-09-2020','DD-MM-YYYY')
+    console.log(dates)
+    this.setState({
+      disabledDates:dates
     })
 }
 
@@ -111,6 +150,7 @@ export default class BookingStructure extends Component{
             updateState={this.updateState.bind(this)}
             price = {this.state.price}
             city = {this.state.city}
+            disabledDates={this.state.disabledDates}
           ></DateSelector>
           <View style={styles.datesBox}>
                   <Text style={styles.dateText}>Check-In:</Text>

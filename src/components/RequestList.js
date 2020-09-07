@@ -21,6 +21,10 @@ export default class StructuresList extends Component {
       status:''
     }
    }
+   updateState(data){
+    this.props.updateState(data)
+   }
+
    _isMounted = false;
    componentDidMount = () => {
     this._isMounted = true;
@@ -67,7 +71,11 @@ export default class StructuresList extends Component {
         .catch(function (error) {
           console.log(error);
         });
+        this.updateState({
+          status3:false
+        })
     }
+    
 
   render(){
     
