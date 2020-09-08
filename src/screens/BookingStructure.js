@@ -32,6 +32,7 @@ export default class BookingStructure extends Component{
       alert: false,
       dates: [],
       disabledDates: [],
+      disabledDatesStrings:[],
       datesError: false
     }
   }
@@ -153,6 +154,9 @@ export default class BookingStructure extends Component{
         var endDate = this.state.dates[i].checkOut;
         disabledDates_.push(this.getDateRange(startDate,endDate,'DD-MM-YYYY',0)) 
       }
+      this.setState({
+        disabledDatesStrings:disabledDates_
+      })
     }
     if(this.state.checkOut.length != 0){
       var selectedDatesRange = this.getDateRange(this.state.checkIn, this.state.checkOut, 'DD-MM-YYYY',0);//date che ha scelto l'utente
@@ -211,42 +215,43 @@ export default class BookingStructure extends Component{
     return (
         <View style={styles.container}>
           <ScrollView>
-          <Text style={styles.textHeader}>Prenotazione Struttura</Text>
-          <Text style={styles.subtitle}>seleziona date di soggiorno e completa tutti i campi</Text>
-          <DateSelector
-            updateState={this.updateState.bind(this)}
-            price = {this.state.price}
-            city = {this.state.city}
-            disabledDates={this.state.disabledDates}
-          ></DateSelector>
-          <View style={styles.datesBox}>
-                  <Text style={styles.dateText}>Check-In:</Text>
-                  <Text style={styles.dateStyle}>{this.state.checkIn}</Text>
-                  <Text style={styles.dateText}>Check-Out: </Text>
-                  <Text style={styles.dateStyle}>{this.state.checkOut}</Text>
-          </View>
-          <Text style={styles.texTitle}> {this.state.itemTitle}</Text>
-          <Text style={styles.textInfo}>{this.state.city}, {this.state.street} </Text>
-          <Text style={styles.textInfo}>Letti: {this.state.beds} </Text>
-          <View style={styles.priceInfo}>
-            <Text style={styles.numberOfDays}> {this.state.diffDays} Notti</Text>
-            <Text style={styles.textInfo}>Prezzo/notte : {this.state.price}€</Text>
-            <Text style={styles.textInfo}>Tasse soggiorno: {this.state.cityTax} €</Text>
-            <Text style={styles.textInfo}>Prezzo Totale: <Text style={styles.finalPrice}>{this.state.totPrice} €</Text></Text>
-          </View>
-          
-          
-          <Text>ID struttura: {this.state.structure_id}</Text>
+            <Text style={styles.textHeader}>Prenotazione Struttura</Text>
+            <Text style={styles.subtitle}>seleziona date di soggiorno e conferma la prenotazione</Text>
+            <DateSelector
+              updateState={this.updateState.bind(this)}
+              price = {this.state.price}
+              city = {this.state.city}
+              disabledDates={this.state.disabledDates}
+              disabledDatesStrings={this.state.disabledDatesStrings}
+            ></DateSelector>
+            <View style={styles.datesBox}>
+                    <Text style={styles.dateText}>Check-In:</Text>
+                    <Text style={styles.dateStyle}>{this.state.checkIn}</Text>
+                    <Text style={styles.dateText}>Check-Out: </Text>
+                    <Text style={styles.dateStyle}>{this.state.checkOut}</Text>
+            </View>
+            <Text style={styles.texTitle}> {this.state.itemTitle}</Text>
+            <Text style={styles.textInfo}>{this.state.city}, {this.state.street} </Text>
+            <Text style={styles.textInfo}>Letti: {this.state.beds} </Text>
+            <View style={styles.priceInfo}>
+              <Text style={styles.numberOfDays}> {this.state.diffDays} Notti</Text>
+              <Text style={styles.textInfo}>Prezzo/notte : {this.state.price}€</Text>
+              <Text style={styles.textInfo}>Tasse soggiorno: {this.state.cityTax} €</Text>
+              <Text style={styles.textInfo}>Prezzo Totale: <Text style={styles.finalPrice}>{this.state.totPrice} €</Text></Text>
+            </View>
+            
+            
+            <Text>ID struttura: {this.state.structure_id}</Text>
 
-          {
-            this.state.alert ? <Text style={styles.alertText}>SELEZIONA LE DATE</Text> : null
-          }
-          {
-            this.state.datesError ? <Text style={styles.alertText}>HAI SCELTO DELLE DATE NON DISPONIBILI</Text> : null
-          }
-          <View>
-            <Button title="CONFERMA" color={colors.orange} onPress = {()=> {this.postBooking()}} ></Button>
-          </View>
+            {
+              this.state.alert ? <Text style={styles.alertText}>SELEZIONA LE DATE</Text> : null
+            }
+            {
+              this.state.datesError ? <Text style={styles.alertText}>HAI SCELTO DELLE DATE NON DISPONIBILI</Text> : null
+            }
+            <View>
+              <Button title="CONFERMA" color={colors.orange} onPress = {()=> {this.postBooking()}} ></Button>
+            </View>
         </ScrollView>
         </View>
     )
@@ -266,14 +271,16 @@ const styles = StyleSheet.create({
       fontSize: 28,
       color: colors.white,
       fontWeight: "300",
-      marginTop:30
+      marginTop:30,
+      alignSelf:'center'
     },
     texTitle:{
       fontSize: 30,
       color: colors.white,
       fontWeight: "700",
       margin:5,
-      marginTop:0
+      marginTop:0,
+      alignSelf:'center'
     },
     subtitle:{
       fontSize: 14,

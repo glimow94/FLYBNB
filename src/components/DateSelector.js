@@ -23,6 +23,7 @@ export default class DateSelector extends Component {
       // status è il valore che rende visibile/invisibile il calendario
       status: false,
       status2:true,
+      maxRange: 28,
     };
     this.onDateChange = this.onDateChange.bind(this);
 
@@ -48,7 +49,25 @@ export default class DateSelector extends Component {
     var month = months.indexOf(monthname);
     return month!=-1 ? month + 1 : undefined;
 }
-  
+  //funzione che calcola il range massimo di selezione delle date a partire dalla scelta della data iniziale(check-in) sul calendario
+  rangeDates(start_date){
+    //incrementa il giorno del check-in controllando se questo è presente nella lista delle date penotate per quella struttura, cosi trova il range massimo di prenotazione
+    var disabledDates = this.props.disabledDates;//date occupate
+    var range = 0; 
+    for(var i = 0; i < 28; i++){
+      var nextDay = new Date(start_date);
+      nextDay.setHours(0,0,0,0)
+      nextDay.setDate(nextDay.getDate()+i)
+      console.log(nextDay);
+      console.log(disabledDates)
+      //vogliamo controllare se nextday incrementato ogni volta sia presente nell'array di oggetti Date disabilitate
+      //serializziamo gli oggetti Date in modo da poter usare la funzione indexOf degli array js
+      if(disabledDates.map(Number).indexOf(+nextDay) != -1) break;
+      else range = range + 1;
+    }
+    console.log(range)
+    return range
+  }
   onDateChange(date, type) {
     var date_mod = date.toString().replace("12:00:00 GMT+0200","").slice(4);
     var month_num = this.monthNameToNum(date_mod.substr(0,3));
@@ -75,10 +94,12 @@ export default class DateSelector extends Component {
       })
 
     } else {
+      var maxRange = this.rangeDates(date)//calcolo il range massimo di date che l'utente può selezionare (da quella selezionata all'ultima disponibile in sequenza...)
       this.setState({
         selectedStartDate: final_date,
         selectedEndDate: null,
-        selectedStartDateOriginal: date
+        selectedStartDateOriginal: date,
+        maxRange : maxRange
       });
       this.props.updateState({
         checkIn: final_date
@@ -109,6 +130,7 @@ export default class DateSelector extends Component {
             <CalendarPicker
                 startFromMonday={true}
                 allowRangeSelection={true}
+                maxRangeDuration={this.state.maxRange}
                 disabledDates={this.props.disabledDates}
                 minDate={minDate}
                 maxDate={maxDate}

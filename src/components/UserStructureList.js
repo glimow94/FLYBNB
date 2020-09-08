@@ -147,6 +147,7 @@ const styles = StyleSheet.create({
   titleStructure:{
     fontSize: 20,
     color: colors.black,
+    textDecorationLine:'underline'
   },
   editButton:{
     color: colors.red, 
