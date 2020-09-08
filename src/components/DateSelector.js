@@ -72,7 +72,7 @@ export default class DateSelector extends Component {
     var date_mod = date.toString().replace("12:00:00 GMT+0200","").slice(4);
     var month_num = this.monthNameToNum(date_mod.substr(0,3));
     var date_mod_format = date_mod.substr(4,2)+"/"+month_num+"/"+date_mod.substr(6,5); //data in formato DD/MonthName/AAAA
-    //function to handle the date change 
+
     var final_date = date_mod_format.replace(/ /g, '');
     var diffDays = ''; //variabile che conterrà i giorni fra il checkin e il checkout utile a calcolare il prezzo totale
     var cityTax= 0;
@@ -95,15 +95,43 @@ export default class DateSelector extends Component {
 
     } else {
       var maxRange = this.rangeDates(date)//calcolo il range massimo di date che l'utente può selezionare (da quella selezionata all'ultima disponibile in sequenza...)
-      this.setState({
-        selectedStartDate: final_date,
-        selectedEndDate: null,
-        selectedStartDateOriginal: date,
-        maxRange : maxRange
-      });
-      this.props.updateState({
-        checkIn: final_date
-      })
+      if(maxRange > 1){  
+          this.setState({
+          selectedStartDate: final_date,
+          selectedEndDate: null,
+          selectedStartDateOriginal: date,
+          maxRange : maxRange
+        });
+        this.props.updateState({
+          checkIn: final_date
+        })
+      }
+      else{
+        var checkOut = new Date(date);
+        checkOut.setDate(checkOut.getDate()+1);
+        var checkOut_mod = checkOut.toString().replace("12:00:00 GMT+0200","").slice(4);
+        var monthCheckout_num = this.monthNameToNum(checkOut_mod.substr(0,3));
+        var checkOut_mod_format = checkOut_mod.substr(4,2)+"/"+monthCheckout_num+"/"+checkOut_mod.substr(6,5); //data in formato DD/MonthName/AAAA
+        
+        var final_checkOut = checkOut_mod_format.replace(/ /g, '');
+
+        var diffDays = 1;
+        totalPrice = this.props.price*diffDays + (this.props.city.length/2)*diffDays;
+        cityTax = (this.props.city.length/2)*diffDays;
+        this.setState({
+          selectedStartDate: final_date,
+          selectedEndDate: final_checkOut,
+          maxRange:1,
+          status:false
+        })
+        this.props.updateState({
+          checkIn:final_date,
+          checkOut: final_checkOut,
+          diffDays: diffDays,
+          totPrice: totalPrice,
+          cityTax: cityTax
+        })
+      }
     }
   }
 
