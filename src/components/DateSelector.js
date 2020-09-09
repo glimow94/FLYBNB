@@ -24,6 +24,9 @@ export default class DateSelector extends Component {
       status: false,
       status2:true,
       maxRange: 28,
+      disabledDates:[],
+      index:'',
+      
     };
     this.onDateChange = this.onDateChange.bind(this);
 
@@ -31,6 +34,10 @@ export default class DateSelector extends Component {
 //callback per comunicare con gli altri pulsanti in modo da chiuderli una volta aperto questo
   
   showHideCalendar=()=>{
+    var dates = this.props.disabledDates
+    this.setState({
+      disabledDates:dates
+    })
       if(this.state.status==true){
           this.setState({
             status:false,
@@ -48,24 +55,32 @@ export default class DateSelector extends Component {
   monthNameToNum(monthname) {
     var month = months.indexOf(monthname);
     return month!=-1 ? month + 1 : undefined;
-}
+  }
+  
   //funzione che calcola il range massimo di selezione delle date a partire dalla scelta della data iniziale(check-in) sul calendario
   rangeDates(start_date){
     //incrementa il giorno del check-in controllando se questo è presente nella lista delle date penotate per quella struttura, cosi trova il range massimo di prenotazione
-    var disabledDates = this.props.disabledDates;//date occupate
+    var disabledDates = this.state.disabledDates;//date occupate
     var range = 0; 
     for(var i = 0; i < 28; i++){
       var nextDay = new Date(start_date);
       nextDay.setHours(0,0,0,0)
       nextDay.setDate(nextDay.getDate()+i)
-      console.log(nextDay);
-      console.log(disabledDates)
+      
       //vogliamo controllare se nextday incrementato ogni volta sia presente nell'array di oggetti Date disabilitate
       //serializziamo gli oggetti Date in modo da poter usare la funzione indexOf degli array js
-      if(disabledDates.map(Number).indexOf(+nextDay) != -1) break;
+      var indexDate = disabledDates.map(Number).indexOf(+nextDay) //vedo se esiste l'elemento nell'array di date non selezionabili, e salvo l'eventuale indice
+
+      if( indexDate != -1) {
+        break; //quando trova la prima data che è fra le occupate allora smette di incrementare il range
+      }
       else range = range + 1;
     }
-    console.log(range)
+    /* new_dates.splice(indexDate) */
+    /* this.setState({
+      disabledDates:new_dates,
+    }) */
+    
     return range
   }
   onDateChange(date, type) {
@@ -95,12 +110,18 @@ export default class DateSelector extends Component {
 
     } else {
       var maxRange = this.rangeDates(date)//calcolo il range massimo di date che l'utente può selezionare (da quella selezionata all'ultima disponibile in sequenza...)
+      //una volta trovato il range,per consentire di cliccare sul checkout 
+      //allora setto le date disabilitate del calendario a [] cioè nessuna data disabilitata 
+      //in modo da far cliccare sul checkout che non era cliccabile perchè check-in di un 'altra prenotazione, questo ci consente di evitare di avere notti non prenotabili
+      this.setState({
+        disabledDates : []
+      })
       if(maxRange > 1){  
           this.setState({
           selectedStartDate: final_date,
           selectedEndDate: null,
           selectedStartDateOriginal: date,
-          maxRange : maxRange
+          maxRange : maxRange,
         });
         this.props.updateState({
           checkIn: final_date
@@ -122,14 +143,13 @@ export default class DateSelector extends Component {
           selectedStartDate: final_date,
           selectedEndDate: final_checkOut,
           maxRange:1,
-          status:false
         })
         this.props.updateState({
           checkIn:final_date,
           checkOut: final_checkOut,
           diffDays: diffDays,
           totPrice: totalPrice,
-          cityTax: cityTax
+          cityTax: cityTax,
         })
       }
     }
@@ -159,7 +179,7 @@ export default class DateSelector extends Component {
                 startFromMonday={true}
                 allowRangeSelection={true}
                 maxRangeDuration={this.state.maxRange}
-                disabledDates={this.props.disabledDates}
+                disabledDates={this.state.disabledDates}
                 minDate={minDate}
                 maxDate={maxDate}
                 weekdays={['Lun.','Mar.','Mer.','Gio.','Ven.','Sab.','Dom.',]}
