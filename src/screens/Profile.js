@@ -1,10 +1,12 @@
 import React, {Component, useEffect} from 'react';
 import {View, Text, StyleSheet, Image, Dimensions, ScrollView, TouchableOpacity, Platform} from 'react-native';
+import { Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-community/async-storage';
 import UserStructures from '../components/UserStructureList'
 import AddButton from '../components/buttons/Button1'
 import { useNavigation } from '@react-navigation/native';
-
+import * as ImagePicker from 'expo-image-picker';
+import uploadToAnonymousFilesAsync from 'anonymous-files'; 
 import colors from '../style/colors';
 
 import { UserContext } from "../components/context";
@@ -141,11 +143,13 @@ static contextType = UserContext
       <View style={styles.container}>
       <ScrollView style={styles.scrollViewWrapper}>
         <Text style={styles.titleHeader}>Area Personale</Text>
-        <View style={styles.profile}>
+
+        <View style={styles.profileCard}>
+           <View style={styles.userInfoBox}>
           { 
             this.state.profileImage !== null ? 
             <Image source={{ uri: this.state.profileImage }} style={styles.ProfileImage}/> : 
-            <Image style={styles.notProfileImage}/>
+            <Image style={styles.logo} source={require('../img/person.png')}/>
           }
           <TouchableOpacity style={styles.button} onPress={this.profileImagePickerAsync}>
           <Icon
@@ -155,21 +159,13 @@ static contextType = UserContext
               type='font-awesome'
               color='#f50'
               color={colors.black}
-              />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.profileCard}>
-           <View style={styles.userInfoBox}>
-            <Image
-                  style={styles.logo}
-                  source={require('../img/person.png')}
             />
+          </TouchableOpacity>
             <Text style={styles.profileTextInfo}>{this.state.name} {this.state.surname}</Text>
             <Text style={styles.profileTextInfo}>{this.state.city}</Text>
             <Text style={styles.profileTextInfo}>{this.state.email}</Text>
             <Text onPress={signOut} style={{color: colors.red, fontSize:14, fontWeight: "700", alignSelf:'center'}} >Logout</Text>
-          </View>
+            </View>
         </View>
 
         <View style={styles.menu}>
@@ -223,30 +219,11 @@ const styles = StyleSheet.create({
         height:'100%',
         padding: 10
     },
-    profile:{
-      padding: 20,
-      height: 170,
-      width: 170,
-      bottom: 100,
-      alignSelf:'center',
-      borderColor: colors.white,
-      borderWidth: 5,
-      borderRadius: 100
-    },
     ProfileImage:{
-      height: 160,
-      width: 160,
-      bottom: 20,
+      height: 100,
+      width: 100,
       alignSelf:'center',
       borderRadius: 80,
-    },
-    notProfileImage:{
-      height: 160,
-      width: 160,
-      bottom: 20,
-      alignSelf:'center',
-      borderRadius: 80,
-      backgroundColor: colors.gray
     },
     profileCard:{
       width:200,
@@ -371,7 +348,7 @@ const styles = StyleSheet.create({
       flex:1,
       alignContent:'center',
       width:'100%'
-    }
+    },
 });
 
 export default Profile
