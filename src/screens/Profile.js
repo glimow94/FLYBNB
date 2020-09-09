@@ -1,5 +1,5 @@
 import React, {Component, useEffect} from 'react';
-import {View, Text, StyleSheet, Image, Dimensions, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, Image, Dimensions, ScrollView, TouchableOpacity, Platform} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import UserStructures from '../components/UserStructureList'
 import AddButton from '../components/buttons/Button1'
@@ -39,6 +39,7 @@ static contextType = UserContext
       status: false,
       status2: false,
       status3: false,
+      profileImage: null
     }
   }
   
@@ -103,15 +104,60 @@ static contextType = UserContext
   updateState(filterStatus){
     this.setState(filterStatus)
   } 
-  render(){
-  
 
-  const {signOut} = this.context
+  profileImagePickerAsync = async () => {
+    let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+    // verifica permessi di accesso alla gallery
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+
+    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+    if (pickerResult.cancelled === true) {
+      return; // operazione abortita
+    }
+    if (Platform.OS === 'web') {
+      // i browser web non possono condividere una URI locale per motivi di sicurezza
+      // facciamo un upload fittizio su anonymousfile.io e ricaviamo la URI remota del file
+      let remoteUri = await uploadToAnonymousFilesAsync(pickerResult.uri);
+      console.log("remote Uri")
+      console.log(remoteUri)
+      this.setState({
+        profileImage: pickerResult.uri
+      })
+    } else {
+      // remoteUri è null per un device mobile
+      this.setState({
+        profileImage: pickerResult.uri
+      })
+    } 
+  };
+
+  render(){
+    const {signOut} = this.context
 
     return (
       <View style={styles.container}>
       <ScrollView style={styles.scrollViewWrapper}>
         <Text style={styles.titleHeader}>Area Personale</Text>
+        <View style={styles.profile}>
+          { 
+            this.state.profileImage !== null ? 
+            <Image source={{ uri: this.state.profileImage }} style={styles.ProfileImage}/> : 
+            <Image style={styles.notProfileImage}/>
+          }
+          <TouchableOpacity style={styles.button} onPress={this.profileImagePickerAsync}>
+          <Icon
+              size={20}
+              style={styles.icon}
+              name='camera'
+              type='font-awesome'
+              color='#f50'
+              color={colors.black}
+              />
+          </TouchableOpacity>
+        </View>
 
         <View style={styles.profileCard}>
            <View style={styles.userInfoBox}>
@@ -176,6 +222,31 @@ const styles = StyleSheet.create({
         backgroundColor: colors.green01,
         height:'100%',
         padding: 10
+    },
+    profile:{
+      padding: 20,
+      height: 170,
+      width: 170,
+      bottom: 100,
+      alignSelf:'center',
+      borderColor: colors.white,
+      borderWidth: 5,
+      borderRadius: 100
+    },
+    ProfileImage:{
+      height: 160,
+      width: 160,
+      bottom: 20,
+      alignSelf:'center',
+      borderRadius: 80,
+    },
+    notProfileImage:{
+      height: 160,
+      width: 160,
+      bottom: 20,
+      alignSelf:'center',
+      borderRadius: 80,
+      backgroundColor: colors.gray
     },
     profileCard:{
       width:200,
