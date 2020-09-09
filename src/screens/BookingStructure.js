@@ -105,7 +105,7 @@ export default class BookingStructure extends Component{
       request: 0
     })
 
-    const url = `http://localhost:3055/bookings/profile/date/${itemID}`;
+    var url = `http://localhost:3055/bookings/profile/date/${itemID}`;
     axios.get(url, {
         method: 'GET',
         headers: {
@@ -136,10 +136,21 @@ export default class BookingStructure extends Component{
         }
 
     })
-      
-    
-    
-}
+
+    url = `http://localhost:3055/bookings/profile/date/${itemID}/${userID}`;
+    axios.get(url, {
+        method: 'GET',
+        headers: {
+          'content-type': 'application/json',
+        }
+      })
+      .then(res => {
+        console.log("ECCO LE DATE PRENOTATE DA UN UTENTE IN UNA STRUTTURA:");
+        console.log(res.data);
+    })
+
+  }
+
   //funzione che controlla se fra il range di date selezionate ce ne sono alcune occupate
   datesRangeCheck(){
     //estraggo da dates, che mi da tutti i checkin e i checkout di quella struttura,un array con tutte le date occupate
