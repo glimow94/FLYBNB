@@ -179,7 +179,7 @@ export default class BookingStructure extends Component{
             headers: {
               'content-type': 'application/json',   
             },
-            user_id: this.state.user_id,
+            user_id: parseInt(this.state.user_id),
             owner_id: this.state.owner_id,
             structure_id: this.state.structure_id,
             checkIn: this.state.checkIn,
