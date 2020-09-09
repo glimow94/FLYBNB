@@ -38,29 +38,31 @@ export default class AddStructure extends Component{
             airConditioner:false,
 
         
-        //variabili per la validazione
-        titleAlert: false,
-        titleColor: colors.white,
-        //indirizzo
-        streetAlert: false,
-        streetColor: colors.white,
-        //numero civico
-        numberAlert: false,
-        numberColor: colors.white,
-        //post_code=CAP
-        capAlert: false,
-        capColor: colors.white,
-        //prezzo
-        priceAlert: false,
-        priceColor: colors.white,
-        //numero di letti
-        bedsAlert: false,
-        bedsColor: colors.white,
-        //stati che in realtà in questa pagina non servono ma servono a cityselector che è un componente usato anche in Home e deve avere questi 3 status necessariamente, altrimenti da errore
-        status1: true,
-        status2:false,
-        status3:false,
-        parentType: 'AddStructure'//serve a cityselector per agire in modo diverso in base al componente padre che lo richiama (addStructure o Home)
+            //variabili per la validazione
+            titleAlert: false,
+            titleColor: colors.white,
+            //indirizzo
+            streetAlert: false,
+            streetColor: colors.white,
+            //numero civico
+            numberAlert: false,
+            numberColor: colors.white,
+            //post_code=CAP
+            capAlert: false,
+            capColor: colors.white,
+            //prezzo
+            priceAlert: false,
+            priceColor: colors.white,
+            //numero di letti
+            bedsAlert: false,
+            bedsColor: colors.white,
+            //warning se qualche credenziale è sbagliata quando si clicca conferma
+            warning:false,
+            //stati che in realtà in questa pagina non servono ma servono a cityselector che è un componente usato anche in Home e deve avere questi 3 status necessariamente, altrimenti da errore
+            status1: true,
+            status2:false,
+            status3:false,
+            parentType: 'AddStructure'//serve a cityselector per agire in modo diverso in base al componente padre che lo richiama (addStructure o Home)
 
         }
     }
@@ -69,6 +71,7 @@ export default class AddStructure extends Component{
         
         if(!val || val.trim().length === 0){
             this.setState({
+                title:'',
                 titleColor: '#DC143C',
                 titleAlert:true
             })
@@ -91,6 +94,7 @@ export default class AddStructure extends Component{
         
         if(!val || val.trim().length === 0){
             this.setState({
+                street:'',
                 streetColor: '#DC143C',
                 streetAlert:true
             })
@@ -104,8 +108,9 @@ export default class AddStructure extends Component{
         }
     }
     changeNumber = (val) => {
-        if(!val || val.trim().length === 0){
+        if(!val || val.trim().length === 0 || parseInt(val) < 1){
             this.setState({
+                number: '',
                 numberColor: '#DC143C',
                 numberAlert:true
             })
@@ -120,8 +125,9 @@ export default class AddStructure extends Component{
     }
     changeCAP = (val) => {
         
-        if(!val || val.trim().length === 0){
+        if((!val || val.trim().length === 0)){
             this.setState({
+                post_code:'',
                 capColor: '#DC143C',
                 capAlert:true
             })
@@ -135,8 +141,9 @@ export default class AddStructure extends Component{
         }
     }
     changePrice = (val) => {
-        if(!val || val.trim().length === 0){
+        if(!val || val.trim().length === 0 || parseInt(val) < 1){
             this.setState({
+                price:'',
                 priceColor: '#DC143C',
                 priceAlert:true
             })
@@ -150,8 +157,9 @@ export default class AddStructure extends Component{
         }
     }
     changeBeds = (val) => {
-        if(!val || val.trim().length === 0){
+        if(!val || val.trim().length === 0 || parseInt(val) <1 ){
             this.setState({
+                beds:'',
                 bedsColor: '#DC143C',
                 bedsAlert:true
             })
@@ -186,36 +194,50 @@ export default class AddStructure extends Component{
 
     }
     postData = () => {
-        const url = `http://localhost:3055/structures/add`;
-        axios.post(url, {
-            method: 'POST',
-            headers: {
-              'content-type': 'application/json',   
-            },
-            user_id: this.state.user_id,
-            title: this.state.title,
-            type: this.state.type,
-            place: this.state.city,
-            street: this.state.street,
-            number: this.state.number,
-            post_code: this.state.post_code,
-            description: this.state.description,
-            location_description: this.state.location_description,
-            beds: this.state.beds,
-            price: this.state.price,
-            fullboard: this.state.fullBoard,
-            wifi: this.state.wifi,
-            parking: this.state.parking,
-            kitchen: this.state.kitchen,
-            airConditioner: this.state.airConditioner 
-          })
-          .then(res => {
-            console.log(res);
-            })
-          .catch(function (error) {
-            console.log(error);
+        if((!this.state.title || this.state.title.trim().length === 0) || 
+            (!this.state.city || this.state.city.trim().length === 0) ||
+            (!this.state.street || this.state.street.trim().length === 0) ||
+            (!this.state.post_code || this.state.post_code.trim().length === 0)||
+            (!this.state.number || this.state.number.trim().length === 0 || this.state.number <1) ||
+            (!this.state.beds || this.state.beds.trim().length === 0 || this.state.beds <1)||
+            (!this.state.price || this.state.price.trim().length === 0 || this.state.price <1)){
+                this.setState({
+                    warning:true
+                })
+            }
+        else{
+            const url = `http://localhost:3055/structures/add`;
+            axios.post(url, {
+                    method: 'POST',
+                    headers: {
+                    'content-type': 'application/json',   
+                    },
+                    user_id: this.state.user_id,
+                    title: this.state.title,
+                    type: this.state.type,
+                    place: this.state.city,
+                    street: this.state.street,
+                    number: this.state.number,
+                    post_code: this.state.post_code,
+                    description: this.state.description,
+                    location_description: this.state.location_description,
+                    beds: this.state.beds,
+                    price: this.state.price,
+                    fullboard: this.state.fullBoard,
+                    wifi: this.state.wifi,
+                    parking: this.state.parking,
+                    kitchen: this.state.kitchen,
+                    airConditioner: this.state.airConditioner 
+                })
+                .then(res => {
+                    console.log(res);
+                    })
+                .catch(function (error) {
+                    console.log(error);
           });
           this.props.navigation.navigate('Profile')
+        }
+        
     }
 
     render(){
@@ -254,56 +276,66 @@ export default class AddStructure extends Component{
                     {   this.state.streetAlert==true ? 
                                     <Text style={{color: '#DC143C'}}>Inserisci una via valida </Text> : null
                     }
-                    <View style={{flexDirection:"row", paddingBottom: 8}}>
-                        <View style={{flexDirection:'column'}}>
-                            <Text style={[{width:150, color: this.state.numberColor},styles.label]}>N° Civico</Text>
-                                <TextInput
-                                    underlineColorAndroid='transparent'  
-                                    keyboardType={'numeric'}
-                                    autoCorrect={false}
-                                    style = {[{borderColor: this.state.numberColor, width: 90},styles.inputField]}
-                                    onChangeText={val => this.changeNumber(val)}
-                                ></TextInput>
-                                
-                        </View>
-                        <View style={{flexDirection:'column'}}>
-                            <Text style={[{width:150, color: this.state.capColor},styles.label]}>CAP</Text>
-                                <TextInput
-                                    underlineColorAndroid='transparent'  
-                                    keyboardType={'numeric'}
-                                    autoCorrect={false}
-                                    style = {[{borderColor: this.state.capColor, width: 100},styles.inputField]}
-                                    onChangeText={val => this.changeCAP(val)}
-                                ></TextInput>
-                                
-                        </View>
-                    </View>
-                    <View style={{flexDirection:"row",paddingBottom: 5}}>
-                        <View style={{flexDirection:'column'}}>
-                                <Text style={[{width:150, color: this.state.capColor},styles.label]}>PREZZO A NOTTE</Text>
+                    <View style={{padding:3}}>
+                        <View style={{flexDirection:"row"}}>
+                            <View style={{flexDirection:'column'}}>
+                                <Text style={[{width:150, color: this.state.numberColor},styles.label]}>N° Civico</Text>
                                     <TextInput
+                                        defaultValue={this.state.number}
                                         underlineColorAndroid='transparent'  
                                         keyboardType={'numeric'}
                                         autoCorrect={false}
-                                        style = {[{borderColor: this.state.priceColor, width: 100},styles.inputField]}
-                                        onChangeText={val => this.changePrice(val)}
+                                        style = {[{borderColor: this.state.numberColor, width: 90},styles.inputField]}
+                                        onChangeText={val => this.changeNumber(val)}
                                     ></TextInput>
-                            {   this.state.priceAlert==true ? 
-                                    <Text style={{color: '#DC143C'}}>Inserisci un prezzo </Text> : null
-                            }
-                        </View>
-                        <View style={{flexDirection:'column'}}>
-                                <Text style={[{width:150, color: this.state.capColor},styles.label]}>POSTI LETTO</Text>
+                                {   this.state.numberAlert==true ? 
+                                        <Text style={{color: '#DC143C'}}>Inserisci civico</Text> : null
+                                }
+                                    
+                            </View>
+                            <View style={{flexDirection:'column'}}>
+                                <Text style={[{width:150, color: this.state.capColor},styles.label]}>CAP</Text>
                                     <TextInput
+                                        defaultValue={this.state.post_code}
                                         underlineColorAndroid='transparent'  
                                         keyboardType={'numeric'}
                                         autoCorrect={false}
-                                        style = {[{borderColor: this.state.bedsColor, width: 100},styles.inputField]}
-                                        onChangeText={val => this.changeBeds(val)}
+                                        style = {[{borderColor: this.state.capColor, width: 100},styles.inputField]}
+                                        onChangeText={val => this.changeCAP(val)}
                                     ></TextInput>
-                            {   this.state.bedsAlert==true ? 
-                                    <Text style={{color: '#DC143C'}}>Inserisci il numero di letti </Text> : null
-                            }
+                                {   this.state.capAlert==true ? 
+                                        <Text style={{color: '#DC143C'}}>Inserisci CAP</Text> : null
+                                }
+                            </View>
+                        </View>
+                        <View style={{flexDirection:'row'}}>
+                            <View style={{flexDirection:'column'}}>
+                                    <Text style={[{width:150, color: this.state.priceColor},styles.label]}>PREZZO PER NOTTE</Text>
+                                        <TextInput
+                                            underlineColorAndroid='transparent'  
+                                            defaultValue={this.state.price}
+                                            keyboardType={'numeric'}
+                                            autoCorrect={false}
+                                            style = {[{borderColor: this.state.priceColor, width: 100},styles.inputField]}
+                                            onChangeText={val => this.changePrice(val)}
+                                        ></TextInput>
+                                {   this.state.priceAlert==true ? 
+                                        <Text style={{color: '#DC143C'}}>Inserisci un prezzo </Text> : null
+                                }
+                            </View>
+                            <View style={{flexDirection:'column'}}>
+                                    <Text style={[{width:150, color: this.state.bedsColor},styles.label]}>POSTI LETTO</Text>
+                                        <TextInput
+                                            underlineColorAndroid='transparent'  
+                                            keyboardType={'numeric'}
+                                            autoCorrect={false}
+                                            style = {[{borderColor: this.state.bedsColor, width: 100},styles.inputField]}
+                                            onChangeText={val => this.changeBeds(val)}
+                                        ></TextInput>
+                                {   this.state.bedsAlert==true ? 
+                                        <Text style={{color: '#DC143C'}}>Inserisci posti letto</Text> : null
+                                }
+                            </View>
                         </View>
                     </View>
                     <Text style={[{width:150},styles.label]}>TIPOLOGIA</Text>
@@ -401,7 +433,11 @@ export default class AddStructure extends Component{
                         maxLength={400}
                         onChangeText={val => this.changeLocationDescription(val)}
                     />
+                   
                     <View style={{marginTop: 5}}>
+                        {this.state.warning ? <View style={{backgroundColor:colors.white}}>
+                            <Text style={styles.warningText}>ERRORE : CONTROLLA CHE TUTTI I DATI SIANO CORRETTI</Text>
+                        </View>:null}
                         <Button title="CONFERMA" color={colors.orange} onPress = {()=> {this.postData()}}></Button>
                     </View>
                     
@@ -474,5 +510,12 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: colors.black,
         borderRadius: 8
+    },
+    warningText:{
+        backgroundColor: colors.white,
+        color:colors.red,
+        alignSelf:'center',
+        fontSize:14,
+        fontWeight:"500"
     }
 });

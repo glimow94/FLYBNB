@@ -87,8 +87,7 @@ export default function Structure({ route }){
             })
           }
           else{
-            alert('non sei loggato')
-            /* navigation.navigate(Login) */
+            navigation.navigate(Login)
           }
         }catch(e){
           console.log(e)

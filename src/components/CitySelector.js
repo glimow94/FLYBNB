@@ -14,7 +14,6 @@ export default class CitySelector extends Component{
     constructor(props) {
         super(props);
         this.state = {
-          //set del valore di inizio e fine data
           region: 'Regione',
           province: 'seleziona provincia',
           province_code: '',

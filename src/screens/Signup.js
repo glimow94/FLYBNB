@@ -7,6 +7,8 @@ import CitySelector from "../components/CitySelector"
 import { UserContext } from "../components/context";
 import { useNavigation } from "@react-navigation/native";
 import Login from './Login';
+import db from '../components/database_region_city'
+
 //pagina di registrazione utente
 const Signup = ({navigation})=>{
 
@@ -37,7 +39,17 @@ const Signup = ({navigation})=>{
         
         //stati utili alla validazione del form per l'EMAIL
         emailColor: colors.white,
-        emailAlert: false
+        emailAlert: false,
+        //stati del cityPicker
+        region: 'Regione',
+        province: 'seleziona provincia',
+        province_code: '',
+        city_code: '',
+        // status(1/2/3) è il valore che rende visibile/invisibile il menu delle regioni,province o città
+        status1: false,
+        status3: false,
+        status2: false,
+        
         
 
     })
@@ -112,6 +124,7 @@ const Signup = ({navigation})=>{
         if(!val || val.trim().length === 0){
             setData({
                 ...newUserData,
+                name:'',
                 nameColor: '#DC143C',
                 nameAlert:true
             })
@@ -125,11 +138,17 @@ const Signup = ({navigation})=>{
             })
         }
     }
-
+    function updateState(datafilter){
+        setData({
+            ...newUserData,
+            datafilter
+        })
+    }
     const changeSurname = (val) => {
         if(!val || val.trim().length === 0){
             setData({
                 ...newUserData,
+                surname:'',
                 surnameColor: '#DC143C',
                 surnameAlert:true
             })
@@ -185,6 +204,7 @@ const Signup = ({navigation})=>{
         if(emailRegex.test(mail)==false){
             setData({
                 ...newUserData,
+                email:'',
                 emailColor: '#DC143C',
                 emailAlert:true
             })
@@ -202,6 +222,7 @@ const Signup = ({navigation})=>{
         if(passwordRegex.test(val)==false){
             setData({
                 ...newUserData,
+                password:'',
                 passwColor: '#DC143C',
                 passwordAlert:true
             })
@@ -230,6 +251,20 @@ const Signup = ({navigation})=>{
                 passwordAlert2: false
             })
             
+        }
+    }
+    const showHideCitySelector = () =>{
+        if(newUserData.status1==true){
+            setData({
+                ...newUserData,
+                status1:false
+            })
+        }
+        else{
+            setData({
+                ...newUserData,
+                status1:true       
+            })
         }
     }
     return (
@@ -287,11 +322,110 @@ const Signup = ({navigation})=>{
                     </View>
                     <View style={styles.citylabel}>
                         <Text style={[{width:150},styles.label]}>RESIDENTE A</Text>
-                        <TextInput
-                            autoCorrect={false}
-                            style = {styles.inputField}
-                            onChangeText={(val) => changeCity(val)}
-                        ></TextInput>
+                        <View>
+                            <Text style={styles.alternativeCityButton} onPress={showHideCitySelector}>{newUserData.city.substring(0,20)}</Text>
+                            <View style={styles.citySelector}>
+                            { newUserData.status1 ?
+                             <View>
+                                <View style={{flexDirection:'row'}}>
+                                    <Picker mode="dropdown" 
+                                            style={styles.cityPickerStyle}                  
+                                            onValueChange={itemValue => setData({
+                                                                            ...newUserData,
+                                                                            region: itemValue,
+                                                                            province: 'Provincia',
+                                                                            city:'Comune',
+                                                                            status2: true
+                                                                        })
+                                                        }
+                                    >
+                                        <Picker.Item label={newUserData.region} value ={newUserData.region}></Picker.Item>
+
+                                        {
+                                        db.map((item) =>{
+                                            return(
+                                            <Picker.Item  label={item.nome} value={item.nome} key={item.nome}/> 
+                                            );
+                                        })
+                                        }
+                                    </Picker>
+                                    <Text style={styles.cancelButton} onPress={showHideCitySelector}>X</Text>
+                                 </View>
+                            {
+                            newUserData.status2 ? 
+                                <Picker 
+                                    mode="dropdown" 
+                                    style={styles.cityPickerStyle}
+                                    onValueChange={
+                                    itemValue => setData({
+                                                    ...newUserData,
+                                                    province: itemValue,
+                                                    city:'Comune',
+                                                    status3: true
+                                    })}
+                                >
+                                <Picker.Item label={newUserData.province} value ={newUserData.province}></Picker.Item>
+                                
+                                {
+                                    db.map((item) =>{
+                                    if(item.nome == newUserData.region){
+                                        return (
+                                        item.province.map((item_prov)=>{
+                                            return(
+                                            <Picker.Item label = {item_prov.nome} value={item_prov.nome} key={item_prov.code} />
+                                            );
+                                        } 
+                                        ))
+                                    }}
+                                    /* return(
+                                        <Picker.Item  label={item.nome} value={item.nome} key={item.nome}/> 
+                                    ); */
+                                    )
+                                }
+                                </Picker> : null
+                            }
+                            {
+                            newUserData.status3 ? 
+                                <Picker 
+                                    mode="dropdown" 
+                                    style={styles.cityPickerStyle}
+                                    onValueChange={itemValue => setData({
+                                                                    ...newUserData,
+                                                                    city:itemValue,
+                                                                    status1:false
+                                    })}
+                                >
+                                <Picker.Item label={newUserData.city} value ={newUserData.city_code}></Picker.Item>
+
+                                {
+                                    db.map((item) =>{
+                                    if(item.nome == newUserData.region){
+                                        return (
+                                        item.province.map((item_prov)=>{
+                                            if(item_prov.nome==newUserData.province){
+                                            return(
+                                                item_prov.comuni.map((item_comuni)=>{
+                                                newUserData.city_code = item_comuni.code
+                                                return(
+                                                <Picker.Item label = {item_comuni.nome} value={item_comuni.nome} key={item_comuni.code} />
+                                                )
+                                            })
+                                            );}
+                                        })
+                                        )
+                                    }
+                                    }
+                                    /* return(
+                                        <Picker.Item  label={item.nome} value={item.nome} key={item.nome}/> 
+                                    ); */
+                                    )
+                                }
+                                </Picker> : null
+                            } 
+                            </View> : null
+                         }
+                            </View>
+                        </View>
                     </View>
                 </View>
 
@@ -424,6 +558,24 @@ const styles = StyleSheet.create({
     },
     birthdatePickers:{
         
+    },
+    container: {
+        flexDirection:'column',
+      },
+    citySelector:{
+       paddingBottom:10
+    },
+    alternativeCityButton:{
+        width: 200,
+        borderBottomWidth: 1,
+        height: 19,
+        marginTop: 15,
+        borderBottomColor: colors.white
+    },
+    cancelButton:{
+        color:colors.red,
+        fontSize: 18,
+        fontWeight: "700"  
     }
 
 });

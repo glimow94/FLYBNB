@@ -36,27 +36,32 @@ export default class EditStructure extends Component{
             kitchen:false,
             airConditioner:false,
 
-        
-        //variabili per la validazione
-        titleAlert: false,
-        titleColor: colors.white,
+            
+            //variabili per la validazione
+            titleAlert: false,
+            titleColor: colors.white,
 
-        streetAlert: false,
-        streetColor: colors.white,
-        //numero civico
-        numberAlert: false,
-        numberColor: colors.white,
-        //post_code=CAP
-        capAlert: false,
-        capColor: colors.white,
-        //prezzo
-        priceAlert: false,
-        priceColor: colors.white,
-        //stati che in realtà in questa pagina nons ervono ma servono a cityselector perche' in Home funziona in un altro modo....problema  da risolvere
-        status1: false,
-        status2:false,
-        status3:false,
-        parentType: 'AddStructure'
+            streetAlert: false,
+            streetColor: colors.white,
+            //numero civico
+            numberAlert: false,
+            numberColor: colors.white,
+            //post_code=CAP
+            capAlert: false,
+            capColor: colors.white,
+            //prezzo
+            priceAlert: false,
+            priceColor: colors.white,
+            //posti letto
+            bedsAlert:false,
+            bedsColor: colors.white,
+            //warning che si attiva al premere del pulsante MODIFICA se qualche dato non è giusto
+            warning:false,
+            //stati che in realtà in questa pagina nons ervono ma servono a cityselector perche' in Home funziona in un altro modo....problema  da risolvere
+            status1: false,
+            status2:false,
+            status3:false,
+            parentType: 'AddStructure'
 
         }
     }
@@ -65,6 +70,7 @@ export default class EditStructure extends Component{
         
         if(!val || val.trim().length === 0){
             this.setState({
+                title:'',
                 titleColor: '#DC143C',
                 titleAlert:true
             })
@@ -87,6 +93,7 @@ export default class EditStructure extends Component{
         
         if(!val || val.trim().length === 0){
             this.setState({
+                street:'',
                 streetColor: '#DC143C',
                 streetAlert:true
             })
@@ -100,8 +107,9 @@ export default class EditStructure extends Component{
         }
     }
     changeNumber = (val) => {
-        if(!val || val.trim().length === 0){
+        if(!val || val.trim().length === 0 || parseInt(val) < 1){
             this.setState({
+                number:'',
                 numberColor: '#DC143C',
                 numberAlert:true
             })
@@ -118,6 +126,7 @@ export default class EditStructure extends Component{
         
         if(!val || val.trim().length === 0){
             this.setState({
+                post_code:'',
                 capColor: '#DC143C',
                 capAlert:true
             })
@@ -131,8 +140,9 @@ export default class EditStructure extends Component{
         }
     }
     changePrice = (val) => {
-        if(!val || val.trim().length === 0){
+        if(!val || val.trim().length === 0 || parseInt(val) < 1){
             this.setState({
+                price:'',
                 priceColor: '#DC143C',
                 priceAlert:true
             })
@@ -142,6 +152,22 @@ export default class EditStructure extends Component{
                 price: val,
                 priceColor: colors.white,
                 priceAlert: false
+            })
+        }
+    }
+    changeBeds = (val) => {
+        if(!val || val.trim().length === 0 || parseInt(val) <1){
+            this.setState({
+                beds:'',
+                bedsColor: '#DC143C',
+                bedsAlert:true
+            })
+        }
+        else{
+            this.setState({
+                beds: val,
+                bedsColor: colors.white,
+                bedsAlert: false
             })
         }
     }
@@ -208,37 +234,51 @@ export default class EditStructure extends Component{
     }
 
     postData = () => {
-        const url = `http://localhost:3055/structures/update/${this.state.id}`;
-        axios.post(url, {
-            method: 'POST',
-            headers: {
-              'content-type': 'application/json',   
-            },
-            user_id: this.state.user_id,
-            title: this.state.title,
-            type: this.state.type,
-            place: this.state.city,
-            street: this.state.street,
-            number: this.state.number,
-            post_code: this.state.post_code,
-            description: this.state.description,
-            location_description: this.state.location_description,
-            beds: this.state.beds,
-            price: this.state.price,
-            fullboard: this.state.fullBoard,
-            wifi: this.state.wifi,
-            parking: this.state.parking,
-            kitchen: this.state.kitchen,
-            airConditioner: this.state.airConditioner 
-          })
-          .then(res => {
-            console.log(res);
+        if(
+            (!this.state.title || this.state.title.trim().length === 0) || 
+            (!this.state.city || this.state.city.trim().length === 0) ||
+            (!this.state.street || this.state.street.trim().length === 0) ||
+            (!this.state.post_code || this.state.post_code.trim().length === 0)||
+            (!this.state.number || this.state.number.length === 0 || this.state.number <1) ||
+            (!this.state.beds || this.state.beds.length === 0 || this.state.beds <1)||
+            (!this.state.price || this.state.price.length === 0 || this.state.price <1)){
+                this.setState({
+                    warning:true
+                })
+            }
+        else{
+            const url = `http://localhost:3055/structures/update/${this.state.id}`;
+            axios.post(url, {
+                method: 'POST',
+                headers: {
+                'content-type': 'application/json',   
+                },
+                user_id: this.state.user_id,
+                title: this.state.title,
+                type: this.state.type,
+                place: this.state.city,
+                street: this.state.street,
+                number: this.state.number,
+                post_code: this.state.post_code,
+                description: this.state.description,
+                location_description: this.state.location_description,
+                beds: this.state.beds,
+                price: this.state.price,
+                fullboard: this.state.fullBoard,
+                wifi: this.state.wifi,
+                parking: this.state.parking,
+                kitchen: this.state.kitchen,
+                airConditioner: this.state.airConditioner 
             })
-          .catch(function (error) {
-            console.log(error);
-          });
+            .then(res => {
+                console.log(res);
+                })
+            .catch(function (error) {
+                console.log(error);
+            });
 
-          this.props.navigation.navigate('Profile')
+            this.props.navigation.navigate('Profile')
+        }
     }
 
     render(){
@@ -256,7 +296,7 @@ export default class EditStructure extends Component{
                                     onChangeText={val => this.changeTitle(val)}
                                 ></TextInput>
                     {   this.state.titleAlert==true ? 
-                                    <Text style={{color: '#DC143C'}}>Inserisci un nome valido </Text> : null
+                                    <Text style={{color: '#DC143C'}}>Inserisci il nome della struttura</Text> : null
                     }
                     
                     <Text style={[{width:150},styles.label]}>CITTA</Text>
@@ -279,45 +319,68 @@ export default class EditStructure extends Component{
                     {   this.state.streetAlert==true ? 
                                     <Text style={{color: '#DC143C'}}>Inserisci una via </Text> : null
                     }
-                    <View style={{flexDirection:"row"}}>
-                        <View style={{flexDirection:'column'}}>
-                            <Text style={[{width:150, color: this.state.numberColor},styles.label]}>N° Civico</Text>
-                                <TextInput
-                                    defaultValue={this.state.number}
-                                    underlineColorAndroid='transparent'  
-                                    keyboardType={'numeric'}
-                                    autoCorrect={false}
-                                    style = {[{borderColor: this.state.numberColor, width: 90},styles.inputField]}
-                                    onChangeText={val => this.changeNumber(val)}
-                                ></TextInput>
-                                
+                    <View>
+                        <View style={{flexDirection:"row"}}>
+                            <View style={{flexDirection:'column'}}>
+                                <Text style={[{width:150, color: this.state.numberColor},styles.label]}>N° Civico</Text>
+                                    <TextInput
+                                        defaultValue={this.state.number}
+                                        underlineColorAndroid='transparent'  
+                                        keyboardType={'numeric'}
+                                        autoCorrect={false}
+                                        style = {[{borderColor: this.state.numberColor, width: 90},styles.inputField]}
+                                        onChangeText={val => this.changeNumber(val)}
+                                    ></TextInput>
+                                {   this.state.numberAlert==true ? 
+                                        <Text style={{color: '#DC143C'}}>Inserisci civico</Text> : null
+                                }
+                                    
+                            </View>
+                            <View style={{flexDirection:'column'}}>
+                                <Text style={[{width:150, color: this.state.capColor},styles.label]}>CAP</Text>
+                                    <TextInput
+                                        defaultValue={this.state.post_code}
+                                        underlineColorAndroid='transparent'  
+                                        keyboardType={'numeric'}
+                                        autoCorrect={false}
+                                        style = {[{borderColor: this.state.capColor, width: 100},styles.inputField]}
+                                        onChangeText={val => this.changeCAP(val)}
+                                    ></TextInput>
+                                {   this.state.capAlert==true ? 
+                                        <Text style={{color: '#DC143C'}}>Inserisci CAP</Text> : null
+                                }
+                            </View>
                         </View>
-                        <View style={{flexDirection:'column'}}>
-                            <Text style={[{width:150, color: this.state.capColor},styles.label]}>CAP</Text>
-                                <TextInput
-                                    defaultValue={this.state.post_code}
-                                    underlineColorAndroid='transparent'  
-                                    keyboardType={'numeric'}
-                                    autoCorrect={false}
-                                    style = {[{borderColor: this.state.capColor, width: 100},styles.inputField]}
-                                    onChangeText={val => this.changeCAP(val)}
-                                ></TextInput>
-                                
+                        <View style={{flexDirection:'row'}}>
+                            <View style={{flexDirection:'column'}}>
+                                    <Text style={[{width:150, color: this.state.priceColor},styles.label]}>PREZZO PER NOTTE</Text>
+                                        <TextInput
+                                            underlineColorAndroid='transparent'  
+                                            defaultValue={this.state.price}
+                                            keyboardType={'numeric'}
+                                            autoCorrect={false}
+                                            style = {[{borderColor: this.state.priceColor, width: 100},styles.inputField]}
+                                            onChangeText={val => this.changePrice(val)}
+                                        ></TextInput>
+                                {   this.state.priceAlert==true ? 
+                                        <Text style={{color: '#DC143C'}}>Inserisci un prezzo </Text> : null
+                                }
+                            </View>
+                            <View style={{flexDirection:'column'}}>
+                                    <Text style={[{width:150, color: this.state.bedsColor},styles.label]}>POSTI LETTO</Text>
+                                        <TextInput
+                                            underlineColorAndroid='transparent'  
+                                            defaultValue={this.state.beds}
+                                            keyboardType={'numeric'}
+                                            autoCorrect={false}
+                                            style = {[{borderColor: this.state.bedsColor, width: 100},styles.inputField]}
+                                            onChangeText={val => this.changeBeds(val)}
+                                        ></TextInput>
+                                {   this.state.bedsAlert==true ? 
+                                        <Text style={{color: '#DC143C'}}>Inserisci posti letto</Text> : null
+                                }
+                            </View>
                         </View>
-                    </View>
-                    <View style={{flexDirection:'column'}}>
-                            <Text style={[{width:150, color: this.state.capColor},styles.label]}>PREZZO PER NOTTE</Text>
-                                <TextInput
-                                    underlineColorAndroid='transparent'  
-                                    defaultValue={this.state.price}
-                                    keyboardType={'numeric'}
-                                    autoCorrect={false}
-                                    style = {[{borderColor: this.state.priceColor, width: 100},styles.inputField]}
-                                    onChangeText={val => this.changePrice(val)}
-                                ></TextInput>
-                        {   this.state.priceAlert==true ? 
-                                <Text style={{color: '#DC143C'}}>Inserisci un prezzo </Text> : null
-                        }
                     </View>
 
                     
@@ -422,6 +485,9 @@ export default class EditStructure extends Component{
                         onChangeText={val => this.changeLocationDescription(val)}
                     />
                     <View style={{marginTop: 5}}>
+                        {this.state.warning ? <View style={{backgroundColor:colors.white}}>
+                            <Text style={styles.warningText}>ERRORE : CONTROLLA CHE TUTTI I DATI SIANO CORRETTI</Text>
+                        </View>:null}
                         <Button title="MODIFICA" color={colors.orange} onPress = {()=> {this.postData()}}></Button>
                     </View>
                     
@@ -494,5 +560,12 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: colors.black,
         borderRadius: 8,
+    },
+    warningText:{
+        backgroundColor: colors.white,
+        color:colors.red,
+        alignSelf:'center',
+        fontSize:14,
+        fontWeight:"500"
     }
 });

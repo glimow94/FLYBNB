@@ -6,19 +6,29 @@ import { useNavigation } from '@react-navigation/native';
 
 import { UserContext } from "../components/context";
 import Signup from './Signup';
+import AsyncStorage from "@react-native-community/async-storage";
 const Login = ()=>{
     const navigation = useNavigation();
 
     const [data,setData] = React.useState({
         email:'',
-        password:''
+        password:'',
+        warning: false,
+        borderColor: colors.white
     })
     const { signIn } = React.useContext(UserContext)
     
 
     const loginCheck = (email,password)=>{
         //if textInputUsername && textInputPassw == Username && Passw then :
-        signIn(email,password);
+        var result = signIn(email,password);
+        if(result && result != 200){
+            setData({
+                ...data,
+                warning:true,
+                borderColor: colors.red
+            })
+        }
     }
 
     const changeEmail=(val)=>{
@@ -45,7 +55,7 @@ const Login = ()=>{
                         <Text style={styles.label}>INDIRIZZO E-MAIL</Text>
                         <TextInput
                             autoCorrect={false}
-                            style = {styles.inputField}
+                            style = {[{borderBottomColor:data.borderColor},styles.inputField]}
                             onChangeText={(val) => changeEmail(val)}
                         ></TextInput>
                     </View>
@@ -54,11 +64,14 @@ const Login = ()=>{
                         <TextInput
                             autoCorrect={false}
                             secureTextEntry={true}
-                            style = {styles.inputField}
+                            style = {[{borderBottomColor:data.borderColor},styles.inputField]}
                             onChangeText={(val)=>changePassw(val)}
                         ></TextInput>
                     </View>
-                    <Text>    Non hai un account? <Text onPress={()=> navigation.navigate(Signup)} style={{color: colors.red, fontSize:14, fontWeight: "700"}} >Iscriviti</Text></Text>
+                    {
+                        data.warning ? <Text style={styles.warning}>CREDENZIALI ERRATE</Text>:null
+                    }
+                    <Text> Non hai un account? <Text onPress={()=> navigation.navigate(Signup)} style={styles.accountText} >Iscriviti</Text></Text>
 
                 </ScrollView>
 
@@ -124,11 +137,21 @@ const styles = StyleSheet.create({
       inputField: {
         borderBottomWidth: 1,
         paddingTop: 10,
-        paddingBottom: 5,
         height: 40,
         width:200,
         backgroundColor: colors.green01,
-        borderBottomColor: colors.white
+    },
+    warning:{
+        alignSelf:'center',
+        color: colors.red,
+        fontWeight:"700",
+        marginBottom:5
+    },
+    accountText:{
+        color: colors.red, 
+        fontSize:14, 
+        fontWeight: "700",
+        alignSelf:'center'
     }
 
 });
