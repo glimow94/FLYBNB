@@ -210,7 +210,6 @@ export default class BookingStructure extends Component{
       }
   }
 
-
   render(){
     
     return (
