@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Button, RefreshControlBase} from 'react-native';
+import {View, Text, StyleSheet, Button, RefreshControlBase, Picker} from 'react-native';
 import colors from '../style/colors/index';
 import DateSelector from '../components/DateSelector';
 import { useNavigation } from '@react-navigation/native';
@@ -15,7 +15,11 @@ export default class BookingStructure extends Component{
     this.state={
       user_id: '',
       title: '',
+      clientName:'',
+      clientSurname:'',
       clientMail: '',
+      ownerName:'',
+      ownerSurname:'',
       ownerMail: '',
       owner_id: '',
       structure_id: '',
@@ -34,7 +38,7 @@ export default class BookingStructure extends Component{
       disabledDates: [],
       disabledDatesStrings:[],
       bookedDates:[], //array di oggetti di coppie (checkin= data1, checkout=data2) in cui sono salvate le date di tutte le prenotazione dell'utente per questa struttura
-      datesError: false,//indica se si è superato il limite dei 28 giorni
+      datesError: false,//indica errore se si è superato il limite dei 28 giorni
       errorMessage:'',
       remainingDays_firstYear:false,
       remainingDays_2Year:false,
@@ -42,7 +46,7 @@ export default class BookingStructure extends Component{
       totBookedDays:'',
       totBooking_FirstYear:0,
       totBooking_2Year:0,
-
+      guests:1,
       maxDays:28 //massimo numero di giorni prenotabili in questa struttura
     }
   }
@@ -50,6 +54,16 @@ export default class BookingStructure extends Component{
   updateState(filterStatus){
     this.setState(filterStatus);
   }
+  //funzione che renderizza i picker item per la sscelta del numero di ospiti
+  renderGuestsNumber(){
+    var num = [];
+    if(this.state.beds>0){
+      for (var i = 1; i <= this.state.beds; i++) {
+        num.push(<Picker.Item label={i.toString()} value={i} key={i} />);
+      }
+    }
+    return num
+  }  
   
   //restituisce array di oggetti Date che comprendono le date fra il check in e il checkout per poi oscurarle nel selettore delle date di soggiorno
   getDateRange(start, end, dateFormat,type) {
@@ -105,7 +119,11 @@ export default class BookingStructure extends Component{
     this.setState({
       user_id: userID,
       title: itemTitle,
+      clientName: clientName,
+      clientSurname:clientSurname,
       clientMail: clientMail,
+      ownerName:ownerName,
+      ownerSurname: ownerSurname,
       ownerMail: ownerMail,
       owner_id: ownerID,
       structure_id: itemID,
@@ -292,7 +310,7 @@ export default class BookingStructure extends Component{
       }
       return tot_bookings
   }
-  datesCheck=()=>{
+datesCheck=()=>{
     var error_string='',
         datesError=false,
         remainingDays_firstYear = false,
@@ -341,9 +359,30 @@ export default class BookingStructure extends Component{
     array.push(datesError,error_string,remainingDays_firstYear,remainingDays_2Year);
     console.log(datesError)
     return array
-  }
+}
   
- async postBooking () {
+async postBooking () {
+  this.props.navigation.navigate('ConfirmBooking',{
+      itemTitle: this.state.title,
+      totPrice: this.state.totPrice,
+      ownerID: this.state.owner_id,
+      itemID: this.state.structure_id,
+      userID: this.state.user_id,
+      clientMail: this.state.clientMail,//email dell'ospite
+      ownerMail: this.state.ownerMail,//email del proprietario di casa
+      ownerName:this.state.ownerName,
+      ownerSurname:this.state.ownerSurname,
+      clientName: this.state.clientName,
+      clientSurname: this.state.clientName,
+      city: this.state.city, //citta, ci servirà anche per calcolare le tasse di soggiorno
+      street: this.state.street,
+      beds: this.state.beds,
+      checkIn : this.state.checkIn,
+      checkOut: this.state.checkOut,
+      cityTax: this.state.cityTax,
+      guests: this.state.guests
+  })
+/* 
     if(this.state.checkOut.length !=0){
       var array = this.datesCheck();
 
@@ -385,7 +424,7 @@ export default class BookingStructure extends Component{
       this.setState({
       alert:true
     })
-  }
+  } */
     
   }
 
@@ -435,6 +474,18 @@ export default class BookingStructure extends Component{
             <Text style={styles.texTitle}> {this.state.itemTitle}</Text>
             <Text style={styles.textInfo}>{this.state.city}, {this.state.street} </Text>
             <Text style={styles.textInfo}>Letti: {this.state.beds} </Text>
+            
+            <View style={{flexDirection:"row"}}>
+              <Text style={styles.textInfo}>NUMERO DI OSPITI: </Text>
+              <Picker 
+                style={styles.Picker} 
+                selectedValue={this.state.guests} 
+                onValueChange={(val)=>this.setState({
+                  guests:val
+                })}>
+                {this.renderGuestsNumber()}
+              </Picker> 
+            </View>
             <View style={styles.priceInfo}>
               <Text style={styles.numberOfDays}> {this.state.diffDays} Notti</Text>
               <Text style={styles.textInfo}>Prezzo/notte : {this.state.price}€</Text>
@@ -464,7 +515,7 @@ export default class BookingStructure extends Component{
             <View>
               <Button title="CONFERMA" color={colors.orange} onPress = {()=> {this.postBooking()}} ></Button>
             </View>
-        </ScrollView>
+          </ScrollView>
         </View>
     )
   }
@@ -552,6 +603,9 @@ const styles = StyleSheet.create({
     },
     smallText:{
       fontSize:8
+    },
+    Picker:{
+      margin:3
     }
 });
 

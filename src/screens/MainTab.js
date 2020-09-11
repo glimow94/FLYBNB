@@ -15,6 +15,7 @@ import Trip from './Trip';
 import AddStructure from './AddStructure';
 import UserStructure from './UserStructure';
 import EditStructure from './EditStructure';
+import ConfirmBooking from './ConfirmBooking';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -65,6 +66,7 @@ const HomeStackScreen = ({navigation}) =>(
       <HomeStack.Screen name="Home" component={Home} />
       <HomeStack.Screen name="Structure" component={Structure} />
       <HomeStack.Screen name="BookingStructure" component={BookingStructure} />
+      <HomeStack.Screen name="ConfirmBooking" component={ConfirmBooking} />
     </HomeStack.Navigator>
 );
 const ProfileStackScreen = ({navigation}) =>(
