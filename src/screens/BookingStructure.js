@@ -180,32 +180,35 @@ export default class BookingStructure extends Component{
     console.log(datesError)
     return datesError;
   }
-  postBooking = () => {
+  
+ async postBooking () {
     var datesCheck = this.datesRangeCheck()
     if(this.state.checkOut.length !=0){
       if(datesCheck == false){  
         const url = `http://localhost:3055/bookings/add`;
-        axios.post(url, {
+        await axios.post(url, {
             method: 'POST',
             headers: {
-              'content-type': 'application/json',   
+              'content-type': 'application/json',
             },
             user_id: parseInt(this.state.user_id),
-            owner_id: this.state.owner_id,
-            structure_id: this.state.structure_id,
+            owner_id: parseInt(this.state.owner_id),
+            structure_id: parseInt(this.state.structure_id),
             checkIn: this.state.checkIn,
             checkOut: this.state.checkOut,
-            days: this.state.diffDays,
-            totPrice: this.state.totPrice,
-            cityTax: this.state.cityTax,
-            request: this.state.request
+            days: parseInt(this.state.diffDays),
+            totPrice: parseInt(this.state.totPrice),
+            cityTax: parseInt(this.state.cityTax)
           })
           .then(res => {
             console.log(res);
+            res.data;
             })
           .catch(function (error) {
             console.log(error);
           });
+
+          this.postMail();
           this.props.navigation.navigate('Home')
         }
         else{
@@ -221,6 +224,29 @@ export default class BookingStructure extends Component{
       }
   }
 
+  async postMail() {
+    const url = `http://localhost:3055/bookings/send/email`;
+    axios.post(url, {
+       method: 'POST',
+       headers: {
+         'content-type': 'application/json',
+       },
+       user_id: parseInt(this.state.user_id),
+       owner_id: parseInt(this.state.owner_id),
+       structure_id: parseInt(this.state.structure_id),
+       checkIn: this.state.checkIn,
+       checkOut: this.state.checkOut,
+       days: parseInt(this.state.diffDays),
+       totPrice: parseInt(this.state.totPrice),
+       cityTax: parseInt(this.state.cityTax)
+     })
+     .then(res => {
+       console.log(res);
+       })
+     .catch(function (error) {
+       console.log(error);
+     });
+  }
   render(){
     
     return (

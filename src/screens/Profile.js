@@ -6,7 +6,7 @@ import UserStructures from '../components/UserStructureList'
 import AddButton from '../components/buttons/Button1'
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
-import uploadToAnonymousFilesAsync from 'anonymous-files'; 
+import uploadToAnonymousFilesAsync from 'anonymous-files';
 import colors from '../style/colors';
 
 import { UserContext } from "../components/context";
@@ -17,7 +17,7 @@ import AddStructure from './AddStructure';
 import { render } from 'react-dom';
 import BookingsList from '../components/BookingsList';
 import RequestList from '../components/RequestList';
-
+import axios from "axios";
 
 const {width} = Dimensions.get('window');
 const height =  width*0.4//40% di width
@@ -64,6 +64,18 @@ static contextType = UserContext
     }catch(e){
       console.log(e)
     }
+    const url = `http://localhost:3055/users/image/${userToken}`;
+    axios.get(url, {
+        method: 'GET',
+        headers: {
+          'content-type': 'application/json',
+        }
+      })
+      .then(res => {
+        this.setState({
+          profileImage : res.data[0].image
+        })
+    })
     this.setState({
       name: user_name,
       surname:user_surname,
@@ -124,16 +136,35 @@ static contextType = UserContext
       // facciamo un upload fittizio su anonymousfile.io e ricaviamo la URI remota del file
       let remoteUri = await uploadToAnonymousFilesAsync(pickerResult.uri);
       console.log("remote Uri")
-      console.log(remoteUri)
+      console.log(pickerResult.uri)
       this.setState({
         profileImage: pickerResult.uri
       })
     } else {
       // remoteUri è null per un device mobile
+      console.log(remoteUri)
       this.setState({
         profileImage: pickerResult.uri
       })
-    } 
+    }
+
+    ///let formdata = new FormData();
+    //formdata.append("product[name]", 'image')
+    //formdata.append("product[image]", {uri: this.state.imageUri, name: 'image.jpg', type: 'image/jpeg'})
+    const url = `http://localhost:3055/users/update/image/${this.state.userToken}`;
+    axios.post(url, {
+        method: 'POST',
+        headers: {
+          'content-type': 'multipart/form-data',
+        },
+        image: this.state.profileImage
+      })
+      .then(res => {
+        console.log(res);
+        })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   render(){
@@ -146,13 +177,9 @@ static contextType = UserContext
 
         <View style={styles.profileCard}>
            <View style={styles.userInfoBox}>
-          { 
-            this.state.profileImage !== null ? 
-            <Image source={{ uri: this.state.profileImage }} style={styles.ProfileImage}/> : 
-            <Image style={styles.logo} source={require('../img/person.png')}/>
-          }
-          <TouchableOpacity style={styles.button} onPress={this.profileImagePickerAsync}>
-          <Icon
+            <Image source={ this.state.profileImage !== '' ? {uri: this.state.profileImage} : require('../img/person.png') } style={styles.ProfileImage} />
+            <TouchableOpacity style={styles.button} onPress={this.profileImagePickerAsync}>
+            <Icon
               size={20}
               style={styles.icon}
               name='camera'
