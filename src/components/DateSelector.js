@@ -53,8 +53,17 @@ export default class DateSelector extends Component {
   }
 
   monthNameToNum(monthname) {
-    var month = months.indexOf(monthname);
-    return month!=-1 ? month + 1 : undefined;
+    var index = months.indexOf(monthname);
+    
+    //aggiungo lo 0 prima del numero del mese se questo è < 10, ovvero 1 diventa 01, 2 diventa 02, ecc.ecc.
+    if(index+1 < 10 && index != -1){
+      index = index +1;
+      var month = '0'+index.toString()
+      return month
+    }
+    else {
+      return index!=-1 ? index+1 : undefined;
+    }
   }
   
   //funzione che calcola il range massimo di selezione delle date a partire dalla scelta della data iniziale(check-in) sul calendario
@@ -86,6 +95,7 @@ export default class DateSelector extends Component {
   onDateChange(date, type) {
     var date_mod = date.toString().replace("12:00:00 GMT+0200","").slice(4);
     var month_num = this.monthNameToNum(date_mod.substr(0,3));
+    
     var date_mod_format = date_mod.substr(4,2)+"/"+month_num+"/"+date_mod.substr(6,5); //data in formato DD/MonthName/AAAA
 
     var final_date = date_mod_format.replace(/ /g, '');

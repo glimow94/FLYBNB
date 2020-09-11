@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/bin/node /usr/local/bin/yarn remove @react-native-community/async-storage
+  /usr/bin/node /usr/local/bin/yarnpkg add expo-image-picker@~8.1.0
 
 PATH: 
   /home/gdp/.local/bin:/home/gdp/.local/bin:/usr/local/sbin:/home/gdp/flutter/bin:/home/gdp/Android/Sdk:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/gdp/flutter/bin:/home/gdp/Android/Sdk/tools:/home/gdp/Android/Sdk/platform-tools:/opt/gradle/gradle-5.2.1/bin:/home/gdp/Scrivania/flybnb/flyBnb/flutter/bin:/home/gdp/Android/Sdk/tools:/home/gdp/Android/Sdk/platform-tools:/opt/gradle/gradle-5.2.1/bin
@@ -14,8 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: getaddrinfo EAI_AGAIN codeload.github.com codeload.github.com:443
-      at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:56:26)
+  Error: EACCES: permission denied, mkdir '/home/gdp/Scrivania/flybnb/flyBnb/node_modules/expo-image-picker/src/__tests__'
 
 npm manifest: 
   {
@@ -28,6 +27,7 @@ npm manifest:
       "eject": "expo eject"
     },
     "dependencies": {
+      "@react-native-community/async-storage": "^1.12.0",
       "@react-native-community/datetimepicker": "2.2.2",
       "@react-native-community/masked-view": "0.1.6",
       "@react-navigation/bottom-tabs": "^5.5.2",
@@ -36,8 +36,11 @@ npm manifest:
       "@react-navigation/material-top-tabs": "^5.2.12",
       "@react-navigation/native": "^5.5.1",
       "@react-navigation/stack": "^5.5.1",
+      "anonymous-files": "^1.0.1",
       "axios": "^0.19.2",
       "expo": "~37.0.3",
+      "expo-image-picker": "^8.4.0",
+      "moment": "^2.27.0",
       "prop-types": "^15.7.2",
       "react": "~16.9.0",
       "react-country-region-selector": "^2.1.0",
@@ -47,7 +50,7 @@ npm manifest:
       "react-native-calendars": "^1.300.0",
       "react-native-datepicker": "^1.7.2",
       "react-native-dropdown-picker": "^3.0.5",
-      "react-native-elements": "^2.0.4",
+      "react-native-elements": "^2.3.2",
       "react-native-gesture-handler": "~1.6.0",
       "react-native-material-dropdown": "^0.11.1",
       "react-native-paper": "^3.10.1",
@@ -1136,10 +1139,10 @@ Lockfile:
       "@types/yargs" "^15.0.0"
       chalk "^3.0.0"
   
-  "@react-native-community/async-storage@^1.11.0":
-    version "1.11.0"
-    resolved "https://registry.yarnpkg.com/@react-native-community/async-storage/-/async-storage-1.11.0.tgz#bf81b8813080846f150c67f531987c429b442166"
-    integrity sha512-Pq9LlmvtCEKAGdkyrgTcRxNh2fnHFykEj2qnRYijOl1pDIl2MkD5IxaXu5eOL0wgOtAl4U//ff4z40Td6XR5rw==
+  "@react-native-community/async-storage@^1.12.0":
+    version "1.12.0"
+    resolved "https://registry.yarnpkg.com/@react-native-community/async-storage/-/async-storage-1.12.0.tgz#d2fc65bc08aa1c3e9514bbe9fe7095eab8e8aca3"
+    integrity sha512-y3zVxuVyiOxI8TXrvajmYfDbIt2vFNxzV5MiA28v15DQTxDk6uJH3rpc9my+la7u2Tiwt3PpdU2+59ZgZ4h7wA==
     dependencies:
       deep-assign "^3.0.0"
   
@@ -1476,6 +1479,11 @@ Lockfile:
     dependencies:
       mime-types "~2.1.24"
       negotiator "0.6.2"
+  
+  anonymous-files@^1.0.1:
+    version "1.0.1"
+    resolved "https://registry.yarnpkg.com/anonymous-files/-/anonymous-files-1.0.1.tgz#4d9c0d3351b2e586ff61872f0afb1aac4915f9fc"
+    integrity sha512-Jbxjad77k4l3cvJPgC+p5/hz/lxQQk3OocWM/hEdsTadX4q+62h8XfbKFNTZHalEkM2pt2EtAiqyzPDga1KMCw==
   
   ansi-colors@^1.0.1:
     version "1.1.0"
@@ -2320,10 +2328,15 @@ Lockfile:
     dependencies:
       is-obj "^1.0.0"
   
-  deepmerge@^3.1.0, deepmerge@^3.2.0:
+  deepmerge@^3.2.0:
     version "3.3.0"
     resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-3.3.0.tgz#d3c47fd6f3a93d517b14426b0628a17b0125f5f7"
     integrity sha512-GRQOafGHwMHpjPx9iCvTgpu9NojZ49q794EEL94JVEw6VaeA8XTUyBKvAkOOjBX9oJNiV6G3P+T+tihFjo2TqA==
+  
+  deepmerge@^4.2.2:
+    version "4.2.2"
+    resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.2.2.tgz#44d2ea3679b8f4d4ffba33f03d865fc1e7bf4955"
+    integrity sha512-FJ3UgI4gIl+PHZm53knsuSFpE+nESMr7M4v9QcgB7S63Kj/6WqMiFQJpBBYz1Pt+66bZpP3Q7Lye0Oo9MPKEdg==
   
   defaults@^1.0.3:
     version "1.0.3"
@@ -2568,6 +2581,14 @@ Lockfile:
       fbjs "1.0.0"
       fontfaceobserver "^2.1.0"
   
+  expo-image-picker@^8.4.0:
+    version "8.4.0"
+    resolved "https://registry.yarnpkg.com/expo-image-picker/-/expo-image-picker-8.4.0.tgz#b4a7c06411f1b190cb6fb695a3cdf0fb8f29dfb2"
+    integrity sha512-XvBNxC5ZXJN9Vsvr+QFk9PYJW1PP7YoPqprFfoBeg1/eBtCAEjgqdQ2o/Ak1RQoCqwg8SEKxxHtQpGogZZCx5g==
+    dependencies:
+      expo-permissions "~9.1.0"
+      uuid "7.0.2"
+  
   expo-keep-awake@~8.1.0:
     version "8.1.0"
     resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-8.1.0.tgz#3a1d8aa5a8395d40c7d79e1c93020ae5f848e664"
@@ -2598,6 +2619,11 @@ Lockfile:
     version "8.1.0"
     resolved "https://registry.yarnpkg.com/expo-permissions/-/expo-permissions-8.1.0.tgz#a7f2ee91ba76ce3a467e7b10adaa9ca5201b226f"
     integrity sha512-QBHD+1J9+sGFnhoEGzMRchPweeEE0OJ9ehG/0l1BMRBA7qsLS9vRC1FTJ55NwjI0Kr4RTha9r6ZX1kZHT09f/w==
+  
+  expo-permissions@~9.1.0:
+    version "9.1.0"
+    resolved "https://registry.yarnpkg.com/expo-permissions/-/expo-permissions-9.1.0.tgz#b830a9e8100d5650a874122b432a65ab1dfdf4c1"
+    integrity sha512-nNF8voeRSzMCIJzt27dmpHHm70ZiZh528GJJzHd9qX9aIgrN2j0WsrFI31p7Q8uPUI8HDCBbF7JmvO91GmFrhQ==
   
   expo-sqlite@~8.1.0:
     version "8.1.0"
@@ -4010,7 +4036,7 @@ Lockfile:
     dependencies:
       minimist "^1.2.5"
   
-  moment@^2.22.0, moment@^2.24.0:
+  moment@^2.22.0, moment@^2.24.0, moment@^2.27.0:
     version "2.27.0"
     resolved "https://registry.yarnpkg.com/moment/-/moment-2.27.0.tgz#8bff4e3e26a236220dfe3e36de756b6ebaa0105d"
     integrity sha512-al0MUK7cpIcglMv3YF13qSgdAIqxHTO7brRtaz3DlSULbqfazqkc5kEjNrLDOM7fsjshoFIihnU8snrP7zUvhQ==
@@ -4676,14 +4702,14 @@ Lockfile:
       prop-types "^15.7.2"
       react-native-vector-icons "^6.6.0"
   
-  react-native-elements@^2.0.4:
-    version "2.0.4"
-    resolved "https://registry.yarnpkg.com/react-native-elements/-/react-native-elements-2.0.4.tgz#ea5a6bb34cabd48dcd6c6546e4737d2075e40ee3"
-    integrity sha512-nIFz47Sk/urOxZX+sqgWF2k7IVL0t9NGsVLg4HC7pN70bsjXMr4VUmS72zioxag3Du8xK1g7lw4vrRX3JQeVYg==
+  react-native-elements@^2.3.2:
+    version "2.3.2"
+    resolved "https://registry.yarnpkg.com/react-native-elements/-/react-native-elements-2.3.2.tgz#f6b974127a3484bb46ebd98fbc012fb2208decd7"
+    integrity sha512-HygYYmq8JYjk/YYiUwr/64qT64H2xlPBz0JnkGTQwvnnyXZrfkHFopw8rLWCupv3iLLPDzVohvPs0Z5HLdonSQ==
     dependencies:
       "@types/react-native-vector-icons" "^6.4.5"
       color "^3.1.0"
-      deepmerge "^3.1.0"
+      deepmerge "^4.2.2"
       hoist-non-react-statics "^3.1.0"
       lodash.isequal "^4.5.0"
       opencollective-postinstall "^2.0.0"
@@ -5813,6 +5839,11 @@ Lockfile:
     version "3.2.1"
     resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.2.1.tgz#12c528bb9d58d0b9265d9a2f6f0fe8be17ff1f14"
     integrity sha512-jZnMwlb9Iku/O3smGWvZhauCf6cvvpKi4BKRiliS3cxnI+Gz9j5MEpTz2UFuXiKPJocb7gnsLHwiS05ige5BEA==
+  
+  uuid@7.0.2:
+    version "7.0.2"
+    resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.2.tgz#7ff5c203467e91f5e0d85cfcbaaf7d2ebbca9be6"
+    integrity sha512-vy9V/+pKG+5ZTYKf+VcphF5Oc6EFiu3W8Nv3P3zIh0EqVI80ZxOzuPfe9EHjkFNvf8+xuTHVeei4Drydlx4zjw==
   
   uuid@^3.3.2, uuid@^3.4.0:
     version "3.4.0"

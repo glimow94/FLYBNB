@@ -56,7 +56,7 @@ export default class DateSelector extends Component {
 
     return (
       <View>
-        <FilterButton text="Altro" onPress={this.showHide}></FilterButton>
+        <FilterButton text="Servizi" onPress={this.showHide}></FilterButton>
         
         {   
           this.props.status3 ? 

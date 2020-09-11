@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Button} from 'react-native';
+import {View, Text, StyleSheet, Button, RefreshControlBase} from 'react-native';
 import colors from '../style/colors/index';
 import DateSelector from '../components/DateSelector';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import axios from "axios";
 import moment from "moment"
+import { diff } from 'react-native-reanimated';
 
 
 export default class BookingStructure extends Component{
@@ -28,18 +29,28 @@ export default class BookingStructure extends Component{
       request: '',
       beds: '',
       diffDays: 0,
-      //alert se si preme conferma senza aver selezionato le date
-      alert: false,
+      alert: false,//alert = true se si preme conferma senza aver selezionato le date
       dates: [],
       disabledDates: [],
       disabledDatesStrings:[],
-      datesError: false
+      bookedDates:[], //array di oggetti di coppie (checkin= data1, checkout=data2) in cui sono salvate le date di tutte le prenotazione dell'utente per questa struttura
+      datesError: false,//indica se si è superato il limite dei 28 giorni
+      errorMessage:'',
+      remainingDays_firstYear:false,
+      remainingDays_2Year:false,
+      totalYearDays:[],
+      totBookedDays:'',
+      totBooking_FirstYear:0,
+      totBooking_2Year:0,
+
+      maxDays:28 //massimo numero di giorni prenotabili in questa struttura
     }
   }
   
   updateState(filterStatus){
     this.setState(filterStatus);
   }
+  
   //restituisce array di oggetti Date che comprendono le date fra il check in e il checkout per poi oscurarle nel selettore delle date di soggiorno
   getDateRange(start, end, dateFormat,type) {
         //se type = 1 restituisce le date in formato array di Oggetti Data
@@ -56,7 +67,7 @@ export default class BookingStructure extends Component{
         for(var i = 0; i < diff; i++) {
             dates.push(endDate.subtract(1,'d').format(dateFormat));
         }
-        //creo l'array di oggetti Date, convertendo il formato da DD-MM-YYYY ad MM-DD-YYYY
+        //se type = 1 creo l'array di oggetti con le date in formato oggetto Date, convertendo il formato da DD-MM-YYYY ad MM-DD-YYYY
         if(type == 1){
           for(var i = 0; i < diff ; i++){
             console.log(dates[i])
@@ -105,7 +116,7 @@ export default class BookingStructure extends Component{
       request: 0
     })
 
-    const url = `http://localhost:3055/bookings/profile/date/${itemID}`;
+    var url = `http://localhost:3055/bookings/profile/date/${itemID}`;
     axios.get(url, {
         method: 'GET',
         headers: {
@@ -113,15 +124,12 @@ export default class BookingStructure extends Component{
         }
       })
       .then(res => {
-        console.log("ECCO LE DATE:");
-        console.log(res.data);
+        /* console.log("ECCO LE DATE:");
+        console.log(res.data); */
         const bookingdates = res.data;
         this.setState({
           dates: bookingdates
         })
-        console.log(this.state.dates);
-        console.log(this.state.clientMail);
-        console.log(this.state.ownerMail);
 
         var disabledDates_ = [];
         if(this.state.dates.length !=0){
@@ -136,12 +144,27 @@ export default class BookingStructure extends Component{
         }
 
     })
-      
-    
-    
-}
+
+    url = `http://localhost:3055/bookings/profile/date/${itemID}/${userID}`;
+    axios.get(url, {
+        method: 'GET',
+        headers: {
+          'content-type': 'application/json',
+        }
+      })
+      .then(res => {
+        console.log("ECCO LE DATE PRENOTATE DA UN UTENTE IN UNA STRUTTURA:");
+        console.log(res.data);
+        const bookedDates = res.data
+        this.setState({
+          bookedDates: bookedDates
+        })
+    })
+
+  }
+
   //funzione che controlla se fra il range di date selezionate ce ne sono alcune occupate
-  datesRangeCheck(){
+ /*  datesRangeCheck(){
     //estraggo da dates, che mi da tutti i checkin e i checkout di quella struttura,un array con tutte le date occupate
     // disableDates_ contiene l'array di date occupate per quella struttura
     //selectedDatesRange conterrà le date che ha scelto l'utente
@@ -168,18 +191,179 @@ export default class BookingStructure extends Component{
     }
     console.log(datesError)
     return datesError;
+  } */
+
+
+  //funzione che calcola l'ammontare dei giorni di prenotazione di un utente per la stessa struttura (NON DEVE ESSERE > 28)
+  //tenendo in considerazione l'anno che ci interessa e considerando anche che potrebbe prenotare a cavallo fra due anni (es. dicembre 2020-gennaio 2021)
+  totBookedDays(){
+   
+    var diffDays = 0;
+    var totDays_firstYear=0; //qui salviamo l'ammontare dei giorni delle prenotazioni effettuate nell'anno del checkin(es. 2020) se questo è diverso dal checkout selezionato(es.2021)
+    var totDays_2Year = 0;//qui salviamo l'ammontare dei giorni delle prenotazioni effettuate nell'anno del checkout quando questo è diverso dall'anno del checkin
+    var tot_bookings = [];//in questo array salviamo totDats_firsyear e totdays_2year per poi usarlo come argomento di return in modo da passare entrambi i valori
+    var dateFormat = 'DD-MM-YYYY';
+    //mi serve l'anno del checkin attuale che sto prenotando e del checkout
+    var checkin_year = parseInt(this.state.checkIn.substring(6,10));//anno del checkin corrente(che sto prenotando adesso)
+    var checkout_year = parseInt(this.state.checkOut.substring(6,10));//anno del checkout corrente
+
+    
+      if(this.state.bookedDates.length !=0){
+        if(parseInt(checkin_year) == parseInt(checkout_year)){
+          for(var i = 0; i < this.state.bookedDates.length; i++){
+            //variabili dei checkin checkout della lista delle prenotazioni effettuate in precedenza
+            //da cui estraggo anche l'anno
+            var start = this.state.dates[i].checkIn,
+                end = this.state.dates[i].checkOut,
+                start_year=parseInt(start.substring(6,10)),
+                end_year=parseInt(end.substring(6,10)),
+                startDate = moment(start, dateFormat),
+                endDate = moment(end,dateFormat);
+                
+                console.log(start_year)
+                console.log(end_year)
+                console.log(checkin_year)
+                console.log(checkout_year)
+            if(start_year == end_year && start_year == checkin_year){
+              var diff = endDate.diff(startDate, 'days');
+              diffDays = diffDays + diff
+              console.log('PRIMO DIFF')
+              console.log(diff)
+            }
+            if(start_year == checkin_year && start_year != end_year){
+              //se le date sono a cavallo fra due anni, es. checkin: 21 dicembre 2020 / checkout: 6 gennaio 2021
+              //e se la data di checkin che voglio prenotare è uguale alla data di checkin delle prenotazioni effettuate 
+              //calcolo i giorni di pernottamento per l'anno che sto prenotando utilizzando la data di fine anno per il calcolo della differenza
+              var end_ = '31/12/'+checkin_year.toString(),
+                  //nextYear = parseInt(year_checkin)+1,
+                  //start_ = '01/01/'+nextYear.toString(); 
+              //calcolo diff = data_fine_anno - datacheckin
+                  endDate_ = moment(end_,dateFormat),
+                  diff_ = endDate_.diff(startDate,'days');
+                  console.log(endDate)
+                  console.log(startDate)
+                  console.log(diff_)
+                  diffDays = diffDays + diff_
+            }
+          } 
+          tot_bookings.push(diffDays,0)
+          console.log(tot_bookings)
+        }else{
+          for(var i = 0; i < this.state.bookedDates.length; i++){
+            //variabili dei checkin checkout della lista delle prenotazioni effettuate in precedenza
+            //da cui estraggo anche l'anno
+            var start = this.state.dates[i].checkIn,
+                end = this.state.dates[i].checkOut,
+                start_year=parseInt(start.substring(6,10)),
+                end_year=parseInt(end.substring(6,10)),
+                startDate = moment(start, dateFormat),
+                endDate = moment(end,dateFormat);
+                
+            
+            if(start_year == checkin_year && end_year == checkout_year){
+              //se l'anno del checkin_selezionato è uguale all'ann del checkin della prenotazione__precedente
+              // e se l'anno del checkout_selezionato è uguale all'anno del checkout della prenotazione_precedente:
+              var end_ = '31/12/'+checkin_year.toString(),
+                  end_date = moment(end_,dateFormat),
+                  diff_days = end_date.diff(startDate, 'days');//giorni totali fra il chekcin e fine anno
+              totDays_firstYear = diff_days + totDays_firstYear;
+              
+              //anno del checkout
+              var start_ = '01/01/'+checkout_year.toString(),
+                  start_date = moment(start_,dateFormat),
+                  diff_days2 = endDate.diff(start_date,'days'); // giorni totali fra inizio anno e checkout
+              totDays_2Year = diff_days2 + totDays_2Year;
+            }
+            if(start_year == checkin_year && end_year == checkin_year){
+              //se le date precedente prenotate che stiamo scorrendo enl ciclo sono composte da checkin e checkout compresi nell'anno 
+              //del checkin che abbiamo scelto allora aggiungiamo il numero totale di giorni prenotati in quell'anno alla variabile totDaysFirstYear
+              var diff_days3 = endDate.diff(startDate,'days');
+              totDays_firstYear = totDays_firstYear + diff_days3;
+            }
+            if(start_year == checkout_year && end_year == checkout_year){
+              var diff_days4 = endDate.diff(startDate,'days');
+              totDays_2Year = totDays_2Year +diff_days4 //stavolta aggiungiamo all'anno successivo
+            }
+          } 
+          tot_bookings.push(totDays_firstYear,totDays_2Year)
+          console.log(tot_bookings)
+        }
+        
+      }
+      return tot_bookings
   }
+  datesCheck=()=>{
+    var error_string='',
+        datesError=false,
+        remainingDays_firstYear = false,
+        remainingDays_2Year =false;
+        
+    if(this.state.checkOut.length!=0){
+      var checkin_year = this.state.checkIn.substring(6,10),
+          checkout_year = this.state.checkOut.substring(6,10),
+          array = this.totBookedDays();
+  
+      if(checkin_year == checkout_year){
+            var bookedDays = array[0],
+                remainingDays= 28-bookedDays;
+            if(((bookedDays+this.state.diffDays) > 28 && bookedDays < 28)){
+              error_string='Non puoi prenotare piu di '+remainingDays+' Notti in questa struttura per il '+checkin_year;
+              datesError=true
+            }
+            if(bookedDays>=28){
+              error_string='Non puoi piu prenotare in questa struttura per il '+checkin_year+' (limite annuale di 28 pernottamenti raggiunto)';
+              datesError=true
+            }
+      }
+      else{
+        var bookedDays_firstYear = array[0],
+            bookedDays_2Year = array[1],
+            checkinDate = moment(this.state.checkIn,'DD-MM-YYYY'),
+            checkOutDate = moment(this.state.checkOut,'DD-MM-YYYY'),
+            endString = '31/12/'+checkin_year.toString(),
+            startString = '01/01/'+checkout_year.toString(),
+            end = moment(endString,'DD-MM-YYYY'),
+            start=moment(startString,'DD-MM-YYYY'),
+            //calcolo diffdays per 1-Year(diffDays sono i giorni di differenza fra il checkin e il checkout selezionati al momento)
+            diff_firstYear = end.diff(checkinDate,'days'),
+            diff_2Year = checkOutDate.diff(start,'days');
+        remainingDays_firstYear = 28 - bookedDays_firstYear;
+        remainingDays_2Year = 28 -bookedDays_2Year;
+  
+        if(((bookedDays_firstYear+diff_firstYear)>28) || (bookedDays_2Year+diff_2Year)>28){
+          error_string="Hai superato il limite di 28 pernottamenti all'anno";
+          datesError=true;
+        } 
+      }
+    }
+    var array = [];
+    array.push(datesError,error_string,remainingDays_firstYear,remainingDays_2Year);
+    console.log(datesError)
+    return array
+  }
+
   postBooking = () => {
-    var datesCheck = this.datesRangeCheck()
+    
     if(this.state.checkOut.length !=0){
-      if(datesCheck == false){  
+      
+      
+      //array[0] = giorni totali di prenotazioni nell'anno del checkin, 
+      //array[1] = giorni tot. di prenotazioni nell'anno del checkout nel caso in cui la prenotazione è a cavallo di due anni (dicembre-gennaio)
+     var array = this.datesCheck();
+     this.setState({
+       datesError:array[0],//array[0] è true o false, true -> c'è un errore nelle date
+       errorMessage:array[1],
+       remainingDays_firstYear:array[2],
+       remainingDays_2Year:array[3]
+     })
+      if(array[0]==false){ //non c'è un errore nelle date
         const url = `http://localhost:3055/bookings/add`;
         axios.post(url, {
             method: 'POST',
             headers: {
               'content-type': 'application/json',   
             },
-            user_id: this.state.user_id,
+            user_id: parseInt(this.state.user_id),
             owner_id: this.state.owner_id,
             structure_id: this.state.structure_id,
             checkIn: this.state.checkIn,
@@ -196,20 +380,15 @@ export default class BookingStructure extends Component{
             console.log(error);
           });
           this.props.navigation.navigate('Home')
-        }
-        else{
-          this.setState({
-            datesError:true
-          })
-        }
       }
-      else{
-        this.setState({
-          alert:true
-        })
-      }
+    }
+    else{
+      this.setState({
+      alert:true
+    })
   }
-
+    
+  }
 
   render(){
     
@@ -242,14 +421,24 @@ export default class BookingStructure extends Component{
             </View>
             
             
-            <Text>ID struttura: {this.state.structure_id}</Text>
+            <Text style={styles.smallText}>ID struttura: {this.state.structure_id}</Text>
 
             {
               this.state.alert ? <Text style={styles.alertText}>SELEZIONA LE DATE</Text> : null
             }
             {
-              this.state.datesError ? <Text style={styles.alertText}>HAI SCELTO DELLE DATE NON DISPONIBILI</Text> : null
+              this.state.datesError ? 
+              <View>
+                  <Text style={styles.alertText}>Errore: {this.state.errorMessage}</Text>
+                </View> : null
             }
+            {this.state.remainingDays_firstYear ?<View>
+              <Text style={styles.alertText}>Errore: hai selezionato un range di date che supera il limite annuale di 28 notti</Text>
+              <Text style={styles.alertText}>Notti prenotabili per il {this.state.checkIn.substring(6,10)}: {this.state.remainingDays_firstYear}</Text>
+              <Text style={styles.alertText}>Notti prenotabili per il {this.state.checkOut.substring(6,10)}: {this.state.remainingDays_2Year}</Text>
+            </View>:null}
+            
+            
             <View>
               <Button title="CONFERMA" color={colors.orange} onPress = {()=> {this.postBooking()}} ></Button>
             </View>
@@ -335,9 +524,12 @@ const styles = StyleSheet.create({
     alertText:{
       color: colors.red,
       backgroundColor: colors.white,
-      fontSize: 18,
+      fontSize: 12,
       marginBottom:2,
       fontWeight: "700"
+    },
+    smallText:{
+      fontSize:8
     }
 });
 

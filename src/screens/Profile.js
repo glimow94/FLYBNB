@@ -1,10 +1,12 @@
 import React, {Component, useEffect} from 'react';
-import {View, Text, StyleSheet, Image, Dimensions, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, Image, Dimensions, ScrollView, TouchableOpacity, Platform} from 'react-native';
+import { Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-community/async-storage';
 import UserStructures from '../components/UserStructureList'
 import AddButton from '../components/buttons/Button1'
 import { useNavigation } from '@react-navigation/native';
-
+import * as ImagePicker from 'expo-image-picker';
+import uploadToAnonymousFilesAsync from 'anonymous-files'; 
 import colors from '../style/colors';
 
 import { UserContext } from "../components/context";
@@ -39,6 +41,7 @@ static contextType = UserContext
       status: false,
       status2: false,
       status3: false,
+      profileImage: null
     }
   }
   
@@ -103,10 +106,38 @@ static contextType = UserContext
   updateState(filterStatus){
     this.setState(filterStatus)
   } 
-  render(){
-  
 
-  const {signOut} = this.context
+  profileImagePickerAsync = async () => {
+    let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+    // verifica permessi di accesso alla gallery
+    if (permissionResult.granted === false) {
+      alert("Permission to access camera roll is required!");
+      return;
+    }
+
+    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+    if (pickerResult.cancelled === true) {
+      return; // operazione abortita
+    }
+    if (Platform.OS === 'web') {
+      // i browser web non possono condividere una URI locale per motivi di sicurezza
+      // facciamo un upload fittizio su anonymousfile.io e ricaviamo la URI remota del file
+      let remoteUri = await uploadToAnonymousFilesAsync(pickerResult.uri);
+      console.log("remote Uri")
+      console.log(remoteUri)
+      this.setState({
+        profileImage: pickerResult.uri
+      })
+    } else {
+      // remoteUri è null per un device mobile
+      this.setState({
+        profileImage: pickerResult.uri
+      })
+    } 
+  };
+
+  render(){
+    const {signOut} = this.context
 
     return (
       <View style={styles.container}>
@@ -115,15 +146,26 @@ static contextType = UserContext
 
         <View style={styles.profileCard}>
            <View style={styles.userInfoBox}>
-            <Image
-                  style={styles.logo}
-                  source={require('../img/person.png')}
+          { 
+            this.state.profileImage !== null ? 
+            <Image source={{ uri: this.state.profileImage }} style={styles.ProfileImage}/> : 
+            <Image style={styles.logo} source={require('../img/person.png')}/>
+          }
+          <TouchableOpacity style={styles.button} onPress={this.profileImagePickerAsync}>
+          <Icon
+              size={20}
+              style={styles.icon}
+              name='camera'
+              type='font-awesome'
+              color='#f50'
+              color={colors.black}
             />
+          </TouchableOpacity>
             <Text style={styles.profileTextInfo}>{this.state.name} {this.state.surname}</Text>
             <Text style={styles.profileTextInfo}>{this.state.city}</Text>
             <Text style={styles.profileTextInfo}>{this.state.email}</Text>
             <Text onPress={signOut} style={{color: colors.red, fontSize:14, fontWeight: "700", alignSelf:'center'}} >Logout</Text>
-          </View>
+            </View>
         </View>
 
         <View style={styles.menu}>
@@ -176,6 +218,12 @@ const styles = StyleSheet.create({
         backgroundColor: colors.green01,
         height:'100%',
         padding: 10
+    },
+    ProfileImage:{
+      height: 100,
+      width: 100,
+      alignSelf:'center',
+      borderRadius: 80,
     },
     profileCard:{
       width:200,
@@ -300,7 +348,7 @@ const styles = StyleSheet.create({
       flex:1,
       alignContent:'center',
       width:'100%'
-    }
+    },
 });
 
 export default Profile
