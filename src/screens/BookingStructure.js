@@ -318,12 +318,13 @@ export default class BookingStructure extends Component{
       else{
         var bookedDays_firstYear = array[0],
             bookedDays_2Year = array[1],
-            checkinDate = moment(this.state.checkIn,'DD-MM-YYYY'),
-            checkOutDate = moment(this.state.checkOut,'DD-MM-YYYY'),
+            dateFormat = 'DD-MM-YYYY',
+            checkinDate = moment(this.state.checkIn,dateFormat),
+            checkOutDate = moment(this.state.checkOut,dateFormat),
             endString = '31/12/'+checkin_year.toString(),
             startString = '01/01/'+checkout_year.toString(),
-            end = moment(endString,'DD-MM-YYYY'),
-            start=moment(startString,'DD-MM-YYYY'),
+            end = moment(endString,dateFormat),
+            start=moment(startString,dateFormat),
             //calcolo diffdays per 1-Year(diffDays sono i giorni di differenza fra il checkin e il checkout selezionati al momento)
             diff_firstYear = end.diff(checkinDate,'days'),
             diff_2Year = checkOutDate.diff(start,'days');
@@ -341,44 +342,42 @@ export default class BookingStructure extends Component{
     console.log(datesError)
     return array
   }
-
-  postBooking = () => {
-    
+  
+ async postBooking () {
     if(this.state.checkOut.length !=0){
-      
-      
-      //array[0] = giorni totali di prenotazioni nell'anno del checkin, 
-      //array[1] = giorni tot. di prenotazioni nell'anno del checkout nel caso in cui la prenotazione è a cavallo di due anni (dicembre-gennaio)
-     var array = this.datesCheck();
-     this.setState({
-       datesError:array[0],//array[0] è true o false, true -> c'è un errore nelle date
-       errorMessage:array[1],
-       remainingDays_firstYear:array[2],
-       remainingDays_2Year:array[3]
-     })
+      var array = this.datesCheck();
+
+      this.setState({
+        datesError:array[0],//array[0] è true o false, true -> c'è un errore nelle date
+        errorMessage:array[1],
+        remainingDays_firstYear:array[2],
+        remainingDays_2Year:array[3]
+      })
       if(array[0]==false){ //non c'è un errore nelle date
         const url = `http://localhost:3055/bookings/add`;
-        axios.post(url, {
+        await axios.post(url, {
             method: 'POST',
             headers: {
-              'content-type': 'application/json',   
+              'content-type': 'application/json',
             },
             user_id: parseInt(this.state.user_id),
-            owner_id: this.state.owner_id,
-            structure_id: this.state.structure_id,
+            owner_id: parseInt(this.state.owner_id),
+            structure_id: parseInt(this.state.structure_id),
             checkIn: this.state.checkIn,
             checkOut: this.state.checkOut,
-            days: this.state.diffDays,
-            totPrice: this.state.totPrice,
-            cityTax: this.state.cityTax,
-            request: this.state.request
+            days: parseInt(this.state.diffDays),
+            totPrice: parseInt(this.state.totPrice),
+            cityTax: parseInt(this.state.cityTax)
           })
           .then(res => {
             console.log(res);
+            res.data;
             })
           .catch(function (error) {
             console.log(error);
           });
+
+          this.postMail();
           this.props.navigation.navigate('Home')
       }
     }
@@ -390,6 +389,29 @@ export default class BookingStructure extends Component{
     
   }
 
+  async postMail() {
+    const url = `http://localhost:3055/bookings/send/email`;
+    axios.post(url, {
+       method: 'POST',
+       headers: {
+         'content-type': 'application/json',
+       },
+       user_id: parseInt(this.state.user_id),
+       owner_id: parseInt(this.state.owner_id),
+       structure_id: parseInt(this.state.structure_id),
+       checkIn: this.state.checkIn,
+       checkOut: this.state.checkOut,
+       days: parseInt(this.state.diffDays),
+       totPrice: parseInt(this.state.totPrice),
+       cityTax: parseInt(this.state.cityTax)
+     })
+     .then(res => {
+       console.log(res);
+       })
+     .catch(function (error) {
+       console.log(error);
+     });
+  }
   render(){
     
     return (
