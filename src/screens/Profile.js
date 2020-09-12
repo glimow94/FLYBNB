@@ -87,7 +87,8 @@ static contextType = UserContext
       userToken:userToken,
       status:false,
       status2:false,
-      status3:false
+      status3:false,
+      
     })
   }
   showHideBookings=()=>{
@@ -198,12 +199,12 @@ static contextType = UserContext
         </View>
 
         <View style={styles.menu}>
-          <View style={styles.menuButton1}>
-            <Text style={styles.menuText} onPress={this.showHideBookings}>PRENOTAZIONI</Text>
-          </View>
-          <View style={styles.menuButton3}>
-            <Text style={styles.menuText} onPress={this.showHideStructures}>STRUTTURE</Text>
-          </View>
+          <TouchableOpacity style={styles.menuButton1} onPress={this.showHideBookings}>
+            <Text style={styles.menuText}>PRENOTAZIONI</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.menuButton3} onPress={this.showHideStructures}>
+            <Text style={styles.menuText}>STRUTTURE</Text>
+          </TouchableOpacity>
           <TouchableOpacity style={styles.menuButton2} onPress ={this.showHideRequests}>
             <Text style={styles.menuText}>RICHIESTE</Text>
            { this.state.waitingRequests > 0 || this.state.waitingRequests == '9+' ? <View style={styles.notifications}>
@@ -223,7 +224,9 @@ static contextType = UserContext
               <View style={styles.infoBox}>
                 { this.state.structuresList.length == 0 ? <Text>Diventa host aggiungendo una nuova struttura</Text>
               :<View style={styles.structuresList}>
-                <UserStructures></UserStructures>
+                <UserStructures
+                  updateState={this.updateState.bind(this)}
+                ></UserStructures>
                </View>}
               <Text style={styles.structureButton} onPress={()=> this.props.navigation.navigate('AddStructure',{userToken: this.state.userToken})} >Aggiungi +</Text>
               </View> : null
