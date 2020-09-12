@@ -1,5 +1,5 @@
 import React, {Component, useEffect} from 'react';
-import {View, Text, StyleSheet, Image, Dimensions, ScrollView, TouchableOpacity, Platform} from 'react-native';
+import {View, Text, StyleSheet, Image, Dimensions, ScrollView, TouchableOpacity, Platform,} from 'react-native';
 import { Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-community/async-storage';
 import UserStructures from '../components/UserStructureList'
@@ -18,6 +18,7 @@ import { render } from 'react-dom';
 import BookingsList from '../components/BookingsList';
 import RequestList from '../components/RequestList';
 import axios from "axios";
+import { TouchableHighlight } from 'react-native-gesture-handler';
 
 const {width} = Dimensions.get('window');
 const height =  width*0.4//40% di width
@@ -40,8 +41,9 @@ static contextType = UserContext
       //status per visualizzare le prenotazioni oppure le strutture personali
       status: false,
       status2: false,
-      status3: false,
-      profileImage: null
+      status3: true,
+      profileImage: null,
+      waitingRequests:0
     }
   }
   
@@ -202,9 +204,12 @@ static contextType = UserContext
           <View style={styles.menuButton3}>
             <Text style={styles.menuText} onPress={this.showHideStructures}>STRUTTURE</Text>
           </View>
-          <View style={styles.menuButton2}>
-            <Text style={styles.menuText} onPress={this.showHideRequests}>RICHIESTE</Text>
-          </View>
+          <TouchableOpacity style={styles.menuButton2} onPress ={this.showHideRequests}>
+            <Text style={styles.menuText}>RICHIESTE</Text>
+           { this.state.waitingRequests > 0 || this.state.waitingRequests == '9+' ? <View style={styles.notifications}>
+              <Text style={styles.numberNotif}>{this.state.waitingRequests}</Text>
+            </View>:null}
+          </TouchableOpacity>
 
         </View>
         <View style={styles.profileInfo}>
@@ -307,6 +312,7 @@ const styles = StyleSheet.create({
       height:30,
       width:110,
       backgroundColor: colors.blue,
+      flexDirection:'row',
       alignContent:'center',
       alignItems:'center',
       justifyContent:'center',
@@ -330,6 +336,20 @@ const styles = StyleSheet.create({
       borderLeftWidth:0,
       borderRightWidth:1,
       margin:0,
+    },
+    notifications:{
+      backgroundColor:colors.red,
+      width:20,
+      height:20,
+      borderWidth:1,
+      borderRadius:9,
+      borderColor:colors.white
+    },
+    numberNotif:{
+      color:colors.white, 
+      fontSize :12, 
+      fontWeight: "600",
+      alignSelf:'center'
     },
     menuText:{
       alignSelf:'center',

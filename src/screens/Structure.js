@@ -63,6 +63,7 @@ export default function Structure({ route }){
           const clientMail = await AsyncStorage.getItem('email');
           const clientName = await AsyncStorage.getItem('name');
           const clientSurname = await AsyncStorage.getItem('surname');
+          const clientBirthdate = await AsyncStorage.getItem('birthdate');
           if(myToken!=null){
             //abbiamo il token
             console.log("ecco il token")
@@ -76,6 +77,7 @@ export default function Structure({ route }){
               itemID: itemID,
               userID: myToken,
               clientMail: clientMail,//email dell'ospite
+              clientBirthdate,
               ownerMail: itemEmail,//email del proprietario di casa
               ownerName: itemName,
               ownerSurname: itemSurname,

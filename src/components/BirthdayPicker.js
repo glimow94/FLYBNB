@@ -85,7 +85,13 @@ export default class BirthdayPicker extends React.Component {
   renderMonthPickerItems() {
     var months = this.getMonthNames();
     return months.map(function(month, index) {
-      return <Picker.Item label={month} value={index} key={index} />;
+      var val = ''
+      if(index <=9){
+        val = '0'+(index+1).toString()
+      }
+      else val = (index+1).toString()
+      
+      return <Picker.Item label={month} value={val} key={index} />;
     });
   }
 
@@ -96,7 +102,12 @@ export default class BirthdayPicker extends React.Component {
     
     var days = [];
     for (var i = 1; i <= numDays; i++) {
-        days.push(<Picker.Item label={i.toString()} value={i} key={i} />);
+      if(i <= 9){
+        var val = '0'+i.toString()
+        days.push(<Picker.Item label={i.toString()} value={val} key={i} />);
+      }
+      else days.push(<Picker.Item label={i.toString()} value={i.toString()} key={i} />);
+        
     }
     return days;
   }
@@ -108,7 +119,7 @@ export default class BirthdayPicker extends React.Component {
     var day = (this.state.day > maxDays) ? maxDays : this.state.day;
 
     this.setState({ year: value, day: day });
-    this.props.onYearValueChange(value, index);
+    this.props.onYearValueChange(value.toString(), index);
   }
 
   // Occurs when month value changes...
@@ -118,13 +129,13 @@ export default class BirthdayPicker extends React.Component {
     var day = (this.state.day > maxDays) ? maxDays : this.state.day;
 
     this.setState({ month: value, day: day });
-    this.props.onMonthValueChange(value, index);
+    this.props.onMonthValueChange(value.toString(), index);
   }
 
   // Occurs when day value changes...
   onDayChange = (value, index) => {
     this.setState({ day: value });
-    this.props.onDayValueChange(value, index);
+    this.props.onDayValueChange(value.toString(), index);
   }
 
   render() {
