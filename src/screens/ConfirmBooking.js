@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Button,TouchableOpacity, FlatList} from 'react-native';
+import {View, Text, StyleSheet, Button,TouchableOpacity, FlatList, Platform} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import uploadToAnonymousFilesAsync from 'anonymous-files';
 import { Icon } from 'react-native-elements';
@@ -117,43 +117,64 @@ export default class BookingStructure extends Component{
       guestsData:guests_data
     })
   }
- async postBooking () {
-     var check = false;
-    if(this.state.checkOut.length !=0){
-      if(check == true){ //non c'è un errore nelle date
-        const url = `http://localhost:3055/bookings/add`;
-        await axios.post(url, {
-            method: 'POST',
-            headers: {
-              'content-type': 'application/json',
-            },
-            user_id: parseInt(this.state.user_id),
-            owner_id: parseInt(this.state.owner_id),
-            structure_id: parseInt(this.state.structure_id),
-            checkIn: this.state.checkIn,
-            checkOut: this.state.checkOut,
-            days: parseInt(this.state.diffDays),
-            totPrice: parseInt(this.state.totPrice),
-            cityTax: parseInt(this.state.cityTax)
-          })
-          .then(res => {
-            console.log(res);
-            res.data;
-            })
-          .catch(function (error) {
-            console.log(error);
-          });
 
-          this.postMail();
-          this.props.navigation.navigate('Home')
-      }
-    }
-    else{
-      this.setState({
-      alert:true
-    })
+  async postBooking () {
+    const url = `http://localhost:3055/bookings/add`;
+    await axios.post(url, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        user_id: parseInt(this.state.user_id),
+        owner_id: parseInt(this.state.owner_id),
+        structure_id: parseInt(this.state.structure_id),
+        checkIn: this.state.checkIn,
+        checkOut: this.state.checkOut,
+        days: parseInt(this.state.diffDays),
+        totPrice: parseInt(this.state.totPrice),
+        cityTax: parseInt(this.state.cityTax)
+      })
+      .then(res => {
+        console.log(res);
+        res.data;
+        })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+      this.postGuest();
+      // this.postMail();
+      this.props.navigation.navigate('Home')
   }
-    
+
+  async postGuest() {
+    const url = `http://localhost:3055/bookings/add/guest`;
+    for(let index=0 ; index < this.state.guestsData.length ; index++){
+      axios.post(url, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        user_id: parseInt(this.state.user_id),
+        owner_id: parseInt(this.state.owner_id),
+        structure_id: parseInt(this.state.structure_id),
+        checkIn: this.state.checkIn,
+        checkOut: this.state.checkOut,
+        days: parseInt(this.state.diffDays),
+        totPrice: parseInt(this.state.totPrice),
+        cityTax: parseInt(this.state.cityTax),
+        name: this.state.guestsData[index].name,
+        surname: this.state.guestsData[index].surname,
+        date: this.state.guestsData[index].birthDay+"/"+this.state.guestsData[index].birthMonth+"/"+this.state.guestsData[index].birthYear,
+        document: this.state.guestsData[index].document_img
+      })
+      .then(res => {
+        console.log(res);
+        })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
   }
 
   async postMail() {
@@ -179,6 +200,7 @@ export default class BookingStructure extends Component{
        console.log(error);
      });
   }
+
   //per salvare i dati di tutti gli utenti utizzo un array di array
   changeName(val,index){
     var data = this.state.guestsData;
@@ -229,7 +251,9 @@ export default class BookingStructure extends Component{
         guestsData:data
     })
   }
-  profileImagePickerAsync = async () => {
+
+  profileImagePickerAsync = async (index) => {
+    var data = this.state.guestsData;
     let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
     // verifica permessi di accesso alla gallery
     if (permissionResult.granted === false) {
@@ -241,6 +265,8 @@ export default class BookingStructure extends Component{
     if (pickerResult.cancelled === true) {
       return; // operazione abortita
     }
+
+    data[index].document_img = pickerResult.uri;
     if (Platform.OS === 'web') {
       // i browser web non possono condividere una URI locale per motivi di sicurezza
       // facciamo un upload fittizio su anonymousfile.io e ricaviamo la URI remota del file
@@ -248,36 +274,15 @@ export default class BookingStructure extends Component{
       console.log("remote Uri")
       console.log(pickerResult.uri)
       this.setState({
-        profileImage: pickerResult.uri
+        guestsData:data
       })
     } else {
       // remoteUri è null per un device mobile
       console.log(remoteUri)
       this.setState({
-        profileImage: pickerResult.uri
+        guestsData:data
       })
     }
-
-    ///let formdata = new FormData();
-    //formdata.append("product[name]", 'image')
-    //formdata.append("product[image]", {uri: this.state.imageUri, name: 'image.jpg', type: 'image/jpeg'})
-    /* const url = `http://localhost:3055/users/update/image/${this.state.userToken}`;
-    axios.post(url, {
-        method: 'POST',
-        headers: {
-          'content-type': 'multipart/form-data',
-        },
-        image: this.state.profileImage
-      })
-      .then(res => {
-        console.log(res);
-        })
-      .catch(function (error) {
-        console.log(error);
-      }); */
-  };
-  postFunction(){
-      console.log(this.state.guestsData)
   }
 
   render(){
@@ -335,7 +340,7 @@ export default class BookingStructure extends Component{
                                 </View>
                                 <View style={{flexDirection:'row'}}>
                                     <Text style={styles.label}>FOTO DOCUMENTO: </Text>
-                                    <TouchableOpacity style={styles.button} onPress={this.profileImagePickerAsync}>
+                                    <TouchableOpacity style={styles.button} onPress={() => this.profileImagePickerAsync(item.key)}>
                                         <Icon
                                             size={20}
                                             style={styles.icon}
@@ -352,7 +357,7 @@ export default class BookingStructure extends Component{
                 contentContainerStyle={{paddingTop:40}}
             />
             </View>
-            <Button onPress={console.log(this.state.guestsData)} title='PRENOTA'></Button>
+            <Button onPress = {()=> this.postBooking()}>CONFERMA</Button>
           </ScrollView>
         </View>
     )
