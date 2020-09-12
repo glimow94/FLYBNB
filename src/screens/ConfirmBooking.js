@@ -70,7 +70,17 @@ export default class BookingStructure extends Component{
     console.log('userTokenAddStructure')
     //creo un array di oggetti che conterranno i dati degli utenti
     var guests_data = [];
-    for(var i = 0; i < guests;i++){
+    var user ={
+      name :clientName,
+      surname : clientSurname,
+      birthDay:'1',
+      birthMonth:'1',
+      birthYear:'2020',
+      document_img:'',
+      key:0
+    }
+    guests_data.push(user)
+    for(var i = 1; i < guests;i++){
         var obj = {
             name : '',
             surname : '',
@@ -82,6 +92,8 @@ export default class BookingStructure extends Component{
         }
         guests_data.push(obj);
     }
+   
+
     this.setState({
       user_id: userID,
       title: itemTitle,
@@ -290,6 +302,7 @@ export default class BookingStructure extends Component{
                                     <Text style={styles.label}>NOME</Text>
                                     <TextInput
                                         autoCorrect={false}
+                                        defaultValue={this.state.guestsData[item.key].name}
                                         style = {styles.inputField}
                                         onChangeText={(val) => this.changeName(val,item.key)}
                                     ></TextInput>
@@ -301,6 +314,7 @@ export default class BookingStructure extends Component{
                                     <Text style={styles.label}>COGNOME</Text>
                                     <TextInput
                                         autoCorrect={false}
+                                        defaultValue={this.state.guestsData[item.key].surname}
                                         style = {styles.inputField}
                                         onChangeText={(val) => this.changeSurName(val,item.key)}
                                     ></TextInput>
@@ -338,7 +352,7 @@ export default class BookingStructure extends Component{
                 contentContainerStyle={{paddingTop:40}}
             />
             </View>
-            <Button onPress={console.log(this.state.guestsData)}>CONFERMA</Button>
+            <Button onPress={console.log(this.state.guestsData)} title='PRENOTA'></Button>
           </ScrollView>
         </View>
     )

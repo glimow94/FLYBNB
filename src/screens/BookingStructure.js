@@ -373,7 +373,7 @@ async postBooking () {
       ownerName:this.state.ownerName,
       ownerSurname:this.state.ownerSurname,
       clientName: this.state.clientName,
-      clientSurname: this.state.clientName,
+      clientSurname: this.state.clientSurname,
       city: this.state.city, //citta, ci servirà anche per calcolare le tasse di soggiorno
       street: this.state.street,
       beds: this.state.beds,
@@ -592,7 +592,7 @@ const styles = StyleSheet.create({
     numberOfDays:{
       fontSize: 18,
       alignSelf:'center',
-      color: colors.orange
+      color: colors.red
     },
     alertText:{
       color: colors.red,
