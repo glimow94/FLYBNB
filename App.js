@@ -112,6 +112,7 @@ export default function App() {
     signIn: async(email,password) =>{
       let userToken;
       userToken=null;
+      var status;
       const url = `http://localhost:3055/users/login`;
 
       axios.post(url, {
@@ -123,6 +124,7 @@ export default function App() {
           password: password
         })
         .then(res => {
+          status = res.status
           console.log(res.status);
           console.log(res.data[0]);
           console.log(res.data[0].id);
@@ -136,6 +138,7 @@ export default function App() {
         .catch(function (error) {
           console.log(error);
         });
+        return status
     },
 
     signOut: async() =>{

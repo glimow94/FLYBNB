@@ -9,9 +9,9 @@ import colors from "../../style/colors/index";
 
 export default class CalendarButton extends Component {
   render() {
-    const { text, onPress , backgroundColor } = this.props;
+    const { text, onPress , backgroundColor, opacity } = this.props;
     return (
-      <TouchableHighlight style={[{backgroundColor:backgroundColor},styles.button]} onPress={onPress}>
+      <TouchableHighlight style={[{backgroundColor:backgroundColor, opacity:opacity},styles.button]} onPress={onPress}>
         <Text style={styles.buttonText}>{text}</Text>
       </TouchableHighlight>
     );

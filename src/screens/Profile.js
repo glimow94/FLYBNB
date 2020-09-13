@@ -222,7 +222,7 @@ static contextType = UserContext
           }
           {this.state.status2 ? 
               <View style={styles.infoBox}>
-                { this.state.structuresList.length == 0 ? <Text>Diventa host aggiungendo una nuova struttura</Text>
+                { this.state.structuresList.length == 0 ? <Text>Diventa host aggiungendo una struttura</Text>
               :<View style={styles.structuresList}>
                 <UserStructures
                   updateState={this.updateState.bind(this)}

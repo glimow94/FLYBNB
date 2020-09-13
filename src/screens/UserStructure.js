@@ -41,11 +41,22 @@ export default function UserStructure({ route }){
       itemWifi,
       itemParking,
       itemDescription,
-      locationDescription } = route.params;
-
+      locationDescription,
+      image1,
+      image2,
+      image3,
+      image4
+     } = route.params;
+      var images = []
+      if(image1 != null) images.push(image1)
+      if(image2 != null) images.push(image2)
+      if(image3 != null) images.push(image3)
+      if(image4 != null) images.push(image4)
+     console.log(image1)
       const [state,setState] = React.useState({
         activeImage : 0,
         horizontalScroll: true,
+        images : images
       })
       const navigation = useNavigation();
 
@@ -79,6 +90,7 @@ export default function UserStructure({ route }){
         itemParking: itemParking,
         itemDescription: itemDescription,
         locationDescription: locationDescription,
+        images : images
       })
     }
       
@@ -99,7 +111,15 @@ export default function UserStructure({ route }){
     
     return (
     <ScrollView style={styles.container}>
-      
+      {
+                  state.images.map((image,index)=>(
+                    <Image
+                      key={index}
+                      source={{uri: image}}
+                      style={styles.Image}
+                    ></Image>
+                  ))
+      }
       <Text style={styles.title}>{itemTitle}</Text>
       
       <View style={{flexDirection:'row', alignSelf:'center'}}>
@@ -159,8 +179,8 @@ const styles = StyleSheet.create({
   },
  
     Image:{
-      width: width*0.9,
-      height: '100%',
+      width: 20,
+      height:20,
       borderRadius:15,
     },
     imageScrollWrapper:{
