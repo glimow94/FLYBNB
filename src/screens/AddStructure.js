@@ -298,48 +298,46 @@ export default class AddStructure extends Component{
                 })
             }
         else{
-          await this.addStructurePost();
-          this.props.navigation.navigate('Profile')
+            const url = `http://localhost:3055/structures/add`;
+            axios.post(url, {
+                    method: 'POST',
+                    headers: {
+                    'content-type': 'application/json',   
+                    },
+                    user_id: parseInt(this.state.user_id),
+                    title: this.state.title,
+                    type: this.state.type,
+                    place: this.state.city,
+                    street: this.state.street,
+                    number: parseInt(this.state.number),
+                    post_code: this.state.post_code,
+                    description: this.state.description,
+                    location_description: this.state.location_description,
+                    beds: parseInt(this.state.beds),
+                    price: this.state.price,
+                    fullboard: this.state.fullBoard,
+                    wifi: this.state.wifi,
+                    parking: this.state.parking,
+                    kitchen: this.state.kitchen,
+                    airConditioner: this.state.airConditioner,
+                    image1: this.state.structureImage_1,
+                    image2: this.state.structureImage_2,
+                    image3: this.state.structureImage_3,
+                    image4: this.state.structureImage_4,
+                    start_date: this.state.start_date
+                })
+                .then(res => {
+                    console.log(res);
+                    })
+                .catch(function (error) {
+                    console.log(error);
+                });
+          
+            this.props.navigation.navigate('Profile')
         }
         
     }
 
-    async addStructurePost(){
-        const url = `http://localhost:3055/structures/add`;
-        axios.post(url, {
-                method: 'POST',
-                headers: {
-                'content-type': 'application/json',   
-                },
-                user_id: parseInt(this.state.user_id),
-                title: this.state.title,
-                type: this.state.type,
-                place: this.state.city,
-                street: this.state.street,
-                number: parseInt(this.state.number),
-                post_code: this.state.post_code,
-                description: this.state.description,
-                location_description: this.state.location_description,
-                beds: parseInt(this.state.beds),
-                price: this.state.price,
-                fullboard: this.state.fullBoard,
-                wifi: this.state.wifi,
-                parking: this.state.parking,
-                kitchen: this.state.kitchen,
-                airConditioner: this.state.airConditioner,
-                image1: this.state.structureImage_1,
-                image2: this.state.structureImage_2,
-                image3: this.state.structureImage_3,
-                image4: this.state.structureImage_4,
-                start_date: this.state.start_date
-            })
-            .then(res => {
-                console.log(res);
-                })
-            .catch(function (error) {
-                console.log(error);
-            });
-    }
     render(){
 
         return (
