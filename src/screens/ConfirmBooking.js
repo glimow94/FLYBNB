@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Button,TouchableOpacity, FlatList, Platform} from 'react-native';
+import {View, Text, StyleSheet, Button,TouchableOpacity, FlatList, Platform, Image} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import uploadToAnonymousFilesAsync from 'anonymous-files';
 import { Icon } from 'react-native-elements';
@@ -23,6 +23,7 @@ export default class BookingStructure extends Component{
         clientName:'',
         clientSurname:'',
         clientMail: '',
+        clientBirthdate:'',
         ownerName:'',
         ownerSurname:'',
         ownerMail: '',
@@ -39,6 +40,7 @@ export default class BookingStructure extends Component{
         beds: '',
         diffDays: 0,
         guests:1,
+        alert: false,
 
         //dati degli utenti
         guestsData:[]
@@ -59,6 +61,7 @@ export default class BookingStructure extends Component{
       ownerSurname, //cognome proprietario
       clientName,//nome del cliente
       clientSurname,//cognome del cliente
+      clientBirthdate,
       city,//citta in cui si trova l'alloggio(per calcolo tasse...)
       street, //indirizzo struttura
       beds,
@@ -67,21 +70,38 @@ export default class BookingStructure extends Component{
       cityTax,
       guests
     } = this.props.route.params;
-    console.log('userTokenAddStructure')
-    //creo un array di oggetti che conterranno i dati degli utenti
-    var guests_data = [];
-    for(var i = 0; i < guests;i++){
+/*     console.log('userTokenAddStructure')
+ */    //creo un array di oggetti che conterranno i dati degli utenti
+    var guests_data = [],
+        day = clientBirthdate.substring(0,2),
+        month = clientBirthdate.substring(3,5),
+        year = clientBirthdate.substring(6,10);
+
+    var user ={
+      name :clientName,
+      surname : clientSurname,
+      birthDay:day,
+      birthMonth:month,
+      birthYear:year,
+      document_img:'',
+      key:0
+    }
+    guests_data.push(user)
+    
+    for(var i = 1; i < guests;i++){
         var obj = {
             name : '',
             surname : '',
             birthDay : '1',
             birthMonth:'1',
-            birthYear:'2020',
+            birthYear:'2000',
             document_img : '',
             key:i //serve per il correto funzionamento delle funzioni della flatlist
         }
         guests_data.push(obj);
     }
+   
+
     this.setState({
       user_id: userID,
       title: itemTitle,
@@ -89,6 +109,7 @@ export default class BookingStructure extends Component{
       clientName:clientName,
       clientSurname:clientSurname,
       clientMail: clientMail,
+      clientBirthdate: clientBirthdate,
       ownerName:ownerName,
       ownerSurname:ownerSurname,
       ownerMail: ownerMail,
@@ -107,32 +128,47 @@ export default class BookingStructure extends Component{
   }
 
   async postBooking () {
-    const url = `http://localhost:3055/bookings/add`;
-    await axios.post(url, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-        },
-        user_id: parseInt(this.state.user_id),
-        owner_id: parseInt(this.state.owner_id),
-        structure_id: parseInt(this.state.structure_id),
-        checkIn: this.state.checkIn,
-        checkOut: this.state.checkOut,
-        days: parseInt(this.state.diffDays),
-        totPrice: parseInt(this.state.totPrice),
-        cityTax: parseInt(this.state.cityTax)
-      })
-      .then(res => {
-        console.log(res);
-        res.data;
-        })
-      .catch(function (error) {
-        console.log(error);
-      });
+    console.log(this.state.guestsData)
+    var error = false;
+    for(var i = 0; i < this.state.guests.length ; i++){
+      if(this.state.guestsData[i].name.trim().length === 0 ||
+         this.state.guestsData[i].surname.trim().length === 0 ||
+         this.state.guestsData[i].document_img.length === 0){
+          error = true;
+          break
+        }
+    }
 
-      await this.postGuest();
-      this.postMail();
-      this.props.navigation.navigate('Home')
+    if(error==false){
+      const url = `http://localhost:3055/bookings/add`;
+      await axios.post(url, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+          },
+          user_id: parseInt(this.state.user_id),
+          owner_id: parseInt(this.state.owner_id),
+          structure_id: parseInt(this.state.structure_id),
+          checkIn: this.state.checkIn,
+          checkOut: this.state.checkOut,
+          days: parseInt(this.state.diffDays),
+          totPrice: parseInt(this.state.totPrice),
+          cityTax: parseInt(this.state.cityTax)
+        })
+        .then(res => {
+          console.log(res);
+          res.data;
+          })
+        .catch(function (error) {
+          console.log(error);
+        });
+  
+        await this.postGuest();
+        this.postMail();
+        this.props.navigation.navigate('Home')
+    }
+    else this.setState({alert:true})
+    
   }
 
   async postGuest() {
@@ -281,7 +317,7 @@ export default class BookingStructure extends Component{
 
             <Text style={styles.textHeader}>Conferma Prenotazione</Text>
             <Text style={styles.subtitle}>Inserisci i dati relativi agli ospiti</Text>
-            <Text>{this.state.guests}</Text>
+            <Text>{this.state.clientBirthdate}</Text>
             <Text>{this.state.totPrice}</Text>
             <Text>{this.state.checkIn}-{this.state.checkOut}</Text>
             <View>
@@ -295,6 +331,7 @@ export default class BookingStructure extends Component{
                                     <Text style={styles.label}>NOME</Text>
                                     <TextInput
                                         autoCorrect={false}
+                                        defaultValue={this.state.guestsData[item.key].name}
                                         style = {styles.inputField}
                                         onChangeText={(val) => this.changeName(val,item.key)}
                                     ></TextInput>
@@ -306,6 +343,7 @@ export default class BookingStructure extends Component{
                                     <Text style={styles.label}>COGNOME</Text>
                                     <TextInput
                                         autoCorrect={false}
+                                        defaultValue={this.state.guestsData[item.key].surname}
                                         style = {styles.inputField}
                                         onChangeText={(val) => this.changeSurName(val,item.key)}
                                     ></TextInput>
@@ -324,8 +362,10 @@ export default class BookingStructure extends Component{
                                             onDayValueChange={(day,i) => this.changeBirthDay(day,item.key)}
                                         ></BirthDayPicker>
                                 </View>
-                                <View style={{flexDirection:'row'}}>
-                                    <Text style={styles.label}>FOTO DOCUMENTO: </Text>
+                                <Text style={styles.label}>FOTO DOCUMENTO: </Text>
+                                <View style={{flexDirection:'column'}}>
+                                    
+                                    <Image source={ this.state.guestsData[item.key].document_img !== '' ? {uri: this.state.guestsData[item.key].document_img} : require('../img/structure_image.png') } style={styles.documentImage} />
                                     <TouchableOpacity style={styles.button} onPress={() => this.profileImagePickerAsync(item.key)}>
                                         <Icon
                                             size={20}
@@ -343,7 +383,10 @@ export default class BookingStructure extends Component{
                 contentContainerStyle={{paddingTop:40}}
             />
             </View>
-            <Button onPress = {()=> this.postBooking()}>CONFERMA</Button>
+            {this.state.alert ? <Text style={styles.alertText}>ERRORE: Completa tutti i campi degli ospiti, compresi i documenti</Text>:null}
+            <View style={{margin:5}}>
+              <Button title={'PRENOTA'} onPress = {()=> this.postBooking()} color={colors.red}></Button>
+            </View>
           </ScrollView>
         </View>
     )
@@ -406,6 +449,19 @@ const styles = StyleSheet.create({
         borderColor:colors.black,
         margin:10,
         padding:10
-    }
+    },
+    documentImage:{
+      height: 60,
+      width: 60,
+      alignSelf:'center',
+      borderRadius: 8,
+  },
+  alertText:{
+    color: colors.red,
+    backgroundColor: colors.white,
+    fontSize: 12,
+    marginBottom:2,
+    fontWeight: "700"
+  },
 });
 

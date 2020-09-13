@@ -59,6 +59,7 @@ export default class StructuresList extends Component {
     return (
       
       <View style={styles.container}>
+        {this.state.data.length >0 ? 
         <FlatList
           data= {this.state.data}
           keyExtractor = {(item, index) => index.toString()}
@@ -73,8 +74,7 @@ export default class StructuresList extends Component {
                     }
                     
                   <Text style={styles.titleStructure}>{item.title}, {item.type} </Text>
-                  <Text style={styles.streetInfoText}>{item.name} {item.surname}, {item.email}</Text>
-                  <Text style={styles.streetInfoText}>{item.place}, {item.street}, {item.number}</Text>
+                  <Text style={styles.streetInfoText}>HOST: {item.name} {item.surname}, {item.email}</Text>
                 </View>
                 <View style={styles.checkInOut}>
           
@@ -99,7 +99,7 @@ export default class StructuresList extends Component {
 
             </View>}
           contentContainerStyle={{paddingTop:40}}
-        />
+        />:<Text>Nessuna Prenotazione effettuata</Text>}
       </View>
     );
   }

@@ -18,6 +18,7 @@ export default class BookingStructure extends Component{
       clientName:'',
       clientSurname:'',
       clientMail: '',
+      clientBirthdate:'',
       ownerName:'',
       ownerSurname:'',
       ownerMail: '',
@@ -112,7 +113,8 @@ export default class BookingStructure extends Component{
       clientSurname,//cognome del cliente
       city,//citta in cui si trova l'alloggio(per calcolo tasse...)
       street, //indirizzo struttura
-      beds
+      beds,
+      clientBirthdate
     } = this.props.route.params;
     console.log('userTokenAddStructure')
 
@@ -122,6 +124,7 @@ export default class BookingStructure extends Component{
       clientName: clientName,
       clientSurname:clientSurname,
       clientMail: clientMail,
+      clientBirthdate: clientBirthdate,
       ownerName:ownerName,
       ownerSurname: ownerSurname,
       ownerMail: ownerMail,
@@ -362,71 +365,45 @@ datesCheck=()=>{
 }
   
 async postBooking () {
-  this.props.navigation.navigate('ConfirmBooking',{
-      itemTitle: this.state.title,
-      totPrice: this.state.totPrice,
-      ownerID: this.state.owner_id,
-      itemID: this.state.structure_id,
-      userID: this.state.user_id,
-      clientMail: this.state.clientMail,//email dell'ospite
-      ownerMail: this.state.ownerMail,//email del proprietario di casa
-      ownerName:this.state.ownerName,
-      ownerSurname:this.state.ownerSurname,
-      clientName: this.state.clientName,
-      clientSurname: this.state.clientName,
-      city: this.state.city, //citta, ci servirà anche per calcolare le tasse di soggiorno
-      street: this.state.street,
-      beds: this.state.beds,
-      checkIn : this.state.checkIn,
-      checkOut: this.state.checkOut,
-      cityTax: this.state.cityTax,
-      guests: this.state.guests
-  })
-/* 
-    if(this.state.checkOut.length !=0){
-      var array = this.datesCheck();
-
-      this.setState({
-        datesError:array[0],//array[0] è true o false, true -> c'è un errore nelle date
-        errorMessage:array[1],
-        remainingDays_firstYear:array[2],
-        remainingDays_2Year:array[3]
-      })
-      if(array[0]==false){ //non c'è un errore nelle date
-        const url = `http://localhost:3055/bookings/add`;
-        await axios.post(url, {
-            method: 'POST',
-            headers: {
-              'content-type': 'application/json',
-            },
-            user_id: parseInt(this.state.user_id),
-            owner_id: parseInt(this.state.owner_id),
-            structure_id: parseInt(this.state.structure_id),
-            checkIn: this.state.checkIn,
-            checkOut: this.state.checkOut,
-            days: parseInt(this.state.diffDays),
-            totPrice: parseInt(this.state.totPrice),
-            cityTax: parseInt(this.state.cityTax)
-          })
-          .then(res => {
-            console.log(res);
-            res.data;
-            })
-          .catch(function (error) {
-            console.log(error);
-          });
-
-          this.postMail();
-          this.props.navigation.navigate('Home')
-      }
-    }
-    else{
-      this.setState({
-      alert:true
+  if(this.state.checkOut.length != 0){
+    var array = this.datesCheck();
+    this.setState({
+      datesError:array[0],//array[0] è true o false, true -> c'è un errore nelle date
+      errorMessage:array[1],
+      remainingDays_firstYear:array[2],
+      remainingDays_2Year:array[3]
     })
-  } */
-    
+    if(array[0]==false){ //non c'è un errore nelle date
+      this.props.navigation.navigate('ConfirmBooking',{
+        itemTitle: this.state.title,
+        totPrice: this.state.totPrice,
+        ownerID: this.state.owner_id,
+        itemID: this.state.structure_id,
+        userID: this.state.user_id,
+        clientMail: this.state.clientMail,//email dell'ospite
+        ownerMail: this.state.ownerMail,//email del proprietario di casa
+        ownerName:this.state.ownerName,
+        ownerSurname:this.state.ownerSurname,
+        clientName: this.state.clientName,
+        clientSurname: this.state.clientSurname,
+        city: this.state.city, //citta, ci servirà anche per calcolare le tasse di soggiorno
+        street: this.state.street,
+        beds: this.state.beds,
+        checkIn : this.state.checkIn,
+        checkOut: this.state.checkOut,
+        cityTax: this.state.cityTax,
+        guests: this.state.guests,
+        clientBirthdate: this.state.clientBirthdate
+      })
+    }
+
   }
+  else{
+    this.setState({
+    alert:true
+    })
+  }
+}
 
   async postMail() {
     const url = `http://localhost:3055/bookings/send/email`;
@@ -473,7 +450,7 @@ async postBooking () {
             </View>
             <Text style={styles.texTitle}> {this.state.itemTitle}</Text>
             <Text style={styles.textInfo}>{this.state.city}, {this.state.street} </Text>
-            <Text style={styles.textInfo}>Letti: {this.state.beds} </Text>
+            <Text style={styles.textInfo}>Posti Letto: {this.state.beds} </Text>
             
             <View style={{flexDirection:"row"}}>
               <Text style={styles.textInfo}>NUMERO DI OSPITI: </Text>
@@ -592,7 +569,7 @@ const styles = StyleSheet.create({
     numberOfDays:{
       fontSize: 18,
       alignSelf:'center',
-      color: colors.orange
+      color: colors.red
     },
     alertText:{
       color: colors.red,

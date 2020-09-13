@@ -178,7 +178,7 @@ export default class DateSelector extends Component {
     return (
       <View>
         <View style={{alignContent:'center', alignItems:'center'}}>
-          <CalendarButton text="Date" onPress={this.showHideCalendar}></CalendarButton>
+          <CalendarButton text="Date" onPress={this.showHideCalendar} backgroundColor={colors.green01}></CalendarButton>
         </View>
         
         

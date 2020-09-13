@@ -93,6 +93,8 @@ export default class Home extends Component{
                   status2={this.state.status2}
                   status3={this.state.status3}
                   status4={this.state.status4}
+                  city={this.state.city}
+                  selectedName={this.state.selectedName}
                 ></TypeSelector>
                 <PriceSelector
                   updateState={this.updateState.bind(this)}
@@ -101,6 +103,8 @@ export default class Home extends Component{
                   status2={this.state.status2}
                   status3={this.state.status3}
                   status4={this.state.status4}
+                  city={this.state.city}
+                  selectedName={this.state.selectedName}
                 ></PriceSelector>
                 <FilterSelector 
                   updateState={this.updateState.bind(this)} 
@@ -113,6 +117,8 @@ export default class Home extends Component{
                   status2={this.state.status2}
                   status3={this.state.status3}
                   status4={this.state.status4}
+                  city={this.state.city}
+                  selectedName={this.state.selectedName}
                 ></FilterSelector>
                 
           </View>

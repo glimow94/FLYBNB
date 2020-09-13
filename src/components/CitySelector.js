@@ -71,7 +71,7 @@ export default class CitySelector extends Component{
             <View>
               { this.props.parentType == 'AddStructure' ?
                 <Text style={styles.alternativeCityButton} onPress={this.showHide}>{this.props.city.substring(0,20)}</Text>
-                 : <CityButton text={this.props.city.substring(0,9)} onPress={this.showHide}></CityButton> }
+                 : <CityButton text={this.props.city.substring(0,9)} backgroundColor={colors.green01} onPress={this.showHide}></CityButton> }
 
               <View style={[{marginTop: this.state.marginTop, position: this.state.position, bottom: this.state.bottom, width: this.state.width},styles.container]}>
             { this.props.status1 ?

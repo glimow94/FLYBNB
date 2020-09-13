@@ -1,6 +1,9 @@
 import React, { Component } from "react";
-import { View, Text, TextInput,ScrollView, StyleSheet, Picker,Button,Dimensions, TextPropTypes  } from "react-native";
+import { View, Text, TextInput,ScrollView, StyleSheet, Picker,Button,Dimensions,TouchableOpacity, Image, Platform  } from "react-native";
 import { CheckBox } from 'react-native-elements';
+import * as ImagePicker from 'expo-image-picker';
+import uploadToAnonymousFilesAsync from 'anonymous-files';
+import { Icon } from 'react-native-elements';
 import colors from "../style/colors/index";
 import NextButton from "../components/buttons/Button1";
 import BirthDayPicker from "../components/BirthdayPicker"
@@ -35,7 +38,11 @@ export default class EditStructure extends Component{
             parking:false,
             kitchen:false,
             airConditioner:false,
-
+            //immagini
+            structureImage_1:'',
+            structureImage_2:'',
+            structureImage_3:'',
+            structureImage_4:'',
             
             //variabili per la validazione
             titleAlert: false,
@@ -183,6 +190,88 @@ export default class EditStructure extends Component{
             location_description: val
         })
     }
+    profileImagePickerAsync = async (index) => {
+        let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+        // verifica permessi di accesso alla gallery
+        if (permissionResult.granted === false) {
+          alert("Permission to access camera roll is required!");
+          return;
+        }
+    
+        let pickerResult = await ImagePicker.launchImageLibraryAsync();
+        if (pickerResult.cancelled === true) {
+          return; // operazione abortita
+        }
+        if (Platform.OS === 'web') {
+          // i browser web non possono condividere una URI locale per motivi di sicurezza
+          // facciamo un upload fittizio su anonymousfile.io e ricaviamo la URI remota del file
+          let remoteUri = await uploadToAnonymousFilesAsync(pickerResult.uri);
+          console.log("remote Uri")
+          console.log(pickerResult.uri)
+            if(index == 1){
+                this.setState({
+                    structureImage_1 : pickerResult.uri
+                })
+            }
+            if(index == 2){
+                this.setState({
+                    structureImage_2 : pickerResult.uri
+                })
+            }
+            if(index == 3){
+                this.setState({
+                    structureImage_3 : pickerResult.uri
+                })
+            }
+            if(index == 4){
+                this.setState({
+                    structureImage_4 : pickerResult.uri
+                })
+            }
+        }
+        else {
+          // remoteUri è null per un device mobile
+          console.log(remoteUri)
+            if(index == 1){
+                this.setState({
+                    structureImage_1 : pickerResult.uri
+                })
+            }
+            if(index == 2){
+                this.setState({
+                    structureImage_2 : pickerResult.uri
+                })
+            }
+            if(index == 3){
+                this.setState({
+                    structureImage_3 : pickerResult.uri
+                })
+            }
+            if(index == 4){
+                this.setState({
+                    structureImage_4 : pickerResult.uri
+                })
+            }
+        }
+    
+        ///let formdata = new FormData();
+        //formdata.append("product[name]", 'image')
+        //formdata.append("product[image]", {uri: this.state.imageUri, name: 'image.jpg', type: 'image/jpeg'})
+        /* const url = `http://localhost:3055/users/update/image/${this.state.userToken}`;
+        axios.post(url, {
+            method: 'POST',
+            headers: {
+              'content-type': 'multipart/form-data',
+            },
+            image: this.state.profileImage
+          })
+          .then(res => {
+            console.log(res);
+            })
+          .catch(function (error) {
+            console.log(error);
+          }); */
+    };
     updateState(filterStatus){
         this.setState(filterStatus)
     }
@@ -276,7 +365,7 @@ export default class EditStructure extends Component{
             .catch(function (error) {
                 console.log(error);
             });
-
+            
             this.props.navigation.navigate('Profile')
         }
     }
@@ -484,6 +573,61 @@ export default class EditStructure extends Component{
                         maxLength={400}
                         onChangeText={val => this.changeLocationDescription(val)}
                     />
+                    <Text style={styles.label}>FOTO DELLA STRUTTURA:</Text>
+                    <View style={styles.images}>
+                        <View style={styles.image}>
+                            <Image source={ this.state.structureImage_1 !== '' ? {uri: this.state.structureImage_1} : require('../img/structure_image.png') } style={styles.structureImage} />
+                            <TouchableOpacity style={styles.button} onPress={()=>this.profileImagePickerAsync(1)}>
+                                <Icon
+                                    size={20}
+                                    style={styles.icon}
+                                    name='camera'
+                                    type='font-awesome'
+                                    color='#f50'
+                                    color={colors.black}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.image}>
+                            <Image source={ this.state.structureImage_2 !== '' ? {uri: this.state.structureImage_2} : require('../img/structure_image.png') } style={styles.structureImage} />
+                            <TouchableOpacity style={styles.button} onPress={()=>this.profileImagePickerAsync(2)}>
+                                <Icon
+                                    size={20}
+                                    style={styles.icon}
+                                    name='camera'
+                                    type='font-awesome'
+                                    color='#f50'
+                                    color={colors.black}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.image}>
+                            <Image source={ this.state.structureImage_3 !== '' ? {uri: this.state.structureImage_3} : require('../img/structure_image.png') } style={styles.structureImage} />
+                            <TouchableOpacity style={styles.button} onPress={()=>this.profileImagePickerAsync(3)}>
+                                <Icon
+                                    size={20}
+                                    style={styles.icon}
+                                    name='camera'
+                                    type='font-awesome'
+                                    color='#f50'
+                                    color={colors.black}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.image}>
+                            <Image source={ this.state.structureImage_4 !== '' ? {uri: this.state.structureImage_4} : require('../img/structure_image.png') } style={styles.structureImage} />
+                            <TouchableOpacity style={styles.button} onPress={()=>this.profileImagePickerAsync(4)}>
+                                <Icon
+                                    size={20}
+                                    style={styles.icon}
+                                    name='camera'
+                                    type='font-awesome'
+                                    color='#f50'
+                                    color={colors.black}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                     <View style={{marginTop: 5}}>
                         {this.state.warning ? <View style={{backgroundColor:colors.white}}>
                             <Text style={styles.warningText}>ERRORE : CONTROLLA CHE TUTTI I DATI SIANO CORRETTI</Text>
@@ -567,5 +711,19 @@ const styles = StyleSheet.create({
         alignSelf:'center',
         fontSize:14,
         fontWeight:"500"
+    },
+    structureImage:{
+        height: 100,
+        width: 100,
+        alignSelf:'center',
+        borderRadius: 8,
+    },
+    images:{
+        flexDirection:'row',
+        alignSelf:'center'
+    },
+    image:{
+        flexDirection:'column',
+        margin:5
     }
 });

@@ -18,7 +18,10 @@ export default class StructuresList extends Component {
       data: [],
       isLoading: true,
       userToken: null,
-      status:''
+      status:'',
+      totEarn:0, //guadagni totali,
+      waitingRequests : 0, //richieste in sospeso
+      possibleEarn : 0,//guadagni possibili se si accettano le richieste in sospeso
     }
    }
    updateState(data){
@@ -43,13 +46,34 @@ export default class StructuresList extends Component {
             }
           })
           .then(res => {
-            console.log(res.data);
+            var totalEarn = 0,
+                possibleEarn = 0,//guadagni possibili se si accettano le richieste in sospeso
+                waitingRequests = 0;
+            //calcolo guadagni totali dalle prenotazioni approvate e numero di richieste in sospeso
+            for(var i=0 ; i < res.data.length; i++){
+              if(res.data[i].request == 1){
+                totalEarn = totalEarn + res.data[i].totPrice;
+              }
+              if(res.data[i].request == 0){
+                waitingRequests = waitingRequests +1;
+              }
+            }
+            
             if(this._isMounted){
               const structures = res.data;
               this.setState({
                 isLoading:false,
                 data: structures,
+                totEarn : totalEarn,
+                possibleEarn:possibleEarn,
+                waitingRequests:waitingRequests
               })
+              if(waitingRequests < 10){
+                this.props.updateState({
+                  waitingRequests:waitingRequests
+                })
+              }
+              else this.props.updateState({waitingRequests:'9+'})
             }
         })
       }
@@ -71,9 +95,24 @@ export default class StructuresList extends Component {
         .catch(function (error) {
           console.log(error);
         });
-        this.updateState({
-          status3:false
-        })
+        
+        var data_ = this.state.data,
+            request_wait = this.state.waitingRequests;
+
+        for(var i = 0; i < data_.length; i++){
+          if(itemID == data_[i].id){
+            data_[i].request = 1;
+            this.setState({
+              data:data_,
+              waitingRequests: request_wait-1
+            });
+            this.props.updateState({
+              waitingRequests:request_wait-1
+            })
+            break
+          }
+        }
+        
     }
     
 
@@ -84,6 +123,11 @@ export default class StructuresList extends Component {
     return (
       
       <View style={styles.container}>
+        <View style={{flexDirection:'row'}}>
+          <Text style={styles.infoText}>Guadagni totali :</Text>
+          <Text style={styles.totEarn}> {this.state.totEarn} €</Text>
+
+        </View>
         <FlatList
           data= {this.state.data}
           keyExtractor = {(item, index) => index.toString()}
@@ -93,12 +137,17 @@ export default class StructuresList extends Component {
 
                 <View style={styles.viewRow}>
                     {
-                      item.request== 0 ? <Text style={styles.requestDontApproved}>In attesa di approvazione</Text>
-                      : <Text style={styles.requestApproved}>Prenotazione approvata</Text>
+                      item.request== 0 ? <Text style={styles.request}>In attesa di approvazione</Text> :null
+                    }
+                    {
+                      item.request== 1 ? <Text style={styles.requestApproved}>Prenotazione Approvata</Text>:null
+                    }
+                    {
+                      item.request== 2 ? <Text style={styles.requestDontApproved}>Prenotazione Rifiutata</Text>:null
                     }
                     
                   <Text style={styles.titleStructure}>{item.title}, {item.type} </Text>
-                  <Text style={styles.streetInfoText}>{item.name} {item.surname}, {item.email}</Text>
+                  <Text style={styles.streetInfoText}>Cliente: {item.name} {item.surname}, {item.email}</Text>
                 </View>
                 <View style={styles.checkInOut}>
           
@@ -147,6 +196,14 @@ const styles = StyleSheet.create({
     alignContent:'center',
     alignItems:'center',
   },
+  infoText:{
+    fontSize:18,
+    fontWeight: "500"
+  },
+  totEarn:{
+    fontSize:20,
+    color:colors.black
+  },
   item: {
    borderColor: colors.black,
    borderWidth:2,
@@ -161,6 +218,11 @@ const styles = StyleSheet.create({
     color: colors.black,
     margin:5,
     marginLeft:0
+  },
+  request:{
+    color:colors.blue,
+    fontSize: 14,
+    fontWeight: "700"
   },
   requestDontApproved:{
     color:colors.red,
