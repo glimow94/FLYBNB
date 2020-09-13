@@ -114,6 +114,40 @@ export default class StructuresList extends Component {
         }
         
     }
+
+    async postRefused(itemID) {
+      const url = `http://localhost:3055/bookings/response/refused/${itemID}`;
+      axios.post(url, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',   
+          }
+        })
+        .then(res => {
+          console.log(res);
+          })
+        .catch(function (error) {
+          console.log(error);
+        });
+        
+        var data_ = this.state.data,
+            request_wait = this.state.waitingRequests;
+
+        for(var i = 0; i < data_.length; i++){
+          if(itemID == data_[i].id){
+            data_[i].request = 2;
+            this.setState({
+              data:data_,
+              waitingRequests: request_wait-1
+            });
+            this.props.updateState({
+              waitingRequests:request_wait-1
+            })
+            break
+          }
+        }
+        
+    }
     
 
   render(){
@@ -176,7 +210,7 @@ export default class StructuresList extends Component {
                         <Button onPress = {()=> {this.postResponse(item.id)}} title="Accetta"color={colors.green02}></Button>
                     </View>
                     <View style={styles.button}>
-                        <Button title="Rifiuta" color={colors.red}></Button>
+                        <Button onPress = {()=> {this.postRefused(item.id)}} title="Rifiuta" color={colors.red}></Button>
                     </View>
                 </View>: null}
             </View>}
