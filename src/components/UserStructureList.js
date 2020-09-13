@@ -66,29 +66,30 @@ class StructuresList extends Component {
             <View style={styles.item}>
               <Text
                 style={styles.titleStructure}
-                onPress={()=>navigation.navigate('UserStructure',{
-                  /* parametri da passare alla schermata successiva */
-                  userToken: this.state.userToken,
-                  itemName: item.name,
-                  temSurname: item.surname,
-                  itemEmail: item.email,
-                  itemTitle: item.title,
-                  itemPrice: item.price,
-                  itemID: item.id,
-                  itemPlace: item.place,
-                  itemStreet: item.street,
-                  itemNumber: item.number,
-                  itemPostCode: item.post_code,
-                  itemBeds: item.beds,
-                  itemType: item.type,
-                  itemKitchen: item.kitchen,
-                  itemFullBoard: item.fullboard,
-                  itemAirConditioner: item.airConditioner,
-                  itemWifi: item.wifi,
-                  itemParking: item.parking,
-                  itemDescription: item.description,
-                  locationDescription: item.location_description,
-                })}>
+                onPress={()=>{
+                  navigation.navigate('UserStructure',{
+                    /* parametri da passare alla schermata successiva */
+                    userToken: this.state.userToken,
+                    itemName: item.name,
+                    temSurname: item.surname,
+                    itemEmail: item.email,
+                    itemTitle: item.title,
+                    itemPrice: item.price,
+                    itemID: item.id,
+                    itemPlace: item.place,
+                    itemStreet: item.street,
+                    itemNumber: item.number,
+                    itemPostCode: item.post_code,
+                    itemBeds: item.beds,
+                    itemType: item.type,
+                    itemKitchen: item.kitchen,
+                    itemFullBoard: item.fullboard,
+                    itemAirConditioner: item.airConditioner,
+                    itemWifi: item.wifi,
+                    itemParking: item.parking,
+                    itemDescription: item.description,
+                    locationDescription: item.location_description,
+                });}}>
                 {item.title} 
               </Text>
               <Text>{item.place}</Text>

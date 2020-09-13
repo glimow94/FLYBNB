@@ -22,6 +22,7 @@ const Login = ()=>{
     const loginCheck = (email,password)=>{
         //if textInputUsername && textInputPassw == Username && Passw then :
         var result = signIn(email,password);
+        console.log(result)
         if(result && result != 200){
             setData({
                 ...data,
