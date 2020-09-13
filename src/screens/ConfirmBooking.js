@@ -130,8 +130,8 @@ export default class BookingStructure extends Component{
         console.log(error);
       });
 
-      this.postGuest();
-      // this.postMail();
+      await this.postGuest();
+      this.postMail();
       this.props.navigation.navigate('Home')
   }
 
