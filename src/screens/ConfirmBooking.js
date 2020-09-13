@@ -163,7 +163,7 @@ export default class BookingStructure extends Component{
         });
   
         await this.postGuest();
-        this.postMail();
+        await this.postMail();
         this.props.navigation.navigate('Home')
     }
     else this.setState({alert:true})
