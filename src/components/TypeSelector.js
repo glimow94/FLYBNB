@@ -56,7 +56,7 @@ export default class DateSelector extends Component {
 
     return (
       <View>
-        {this.props.city != 'Luogo' || this.props.selectedName.length != 0?<FilterButton text="Struttura" onPress={this.showHide} backgroundColor={colors.green01}></FilterButton>:<FilterButton text="Struttura" backgroundColor={colors.grey}></FilterButton>}
+        {this.props.city != 'Luogo' || this.props.selectedName.length != 0?<FilterButton text="Struttura" onPress={this.showHide} backgroundColor={colors.green01}></FilterButton>:<FilterButton text="Struttura" backgroundColor={colors.green01} opacity={0.6}></FilterButton>}
         
         {   
           this.props.status4 ? 

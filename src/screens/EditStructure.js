@@ -297,7 +297,8 @@ export default class EditStructure extends Component{
             itemWifi,
             itemParking,
             itemDescription,
-            locationDescription
+            locationDescription,
+            images
         } = this.props.route.params;
         console.log('userTokenAddStructure')
         console.log(itemName)

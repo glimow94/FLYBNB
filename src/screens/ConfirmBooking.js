@@ -4,8 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import uploadToAnonymousFilesAsync from 'anonymous-files';
 import { Icon } from 'react-native-elements';
 import colors from '../style/colors/index';
-import DateSelector from '../components/DateSelector';
-import { useNavigation } from '@react-navigation/native';
+
 import { ScrollView } from 'react-native-gesture-handler';
 import axios from "axios";
 import BirthDayPicker from "../components/BirthdayPicker"
