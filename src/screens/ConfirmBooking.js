@@ -164,7 +164,6 @@ export default class BookingStructure extends Component{
         });
   
         await this.postGuest()
-        
         this.props.navigation.navigate('Home')
     }
     else this.setState({alert:true})
@@ -197,7 +196,7 @@ export default class BookingStructure extends Component{
       );
     }
 
-    await axios.all(promises).finally(this.postMail())
+    axios.all(promises).then( this.postMail())
   }
 
   async postMail() {
