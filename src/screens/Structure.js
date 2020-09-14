@@ -4,6 +4,8 @@ import {View, Text, StyleSheet, Button, Image, ScrollView, Dimensions, Platform}
 import colors from '../style/colors';
 import BookingButton from '../components/buttons/Button1'
 import AsyncStorage from '@react-native-community/async-storage';
+import { Icon } from 'react-native-elements';
+
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -25,6 +27,8 @@ export default function Structure({ route }){
       itemPrice,
       itemID,
       itemPlace,
+      itemNumber,
+      itemPostCode,
       itemStreet,
       itemType,
       itemBeds,
@@ -161,35 +165,52 @@ export default function Structure({ route }){
 
               <View style={styles.mainInfo}>
                   <View style={{flexDirection:'row'}}>
-                    <Text style = {styles.important}>{itemType} - {itemTitle}</Text>
+                    <Text style = {[styles.important,{marginLeft:0}]}>{itemType} - {itemTitle}</Text>
                   </View>
                   <View style={{flexDirection:'row'}}>
-                      <Text style={styles.normalText}>Proprietario: </Text><Text style = {styles.important}> {itemName} {itemSurname}, {itemEmail}</Text>
+                      <Text style={styles.normalText}>Luogo: </Text><Text style = {styles.important}> {itemPlace}</Text>
                   </View>
-                  <View style={styles.description}>
-                    <Text>{itemDescription}</Text>
+                  <View style={{flexDirection:'row'}}>
+                      <Text style={styles.normalText}>Proprietario: </Text><Text style = {styles.important}> {itemName} {itemSurname}, {itemEmail.toLowerCase()}</Text>
                   </View>
                   <View style={{flexDirection:'row'}}>
                     <Text style={styles.normalText} >Prezzo per Notte: </Text><Text style = {styles.important}>{itemPrice}€</Text>
                   </View>
                   
                   <View style={{flexDirection:'row'}}>
-                     <Text style={styles.normalText}>Indirizzo: </Text><Text style = {styles.important}>{itemPlace}, {itemStreet}</Text>
+                   <Text style={styles.normalText}>Indirizzo: </Text><Text style = {styles.important}>{itemPlace}, {itemStreet} - {itemNumber}, {itemPostCode}</Text>
                   </View>
                   
                   <View style={{flexDirection:'row'}}>
                     <Text style={styles.normalText}>Letti (per singola persona): </Text><Text style = {styles.important}> {itemBeds}</Text>
                   </View>
-
+                  <View style={styles.description}>
+                    <Text>{itemDescription}</Text>
+                  </View>
 
               </View>
                             
               <View style={styles.structureServicesBox}> 
-                  {itemKitchen ? <Text style={styles.servicesText}>Cucina</Text> : null}
-                  {itemFullBoard == true ? <Text style={styles.servicesText}>Pensione completa</Text> : null }
-                  {itemAirConditioner == true ? <Text style={styles.servicesText}>Aria condizionata</Text> : null}
-                  {itemWifi == true ? <Text style={styles.servicesText}>Wi-Fi</Text> : null }
-                  {itemParking==true ? <Text style={styles.servicesText}>Parcheggio auto</Text> : null }   
+              
+                  
+                    <View style={{flexDirection:'row'}}>
+                      <Text style={styles.service}>Pensione Completa: </Text>{itemFullBoard ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
+                    </View>
+                    <View style={{flexDirection:'row'}}>
+                      <Text style={styles.service}>Parcheggio: </Text>{itemParking ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' style={{marginRight:5}} type='font-awesome' color={colors.red}/>}
+                    </View>
+                    <View style={{flexDirection:'row'}}>
+                      <Text style={styles.service}>Cucina: </Text>{itemKitchen ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
+                    </View>
+                  
+                
+                    <View style={{flexDirection:'row'}}>
+                      <Text style={styles.service}>Aria Condizionata: </Text>{itemAirConditioner ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
+                    </View>
+                    <View style={{flexDirection:'row'}}>
+                      <Text style={styles.service}>Wi-Fi: </Text>{itemWifi ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
+                    </View>
+                  
                   <View style={styles.description}>
                     <Text>{locationDescription}</Text>
                   </View> 
@@ -272,10 +293,10 @@ const styles = StyleSheet.create({
     backgroundColor:colors.white,
     width: width*0.5
   },
-  servicesText:{
+  service:{
     textAlign:'left',
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: '700',
     color: colors.black,
 
   },
@@ -292,14 +313,15 @@ const styles = StyleSheet.create({
     textAlign:'center'
   },
   important:{
-    color:colors.orange,
-    fontWeight: '400',
-    fontSize: 16
+    color:colors.black2,
+    fontWeight: '700',
+    fontSize: 16,
+    marginLeft: 5
   },
 
   ownerInfo:{
     color:colors.black,
-    fontWeight: '400',
+    fontWeight: '700',
     fontSize: 16,
   },
   BookingButton:{

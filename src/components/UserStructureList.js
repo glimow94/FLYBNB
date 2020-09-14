@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
   },
   titleStructure:{
     fontSize: 20,
-    color: colors.blue,
+    color: colors.black2,
     textDecorationLine:'underline'
   },
   editButton:{
@@ -211,6 +211,7 @@ const styles = StyleSheet.create({
   dateswarning:{
     color: colors.red,
     fontSize:10,
+    marginTop: 8,
     textDecorationLine:'underline',
     fontWeight:'600'
     

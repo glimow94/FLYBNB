@@ -1,4 +1,4 @@
 export default{
-    HOST : '192.168.1.14'
+    HOST : '127.168.1.14'
     
 };

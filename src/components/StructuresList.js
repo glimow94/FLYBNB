@@ -4,9 +4,12 @@ import Constants from 'expo-constants';
 import colors from "../style/colors/index";
 import BookingButton from "../components/buttons/bookingButton";
 import { useNavigation } from '@react-navigation/native';
+import { Icon } from 'react-native-elements';
+
 import axios from "axios";
 import AsyncStorage from '@react-native-community/async-storage';
 import host from '../configHost'
+import { getActiveChildNavigationOptions } from 'react-navigation';
 
 class StructuresList extends Component {
   
@@ -178,12 +181,32 @@ class StructuresList extends Component {
           keyExtractor = {(item, index) => index.toString()}
           renderItem = {({item}) =>
               <View style={styles.item}>
-                <Text>{item.title}</Text>
-                <Text>{item.email}</Text>
-                <Text>{item.place}</Text>
-                <Text>{item.type}</Text>
-                <Text>{item.beds}</Text>
-                <Text style={styles.services}>Servizi inclusi :</Text>
+                <Text style={styles.title}>{item.title}</Text>
+                <Text style={styles.type}>{item.type}</Text>
+                <Text style={styles.place}>{item.place}</Text>
+                <View>
+                  <Text style={styles.beds}>Posti letto: {item.beds}</Text>
+                  <View style={styles.serviceBox}>
+                    <View style={{flexDirection:'row'}}>
+                      <Text style={styles.service}>Pensione Completa: </Text>{item.fullBoard ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
+                    </View>
+                    <View style={{flexDirection:'row'}}>
+                      <Text style={styles.service}>Parcheggio: </Text>{item.parking ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' style={{marginRight:5}} type='font-awesome' color={colors.red}/>}
+                    </View>
+                    <View style={{flexDirection:'row'}}>
+                      <Text style={styles.service}>Cucina: </Text>{item.kitchen ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
+                    </View>
+                  </View>
+                  <View style={styles.serviceBox}>
+                    <View style={{flexDirection:'row'}}>
+                      <Text style={styles.service}>Aria Condizionata: </Text>{item.airConditioner ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
+                    </View>
+                    <View style={{flexDirection:'row'}}>
+                      <Text style={styles.service}>Wi-Fi: </Text>{item.wifi ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
+                    </View>
+                  </View>
+
+                </View>
                 <BookingButton 
                   text={parseInt(item.price)+'€ a Notte'} 
                   onPress={()=>navigation.navigate('Structure',{
@@ -196,6 +219,8 @@ class StructuresList extends Component {
                       itemPrice: item.price,
                       itemID: item.id,
                       itemPlace: item.place,
+                      itemNumber: item.number,
+                      itemPostCode:item.post_code,
                       itemStreet: item.street,
                       itemBeds: item.beds,
                       itemType: item.type,
@@ -248,12 +273,44 @@ const styles = StyleSheet.create({
     borderTopLeftRadius:20,
   },
   title: {
-    fontSize: 18,
-    paddingBottom: 8
+    fontSize: 20,
+    paddingBottom: 8,
+    alignSelf:'center',
+    fontWeight:"700"
+  },
+  type:{
+    fontSize: 16,
+    paddingBottom: 8,
+    fontWeight:"700",
+    alignSelf:'center',
+  },
+  place:{
+    fontSize:15,
+    color:colors.black2,
+    fontWeight:"700",
+    marginTop:5,
+    marginBottom:10,
+    marginLeft:8,
+    alignSelf:'center'
   },
   price:{
     paddingTop:8,
     paddingBottom:8
   },
+  beds:{
+    fontSize:14,
+    fontWeight:"700",
+    marginLeft:8
+  },
+  service:{
+    fontSize:14,
+    fontWeight:"700",
+    color:colors.black2,
+    marginLeft:8
+  },
+  serviceBox:{
+    flexDirection:'row',
+    marginTop:5
+  }
   
 });
