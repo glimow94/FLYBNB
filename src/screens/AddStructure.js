@@ -285,24 +285,7 @@ export default class AddStructure extends Component{
         this.setState({user_id: userToken})
 
     }
-    monthNameToNum(monthname) {
-        var months = [
-            'Jan', 'Feb', 'Mar', 'Apr', 'May',
-            'Jun', 'Jul', 'Aug', 'Sep',
-            'Oct', 'Nov', 'Dec'
-          ]; //mesi dell'anno che mi servono per convertire il mese della data nel suo corrispondente numero MM
-        var index = months.indexOf(monthname);
-        
-        //aggiungo lo 0 prima del numero del mese se questo è < 10, ovvero 1 diventa 01, 2 diventa 02, ecc.ecc.
-        if(index+1 < 10 && index != -1){
-          index = index +1;
-          var month = '0'+index.toString()
-          return month
-        }
-        else {
-          return index!=-1 ? index+1 : undefined;
-        }
-      }
+
     async postData(){
         if((!this.state.title || this.state.title.trim().length === 0) || 
             (!this.state.city || this.state.city.trim().length === 0) ||
@@ -323,11 +306,7 @@ export default class AddStructure extends Component{
     }
 
     async addStructurePost(){
-        var date = new Date()
-        var date_mod = date.toString().replace("12:00:00 GMT+0200","").slice(4);
-        var month_num = this.monthNameToNum(date_mod.substr(0,3));
-        var date_mod_format = date_mod.substr(4,2)+"/"+month_num+"/"+date_mod.substr(6,5); //data in formato DD/MonthName/AAAA
-        var final_date = date_mod_format.replace(/ /g, '');
+        var date_creation = new Date()
         const url = `http://localhost:3055/structures/add`;
         axios.post(url, {
                 method: 'POST',
@@ -354,7 +333,7 @@ export default class AddStructure extends Component{
                 image2: this.state.structureImage_2,
                 image3: this.state.structureImage_3,
                 image4: this.state.structureImage_4,
-                start_date: final_date
+                start_date: date_creation
             })
             .then(res => {
                 console.log(res);

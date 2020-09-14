@@ -99,7 +99,7 @@ export default class DateSelector extends Component {
     var date_mod_format = date_mod.substr(4,2)+"/"+month_num+"/"+date_mod.substr(6,5); //data in formato DD/MonthName/AAAA
 
     var final_date = date_mod_format.replace(/ /g, '');
-    var diffDays = ''; //variabile che conterrà i giorni fra il checkin e il checkout utile a calcolare il prezzo totale
+    var diffDays = ''; //variabile che conterrà il numero di giorni fra il checkin e il checkout utile a calcolare il prezzo totale
     var cityTax= 0;
     var totalPrice= 0;
 
