@@ -173,7 +173,7 @@ export default class BookingStructure extends Component{
   async postGuest() {
     let promises = [];
     const url = `http://${host.host}:3055/bookings/add/guest`;
-    for(let index=0 ; index < this.state.guestsData.length ; index++){
+    for(let index=0 ; index < this.state.guests ; index++){
       promises.push(
         axios.post(url, {
           method: 'POST',
