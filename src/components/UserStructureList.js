@@ -1,6 +1,6 @@
 //componente che restituisce le strutture di uno specifico utente
 import React, { Component } from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text } from 'react-native';
+import { SafeAreaView, View, FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import Constants from 'expo-constants';
 import colors from "../style/colors/index";
 import BookingButton from "../components/buttons/bookingButton";
@@ -63,40 +63,41 @@ class StructuresList extends Component {
           keyExtractor = {(item, index) => index.toString()}
           inverted={true}
           renderItem = {({item}) =>
-            <View style={styles.item}>
-              <Text
-                style={styles.titleStructure}
-                onPress={()=>{
-                  navigation.navigate('UserStructure',{
-                    /* parametri da passare alla schermata successiva */
-                    userToken: this.state.userToken,
-                    itemName: item.name,
-                    temSurname: item.surname,
-                    itemEmail: item.email,
-                    itemTitle: item.title,
-                    itemPrice: item.price,
-                    itemID: item.id,
-                    itemPlace: item.place,
-                    itemStreet: item.street,
-                    itemNumber: item.number,
-                    itemPostCode: item.post_code,
-                    itemBeds: item.beds,
-                    itemType: item.type,
-                    itemKitchen: item.kitchen,
-                    itemFullBoard: item.fullboard,
-                    itemAirConditioner: item.airConditioner,
-                    itemWifi: item.wifi,
-                    itemParking: item.parking,
-                    itemDescription: item.description,
-                    locationDescription: item.location_description,
-                    image1: item.image1,
-                    image2 : item.image2,
-                    image3: item.image3,
-                    image4 : item.image4
-                });}}>
-                {item.title} 
-              </Text>
+            <TouchableOpacity 
+              style={styles.item}
+              onPress={()=>{
+                navigation.navigate('UserStructure',{
+                  /* parametri da passare alla schermata successiva */
+                  userToken: this.state.userToken,
+                  itemName: item.name,
+                  temSurname: item.surname,
+                  itemEmail: item.email,
+                  itemTitle: item.title,
+                  itemPrice: item.price,
+                  itemID: item.id,
+                  itemPlace: item.place,
+                  itemStreet: item.street,
+                  itemNumber: item.number,
+                  itemPostCode: item.post_code,
+                  itemBeds: item.beds,
+                  itemType: item.type,
+                  itemKitchen: item.kitchen,
+                  itemFullBoard: item.fullboard,
+                  itemAirConditioner: item.airConditioner,
+                  itemWifi: item.wifi,
+                  itemParking: item.parking,
+                  itemDescription: item.description,
+                  locationDescription: item.location_description,
+                  image1: item.image1,
+                  image2 : item.image2,
+                  image3: item.image3,
+                  image4 : item.image4,
+              });}}
+            >
+              
+              <Text style={styles.titleStructure}>{item.title} </Text>
               <Text>{item.place}</Text>
+            <Text>{item.start_date}</Text>
               <Text style={styles.editButton} 
                 onPress={()=> navigation.navigate('EditStructure',{
                   /* parametri da passare alla schermata successiva */
@@ -120,8 +121,12 @@ class StructuresList extends Component {
                   itemParking: item.parking,
                   itemDescription: item.description,
                   locationDescription: item.location_description,
+                  image1: item.image1,
+                  image2 : item.image2,
+                  image3: item.image3,
+                  image4 : item.image4
               })} >Modifica</Text>
-            </View>}
+            </TouchableOpacity>}
           contentContainerStyle={{paddingTop:40}}
         />
       </View>
