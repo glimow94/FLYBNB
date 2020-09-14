@@ -7,8 +7,8 @@ import BookingButton from "../components/buttons/bookingButton";
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
 import AsyncStorage from '@react-native-community/async-storage';
-import moment from "moment";
-
+import host from '../configHost';
+import moment from 'moment'
 
 class StructuresList extends Component {
   
@@ -58,7 +58,7 @@ class StructuresList extends Component {
       console.log("token state");
       console.log(this.state.userToken);
       if(this.state.userToken != null){
-        const url = `http://localhost:3055/structures/profile/${this.state.userToken}`;
+        const url = `http://${host.host}:3055/structures/profile/${this.state.userToken}`;
         axios.get(url, {
             method: 'GET',
             headers: {

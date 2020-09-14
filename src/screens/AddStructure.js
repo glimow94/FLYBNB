@@ -12,6 +12,7 @@ import { UserContext } from "../components/context";
 import { useNavigation } from "@react-navigation/native";
 import Login from './Login';
 import axios from "axios";
+import host from '../configHost'
 
 const {width} = Dimensions.get('window');
 
@@ -354,7 +355,7 @@ export default class AddStructure extends Component{
         var month_num = this.monthNameToNum(date_mod.substr(0,3));
         var date_mod_format = date_mod.substr(4,2)+"/"+month_num+"/"+date_mod.substr(6,5); //data in formato DD/MonthName/AAAA
         var final_date = date_mod_format.replace(/ /g, '');
-        const url = `http://localhost:3055/structures/add`;
+        const url = `http://${host.host}:3055/structures/add`;
         axios.post(url, {
                 method: 'POST',
                 headers: {

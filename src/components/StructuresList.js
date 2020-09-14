@@ -6,7 +6,7 @@ import BookingButton from "../components/buttons/bookingButton";
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
 import AsyncStorage from '@react-native-community/async-storage';
-import host from '../environment'
+import host from '../configHost'
 
 class StructuresList extends Component {
   
@@ -29,7 +29,7 @@ class StructuresList extends Component {
       console.log("token state");
       console.log(this.state.userToken);
       if(this.state.userToken != null){
-        const url = `http://${host.HOST}:3055/structures/${this.state.userToken}`;
+        const url = `http://${host.host}:3055/structures/${this.state.userToken}`;
         axios.get(url, {
             method: 'GET',
             headers: {
@@ -48,7 +48,7 @@ class StructuresList extends Component {
         })
       }else{
         console.log("userToken è null");
-        const url = `http://localhost:3055/structures`;
+        const url = `http://${host.host}:3055/structures`;
         axios.get(url, {
             method: 'GET',
             headers: {

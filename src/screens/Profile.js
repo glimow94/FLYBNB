@@ -6,7 +6,7 @@ import UserStructures from '../components/UserStructureList'
 import * as ImagePicker from 'expo-image-picker';
 import uploadToAnonymousFilesAsync from 'anonymous-files';
 import colors from '../style/colors';
-
+import host from '../configHost';
 import { UserContext } from "../components/context";
 
 import BookingsList from '../components/BookingsList';
@@ -60,7 +60,7 @@ static contextType = UserContext
     }catch(e){
       console.log(e)
     }
-    const url = `http://localhost:3055/users/image/${userToken}`;
+    const url = `http://${host.host}:3055/users/image/${userToken}`;
     axios.get(url, {
         method: 'GET',
         headers: {
@@ -68,9 +68,7 @@ static contextType = UserContext
         }
       })
       .then(res => {
-        this.setState({
-          profileImage : res.data[0].image
-        })
+        if(res.data[0] ) this.setState({profileImage : res.data[0].image})
     })
     this.setState({
       name: user_name,
@@ -148,7 +146,7 @@ static contextType = UserContext
     ///let formdata = new FormData();
     //formdata.append("product[name]", 'image')
     //formdata.append("product[image]", {uri: this.state.imageUri, name: 'image.jpg', type: 'image/jpeg'})
-    const url = `http://localhost:3055/users/update/image/${this.state.userToken}`;
+    const url = `http://${host.host}:3055/users/update/image/${this.state.userToken}`;
     axios.post(url, {
         method: 'POST',
         headers: {
@@ -174,7 +172,7 @@ static contextType = UserContext
 
         <View style={styles.profileCard}>
            <View style={styles.userInfoBox}>
-            <Image source={ this.state.profileImage !== '' ? {uri: this.state.profileImage} : require('../img/person.png') } 
+            <Image source={ this.state.profileImage != null ? {uri: this.state.profileImage} : require('../img/person.png') } 
                    style={styles.ProfileImage} 
             />
             <TouchableOpacity style={styles.button} onPress={this.profileImagePickerAsync}>

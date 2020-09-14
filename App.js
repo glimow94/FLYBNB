@@ -6,7 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-community/async-storage';
-
+import host from './src/configHost';
 //screens e components
 import LoggedOut from "./src/screens/LoggedOut";
 import colors from "./src/style/colors/index"
@@ -113,7 +113,7 @@ export default function App() {
       let userToken;
       userToken=null;
       var status;
-      const url = `http://localhost:3055/users/login`;
+      const url = `http://${host.host}:3055/users/login`;
 
       axios.post(url, {
           method: 'POST',
@@ -153,7 +153,7 @@ export default function App() {
     signUp: (name, surname, birthDay, birthMonth, birthYear,
             gender, fiscal_code, city, address, email, password) => {
 
-              const url = `http://localhost:3055/users/registration`;
+              const url = `http://${host.host}:3055/users/registration`;
               axios.post(url, {
                   method: 'POST',
                   headers: {

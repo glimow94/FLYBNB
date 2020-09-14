@@ -30,7 +30,9 @@ const Signup = ({navigation})=>{
         nameColor: colors.white,
         surnameAlert:false,
         surnameColor: colors.white,
-
+        //stati per la validazione dell'indirizzo
+        addressColor: colors.white,
+        addressAlert: false,
         //stati utili alla validazione del form per la PASSWORD
         passwColor: colors.white,
         repasswColor: colors.white,
@@ -62,6 +64,7 @@ const Signup = ({navigation})=>{
     const { signUp } = React.useContext(UserContext)
 
     const validationCheck=()=>{
+        var error = false;
         if(
               (newUserData.name=='' || newUserData.name.trim().length === 0)
            || (newUserData.surname=='' || newUserData.surname.trim().length === 0)
@@ -70,17 +73,10 @@ const Signup = ({navigation})=>{
            || (newUserData.password=='' || newUserData.password.trim().length === 0)
             
         ){
-            setData({
-                ...newUserData,
-                validation: false
-            })
+            error = true
         }
-        else{
-            setData({
-                ...newUserData,
-                validation: true 
-            })
-        }
+        return error
+        
     }    
 
     const loginCheck = ()=>{
@@ -93,11 +89,12 @@ const Signup = ({navigation})=>{
                 newUserData.gender,
                 newUserData.city, 
                 newUserData.email, 
-                newUserData.password
+                newUserData.password,
+                newUserData.address
         )
-        validationCheck()
+        var error = validationCheck()
         if(
-            newUserData.validation == true
+            error == false
         ){  
             signUp (
                 newUserData.name, 
@@ -110,7 +107,7 @@ const Signup = ({navigation})=>{
                 newUserData.city, 
                 newUserData.address,
                 newUserData.email, 
-                newUserData.password
+                newUserData.password,
                 );
                 navigation.navigate(Login);
             }
@@ -162,6 +159,25 @@ const Signup = ({navigation})=>{
             })
         }
     }
+    const changeAddress = (val) => {
+        if(!val || val.trim().length === 0){
+            setData({
+                ...newUserData,
+                address:'',
+                addressColor: '#DC143C',
+                addressAlert:true
+            })
+        }
+        else{
+            setData({
+                ...newUserData,
+                address:val,
+                addressColor: colors.white,
+                addressAlert: false
+            })
+        }
+    }
+    
 
     const changeBirthDay = (val) => {
         setData({
@@ -427,8 +443,19 @@ const Signup = ({navigation})=>{
                             </View>
                         </View>
                     </View>
+                    
                 </View>
-
+                <View style={styles.InputWrapper}>
+                        <Text style={styles.label}>INDIRIZZO</Text>
+                        <TextInput
+                            autoCorrect={false}
+                            style = {[{borderColor: newUserData.addressColor},styles.inputField]}
+                            onChangeText={(val) => changeAddress(val)}
+                        ></TextInput>
+                        {   newUserData.addressAlert==true ? 
+                            <Text style={{color: '#DC143C'}}>Inserisci un'indirizzo </Text> : null
+                        }
+                    </View>
                 <View styles={styles.authenticationForm}>
                     <View style={styles.InputWrapper}>
                         <Text style={styles.label}>INDIRIZZO E-MAIL</Text>
@@ -483,6 +510,7 @@ const Signup = ({navigation})=>{
                     <NextButton 
                         text = "Iscriviti"
                         onPress = {()=> {loginCheck()}}
+                        backgroundColor={colors.green01}
                     ></NextButton>
             </View>
         </View>

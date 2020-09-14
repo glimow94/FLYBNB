@@ -7,7 +7,7 @@ import BookingButton from "../components/buttons/bookingButton";
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
 import AsyncStorage from '@react-native-community/async-storage';
-
+import host from '../configHost'
 
 export default class StructuresList extends Component {
   
@@ -38,7 +38,7 @@ export default class StructuresList extends Component {
       console.log("token booking state");
       console.log(this.state.userToken);
       if(this.state.userToken != null){
-        const url = `http://localhost:3055/bookings/profile/request/${this.state.userToken}`;
+        const url = `http://${host.host}:3055/bookings/profile/request/${this.state.userToken}`;
         axios.get(url, {
             method: 'GET',
             headers: {
@@ -81,8 +81,9 @@ export default class StructuresList extends Component {
       console.log(this.state.data)
     }
 
-   async postResponse(itemID) {
-      const url = `http://localhost:3055/bookings/profile/response/${itemID}`;
+   async postConfirm(itemID, earn) {
+     var totEarn_ = this.state.totEarn;
+      const url = `http://${host.host}:3055/bookings/profile/response/${itemID}`;
       axios.post(url, {
           method: 'POST',
           headers: {
@@ -104,7 +105,8 @@ export default class StructuresList extends Component {
             data_[i].request = 1;
             this.setState({
               data:data_,
-              waitingRequests: request_wait-1
+              waitingRequests: request_wait-1,
+              totEarn : totEarn_+earn
             });
             this.props.updateState({
               waitingRequests:request_wait-1
@@ -116,7 +118,7 @@ export default class StructuresList extends Component {
     }
 
     async postRefused(itemID) {
-      const url = `http://localhost:3055/bookings/response/refused/${itemID}`;
+      const url = `http://${host.host}:3055/bookings/profile/response/refused/${itemID}`;
       axios.post(url, {
           method: 'POST',
           headers: {
@@ -208,7 +210,7 @@ export default class StructuresList extends Component {
                 </View>
                 {item.request == 0 ? <View style={styles.buttonGroup}>
                     <View style={styles.button}>
-                        <Button onPress = {()=> {this.postResponse(item.id)}} title="Accetta"color={colors.green02}></Button>
+                        <Button onPress = {()=> {this.postConfirm(item.id, item.totPrice)}} title="Accetta"color={colors.green02}></Button>
                     </View>
                     <View style={styles.button}>
                         <Button onPress = {()=> {this.postRefused(item.id)}} title="Rifiuta" color={colors.red}></Button>

@@ -4,7 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import uploadToAnonymousFilesAsync from 'anonymous-files';
 import { Icon } from 'react-native-elements';
 import colors from '../style/colors/index';
-
+import host from '../configHost'
 import { ScrollView } from 'react-native-gesture-handler';
 import axios from "axios";
 import BirthDayPicker from "../components/BirthdayPicker"
@@ -100,6 +100,7 @@ export default class BookingStructure extends Component{
         guests_data.push(obj);
     }
     console.log(guests_data)
+    console.log(guests)
    
 
     this.setState({
@@ -140,7 +141,7 @@ export default class BookingStructure extends Component{
     }
 
     if(error==false){
-      const url = `http://localhost:3055/bookings/add`;
+      const url = `http://${host.host}:3055/bookings/add`;
       await axios.post(url, {
           method: 'POST',
           headers: {
@@ -158,13 +159,13 @@ export default class BookingStructure extends Component{
         .then(res => {
           console.log(res);
           res.data;
+          return res;
           })
         .catch(function (error) {
           console.log(error);
         });
   
-        await this.postGuest();
-        await this.postMail();
+        await this.postGuest()
         this.props.navigation.navigate('Home')
     }
     else this.setState({alert:true})
@@ -172,38 +173,36 @@ export default class BookingStructure extends Component{
   }
 
   async postGuest() {
-    const url = `http://localhost:3055/bookings/add/guest`;
-    console.log(this.state.guestsData)
+    let promises = [];
+    const url = `http://${host.host}:3055/bookings/add/guest`;
     for(let index=0 ; index < this.state.guestsData.length ; index++){
-      axios.post(url, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-        },
-        user_id: parseInt(this.state.user_id),
-        owner_id: parseInt(this.state.owner_id),
-        structure_id: parseInt(this.state.structure_id),
-        checkIn: this.state.checkIn,
-        checkOut: this.state.checkOut,
-        days: parseInt(this.state.diffDays),
-        totPrice: parseInt(this.state.totPrice),
-        cityTax: parseInt(this.state.cityTax),
-        name: this.state.guestsData[index].name,
-        surname: this.state.guestsData[index].surname,
-        date: this.state.guestsData[index].birthDay+"/"+this.state.guestsData[index].birthMonth+"/"+this.state.guestsData[index].birthYear,
-        document: this.state.guestsData[index].document_img
-      })
-      .then(res => {
-        console.log(res);
+      promises.push(
+        axios.post(url, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+          },
+          user_id: parseInt(this.state.user_id),
+          owner_id: parseInt(this.state.owner_id),
+          structure_id: parseInt(this.state.structure_id),
+          checkIn: this.state.checkIn,
+          checkOut: this.state.checkOut,
+          days: parseInt(this.state.diffDays),
+          totPrice: parseInt(this.state.totPrice),
+          cityTax: parseInt(this.state.cityTax),
+          name: this.state.guestsData[index].name,
+          surname: this.state.guestsData[index].surname,
+          date: this.state.guestsData[index].birthDay+"/"+this.state.guestsData[index].birthMonth+"/"+this.state.guestsData[index].birthYear,
+          document: this.state.guestsData[index].document_img
         })
-      .catch(function (error) {
-        console.log(error);
-      });
+      );
     }
+
+    axios.all(promises).then( this.postMail())
   }
 
   async postMail() {
-    const url = `http://localhost:3055/bookings/send/email`;
+    const url = `http://${host.host}:3055/bookings/send/email`;
     axios.post(url, {
        method: 'POST',
        headers: {
