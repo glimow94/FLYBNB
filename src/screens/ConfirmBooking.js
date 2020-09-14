@@ -164,12 +164,6 @@ export default class BookingStructure extends Component{
         });
   
         await this.postGuest()
-        .then(res => {
-          return res;
-          })
-        .finally(()=>{
-          this.postMail();
-        });
         
         this.props.navigation.navigate('Home')
     }
@@ -178,34 +172,32 @@ export default class BookingStructure extends Component{
   }
 
   async postGuest() {
+    let promises = [];
     const url = `http://${host.host}:3055/bookings/add/guest`;
     for(let index=0 ; index < this.state.guestsData.length ; index++){
-      axios.post(url, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-        },
-        user_id: parseInt(this.state.user_id),
-        owner_id: parseInt(this.state.owner_id),
-        structure_id: parseInt(this.state.structure_id),
-        checkIn: this.state.checkIn,
-        checkOut: this.state.checkOut,
-        days: parseInt(this.state.diffDays),
-        totPrice: parseInt(this.state.totPrice),
-        cityTax: parseInt(this.state.cityTax),
-        name: this.state.guestsData[index].name,
-        surname: this.state.guestsData[index].surname,
-        date: this.state.guestsData[index].birthDay+"/"+this.state.guestsData[index].birthMonth+"/"+this.state.guestsData[index].birthYear,
-        document: this.state.guestsData[index].document_img
-      })
-      .then(res => {
-        //console.log(res);
-        return res
+      promises.push(
+        axios.post(url, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+          },
+          user_id: parseInt(this.state.user_id),
+          owner_id: parseInt(this.state.owner_id),
+          structure_id: parseInt(this.state.structure_id),
+          checkIn: this.state.checkIn,
+          checkOut: this.state.checkOut,
+          days: parseInt(this.state.diffDays),
+          totPrice: parseInt(this.state.totPrice),
+          cityTax: parseInt(this.state.cityTax),
+          name: this.state.guestsData[index].name,
+          surname: this.state.guestsData[index].surname,
+          date: this.state.guestsData[index].birthDay+"/"+this.state.guestsData[index].birthMonth+"/"+this.state.guestsData[index].birthYear,
+          document: this.state.guestsData[index].document_img
         })
-      .catch(function (error) {
-        console.log(error);
-      });
+      );
     }
+
+    await axios.all(promises).finally(this.postMail())
   }
 
   async postMail() {
