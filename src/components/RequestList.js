@@ -157,6 +157,7 @@ export default class StructuresList extends Component {
     return (
       
       <View style={styles.container}>
+        {this.state.data.length != 0? <View>
         <View style={{flexDirection:'row'}}>
           <Text style={styles.infoText}>Guadagni totali :</Text>
           <Text style={styles.totEarn}> {this.state.totEarn} €</Text>
@@ -216,7 +217,7 @@ export default class StructuresList extends Component {
             </View>}
           contentContainerStyle={{paddingTop:40}}
         />
-
+        </View>:<Text>Non hai nessuna richiesta di prenotazioni</Text>}
       </View>
     );
   }

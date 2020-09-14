@@ -1,12 +1,13 @@
 //componente che restituisce le strutture di uno specifico utente
 import React, { Component } from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView,Button, View, FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import Constants from 'expo-constants';
 import colors from "../style/colors/index";
 import BookingButton from "../components/buttons/bookingButton";
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
 import AsyncStorage from '@react-native-community/async-storage';
+import moment from "moment";
 
 
 class StructuresList extends Component {
@@ -18,15 +19,17 @@ class StructuresList extends Component {
       data: [],
       isLoading: true,
       userToken: null,
+      today:''
     }
    }
    _isMounted = false;
    monthNameToNum(monthname) {
+    // da "Day Mon DayNumber Year" in "DD-MM-YYYY"
     var months = [
         'Jan', 'Feb', 'Mar', 'Apr', 'May',
         'Jun', 'Jul', 'Aug', 'Sep',
         'Oct', 'Nov', 'Dec'
-      ]; //mesi dell'anno che mi servono per convertire il mese della data nel suo corrispondente numero MM
+    ]; //mesi dell'anno che mi servono per convertire il mese della data nel suo corrispondente numero MM
     var index = months.indexOf(monthname);
     
     //aggiungo lo 0 prima del numero del mese se questo è < 10, ovvero 1 diventa 01, 2 diventa 02, ecc.ecc.
@@ -41,6 +44,11 @@ class StructuresList extends Component {
   }
    componentDidMount = () => {
     var date = new Date()
+    var date_mod = date.toString().replace("12:00:00 GMT+0200","").slice(4);
+    var month_num = this.monthNameToNum(date_mod.substr(0,3));
+    var date_mod_format = date_mod.substr(4,2)+"/"+month_num+"/"+date_mod.substr(6,5); //data in formato DD/MonthName/AAAA
+    var final_date = date_mod_format.replace(/ /g, '');
+    var today = moment(final_date,'DD-MM-YYYY');
     console.log(date)
     this._isMounted = true;
     //get current token
@@ -63,7 +71,7 @@ class StructuresList extends Component {
               const structures = res.data;
               this.setState({
                 isLoading:false,
-                today : date,
+                today : today,
                 data: structures
               })
             }
@@ -79,46 +87,52 @@ class StructuresList extends Component {
     return (
       
       <View style={styles.container}>
-        <FlatList
+       { this.state.data.length != 0 ? <FlatList
           data= {this.state.data}
           keyExtractor = {(item, index) => index.toString()}
           inverted={true}
           renderItem = {({item}) =>
-            <TouchableOpacity 
-              style={styles.item}
-              onPress={()=>{
-                navigation.navigate('UserStructure',{
-                  /* parametri da passare alla schermata successiva */
-                  userToken: this.state.userToken,
-                  itemName: item.name,
-                  temSurname: item.surname,
-                  itemEmail: item.email,
-                  itemTitle: item.title,
-                  itemPrice: item.price,
-                  itemID: item.id,
-                  itemPlace: item.place,
-                  itemStreet: item.street,
-                  itemNumber: item.number,
-                  itemPostCode: item.post_code,
-                  itemBeds: item.beds,
-                  itemType: item.type,
-                  itemKitchen: item.kitchen,
-                  itemFullBoard: item.fullboard,
-                  itemAirConditioner: item.airConditioner,
-                  itemWifi: item.wifi,
-                  itemParking: item.parking,
-                  itemDescription: item.description,
-                  locationDescription: item.location_description,
-                  image1: item.image1,
-                  image2 : item.image2,
-                  image3: item.image3,
-                  image4 : item.image4,
-              });}}
-            >
+            <View style={styles.item}>
               
-              <Text style={styles.titleStructure}>{item.title} </Text>
+              <Text 
+                style={styles.titleStructure}
+                onPress={()=>{
+                  navigation.navigate('UserStructure',{
+                    /* parametri da passare alla schermata successiva */
+                    userToken: this.state.userToken,
+                    itemName: item.name,
+                    temSurname: item.surname,
+                    itemEmail: item.email,
+                    itemTitle: item.title,
+                    itemPrice: item.price,
+                    itemID: item.id,
+                    itemPlace: item.place,
+                    itemStreet: item.street,
+                    itemNumber: item.number,
+                    itemPostCode: item.post_code,
+                    itemBeds: item.beds,
+                    itemType: item.type,
+                    itemKitchen: item.kitchen,
+                    itemFullBoard: item.fullboard,
+                    itemAirConditioner: item.airConditioner,
+                    itemWifi: item.wifi,
+                    itemParking: item.parking,
+                    itemDescription: item.description,
+                    locationDescription: item.location_description,
+                    image1: item.image1,
+                    image2 : item.image2,
+                    image3: item.image3,
+                    image4 : item.image4,
+                    start_date : item.start_date,
+                    today_date : this.state.today
+                });}}
+              >{item.title}</Text>
+
               <Text>{item.place}</Text>
-              {item.start_date ? <Text> {parseInt((this.state.today - item.start_date) / (1000 * 60 * 60 * 24), 10)}</Text>:null}
+
+              {this.state.today.diff(moment(item.start_date,'DD-MM-YYYY'), 'days') > -1 ? 
+              <Text style={styles.dateswarning} onPress={()=>{console.log('INVIA RENDICONTO')}}>INVIA RENDICONTO TREMESTRALE</Text>:null}
+
               <Text style={styles.editButton} 
                 onPress={()=> navigation.navigate('EditStructure',{
                   /* parametri da passare alla schermata successiva */
@@ -147,9 +161,9 @@ class StructuresList extends Component {
                   image3: item.image3,
                   image4 : item.image4
               })} >Modifica</Text>
-            </TouchableOpacity>}
+            </View>}
           contentContainerStyle={{paddingTop:40}}
-        />
+        />:<Text>Non hai nessuna struttura registrata</Text>}
       </View>
     );
   }
@@ -177,7 +191,7 @@ const styles = StyleSheet.create({
   },
   titleStructure:{
     fontSize: 20,
-    color: colors.black,
+    color: colors.blue,
     textDecorationLine:'underline'
   },
   editButton:{
@@ -193,5 +207,12 @@ const styles = StyleSheet.create({
     borderColor: colors.black,
     borderWidth: 1,
     borderRadius: 10
+  },
+  dateswarning:{
+    color: colors.red,
+    fontSize:10,
+    textDecorationLine:'underline',
+    fontWeight:'600'
+    
   }
 });

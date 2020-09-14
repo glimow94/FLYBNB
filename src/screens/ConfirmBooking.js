@@ -99,6 +99,7 @@ export default class BookingStructure extends Component{
         }
         guests_data.push(obj);
     }
+    console.log(guests_data)
    
 
     this.setState({
@@ -172,6 +173,7 @@ export default class BookingStructure extends Component{
 
   async postGuest() {
     const url = `http://localhost:3055/bookings/add/guest`;
+    console.log(this.state.guestsData)
     for(let index=0 ; index < this.state.guestsData.length ; index++){
       axios.post(url, {
         method: 'POST',

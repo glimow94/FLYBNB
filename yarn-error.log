@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/bin/node /usr/local/bin/yarn install
+  /usr/bin/node /usr/local/bin/yarn add bcrypt
 
 PATH: 
   /home/gdp/.local/bin:/home/gdp/.local/bin:/usr/local/sbin:/home/gdp/flutter/bin:/home/gdp/Android/Sdk:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/gdp/flutter/bin:/home/gdp/Android/Sdk/tools:/home/gdp/Android/Sdk/platform-tools:/opt/gradle/gradle-5.2.1/bin:/home/gdp/Scrivania/flybnb/flyBnb/flutter/bin:/home/gdp/Android/Sdk/tools:/home/gdp/Android/Sdk/platform-tools:/opt/gradle/gradle-5.2.1/bin
