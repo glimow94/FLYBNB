@@ -317,9 +317,10 @@ export default class BookingStructure extends Component{
 
             <Text style={styles.textHeader}>Conferma Prenotazione</Text>
             <Text style={styles.subtitle}>Inserisci i dati relativi agli ospiti</Text>
-            <Text>{this.state.clientBirthdate}</Text>
-            <Text>{this.state.totPrice}</Text>
-            <Text>{this.state.checkIn}-{this.state.checkOut}</Text>
+            <Text style={styles.structureName}>{this.state.title}</Text>
+            <Text style={styles.subtitle2}>Prezzo tot. : {this.state.totPrice} €</Text>
+            <Text style={styles.subtitle2}>Check-In: {this.state.checkIn}</Text>
+            <Text style={styles.subtitle2}>Check-Out: {this.state.checkOut}</Text>
             <View>
             <FlatList
                 data= {this.state.guestsData}
@@ -418,6 +419,20 @@ const styles = StyleSheet.create({
       marginBottom: 30,
       
     },
+    structureName:{
+      fontSize: 18,
+      color: colors.white,
+      fontWeight: "400",
+      alignSelf:'center',
+      marginBottom:4
+    },
+    subtitle2:{
+      fontSize: 14,
+      color: colors.white,
+      fontWeight: "400",
+      alignSelf:'center',
+      marginBottom:4
+    },
     formGuestTitle:{
         fontSize:14,
         fontWeight:"700",
@@ -429,6 +444,7 @@ const styles = StyleSheet.create({
         paddingRight:10,
         marginBottom: 5
     },
+    
 
     label:{
         color: colors.white,
