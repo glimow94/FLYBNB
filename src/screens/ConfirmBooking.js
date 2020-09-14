@@ -158,15 +158,21 @@ export default class BookingStructure extends Component{
         })
         .then(res => {
           console.log(res);
-          res.data;
-          return res;
+          if(res){
+            this.postGuest().then((res)=>{
+              console.log("result GUEST")
+              console.log(res)
+              if(res && res.filter(function(value){
+                return value.status == 201;
+              }).length == res.length )
+                this.postMail();
+            })
+          }
+          this.props.navigation.navigate('Home');
           })
         .catch(function (error) {
           console.log(error);
         });
-  
-        await this.postGuest()
-        this.props.navigation.navigate('Home')
     }
     else this.setState({alert:true})
     
@@ -197,13 +203,12 @@ export default class BookingStructure extends Component{
         })
       );
     }
-
-    axios.all(promises).then( this.postMail())
+    return Promise.all(promises);
   }
 
   async postMail() {
     const url = `http://${host.host}:3055/bookings/send/email`;
-    axios.post(url, {
+    return axios.post(url, {
        method: 'POST',
        headers: {
          'content-type': 'application/json',
