@@ -1,25 +1,15 @@
 import React, {Component, useEffect} from 'react';
-import {View, Text, StyleSheet, Button, Image, ScrollView, Dimensions, Platform} from 'react-native';
+import {View, Text, StyleSheet, Image, ScrollView, Dimensions, Platform} from 'react-native';
 
 import colors from '../style/colors';
-import BookingButton from '../components/buttons/Button1'
-import AsyncStorage from '@react-native-community/async-storage';
+import { Icon } from 'react-native-elements';
 
 import { useNavigation } from '@react-navigation/native';
 
-import Login from './Login'
-
-import BookingStructure from './BookingStructure';
-import { color } from 'react-native-reanimated';
 
 const {width} = Dimensions.get('window');
-const height =  width*0.8//40% di width
-const images =[
-  'https://res.cloudinary.com/flybnb94/image/upload/v1594675659/flyBNB/prova_csplvy.jpg',
-  'https://thumbnails.trvl-media.com/l3Y9880qRaNDeRcV0mCacf5zBdc=/500x333/smart/filters:quality(80)/images.trvl-media.com/hotels/17000000/16620000/16611100/16611049/063cc6c0_z.jpg',
-  'https://res.cloudinary.com/flybnb94/image/upload/v1594675659/flyBNB/prova_csplvy.jpg',
+const height =  width*0.8
 
-]
 export default function UserStructure({ route }){
     const {
       userToken,
@@ -48,15 +38,14 @@ export default function UserStructure({ route }){
       image4
      } = route.params;
       var images = []
-      if(image1 != null) images.push(image1)
-      if(image2 != null) images.push(image2)
-      if(image3 != null) images.push(image3)
-      if(image4 != null) images.push(image4)
+      if(image1 != null && image1.length != 0) images.push(image1)
+      if(image2 != null && image2.length != 0) images.push(image2)
+      if(image3 != null && image3.length != 0)  images.push(image3)
+      if(image4 != null && image4.length != 0) images.push(image4)
      console.log(image1)
       const [state,setState] = React.useState({
         activeImage : 0,
         horizontalScroll: true,
-        images : images
       })
       const navigation = useNavigation();
 
@@ -90,7 +79,10 @@ export default function UserStructure({ route }){
         itemParking: itemParking,
         itemDescription: itemDescription,
         locationDescription: locationDescription,
-        images : images
+        image1: image1,
+        image2 : image2,
+        image3: image3,
+        image4 : image4
       })
     }
       
@@ -108,18 +100,44 @@ export default function UserStructure({ route }){
         }
       } */
       
-    
+      const imageChanged = ({nativeEvent}) => {
+        const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width );
+        //contentOffSet misura quanto una view (in questo caso l'img della scrollView) è stata spostataa dall'origine tramite evento di tocco/trascinamento
+        if(slide !== state.activeImage){
+          setState({
+            activeImage: slide
+          })
+        }
+      }
     return (
     <ScrollView style={styles.container}>
-      {
-                  state.images.map((image,index)=>(
-                    <Image
-                      key={index}
-                      source={{uri: image}}
-                      style={styles.Image}
-                    ></Image>
+      {images.length> 0 ? 
+        <View style={styles.imageScrollWrapper}>
+              <ScrollView 
+                pagingEnabled 
+                horizontal
+                onScroll={imageChanged}
+                scrollEventThrottle={16}
+                showsHorizontalScrollIndicator={state.horizontalScroll}
+                style={styles.imageScrollView}>
+                  {
+                    images.map((image,index)=>(
+                      <Image
+                        key={index}
+                        source={{uri: image}}
+                        style={styles.Image}
+                      ></Image>
+                    ))
+                  }
+              </ScrollView>
+              <View style={styles.pagination}>
+                {
+                  images.map((i,k)=>(
+                    <Text key={k} style={k == state.activeImage? styles.paginActiveDot :styles.paginDot}>⬤</Text>
                   ))
-      }
+                }
+              </View>
+        </View>:null}
       <Text style={styles.title}>{itemTitle}</Text>
       
       <View style={{flexDirection:'row', alignSelf:'center'}}>
@@ -163,9 +181,7 @@ export default function UserStructure({ route }){
           </View>
           
           <Text style={styles.structureButton} onPress={()=> navigate()} >Modifica</Text>
-
-
-      
+         
       </ScrollView>
     )
 }
@@ -173,127 +189,128 @@ export default function UserStructure({ route }){
 const styles = StyleSheet.create({
   container:{
     flex:1,
-    height:'100%',
+
     backgroundColor: colors.green01,
     
   },
- 
-    Image:{
-      width: 20,
-      height:20,
-      borderRadius:15,
-    },
-    imageScrollWrapper:{
-      height: '30%',
-      marginBottom: 20,
-      backgroundColor: colors.white,
-      borderRadius: 20,
-      alignSelf:'center'
-    },
-    imageScrollView:{
-      width: width*0.9,
-      height: height,
-      margin: 5,
-      
-    },
-    pagination:{
-      flexDirection: 'row', 
-      position:'absolute', 
-      bottom: 35, 
-      alignSelf:'center'
-    },
-    paginDot:{
-      color: colors.white,
-      margin:3,
-      opacity: 0.5
-    },
-    paginActiveDot:{
-      color: colors.white,
-      margin:3,
-      opacity: 0.9
-    },
-    structureInfo:{
-      alignContent:'center',
-      alignItems:'center',
-        
-    },
-    mainInfo:{
-      borderRadius: 20,
-      borderWidth: 2,
-      borderColor: colors.black,
-      padding:20,
-      backgroundColor: colors.white,
-      marginBottom:20,
-      width: width*0.9
+  Image:{
+    width: width*0.5,
+    height: '100%',
+    borderRadius:15,
+    resizeMode:'contain'
+  },
+  imageScrollWrapper:{
+    flex:1,
+    marginBottom: 20,
+    backgroundColor: colors.white,
+    borderRadius: 20,
+    alignSelf:'center',
+    marginTop:5
+  },
+  imageScrollView:{
+    width: width*0.5,
+    height: height*0.4,
+    margin: 5,
+    
+  },
+  pagination:{
+    flexDirection: 'row', 
+    position:'absolute', 
+    bottom: 35, 
+    alignSelf:'center'
+  },
+  paginDot:{
+    color: colors.white,
+    margin:3,
+    opacity: 0.5
+  },
+  paginActiveDot:{
+    color: colors.white,
+    margin:3,
+    opacity: 0.9
+  },
+  structureInfo:{
+    alignContent:'center',
+    alignItems:'center',
       
   },
-  structureServicesBox:{
+  mainInfo:{
     borderRadius: 20,
     borderWidth: 2,
     borderColor: colors.black,
     padding:20,
-    paddingBottom:0,
-    backgroundColor:colors.white,
-    width: width*0.9
-  },
-  servicesText:{
-    textAlign:'left',
-    fontSize: 16,
-    fontWeight: '500',
-    color: colors.black,
+    backgroundColor: colors.white,
+    marginBottom:20,
+    width: width*0.5
+    
+},
+structureServicesBox:{
+  borderRadius: 20,
+  borderWidth: 2,
+  borderColor: colors.black,
+  padding:20,
+  paddingBottom:0,
+  backgroundColor:colors.white,
+  width: width*0.5
+},
+servicesText:{
+  textAlign:'left',
+  fontSize: 16,
+  fontWeight: '500',
+  color: colors.black,
 
-  },
-  title:{
-    fontSize: 28,
-    color: colors.white,
-    fontWeight: "300",
-    margin: 20,
-    alignSelf:'center'
-  },
-  normalText:{
-    fontSize:16,
-    marginBottom: 5,
-    textAlign:'center'
-  },
-  important:{
-    color:colors.orange,
-    fontWeight: '400',
-    fontSize: 16
-  },
+},
+title:{
+  fontSize: 28,
+  color: colors.white,
+  fontWeight: "300",
+  margin: 20,
+  alignSelf:'center'
+},
+normalText:{
+  fontSize:16,
+  marginBottom: 5,
+  textAlign:'center'
+},
+important:{
+  color:colors.orange,
+  fontWeight: '400',
+  fontSize: 16
+},
 
-  ownerInfo:{
-    color:colors.white,
-    fontWeight: '400',
-    fontSize: 16
-  },
-  BookingButton:{
-    alignContent:'center',
-    alignItems:'center',
-    padding: 20
-  },
-  description:{
-    marginTop: 20,
-    marginBottom:20
-  },
-  logo: {
-    width:80,
-    height:90,
-    marginTop: 0,
-    marginBottom: 0,
-  },
-  structureButton:{
-    color: colors.white, 
-    fontSize:14, 
-    fontWeight: "700",
-    padding:4,
-    width: 90,
-    textAlign:'center',
-    alignSelf:'center',
-    margin: 5,
-    backgroundColor: colors.blue,
-    borderColor: colors.black,
-    borderWidth: 3,
-    borderRadius: 10
-  }
- 
+ownerInfo:{
+  color:colors.white,
+  fontWeight: '400',
+  fontSize: 16
+},
+BookingButton:{
+  alignContent:'center',
+  alignItems:'center',
+  padding: 20
+},
+description:{
+  marginTop: 20,
+  marginBottom:20
+},
+logo: {
+  width:80,
+  height:90,
+  marginTop: 0,
+  marginBottom: 0,
+},
+structureButton:{
+  color: colors.white, 
+  fontSize:14, 
+  fontWeight: "700",
+  padding:4,
+  width: 90,
+  textAlign:'center',
+  alignSelf:'center',
+  margin: 5,
+  backgroundColor: colors.blue,
+  borderColor: colors.black,
+  borderWidth: 3,
+  borderRadius: 10
+}
+
 });

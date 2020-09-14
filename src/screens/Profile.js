@@ -3,22 +3,16 @@ import {View, Text, StyleSheet, Image, Dimensions, ScrollView, TouchableOpacity,
 import { Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-community/async-storage';
 import UserStructures from '../components/UserStructureList'
-import AddButton from '../components/buttons/Button1'
-import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import uploadToAnonymousFilesAsync from 'anonymous-files';
 import colors from '../style/colors';
 import host from '../configHost';
 import { UserContext } from "../components/context";
-import LogoutButton from "../components/buttons/Button1"
-import { color } from 'react-native-reanimated';
 
-import AddStructure from './AddStructure';
-import { render } from 'react-dom';
 import BookingsList from '../components/BookingsList';
 import RequestList from '../components/RequestList';
 import axios from "axios";
-import { TouchableHighlight } from 'react-native-gesture-handler';
+
 
 const {width} = Dimensions.get('window');
 const height =  width*0.4//40% di width
@@ -180,7 +174,9 @@ static contextType = UserContext
 
         <View style={styles.profileCard}>
            <View style={styles.userInfoBox}>
-            <Image source={ this.state.profileImage !== '' ? {uri: this.state.profileImage} : require('../img/person.png') } style={styles.ProfileImage} />
+            <Image source={ this.state.profileImage !== '' ? {uri: this.state.profileImage} : require('../img/person.png') } 
+                   style={styles.ProfileImage} 
+            />
             <TouchableOpacity style={styles.button} onPress={this.profileImagePickerAsync}>
             <Icon
               size={20}

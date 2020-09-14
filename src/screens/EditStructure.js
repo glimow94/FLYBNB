@@ -281,7 +281,10 @@ export default class EditStructure extends Component{
             itemParking,
             itemDescription,
             locationDescription,
-            images
+            image1,
+            image2,
+            image3,
+            image4,
         } = this.props.route.params;
         console.log('userTokenAddStructure')
         console.log(itemName)
@@ -303,6 +306,10 @@ export default class EditStructure extends Component{
             parking:itemParking,
             kitchen:itemKitchen,
             airConditioner:itemAirConditioner,
+            structureImage_1:image1,
+            structureImage_2:image2,
+            structureImage_3:image3,
+            structureImage_4:image4
         })
     }
 
@@ -354,7 +361,31 @@ export default class EditStructure extends Component{
                 console.log(error);
             });
             
-            this.props.navigation.navigate('Profile')
+            this.props.navigation.navigate('UserStructure',{
+                /* parametri da passare alla schermata successiva */
+                userToken: this.state.user_id,
+                itemID: this.state.id,
+                itemName: this.state.title,
+                itemTitle: this.state.title,
+                itemPrice: this.state.price,
+                itemPlace: this.state.city,
+                itemStreet: this.state.street,
+                itemNumber: this.state.number,
+                itemPostCode: this.state.post_code,
+                itemBeds: this.state.beds,
+                itemType: this.state.type,
+                itemKitchen: this.state.kitchen,
+                itemFullBoard: this.state.fullBoard,
+                itemAirConditioner: this.state.itemAirConditioner,
+                itemWifi: this.state.wifi,
+                itemParking: this.state.parking,
+                itemDescription: this.state.description,
+                locationDescription: this.state.location_description,
+                image1: this.state.structureImage_1,
+                image2 : this.state.structureImage_2,
+                image3: this.state.structureImage_3,
+                image4 : this.state.structureImage_4
+            });
         }
     }
 

@@ -206,6 +206,10 @@ class StructuresList extends Component {
                       itemParking: item.parking,
                       itemDescription: item.description,
                       locationDescription: item.location_description,
+                      image1: item.image1,
+                      image2 : item.image2,
+                      image3: item.image3,
+                      image4 : item.image4
                   })}></BookingButton>
               </View>}
           contentContainerStyle={{paddingTop:40}}

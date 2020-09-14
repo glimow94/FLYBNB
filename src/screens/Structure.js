@@ -14,12 +14,7 @@ import { color } from 'react-native-reanimated';
 
 const {width} = Dimensions.get('window');
 const height =  width*0.8//40% di width
-const images =[
-  'https://res.cloudinary.com/flybnb94/image/upload/v1594675659/flyBNB/prova_csplvy.jpg',
-  'https://thumbnails.trvl-media.com/l3Y9880qRaNDeRcV0mCacf5zBdc=/500x333/smart/filters:quality(80)/images.trvl-media.com/hotels/17000000/16620000/16611100/16611049/063cc6c0_z.jpg',
-  'https://res.cloudinary.com/flybnb94/image/upload/v1594675659/flyBNB/prova_csplvy.jpg',
 
-]
 export default function Structure({ route }){
     const {
       itemName,
@@ -39,8 +34,18 @@ export default function Structure({ route }){
       itemWifi,
       itemParking,
       itemDescription,
-      locationDescription } = route.params;
-
+      locationDescription,
+      image1,
+      image2,
+      image3,
+      image4 
+    } = route.params;
+    var images = []
+    if(image1 != null && image1.length != 0) images.push(image1)
+    if(image2 != null && image2.length != 0) images.push(image2)
+    if(image3 != null && image3.length != 0)  images.push(image3)
+    if(image4 != null && image4.length != 0) images.push(image4)
+    console.log(images)
       const [state,setState] = React.useState({
         activeImage : 0,
         horizontalScroll: true,
@@ -121,14 +126,14 @@ export default function Structure({ route }){
     
     return (
     <ScrollView style={styles.container}>
-      
-      <Text style={styles.title}>{itemTitle}</Text>
-      
-      <View style={styles.imageScrollWrapper}>
+      <View style={{alignContent:'center',alignItems:'center'}}>
+      {images.length > 0 ? 
+        <View style={styles.imageScrollWrapper}>
             <ScrollView 
               pagingEnabled 
               horizontal
               onScroll={imageChanged}
+              scrollEventThrottle={16}
               showsHorizontalScrollIndicator={state.horizontalScroll}
               style={styles.imageScrollView}>
                 {
@@ -148,17 +153,18 @@ export default function Structure({ route }){
                 ))
               }
             </View>
-      </View>
-      <View style={{flexDirection:'row', alignSelf:'center'}}>
-              <Text style={styles.normalText}>Proprietario: </Text><Text style = {styles.ownerInfo}> {itemName} {itemSurname}, {itemEmail}</Text>
-      </View>
-         
+      </View>:null}
+      
+            
+      <Text style={styles.title}>{itemTitle}</Text>
          <View style={styles.structureInfo}>
 
               <View style={styles.mainInfo}>
                   <View style={{flexDirection:'row'}}>
                     <Text style = {styles.important}>{itemType} - {itemTitle}</Text>
-
+                  </View>
+                  <View style={{flexDirection:'row'}}>
+                      <Text style={styles.normalText}>Proprietario: </Text><Text style = {styles.important}> {itemName} {itemSurname}, {itemEmail}</Text>
                   </View>
                   <View style={styles.description}>
                     <Text>{itemDescription}</Text>
@@ -191,10 +197,10 @@ export default function Structure({ route }){
           </View>
           
           <View style={styles.BookingButton}>
-                <BookingButton text="PRENOTA" onPress={getToken}></BookingButton> 
+                <BookingButton text="PRENOTA" backgroundColor={colors.green01} onPress={getToken}></BookingButton> 
           </View>
      
-      
+          </View>
       </ScrollView>
     )
 }
@@ -208,22 +214,23 @@ const styles = StyleSheet.create({
   },
  
     Image:{
-      width: width*0.9,
+      width: width*0.5,
       height: '100%',
       borderRadius:15,
+      resizeMode:'contain'
     },
     imageScrollWrapper:{
+      flex:1,
       height: '30%',
-      marginBottom: 20,
+      marginBottom: 10,
       backgroundColor: colors.white,
-      borderRadius: 20,
-      alignSelf:'center'
+      borderRadius: 10,
     },
     imageScrollView:{
-      width: width*0.9,
-      height: height,
-      margin: 5,
-      
+      width: width*0.5,
+    height: height*0.4,
+    margin: 5,
+    
     },
     pagination:{
       flexDirection: 'row', 
@@ -253,7 +260,7 @@ const styles = StyleSheet.create({
       padding:20,
       backgroundColor: colors.white,
       marginBottom:20,
-      width: width*0.9
+      width: width*0.5
       
   },
   structureServicesBox:{
@@ -263,7 +270,7 @@ const styles = StyleSheet.create({
     padding:20,
     paddingBottom:0,
     backgroundColor:colors.white,
-    width: width*0.9
+    width: width*0.5
   },
   servicesText:{
     textAlign:'left',
@@ -291,10 +298,9 @@ const styles = StyleSheet.create({
   },
 
   ownerInfo:{
-    color:colors.white,
+    color:colors.black,
     fontWeight: '400',
     fontSize: 16,
-    margin: 5
   },
   BookingButton:{
     alignContent:'center',
