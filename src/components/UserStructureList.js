@@ -131,7 +131,7 @@ class StructuresList extends Component {
               <Text>{item.place}</Text>
 
               {this.state.today.diff(moment(item.start_date,'DD-MM-YYYY'), 'days') > -1 ? 
-              <Text style={styles.dateswarning} onPress={()=>{console.log('INVIA RENDICONTO')}}>INVIA RENDICONTO TREMESTRALE</Text>:null}
+              <Text style={styles.dateswarning} onPress={()=>{console.log('INVIA RENDICONTO')}}>INVIA RENDICONTO TRIMESTRALE</Text>:null}
 
               <Text style={styles.editButton} 
                 onPress={()=> navigation.navigate('EditStructure',{

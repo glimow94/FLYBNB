@@ -14,8 +14,11 @@ import Login from './Login'
 import BookingStructure from './BookingStructure';
 import { color } from 'react-native-reanimated';
 
-const {width} = Dimensions.get('window');
-const height =  width*0.8//40% di width
+var {width} = Dimensions.get('window');
+var height =  width;
+
+Platform.OS === 'web' ? width= width *0.5 : width = width*0.9
+Platform.OS === 'web' ? height = height*0.4 : height = height*0.9
 
 export default function Structure({ route }){
     const {
@@ -164,13 +167,10 @@ export default function Structure({ route }){
          <View style={styles.structureInfo}>
 
               <View style={styles.mainInfo}>
-                  <View style={{flexDirection:'row'}}>
+                  <View style={{flexDirection:'row', alignSelf:'center'}}>
                     <Text style = {[styles.important,{marginLeft:0}]}>{itemType} - {itemTitle}</Text>
                   </View>
-                  <View style={{flexDirection:'row'}}>
-                      <Text style={styles.normalText}>Luogo: </Text><Text style = {styles.important}> {itemPlace}</Text>
-                  </View>
-                  <View style={{flexDirection:'row'}}>
+                  <View style={styles.userInfo}>
                       <Text style={styles.normalText}>Proprietario: </Text><Text style = {styles.important}> {itemName} {itemSurname}, {itemEmail.toLowerCase()}</Text>
                   </View>
                   <View style={{flexDirection:'row'}}>
@@ -178,7 +178,10 @@ export default function Structure({ route }){
                   </View>
                   
                   <View style={{flexDirection:'row'}}>
-                   <Text style={styles.normalText}>Indirizzo: </Text><Text style = {styles.important}>{itemPlace}, {itemStreet} - {itemNumber}, {itemPostCode}</Text>
+                  <Text style={styles.normalText}>Luogo: </Text><Text style = {styles.important}>{itemPlace}, {itemPostCode}</Text>
+                  </View>
+                  <View style={{flexDirection:'row'}}>
+                   <Text style={styles.normalText}>Indirizzo: </Text><Text style = {styles.important}>{itemStreet},{itemNumber}</Text>
                   </View>
                   
                   <View style={{flexDirection:'row'}}>
@@ -235,7 +238,7 @@ const styles = StyleSheet.create({
   },
  
     Image:{
-      width: width*0.5,
+      width: width,
       height: '100%',
       borderRadius:15,
       resizeMode:'contain'
@@ -248,10 +251,14 @@ const styles = StyleSheet.create({
       borderRadius: 10,
     },
     imageScrollView:{
-      width: width*0.5,
-    height: height*0.4,
+      width: width,
+    height: height,
     margin: 5,
     
+    },
+    userInfo:{
+      marginBottom:20,
+      marginTop:20,
     },
     pagination:{
       flexDirection: 'row', 
@@ -281,7 +288,7 @@ const styles = StyleSheet.create({
       padding:20,
       backgroundColor: colors.white,
       marginBottom:20,
-      width: width*0.5
+      width: width
       
   },
   structureServicesBox:{
@@ -291,7 +298,7 @@ const styles = StyleSheet.create({
     padding:20,
     paddingBottom:0,
     backgroundColor:colors.white,
-    width: width*0.5
+    width: width
   },
   service:{
     textAlign:'left',

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SafeAreaView, View, FlatList, StyleSheet, Text } from 'react-native';
+import { SafeAreaView, View, FlatList, StyleSheet, Text, Platform } from 'react-native';
 import Constants from 'expo-constants';
 import colors from "../style/colors/index";
 import BookingButton from "../components/buttons/bookingButton";
@@ -10,6 +10,14 @@ import axios from "axios";
 import AsyncStorage from '@react-native-community/async-storage';
 import host from '../configHost'
 import { getActiveChildNavigationOptions } from 'react-navigation';
+
+var height='95%';
+var width='100%';
+
+Platform.OS == 'web' ? height = '80%' : null
+Platform.OS == 'web' ? width = '70%' : null
+
+
 
 class StructuresList extends Component {
   
@@ -176,6 +184,10 @@ class StructuresList extends Component {
     return (
       
       <View style={styles.container}>
+        { 
+        //se la citta è selezionata o se è stato scritto qualcosa sulla barra di ricerca allora renderizza gli oggetti che corrispondono 
+        //altrimenti solo le ultime 10 strutture inserite
+        this.props.city != 'Luogo' || this.props.selectedStructureName.length != 0 ?
         <FlatList
           data={this.dataServicesFilter(this.dataCityFilter(this.dataPriceFilter(this.dataStructureNameFilter(this.dataTypeFilter(this.dataBedsFilter(this.state.data))))))}
           keyExtractor = {(item, index) => index.toString()}
@@ -193,9 +205,7 @@ class StructuresList extends Component {
                     <View style={{flexDirection:'row'}}>
                       <Text style={styles.service}>Parcheggio: </Text>{item.parking ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' style={{marginRight:5}} type='font-awesome' color={colors.red}/>}
                     </View>
-                    <View style={{flexDirection:'row'}}>
-                      <Text style={styles.service}>Cucina: </Text>{item.kitchen ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
-                    </View>
+                    
                   </View>
                   <View style={styles.serviceBox}>
                     <View style={{flexDirection:'row'}}>
@@ -203,6 +213,9 @@ class StructuresList extends Component {
                     </View>
                     <View style={{flexDirection:'row'}}>
                       <Text style={styles.service}>Wi-Fi: </Text>{item.wifi ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
+                    </View>
+                    <View style={{flexDirection:'row'}}>
+                      <Text style={styles.service}>Cucina: </Text>{item.kitchen ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
                     </View>
                   </View>
 
@@ -238,7 +251,70 @@ class StructuresList extends Component {
                   })}></BookingButton>
               </View>}
           contentContainerStyle={{paddingTop:40}}
-        />
+        />    : 
+        <FlatList
+        data={this.state.data.slice(0,10)}
+        keyExtractor = {(item, index) => index.toString()}
+        renderItem = {({item}) =>
+            <View style={styles.item}>
+              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.type}>{item.type}</Text>
+              <Text style={styles.place}>{item.place}</Text>
+              <View>
+                <Text style={styles.beds}>Posti letto: {item.beds}</Text>
+                <View style={styles.serviceBox}>
+                  <View style={{flexDirection:'row'}}>
+                    <Text style={styles.service}>Pensione Completa: </Text>{item.fullBoard ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
+                  </View>
+                  <View style={{flexDirection:'row'}}>
+                    <Text style={styles.service}>Parcheggio: </Text>{item.parking ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' style={{marginRight:5}} type='font-awesome' color={colors.red}/>}
+                  </View>
+                </View>
+                <View style={styles.serviceBox}>
+                  <View style={{flexDirection:'row'}}>
+                    <Text style={styles.service}>Aria Condizionata: </Text>{item.airConditioner ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
+                  </View>
+                  <View style={{flexDirection:'row'}}>
+                    <Text style={styles.service}>Wi-Fi: </Text>{item.wifi ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
+                  </View>
+                  <View style={{flexDirection:'row'}}>
+                      <Text style={styles.service}>Cucina: </Text>{item.kitchen ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
+                  </View>
+                </View>
+
+              </View>
+              <BookingButton 
+                text={parseInt(item.price)+'€ a Notte'} 
+                onPress={()=>navigation.navigate('Structure',{
+                    /* parametri da passare alla schermata successiva */
+                    itemName: item.name,
+                    itemSurname: item.surname,
+                    ownerID: item.user_id,
+                    itemEmail: item.email,
+                    itemTitle: item.title,
+                    itemPrice: item.price,
+                    itemID: item.id,
+                    itemPlace: item.place,
+                    itemNumber: item.number,
+                    itemPostCode:item.post_code,
+                    itemStreet: item.street,
+                    itemBeds: item.beds,
+                    itemType: item.type,
+                    itemKitchen: item.kitchen,
+                    itemFullBoard: item.fullboard,
+                    itemAirConditioner: item.airConditioner,
+                    itemWifi: item.wifi,
+                    itemParking: item.parking,
+                    itemDescription: item.description,
+                    locationDescription: item.location_description,
+                    image1: item.image1,
+                    image2 : item.image2,
+                    image3: item.image3,
+                    image4 : item.image4
+                })}></BookingButton>
+            </View>}
+        contentContainerStyle={{paddingTop:40}}
+      />}
       </View>
     );
   }
@@ -251,8 +327,8 @@ export default function(props) {
 
 const styles = StyleSheet.create({
   container: {
-    height:'80%',
-    width:'70%',
+    height:height,
+    width:width,
     marginBottom: '20%',
     borderTopColor: colors.white,
     borderTopWidth: 2,

@@ -14,8 +14,7 @@ import RequestList from '../components/RequestList';
 import axios from "axios";
 
 
-const {width} = Dimensions.get('window');
-const height =  width*0.4//40% di width
+
 
 class Profile extends Component{
 static contextType = UserContext
@@ -129,7 +128,6 @@ static contextType = UserContext
     if (Platform.OS === 'web') {
       // i browser web non possono condividere una URI locale per motivi di sicurezza
       // facciamo un upload fittizio su anonymousfile.io e ricaviamo la URI remota del file
-      let remoteUri = await uploadToAnonymousFilesAsync(pickerResult.uri);
       console.log("remote Uri")
       console.log(pickerResult.uri)
       this.setState({
@@ -137,7 +135,6 @@ static contextType = UserContext
       })
     } else {
       // remoteUri è null per un device mobile
-      console.log(remoteUri)
       this.setState({
         profileImage: pickerResult.uri
       })

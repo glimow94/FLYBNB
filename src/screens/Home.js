@@ -122,7 +122,7 @@ export default class Home extends Component{
                 ></FilterSelector>
                 
           </View>
-
+          {this.state.city == 'Luogo' == this.state.selectedName.length == 0 ? <Text style={styles.infoText}>Seleziona un luogo o cerca una struttura</Text>:null}
           <View style={styles.structuresList}>
             {/* <StructureListDB
                kitchen={this.state.kitchen}
@@ -133,8 +133,8 @@ export default class Home extends Component{
                city={this.state.city}    
                price={this.state.price}
             ></StructureListDB> */}
-            {
-              this.state.city != 'Luogo'|| this.state.selectedName.length != 0?
+            
+              
               <StructuresList
                 kitchen={this.state.kitchen}
                 fullBoard={this.state.fullBoard}
@@ -146,12 +146,8 @@ export default class Home extends Component{
                 type={this.state.type}
                 beds={this.state.beds}
                 selectedStructureName={this.state.selectedName}
-              ></StructuresList>: <View styles={styles.footer}>
-                                    <Text style={styles.footerText}>BENVENUTO SU FLYBNB</Text>
-                                    <Text style={styles.footerText2}>Seleziona il luogo in cui intendi pernottare o cerca una struttura</Text>
-                                    
-                                </View> 
-            }
+              ></StructuresList>
+            
           </View>
 
         </View>
@@ -216,12 +212,12 @@ const styles = StyleSheet.create({
         paddingTop:20,
         marginLeft:10
     },
-    footerText2:{
-      fontSize: 20,
+    infoText:{
+      fontSize: 12,
         color: colors.white,
         fontWeight: "300",
         position: 'relative',
-        margin:10,
+        margin:5,
         alignSelf:'center'
     }
 });

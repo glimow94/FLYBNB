@@ -7,8 +7,11 @@ import { Icon } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 
 
-const {width} = Dimensions.get('window');
-const height =  width*0.8
+var {width} = Dimensions.get('window');
+var height =  width;
+
+Platform.OS === 'web' ? width= width *0.5 : width = width*0.9
+Platform.OS === 'web' ? height = height*0.4 : height = height*0.9
 
 export default function UserStructure({ route }){
     const {
@@ -198,7 +201,7 @@ const styles = StyleSheet.create({
     
   },
   Image:{
-    width: width*0.5,
+    width: width,
     height: '100%',
     borderRadius:15,
     resizeMode:'contain'
@@ -212,8 +215,8 @@ const styles = StyleSheet.create({
     marginTop:5
   },
   imageScrollView:{
-    width: width*0.5,
-    height: height*0.4,
+    width: width,
+    height: height,
     margin: 5,
     
   },
@@ -245,7 +248,7 @@ const styles = StyleSheet.create({
     padding:20,
     backgroundColor: colors.white,
     marginBottom:20,
-    width: width*0.5
+    width: width
     
 },
 structureServicesBox:{
@@ -255,7 +258,7 @@ structureServicesBox:{
   padding:20,
   paddingBottom:0,
   backgroundColor:colors.white,
-  width: width*0.5
+  width: width
 },
 servicesText:{
   textAlign:'left',

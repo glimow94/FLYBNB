@@ -15,6 +15,8 @@ import axios from "axios";
 import host from '../configHost'
 
 const {width} = Dimensions.get('window');
+let {imageDim} = 0
+Platform.OS === 'web' ? imageDim = 100 : imageDim = 50;
 
 //pagina di registrazione struttura
 export default class EditStructure extends Component{
@@ -195,7 +197,7 @@ export default class EditStructure extends Component{
         let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
         // verifica permessi di accesso alla gallery
         if (permissionResult.granted === false) {
-          alert("Permission to access camera roll is required!");
+          alert("È necessario attivare i permessi della fotocamera!");
           return;
         }
     
@@ -203,12 +205,11 @@ export default class EditStructure extends Component{
         if (pickerResult.cancelled === true) {
           return; // operazione abortita
         }
+        
+
         if (Platform.OS === 'web') {
-          // i browser web non possono condividere una URI locale per motivi di sicurezza
-          // facciamo un upload fittizio su anonymousfile.io e ricaviamo la URI remota del file
-          let remoteUri = await uploadToAnonymousFilesAsync(pickerResult.uri);
-          console.log("remote Uri")
-          console.log(pickerResult.uri)
+         
+
             if(index == 1){
                 this.setState({
                     structureImage_1 : pickerResult.uri
@@ -231,8 +232,6 @@ export default class EditStructure extends Component{
             }
         }
         else {
-          // remoteUri è null per un device mobile
-          console.log(remoteUri)
             if(index == 1){
                 this.setState({
                     structureImage_1 : pickerResult.uri
@@ -513,7 +512,7 @@ export default class EditStructure extends Component{
                             checkedIcon='dot-circle-o'
                             uncheckedIcon='circle-o'
                             title='Colazione inclusa'
-                            checked={this.state.fullBoard}
+                            checked={this.state.fullBoard == 0 ? false : true}
                             onPress={()=>{
                                 this.state.fullBoard==false ? this.setState({fullBoard: true}) : this.setState({fullBoard: false})
                             }}
@@ -526,7 +525,7 @@ export default class EditStructure extends Component{
                             checkedIcon='dot-circle-o'
                             uncheckedIcon='circle-o'
                             title='Cucina'
-                            checked={this.state.kitchen}
+                            checked={this.state.kitchen==0 ? false : true}
                             onPress={()=>{
                                 this.state.kitchen==false ? this.setState({kitchen: true}) : this.setState({kitchen: false})
                             }}
@@ -540,7 +539,7 @@ export default class EditStructure extends Component{
                             uncheckedIcon='circle-o'
                             backgroundColor={colors.green01}
                             title='Aria condizionata'
-                            checked={this.state.airConditioner}
+                            checked={this.state.airConditioner == 0 ? false : true}
                             onPress={()=>{
                                 this.state.airConditioner==false ? this.setState({airConditioner: true}) : this.setState({airConditioner: false})
                             }}
@@ -553,7 +552,7 @@ export default class EditStructure extends Component{
                             checkedIcon='dot-circle-o'
                             uncheckedIcon='circle-o'
                             title='Wi-Fi'
-                            checked={this.state.wifi}
+                            checked={this.state.wifi ==0 ? false : true}
                             onPress={()=>{
                                 this.state.wifi==false ? this.setState({wifi: true}) : this.setState({wifi: false})
                             }}
@@ -566,7 +565,7 @@ export default class EditStructure extends Component{
                             checkedIcon='dot-circle-o'
                             uncheckedIcon='circle-o'
                             title='Parcheggio Auto'
-                            checked={this.state.parking}
+                            checked={this.state.parking == 0 ? false : true}
                             onPress={()=>{
                                 this.state.parking==false ? this.setState({parking: true}) : this.setState({parking: false})
                             }}
@@ -732,8 +731,8 @@ const styles = StyleSheet.create({
         fontWeight:"500"
     },
     structureImage:{
-        height: 100,
-        width: 100,
+        height: imageDim,
+        width: imageDim,
         alignSelf:'center',
         borderRadius: 8,
     },

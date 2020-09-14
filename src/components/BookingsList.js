@@ -69,9 +69,18 @@ export default class StructuresList extends Component {
 
                 <View style={styles.viewRow}>
                     {
-                      item.request== 0 ? <Text style={styles.requestDontApproved}>In attesa di approvazione</Text>
-                      : <Text style={styles.requestApproved}>Prenotazione approvata</Text>
+                      item.request== 0 ? <Text style={styles.requestWaiting}>In Attesa di Approvazione</Text>
+                      : null
                     }
+                    {
+                      item.request== 1 ? <Text style={styles.requestApproved}>Richiesta Approvata</Text>
+                      : null
+                    }
+                    {
+                      item.request== 2 ? <Text style={styles.requestDontApproved}>Richiesta Rifiutata e Rimborsata</Text>
+                      : null
+                    }
+                    
                     
                   <Text style={styles.titleStructure}>{item.title}, {item.type} </Text>
                   <Text style={styles.streetInfoText}>HOST: {item.name} {item.surname}, {item.email}</Text>
@@ -130,6 +139,11 @@ const styles = StyleSheet.create({
   },
   requestDontApproved:{
     color:colors.red,
+    fontSize: 14,
+    fontWeight: "700"
+  },
+  requestWaiting:{
+    color:colors.blue,
     fontSize: 14,
     fontWeight: "700"
   },
