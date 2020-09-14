@@ -5,7 +5,7 @@ import DateSelector from '../components/DateSelector';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
 import axios from "axios";
-import moment from "moment"
+import moment from "moment";
 import { diff } from 'react-native-reanimated';
 import host from '../configHost';
 

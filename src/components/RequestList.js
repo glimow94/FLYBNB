@@ -81,7 +81,8 @@ export default class StructuresList extends Component {
       console.log(this.state.data)
     }
 
-   async postResponse(itemID) {
+   async postConfirm(itemID, earn) {
+     var totEarn_ = this.state.totEarn;
       const url = `http://${host.host}:3055/bookings/profile/response/${itemID}`;
       axios.post(url, {
           method: 'POST',
@@ -104,7 +105,8 @@ export default class StructuresList extends Component {
             data_[i].request = 1;
             this.setState({
               data:data_,
-              waitingRequests: request_wait-1
+              waitingRequests: request_wait-1,
+              totEarn : totEarn_+earn
             });
             this.props.updateState({
               waitingRequests:request_wait-1
@@ -157,6 +159,7 @@ export default class StructuresList extends Component {
     return (
       
       <View style={styles.container}>
+        {this.state.data.length != 0? <View>
         <View style={{flexDirection:'row'}}>
           <Text style={styles.infoText}>Guadagni totali :</Text>
           <Text style={styles.totEarn}> {this.state.totEarn} €</Text>
@@ -207,7 +210,7 @@ export default class StructuresList extends Component {
                 </View>
                 {item.request == 0 ? <View style={styles.buttonGroup}>
                     <View style={styles.button}>
-                        <Button onPress = {()=> {this.postResponse(item.id)}} title="Accetta"color={colors.green02}></Button>
+                        <Button onPress = {()=> {this.postConfirm(item.id, item.totPrice)}} title="Accetta"color={colors.green02}></Button>
                     </View>
                     <View style={styles.button}>
                         <Button onPress = {()=> {this.postRefused(item.id)}} title="Rifiuta" color={colors.red}></Button>
@@ -216,7 +219,7 @@ export default class StructuresList extends Component {
             </View>}
           contentContainerStyle={{paddingTop:40}}
         />
-
+        </View>:<Text>Non hai nessuna richiesta di prenotazioni</Text>}
       </View>
     );
   }

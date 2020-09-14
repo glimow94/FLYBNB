@@ -35,8 +35,12 @@ export default function UserStructure({ route }){
       image1,
       image2,
       image3,
-      image4
+      image4,
+      start_date,
+      today
      } = route.params;
+     console.log(today)
+     console.log(start_date)
       var images = []
       if(image1 != null && image1.length != 0) images.push(image1)
       if(image2 != null && image2.length != 0) images.push(image2)

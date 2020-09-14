@@ -68,9 +68,7 @@ static contextType = UserContext
         }
       })
       .then(res => {
-        this.setState({
-          profileImage : res.data[0].image
-        })
+        if(res.data[0] ) this.setState({profileImage : res.data[0].image})
     })
     this.setState({
       name: user_name,
@@ -174,7 +172,7 @@ static contextType = UserContext
 
         <View style={styles.profileCard}>
            <View style={styles.userInfoBox}>
-            <Image source={ this.state.profileImage !== '' ? {uri: this.state.profileImage} : require('../img/person.png') } 
+            <Image source={ this.state.profileImage != null ? {uri: this.state.profileImage} : require('../img/person.png') } 
                    style={styles.ProfileImage} 
             />
             <TouchableOpacity style={styles.button} onPress={this.profileImagePickerAsync}>

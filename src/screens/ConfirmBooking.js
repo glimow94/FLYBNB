@@ -99,6 +99,8 @@ export default class BookingStructure extends Component{
         }
         guests_data.push(obj);
     }
+    console.log(guests_data)
+    console.log(guests)
    
 
     this.setState({
