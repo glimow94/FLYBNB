@@ -7,7 +7,7 @@ import BookingButton from "../components/buttons/bookingButton";
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
 import AsyncStorage from '@react-native-community/async-storage';
-
+import host from '../configHost'
 
 export default class StructuresList extends Component {
   
@@ -38,7 +38,7 @@ export default class StructuresList extends Component {
       console.log("token booking state");
       console.log(this.state.userToken);
       if(this.state.userToken != null){
-        const url = `http://localhost:3055/bookings/profile/request/${this.state.userToken}`;
+        const url = `http://${host.host}:3055/bookings/profile/request/${this.state.userToken}`;
         axios.get(url, {
             method: 'GET',
             headers: {
@@ -82,7 +82,7 @@ export default class StructuresList extends Component {
     }
 
    async postResponse(itemID) {
-      const url = `http://localhost:3055/bookings/profile/response/${itemID}`;
+      const url = `http://${host.host}:3055/bookings/profile/response/${itemID}`;
       axios.post(url, {
           method: 'POST',
           headers: {
@@ -116,7 +116,7 @@ export default class StructuresList extends Component {
     }
 
     async postRefused(itemID) {
-      const url = `http://localhost:3055/bookings/response/refused/${itemID}`;
+      const url = `http://${host.host}:3055/bookings/response/refused/${itemID}`;
       axios.post(url, {
           method: 'POST',
           headers: {

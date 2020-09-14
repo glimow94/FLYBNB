@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import uploadToAnonymousFilesAsync from 'anonymous-files';
 import colors from '../style/colors';
-
+import host from '../configHost';
 import { UserContext } from "../components/context";
 import LogoutButton from "../components/buttons/Button1"
 import { color } from 'react-native-reanimated';
@@ -66,7 +66,7 @@ static contextType = UserContext
     }catch(e){
       console.log(e)
     }
-    const url = `http://localhost:3055/users/image/${userToken}`;
+    const url = `http://${host.host}:3055/users/image/${userToken}`;
     axios.get(url, {
         method: 'GET',
         headers: {
@@ -154,7 +154,7 @@ static contextType = UserContext
     ///let formdata = new FormData();
     //formdata.append("product[name]", 'image')
     //formdata.append("product[image]", {uri: this.state.imageUri, name: 'image.jpg', type: 'image/jpeg'})
-    const url = `http://localhost:3055/users/update/image/${this.state.userToken}`;
+    const url = `http://${host.host}:3055/users/update/image/${this.state.userToken}`;
     axios.post(url, {
         method: 'POST',
         headers: {

@@ -4,7 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import uploadToAnonymousFilesAsync from 'anonymous-files';
 import { Icon } from 'react-native-elements';
 import colors from '../style/colors/index';
-
+import host from '../configHost'
 import { ScrollView } from 'react-native-gesture-handler';
 import axios from "axios";
 import BirthDayPicker from "../components/BirthdayPicker"
@@ -139,7 +139,7 @@ export default class BookingStructure extends Component{
     }
 
     if(error==false){
-      const url = `http://localhost:3055/bookings/add`;
+      const url = `http://${host.host}:3055/bookings/add`;
       await axios.post(url, {
           method: 'POST',
           headers: {
@@ -157,13 +157,20 @@ export default class BookingStructure extends Component{
         .then(res => {
           console.log(res);
           res.data;
+          return res;
           })
         .catch(function (error) {
           console.log(error);
         });
   
-        await this.postGuest();
-        await this.postMail();
+        await this.postGuest()
+        .then(res => {
+          return res;
+          })
+        .finally(()=>{
+          this.postMail();
+        });
+        
         this.props.navigation.navigate('Home')
     }
     else this.setState({alert:true})
@@ -171,7 +178,7 @@ export default class BookingStructure extends Component{
   }
 
   async postGuest() {
-    const url = `http://localhost:3055/bookings/add/guest`;
+    const url = `http://${host.host}:3055/bookings/add/guest`;
     for(let index=0 ; index < this.state.guestsData.length ; index++){
       axios.post(url, {
         method: 'POST',
@@ -192,7 +199,8 @@ export default class BookingStructure extends Component{
         document: this.state.guestsData[index].document_img
       })
       .then(res => {
-        console.log(res);
+        //console.log(res);
+        return res
         })
       .catch(function (error) {
         console.log(error);
@@ -201,7 +209,7 @@ export default class BookingStructure extends Component{
   }
 
   async postMail() {
-    const url = `http://localhost:3055/bookings/send/email`;
+    const url = `http://${host.host}:3055/bookings/send/email`;
     axios.post(url, {
        method: 'POST',
        headers: {

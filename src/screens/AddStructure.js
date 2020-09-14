@@ -12,6 +12,7 @@ import { UserContext } from "../components/context";
 import { useNavigation } from "@react-navigation/native";
 import Login from './Login';
 import axios from "axios";
+import host from '../configHost'
 
 const {width} = Dimensions.get('window');
 
@@ -306,7 +307,7 @@ export default class AddStructure extends Component{
     }
 
     async addStructurePost(){
-        const url = `http://localhost:3055/structures/add`;
+        const url = `http://${host.host}:3055/structures/add`;
         axios.post(url, {
                 method: 'POST',
                 headers: {

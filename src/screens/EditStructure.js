@@ -12,6 +12,7 @@ import { UserContext } from "../components/context";
 import { useNavigation } from "@react-navigation/native";
 import Login from './Login';
 import axios from "axios";
+import host from '../configHost'
 
 const {width} = Dimensions.get('window');
 
@@ -253,24 +254,6 @@ export default class EditStructure extends Component{
                 })
             }
         }
-    
-        ///let formdata = new FormData();
-        //formdata.append("product[name]", 'image')
-        //formdata.append("product[image]", {uri: this.state.imageUri, name: 'image.jpg', type: 'image/jpeg'})
-        /* const url = `http://localhost:3055/users/update/image/${this.state.userToken}`;
-        axios.post(url, {
-            method: 'POST',
-            headers: {
-              'content-type': 'multipart/form-data',
-            },
-            image: this.state.profileImage
-          })
-          .then(res => {
-            console.log(res);
-            })
-          .catch(function (error) {
-            console.log(error);
-          }); */
     };
     updateState(filterStatus){
         this.setState(filterStatus)
@@ -337,7 +320,7 @@ export default class EditStructure extends Component{
                 })
             }
         else{
-            const url = `http://localhost:3055/structures/update/${this.state.id}`;
+            const url = `http://${host.host}:3055/structures/update/${this.state.id}`;
             axios.post(url, {
                 method: 'POST',
                 headers: {
@@ -358,7 +341,11 @@ export default class EditStructure extends Component{
                 wifi: this.state.wifi,
                 parking: this.state.parking,
                 kitchen: this.state.kitchen,
-                airConditioner: this.state.airConditioner 
+                airConditioner: this.state.airConditioner,
+                image1: this.state.structureImage_1,
+                image2: this.state.structureImage_2,
+                image3: this.state.structureImage_3,
+                image4: this.state.structureImage_4
             })
             .then(res => {
                 console.log(res);

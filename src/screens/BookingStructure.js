@@ -7,7 +7,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import axios from "axios";
 import moment from "moment"
 import { diff } from 'react-native-reanimated';
-
+import host from '../configHost';
 
 export default class BookingStructure extends Component{
   constructor(props){
@@ -137,7 +137,7 @@ export default class BookingStructure extends Component{
       request: 0
     })
 
-    var url = `http://localhost:3055/bookings/profile/date/${itemID}`;
+    var url = `http://${host.host}:3055/bookings/profile/date/${itemID}`;
     axios.get(url, {
         method: 'GET',
         headers: {
@@ -166,7 +166,7 @@ export default class BookingStructure extends Component{
 
     })
 
-    url = `http://localhost:3055/bookings/profile/date/${itemID}/${userID}`;
+    url = `http://${host.host}:3055/bookings/profile/date/${itemID}/${userID}`;
     axios.get(url, {
         method: 'GET',
         headers: {
@@ -406,7 +406,7 @@ async postBooking () {
 }
 
   async postMail() {
-    const url = `http://localhost:3055/bookings/send/email`;
+    const url = `http://${host.host}:3055/bookings/send/email`;
     axios.post(url, {
        method: 'POST',
        headers: {
