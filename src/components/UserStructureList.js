@@ -21,7 +21,27 @@ class StructuresList extends Component {
     }
    }
    _isMounted = false;
+   monthNameToNum(monthname) {
+    var months = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May',
+        'Jun', 'Jul', 'Aug', 'Sep',
+        'Oct', 'Nov', 'Dec'
+      ]; //mesi dell'anno che mi servono per convertire il mese della data nel suo corrispondente numero MM
+    var index = months.indexOf(monthname);
+    
+    //aggiungo lo 0 prima del numero del mese se questo è < 10, ovvero 1 diventa 01, 2 diventa 02, ecc.ecc.
+    if(index+1 < 10 && index != -1){
+      index = index +1;
+      var month = '0'+index.toString()
+      return month
+    }
+    else {
+      return index!=-1 ? index+1 : undefined;
+    }
+  }
    componentDidMount = () => {
+    var date = new Date()
+    console.log(date)
     this._isMounted = true;
     //get current token
     const itemToken = AsyncStorage.getItem('userToken')
@@ -43,6 +63,7 @@ class StructuresList extends Component {
               const structures = res.data;
               this.setState({
                 isLoading:false,
+                today : date,
                 data: structures
               })
             }
@@ -97,7 +118,7 @@ class StructuresList extends Component {
               
               <Text style={styles.titleStructure}>{item.title} </Text>
               <Text>{item.place}</Text>
-            <Text>{item.start_date}</Text>
+              {item.start_date ? <Text> {parseInt((this.state.today - item.start_date) / (1000 * 60 * 60 * 24), 10)}</Text>:null}
               <Text style={styles.editButton} 
                 onPress={()=> navigation.navigate('EditStructure',{
                   /* parametri da passare alla schermata successiva */
