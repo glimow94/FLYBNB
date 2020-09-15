@@ -332,7 +332,6 @@ export default class EditStructure extends Component{
                 headers: {
                 'content-type': 'application/json',   
                 },
-                user_id: this.state.user_id,
                 title: this.state.title,
                 type: this.state.type,
                 place: this.state.city,

@@ -132,6 +132,20 @@ export default class StructuresList extends Component {
           console.log(error);
         });
         
+      url = `http://${host.host}:3055/bookings/send/refused/${itemID}`;
+        axios.post(url, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',   
+        }
+        })
+        .then(res => {
+          console.log(res);
+          })
+        .catch(function (error) {
+          console.log(error);
+        });
+
         var data_ = this.state.data,
             request_wait = this.state.waitingRequests;
 
