@@ -689,7 +689,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         paddingTop: 15,
         paddingBottom: 5,
-        height: 30,
+        height: 40,
         backgroundColor: colors.green01,
         borderBottomColor: colors.white,
     },

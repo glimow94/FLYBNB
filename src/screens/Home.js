@@ -1,13 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component,  } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import colors from "../style/colors/index";
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import SearchBar from "../components/SearchBar";
+import { Icon } from 'react-native-elements';
+
 import DateSelector from "../components/DateSelector";
 import FilterSelector from "../components/FilterSelector";
 import StructuresList from "../components/StructuresList";
-import StructureLIstProva from "../components/provaStruttureLista"
-import TypeSelector from "../components/TypeSelector"
+
+import TypeSelector from "../components/TypeSelector";
 
 import {
   Text,
@@ -16,15 +18,16 @@ import {
   TouchableHighlight,
   ScrollView,
   StyleSheet,
+  TouchableOpacity,
   Button,
-  SafeAreaView
+  SafeAreaView, Platform
 } from 'react-native';
 import CitySelector from '../components/CitySelector';
 import PriceSelector from '../components/PriceSelector';
 
 
 
-export default class Home extends Component{
+class Home extends Component{
   constructor(props){
     super(props);
     this.state={
@@ -35,7 +38,7 @@ export default class Home extends Component{
       parking:false,
       city:'Luogo',
       price: 'Prezzo',
-
+      token : null, //se token non è null il pulsante LOGIN diventa quello per accedere al PROFILO
       //filtri per tupi di alloggio (beb o casa vacanze) e posti letto disponibili
       type:'Qualsiasi',
       beds:0, //se beds = 0 allora cerca alloggi con qualsiasi numero di posti letto
@@ -54,10 +57,30 @@ export default class Home extends Component{
   updateState(filterStatus){
     this.setState(filterStatus)
   } 
-  
 
-  render()
-    {
+  async getToken(){
+    try{
+      const myToken = await AsyncStorage.getItem('userToken');
+      const clientMail = await AsyncStorage.getItem('email');
+      const clientName = await AsyncStorage.getItem('name');
+      const clientSurname = await AsyncStorage.getItem('surname');
+      const clientBirthdate = await AsyncStorage.getItem('birthdate');
+      if(myToken!=null){
+        this.setState({
+          token : myToken
+        })
+      }
+    }catch(e){
+      console.log(e)
+    }
+  }
+
+  componentDidMount(){
+    this.getToken()
+  }
+
+  render(){
+    const { navigation } = this.props;
       return (
         <View style={styles.container}>
           
@@ -69,12 +92,35 @@ export default class Home extends Component{
             <SearchBar
               updateState={this.updateState.bind(this)}
             ></SearchBar>
+            {Platform.OS === 'web'? 
+              <View style={{alignContent:'center',alignItems:'center'}}>
+                { this.state.token != null ?
+                  <TouchableOpacity onPress={()=>navigation.navigate('Login')} style={styles.accessButton}> 
+                    <Icon
+                      size={40}
+                      style={styles.icon}
+                      name='user'
+                      type='font-awesome'
+                      color={colors.white}
+                  /><Text style={styles.accessText}>LOGIN</Text>
+                  </TouchableOpacity>
+                  :<TouchableOpacity onPress={()=>navigation.navigate('Profile')} style={styles.accessButton}>
+                    <Icon
+                    size={40}
+                    style={styles.icon}
+                    name='user'
+                    type='font-awesome'
+                    color={colors.white}
+                /><Text style={styles.accessText}>PROFILO</Text></TouchableOpacity>
+
+                }
+              </View>:null}
           </View>
 
           <Text style={styles.titleStyle}>
                 Come possiamo aiutarti?
           </Text>
-
+          
           <View style={styles.buttonGroup}>
                 <CitySelector
                   updateState={this.updateState.bind(this)}
@@ -154,7 +200,12 @@ export default class Home extends Component{
     )
   }
 }
+// Wrap and export
+export default function(props) {
+  const navigation = useNavigation();
 
+  return <Home {...props} navigation={navigation} />;
+}
 const styles = StyleSheet.create({
     container:{
       flex:1,
@@ -219,5 +270,26 @@ const styles = StyleSheet.create({
         position: 'relative',
         margin:5,
         alignSelf:'center'
+    },
+    accessButton:{
+      borderWidth:3,
+      borderRadius:50,
+      borderColor:colors.white,
+      alignContent:'center',
+      alignItems:'center',
+      height:80,
+      backgroundColor:colors.blue,
+      width:80,
+      marginRight:30,
+    },
+    accessText:{
+      fontWeight:"600",
+      textAlign:'center',
+      fontSize:12,
+      color:colors.white
+    },
+    icon:{
+      marginTop:6,
+      alignSelf:'center'
     }
 });

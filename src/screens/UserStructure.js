@@ -1,5 +1,5 @@
 import React, {Component, useEffect} from 'react';
-import {View, Text, StyleSheet, Image, ScrollView, Dimensions, Platform} from 'react-native';
+import {View, Text, StyleSheet, Image, ScrollView, Dimensions, Platform, TouchableOpacity} from 'react-native';
 
 import colors from '../style/colors';
 import { Icon } from 'react-native-elements';
@@ -11,7 +11,7 @@ var {width} = Dimensions.get('window');
 var height =  width;
 
 Platform.OS === 'web' ? width= width *0.5 : width = width*0.9
-Platform.OS === 'web' ? height = height*0.4 : height = height*0.9
+Platform.OS === 'web' ? height = height*0.3 : height = height*0.9
 
 export default function UserStructure({ route }){
     const {
@@ -39,11 +39,9 @@ export default function UserStructure({ route }){
       image2,
       image3,
       image4,
-      start_date,
-      today
+      
      } = route.params;
-     console.log(today)
-     console.log(start_date)
+     
       var images = []
       if(image1 != null && image1.length != 0) images.push(image1)
       if(image2 != null && image2.length != 0) images.push(image2)
@@ -117,70 +115,95 @@ export default function UserStructure({ route }){
         }
       }
     return (
-    <ScrollView style={styles.container}>
-      {images.length> 0 ? 
+      <ScrollView style={styles.container}>
+        {Platform.OS === 'web'? 
+        <TouchableOpacity onPress={()=>navigation.navigate('Login')} style={styles.accessButton}>
+                    <Icon
+                    size={40}
+                    style={styles.icon}
+                    name='user'
+                    type='font-awesome'
+                    color={colors.white}
+        /><Text style={styles.accessText}>HOME</Text></TouchableOpacity>:null}
+      <View style={{alignContent:'center',alignItems:'center'}}>
+      {images.length > 0 ? 
         <View style={styles.imageScrollWrapper}>
-              <ScrollView 
-                pagingEnabled 
-                horizontal
-                onScroll={imageChanged}
-                scrollEventThrottle={16}
-                showsHorizontalScrollIndicator={state.horizontalScroll}
-                style={styles.imageScrollView}>
-                  {
-                    images.map((image,index)=>(
-                      <Image
-                        key={index}
-                        source={{uri: image}}
-                        style={styles.Image}
-                      ></Image>
-                    ))
-                  }
-              </ScrollView>
-              <View style={styles.pagination}>
+            <ScrollView 
+              pagingEnabled 
+              horizontal
+              onScroll={imageChanged}
+              scrollEventThrottle={16}
+              showsHorizontalScrollIndicator={state.horizontalScroll}
+              style={styles.imageScrollView}>
                 {
-                  images.map((i,k)=>(
-                    <Text key={k} style={k == state.activeImage? styles.paginActiveDot :styles.paginDot}>⬤</Text>
+                  images.map((image,index)=>(
+                    <Image
+                      key={index}
+                      source={{uri: image}}
+                      style={styles.Image}
+                    ></Image>
                   ))
                 }
-              </View>
-        </View>:null}
-      <Text style={styles.title}>{itemTitle}</Text>
+            </ScrollView>
+            <View style={styles.pagination}>
+              {
+                images.map((i,k)=>(
+                  <Text key={k} style={k == state.activeImage? styles.paginActiveDot :styles.paginDot}>⬤</Text>
+                ))
+              }
+            </View>
+      </View>:null}
       
-      <View style={{flexDirection:'row', alignSelf:'center'}}>
-      </View>
-         
+            
+      <Text style={styles.title}>{itemTitle}</Text>
          <View style={styles.structureInfo}>
 
               <View style={styles.mainInfo}>
-                  <View style={{flexDirection:'row'}}>
-                    <Text style = {styles.important}>{itemType} - {itemTitle}</Text>
-
+                  <View style={{flexDirection:'row', alignSelf:'center'}}>
+                    <Text style = {[styles.important,{marginLeft:0}]}>{itemType} - {itemTitle}</Text>
                   </View>
-                  <View style={styles.description}>
-                    <Text>{itemDescription}</Text>
-                  </View>
+                  
                   <View style={{flexDirection:'row'}}>
                     <Text style={styles.normalText} >Prezzo per Notte: </Text><Text style = {styles.important}>{itemPrice}€</Text>
                   </View>
                   
                   <View style={{flexDirection:'row'}}>
-                     <Text style={styles.normalText}>Indirizzo: </Text><Text style = {styles.important}>{itemPlace}, {itemStreet}</Text>
+                  <Text style={styles.normalText}>Luogo: </Text><Text style = {styles.important}>{itemPlace}, {itemPostCode}</Text>
+                  </View>
+                  <View style={{flexDirection:'row'}}>
+                   <Text style={styles.normalText}>Indirizzo: </Text><Text style = {styles.important}>{itemStreet},{itemNumber}</Text>
                   </View>
                   
                   <View style={{flexDirection:'row'}}>
                     <Text style={styles.normalText}>Letti (per singola persona): </Text><Text style = {styles.important}> {itemBeds}</Text>
                   </View>
-
+                  <View style={styles.description}>
+                    <Text>{itemDescription}</Text>
+                  </View>
 
               </View>
                             
               <View style={styles.structureServicesBox}> 
-                  {itemKitchen ? <Text style={styles.servicesText}>Cucina</Text> : null}
-                  {itemFullBoard == true ? <Text style={styles.servicesText}>Pensione completa</Text> : null }
-                  {itemAirConditioner == true ? <Text style={styles.servicesText}>Aria condizionata</Text> : null}
-                  {itemWifi == true ? <Text style={styles.servicesText}>Wi-Fi</Text> : null }
-                  {itemParking==true ? <Text style={styles.servicesText}>Parcheggio auto</Text> : null }   
+              
+                  
+                    <View style={{flexDirection:'row'}}>
+                      <Text style={styles.service}>Pensione Completa: </Text>{itemFullBoard ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
+                    </View>
+                    <View style={{flexDirection:'row'}}>
+                      <Text style={styles.service}>Parcheggio: </Text>{itemParking ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' style={{marginRight:5}} type='font-awesome' color={colors.red}/>}
+                    </View>
+                    <View style={{flexDirection:'row'}}>
+                      <Text style={styles.service}>Cucina: </Text>{itemKitchen ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
+                    </View>
+                  
+                
+                    <View style={{flexDirection:'row'}}>
+                      <Text style={styles.service}>Aria Condizionata: </Text>{itemAirConditioner ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
+                    </View>
+                    <View style={{flexDirection:'row'}}>
+                      <Text style={styles.service}>Wi-Fi: </Text>{itemWifi ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
+                    </View>
+                  
                   <View style={styles.description}>
                     <Text>{locationDescription}</Text>
                   </View> 
@@ -188,123 +211,129 @@ export default function UserStructure({ route }){
           </View>
           
           <Text style={styles.structureButton} onPress={()=> navigate()} >Modifica</Text>
-         
+
+          </View>
       </ScrollView>
     )
 }
-
 const styles = StyleSheet.create({
   container:{
     flex:1,
-
+    height:'100%',
     backgroundColor: colors.green01,
     
   },
-  Image:{
-    width: width,
-    height: '100%',
-    borderRadius:15,
-    resizeMode:'contain'
-  },
-  imageScrollWrapper:{
-    flex:1,
-    marginBottom: 20,
-    backgroundColor: colors.white,
-    borderRadius: 20,
-    alignSelf:'center',
-    marginTop:5
-  },
-  imageScrollView:{
+ 
+    Image:{
+      width: width,
+      height: '100%',
+      borderRadius:15,
+      resizeMode:'contain'
+    },
+    imageScrollWrapper:{
+      flex:1,
+      height: '30%',
+      marginBottom: 10,
+      backgroundColor: colors.white,
+      borderRadius: 10,
+      marginTop:30
+    },
+    imageScrollView:{
     width: width,
     height: height,
     margin: 5,
     
-  },
-  pagination:{
-    flexDirection: 'row', 
-    position:'absolute', 
-    bottom: 35, 
-    alignSelf:'center'
-  },
-  paginDot:{
-    color: colors.white,
-    margin:3,
-    opacity: 0.5
-  },
-  paginActiveDot:{
-    color: colors.white,
-    margin:3,
-    opacity: 0.9
-  },
-  structureInfo:{
-    alignContent:'center',
-    alignItems:'center',
+    },
+    userInfo:{
+      marginBottom:20,
+      marginTop:20,
+    },
+    pagination:{
+      flexDirection: 'row', 
+      position:'absolute', 
+      bottom: 35, 
+      alignSelf:'center'
+    },
+    paginDot:{
+      color: colors.white,
+      margin:3,
+      opacity: 0.5
+    },
+    paginActiveDot:{
+      color: colors.white,
+      margin:3,
+      opacity: 0.9
+    },
+    structureInfo:{
+      alignContent:'center',
+      alignItems:'center',
+        
+    },
+    mainInfo:{
+      borderRadius: 20,
+      borderWidth: 2,
+      borderColor: colors.black,
+      padding:20,
+      backgroundColor: colors.white,
+      marginBottom:20,
+      width: width
       
   },
-  mainInfo:{
+  structureServicesBox:{
     borderRadius: 20,
     borderWidth: 2,
     borderColor: colors.black,
     padding:20,
-    backgroundColor: colors.white,
-    marginBottom:20,
+    paddingBottom:0,
+    backgroundColor:colors.white,
     width: width
-    
-},
-structureServicesBox:{
-  borderRadius: 20,
-  borderWidth: 2,
-  borderColor: colors.black,
-  padding:20,
-  paddingBottom:0,
-  backgroundColor:colors.white,
-  width: width
-},
-servicesText:{
-  textAlign:'left',
-  fontSize: 16,
-  fontWeight: '500',
-  color: colors.black,
+  },
+  service:{
+    textAlign:'left',
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.black,
 
-},
-title:{
-  fontSize: 28,
-  color: colors.white,
-  fontWeight: "300",
-  margin: 20,
-  alignSelf:'center'
-},
-normalText:{
-  fontSize:16,
-  marginBottom: 5,
-  textAlign:'center'
-},
-important:{
-  color:colors.orange,
-  fontWeight: '400',
-  fontSize: 16
-},
+  },
+  title:{
+    fontSize: 28,
+    color: colors.white,
+    fontWeight: "300",
+    margin: 20,
+    alignSelf:'center'
+  },
+  normalText:{
+    fontSize:16,
+    marginBottom: 5,
+    textAlign:'center'
+  },
+  important:{
+    color:colors.black2,
+    fontWeight: '700',
+    fontSize: 16,
+    marginLeft: 5
+  },
 
-ownerInfo:{
-  color:colors.white,
-  fontWeight: '400',
-  fontSize: 16
-},
-BookingButton:{
-  alignContent:'center',
-  alignItems:'center',
-  padding: 20
-},
-description:{
-  marginTop: 20,
-  marginBottom:20
-},
-logo: {
-  width:80,
-  height:90,
-  marginTop: 0,
-  marginBottom: 0,
-},
+  ownerInfo:{
+    color:colors.black,
+    fontWeight: '700',
+    fontSize: 16,
+  },
+  BookingButton:{
+    alignContent:'center',
+    alignItems:'center',
+    padding: 20
+  },
+  description:{
+    marginTop: 20,
+    marginBottom:20
+  },
+  logo: {
+    width:80,
+    height:90,
+    marginTop: 0,
+    marginBottom: 0,
+  },
 structureButton:{
   color: colors.white, 
   fontSize:14, 
@@ -318,6 +347,26 @@ structureButton:{
   borderColor: colors.black,
   borderWidth: 3,
   borderRadius: 10
+},
+accessButton:{
+  borderWidth:3,
+  borderRadius:50,
+  borderColor:colors.white,
+  alignContent:'center',
+  alignItems:'center',
+  height:80,
+  backgroundColor:colors.blue,
+  width:80,
+  marginRight:30,
+},
+accessText:{
+  fontWeight:"600",
+  textAlign:'center',
+  fontSize:12,
+  color:colors.white
+},
+icon:{
+  marginTop:6,
+  alignSelf:'center'
 }
-
 });

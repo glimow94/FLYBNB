@@ -83,7 +83,13 @@ export default class StructuresList extends Component {
                     
                     
                   <Text style={styles.titleStructure}>{item.title}, {item.type} </Text>
-                  <Text style={styles.streetInfoText}>HOST: {item.name} {item.surname}, {item.email}</Text>
+                  <Text style={styles.streetInfoText}>{item.place} </Text>
+                  <Text style={styles.streetInfoText}>{item.street}, {item.number}</Text>
+
+                  <Text style={styles.hostInfo}>HOST:</Text>
+                  <Text style={styles.hostInfo}> {item.name} {item.surname} </Text>
+                  <Text style={styles.hostInfo}> {item.email.toLowerCase()}</Text>
+
                 </View>
                 <View style={styles.checkInOut}>
           
@@ -99,10 +105,15 @@ export default class StructuresList extends Component {
                 </View>
                 <View style={styles.viewRow}>
                     
-                    <View style={styles.priceBox}>
-                      <Text style={styles.priceText}>Totale: </Text>
-                      <Text style={styles.price}>{item.totPrice} € </Text>
-                    </View>
+                    {item.request == 2 ? 
+                      <View style={styles.priceBox}>
+                        <Text style={[{textDecorationLine:'line-through'},styles.priceText]}>Totale: </Text>
+                        <Text style={[{textDecorationLine:'line-through'},styles.priceText]}>{item.totPrice} € </Text>
+                      </View> : <View style={styles.priceBox}>
+                                <Text style={styles.priceText}>Totale: </Text>
+                                <Text style={styles.price}>{item.totPrice} € </Text>
+                              </View>
+                      }
                     
                 </View>
 
@@ -131,31 +142,49 @@ const styles = StyleSheet.create({
    width: 300,
   },
   titleStructure:{
-    fontSize:16,
+    fontSize:18,
     fontWeight: "700",
     color: colors.black,
     margin:5,
-    marginLeft:0
+    alignSelf:'center',
+    marginLeft:0,
   },
   requestDontApproved:{
     color:colors.red,
-    fontSize: 14,
-    fontWeight: "700"
+    fontSize: 16,
+    fontWeight: "700",
+    borderBottomColor:colors.red,
+    borderBottomWidth:2,
+    alignSelf:'center',
   },
   requestWaiting:{
     color:colors.blue,
-    fontSize: 14,
-    fontWeight: "700"
+    fontSize: 16,
+    fontWeight: "700",
+    borderBottomColor:colors.blue,
+    borderBottomWidth:2,
+    alignSelf:'center',
   },
   requestApproved:{
     color:colors.green02,
-    fontSize: 14,
-    fontWeight: "700"
+    fontSize: 16,
+    fontWeight: "700",
+    borderBottomColor:colors.green02,
+    borderBottomWidth:2,
+    alignSelf:'center',
   },
   streetInfoText:{
     flexDirection:'row',
     fontWeight:"700",
-    color:colors.black
+    color:colors.black,
+    alignSelf:'center',
+  },
+  hostInfo:{
+    fontSize:12,
+    alignSelf:'center',
+    fontWeight:"700",
+    color:colors.black,
+    marginTop:5
   },
   checkInOut:{
     flexDirection: 'row',

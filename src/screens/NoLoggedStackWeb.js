@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import colors from "../style/colors/index";
 import { Icon } from 'react-native-elements';
 
@@ -11,34 +10,33 @@ import LoggedOut from './LoggedOut';
 import Login from './Login';
 import Signup from './Signup';
 import Structure from "../screens/Structure"
-import Trip from "../screens/Trip"
 
 
 const Stack = createStackNavigator();
 const HomeStack = createStackNavigator();
-const Tab = createMaterialBottomTabNavigator();
-
-export default class NoLoggedScreen extends Component{
+const Drawer = createDrawerNavigator();
+export default class NoLoggedScreenWeb extends Component{
     render()
     {    return (
-            <Tab.Navigator
+            <Drawer.Navigator
                 initialRouteName="Home"
                 activeColor= {colors.green01}
                 inactiveColor={colors.black}
                 shifting={true}
+                hideStatusBar={true}
                 style={{ backgroundColor: colors.black }}>
-                <Tab.Screen
+                <Drawer.Screen
                     name="Logout"
                     component={NoLoggedStack}
                     options={{
-                        tabBarColor :colors.white,
+                        tabBarColor :colors.green02,
                         tabBarLabel: 'Accesso',
                         tabBarIcon: ({ color }) => (
                         <Icon name="work" color={color} size={26} />
                     ),
                 }}
                 />
-                <Tab.Screen
+                <Drawer.Screen
                     name="Home"
                     component={HomeStackScreen}
                     options={{
@@ -49,7 +47,7 @@ export default class NoLoggedScreen extends Component{
                     ),
                 }}
                 />
-            </Tab.Navigator>
+            </Drawer.Navigator>
             )
     }
 }
@@ -70,8 +68,5 @@ const NoLoggedStack = ({navigation}) => (
         <Stack.Screen name = "Login" component={Login} />        
         <Stack.Screen name = "Signup" component={Signup} /> 
         <Stack.Screen name="Home" component={Home} />
-
-        
-
     </Stack.Navigator>
 );

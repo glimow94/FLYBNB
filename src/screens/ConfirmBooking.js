@@ -75,7 +75,7 @@ export default class BookingStructure extends Component{
         day = clientBirthdate.substring(0,2),
         month = clientBirthdate.substring(3,5),
         year = clientBirthdate.substring(6,10);
-
+    console.log(clientBirthdate)
     var user ={
       name :clientName,
       surname : clientSurname,
@@ -131,15 +131,16 @@ export default class BookingStructure extends Component{
   async postBooking () {
     console.log(this.state.guestsData)
     var error = false;
-    for(var i = 0; i < this.state.guests.length ; i++){
-      if(this.state.guestsData[i].name.trim().length === 0 ||
-         this.state.guestsData[i].surname.trim().length === 0 ||
-         this.state.guestsData[i].document_img.length === 0){
+    for(var i = 0; i < this.state.guestsData.length ; i++){
+      console.log('SONO ENTRATOOOOOOOOOOOOOOOOOOOO')
+      if(this.state.guestsData[i].name.trim().length == 0 ||
+         this.state.guestsData[i].surname.trim().length == 0 ||
+         this.state.guestsData[i].document_img.length == 0){
           error = true;
           break
         }
     }
-
+    console.log(error)
     if(error==false){
       const url = `http://${host.host}:3055/bookings/add`;
       await axios.post(url, {
@@ -158,15 +159,21 @@ export default class BookingStructure extends Component{
         })
         .then(res => {
           console.log(res);
-          res.data;
-          return res;
+          if(res){
+            this.postGuest().then((res)=>{
+              console.log("result GUEST")
+              console.log(res)
+              if(res && res.filter(function(value){
+                return value.status == 201;
+              }).length == res.length )
+                this.postMail();
+            })
+          }
+          this.props.navigation.navigate('Home');
           })
         .catch(function (error) {
           console.log(error);
         });
-  
-        await this.postGuest()
-        this.props.navigation.navigate('Home')
     }
     else this.setState({alert:true})
     
@@ -175,7 +182,7 @@ export default class BookingStructure extends Component{
   async postGuest() {
     let promises = [];
     const url = `http://${host.host}:3055/bookings/add/guest`;
-    for(let index=0 ; index < this.state.guestsData.length ; index++){
+    for(let index=0 ; index < this.state.guests ; index++){
       promises.push(
         axios.post(url, {
           method: 'POST',
@@ -197,13 +204,12 @@ export default class BookingStructure extends Component{
         })
       );
     }
-
-    axios.all(promises).then( this.postMail())
+    return Promise.all(promises);
   }
 
   async postMail() {
     const url = `http://${host.host}:3055/bookings/send/email`;
-    axios.post(url, {
+    return axios.post(url, {
        method: 'POST',
        headers: {
          'content-type': 'application/json',
@@ -292,17 +298,13 @@ export default class BookingStructure extends Component{
 
     data[index].document_img = pickerResult.uri;
     if (Platform.OS === 'web') {
-      // i browser web non possono condividere una URI locale per motivi di sicurezza
-      // facciamo un upload fittizio su anonymousfile.io e ricaviamo la URI remota del file
-      let remoteUri = await uploadToAnonymousFilesAsync(pickerResult.uri);
-      console.log("remote Uri")
+
       console.log(pickerResult.uri)
       this.setState({
         guestsData:data
       })
     } else {
-      // remoteUri è null per un device mobile
-      console.log(remoteUri)
+
       this.setState({
         guestsData:data
       })

@@ -1,5 +1,5 @@
 import React , {useEffect}from 'react';
-import { StyleSheet, Text, View, ActivityIndicator  } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator, Platform  } from 'react-native';
 import { Icon } from 'react-native-elements';
 //navigazione
 import { NavigationContainer } from '@react-navigation/native';
@@ -15,7 +15,9 @@ import Structure from "./src/screens/Structure";
 import Profile from "./src/screens/Profile";
 import Explore from "./src/screens/Explore";
 import MainTab from "./src/screens/MainTab";
+import MainTabWeb from "./src/screens/MainTabWeb";
 import NoLoggedStack from "./src/screens/NoLoggedStack";
+import NoLoggedStackWeb from './src/screens/NoLoggedStackWeb'
 
 import { UserContext }from "./src/components/context";
 import axios from "axios";
@@ -188,11 +190,18 @@ export default function App() {
   //altrimenti viene renderizzato NoLoggedStack che comprende la pagina di login/signIn e la Home in cui si possono solo vedere le strutture
   return (
     <UserContext.Provider value = {userContext}>
-      <NavigationContainer>
+      {Platform.OS === 'web'?
+        <NavigationContainer>
         { loginState.userToken == null ? 
-           <NoLoggedStack></NoLoggedStack> : <MainTab></MainTab>
+           <NoLoggedStackWeb></NoLoggedStackWeb> : <MainTabWeb></MainTabWeb>
         }
       </NavigationContainer>
+      : <NavigationContainer>
+        {loginState.userToken == null ?
+          <NoLoggedStack></NoLoggedStack> : <MainTab></MainTab>
+        }
+      </NavigationContainer>  
+    }
     </UserContext.Provider>
   );
 }

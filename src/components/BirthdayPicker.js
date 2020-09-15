@@ -169,7 +169,7 @@ export default class BirthdayPicker extends React.Component {
 const styles = StyleSheet.create({
   container:    { flexDirection: "row", },
   Picker:{
-    width:100,
+    width:110,
     height: 40,
     marginTop:5,
     marginBottom:5,

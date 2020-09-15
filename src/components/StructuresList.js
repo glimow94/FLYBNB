@@ -264,7 +264,7 @@ class StructuresList extends Component {
                 <Text style={styles.beds}>Posti letto: {item.beds}</Text>
                 <View style={styles.serviceBox}>
                   <View style={{flexDirection:'row'}}>
-                    <Text style={styles.service}>Pensione Completa: </Text>{item.fullBoard ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
+                    <Text style={styles.service}>Pensione Completa: </Text>{item.fullboard ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
                   </View>
                   <View style={{flexDirection:'row'}}>
                     <Text style={styles.service}>Parcheggio: </Text>{item.parking ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' style={{marginRight:5}} type='font-awesome' color={colors.red}/>}

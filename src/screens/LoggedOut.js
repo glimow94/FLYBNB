@@ -36,7 +36,7 @@ const navigation = useNavigation();
         <View >
           <LoginButton 
             text="Accedi"
-            onPress={()=>navigation.navigate(Login)}
+            onPress={()=>navigation.navigate('Login',{status:0})}
           />
         </View>
         <LoginButton 

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, TextInput,ScrollView, StyleSheet, Picker, TextPropTypes } from "react-native";
+import { View, Text, TextInput,ScrollView, StyleSheet, Picker, TextPropTypes, Platform } from "react-native";
 import colors from "../style/colors/index";
 import NextButton from "../components/buttons/Button1";
 import BirthDayPicker from "../components/BirthdayPicker"
@@ -9,14 +9,27 @@ import { useNavigation } from "@react-navigation/native";
 import Login from './Login';
 import db from '../components/database_region_city'
 
+
+var height = 40;
+var width = 200;
+var position = 'absolute';
+var bottom = 0;
+if( Platform.OS === 'android'){
+
+    height=40;
+    width=150;
+    position='relative';
+    bottom=10;
+
+}
 //pagina di registrazione utente
 const Signup = ({navigation})=>{
 
     const [newUserData,setData] = React.useState({
         name:'',
         surname:'',
-        birthDay: '1',
-        birthMonth: '1',
+        birthDay: '01',
+        birthMonth: '01',
         birthYear:'2000',
         gender: '0',// 0 = uomo , 1 = donna
         city:'',
@@ -44,7 +57,8 @@ const Signup = ({navigation})=>{
         emailAlert: false,
         //stati del cityPicker
         region: 'Regione',
-        province: 'seleziona provincia',
+        province: 'Provincia',
+        comune: 'Comune',
         province_code: '',
         city_code: '',
         // status(1/2/3) è il valore che rende visibile/invisibile il menu delle regioni,province o città
@@ -60,7 +74,7 @@ const Signup = ({navigation})=>{
     //PASSSWORD: deve contenere almeno 6 caratteri(max 20),almeno un carattere maiusoclo,uno minuscolo e un numero
     const passwordRegex = new RegExp("^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{6,}$")
     const emailRegex = new RegExp("[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}")
-    const nameRegex = new RegExp("/^\s+$/")
+    const nameRegex = new RegExp('/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/')
     const { signUp } = React.useContext(UserContext)
 
     const validationCheck=()=>{
@@ -297,7 +311,7 @@ const Signup = ({navigation})=>{
                             onChangeText={(val) => changeName(val)}
                         ></TextInput>
                         {   newUserData.nameAlert==true ? 
-                            <Text style={{color: '#DC143C'}}>Inserisci un nome valido </Text> : null
+                            <Text style={{color: colors.red}}>Inserisci un nome</Text> : null
                         }
                     </View>
                     <View style={styles.InputWrapper}>
@@ -308,7 +322,7 @@ const Signup = ({navigation})=>{
                             onChangeText={(val) => changeSurname(val)}
                         ></TextInput>
                         {   newUserData.surnameAlert==true ? 
-                            <Text style={{color: '#DC143C'}}>Inserisci un cognome valido </Text> : null
+                            <Text style={{color:colors.red}}>Inserisci un cognome</Text> : null
                         }
                     </View>
                 </View>
@@ -337,7 +351,7 @@ const Signup = ({navigation})=>{
                             </Picker>
                     </View>
                     <View style={styles.citylabel}>
-                        <Text style={[{width:150},styles.label]}>RESIDENTE A</Text>
+                        <Text style={styles.label}>RESIDENTE A</Text>
                         <View>
                             <Text style={styles.alternativeCityButton} onPress={showHideCitySelector}>{newUserData.city.substring(0,20)}</Text>
                             <View style={styles.citySelector}>
@@ -345,12 +359,12 @@ const Signup = ({navigation})=>{
                              <View>
                                 <View style={{flexDirection:'row'}}>
                                     <Picker mode="dropdown" 
-                                            style={styles.cityPickerStyle}                  
+                                            style={styles.cityPickerStyle}
                                             onValueChange={itemValue => setData({
                                                                             ...newUserData,
                                                                             region: itemValue,
                                                                             province: 'Provincia',
-                                                                            city:'Comune',
+                                                                            city:'',
                                                                             status2: true
                                                                         })
                                                         }
@@ -365,7 +379,7 @@ const Signup = ({navigation})=>{
                                         })
                                         }
                                     </Picker>
-                                    <Text style={styles.cancelButton} onPress={showHideCitySelector}>X</Text>
+                                    {Platform.OS === 'web' ?<Text style={styles.cancelButton} onPress={showHideCitySelector}>X</Text>:null}
                                  </View>
                             {
                             newUserData.status2 ? 
@@ -376,7 +390,7 @@ const Signup = ({navigation})=>{
                                     itemValue => setData({
                                                     ...newUserData,
                                                     province: itemValue,
-                                                    city:'Comune',
+                                                    comune:'Comune',
                                                     status3: true
                                     })}
                                 >
@@ -408,10 +422,11 @@ const Signup = ({navigation})=>{
                                     onValueChange={itemValue => setData({
                                                                     ...newUserData,
                                                                     city:itemValue,
+                                                                    comune:itemValue,
                                                                     status1:false
                                     })}
                                 >
-                                <Picker.Item label={newUserData.city} value ={newUserData.city_code}></Picker.Item>
+                                <Picker.Item label={newUserData.comune} value ={newUserData.comune}></Picker.Item>
 
                                 {
                                     db.map((item) =>{
@@ -437,9 +452,10 @@ const Signup = ({navigation})=>{
                                     )
                                 }
                                 </Picker> : null
-                            } 
+                            }{Platform.OS === 'android' ?<Text style={styles.cancelButton2} onPress={showHideCitySelector}>chiudi</Text>:null}
+
                             </View> : null
-                         }
+                            }
                             </View>
                         </View>
                     </View>
@@ -453,7 +469,7 @@ const Signup = ({navigation})=>{
                             onChangeText={(val) => changeAddress(val)}
                         ></TextInput>
                         {   newUserData.addressAlert==true ? 
-                            <Text style={{color: '#DC143C'}}>Inserisci un'indirizzo </Text> : null
+                            <Text style={{color: colors.red}}>Inserisci un'indirizzo </Text> : null
                         }
                     </View>
                 <View styles={styles.authenticationForm}>
@@ -465,7 +481,7 @@ const Signup = ({navigation})=>{
                             onChangeText={(val) => changeEmail(val)}
                         ></TextInput>
                         {   newUserData.emailAlert==true ? 
-                            <Text style={{color: '#DC143C'}}>Inserisci un'e-mail valida </Text> : null
+                            <Text style={{color:colors.red}}>Inserisci un'e-mail valida </Text> : null
                         }
                     </View>
                     <View style={styles.passwordForm}>
@@ -481,7 +497,7 @@ const Signup = ({navigation})=>{
                                 onChangeText={(val)=>changePassw(val)}
                             ></TextInput>
                             {   newUserData.passwordAlert==true ? 
-                                <Text style={{color: '#DC143C'}}>Inserisci una password di: {'\n'} almeno sei caratteri {'\n'} con almeno un numero </Text> : null
+                                <Text style={{color: colors.red}}>Inserisci una password di: {'\n'} almeno sei caratteri {'\n'} con almeno un numero </Text> : null
                             }
                         </View>
                         <View style={styles.InputWrapper}>
@@ -496,7 +512,7 @@ const Signup = ({navigation})=>{
                                 onChangeText={(val)=>changeRepassw(val)}
                             ></TextInput>
                             {   newUserData.passwordAlert2==true ? 
-                                <Text style={{color: '#DC143C'}}>Le password devono corrispondere</Text> : null
+                                <Text style={{color: colors.red}}>Password diverse</Text> : null
                             }
                         </View>
                     </View>
@@ -565,7 +581,7 @@ const styles = StyleSheet.create({
     citylabel:{
         fontWeight: "700", 
         width: 150,
-        marginTop: 5,
+        marginTop: 0,
         marginLeft:35,
         bottom: 24
     },
@@ -591,10 +607,10 @@ const styles = StyleSheet.create({
         flexDirection:'column',
       },
     citySelector:{
-       paddingBottom:10
+       paddingBottom:10,
     },
     alternativeCityButton:{
-        width: 200,
+        width: 170,
         borderBottomWidth: 1,
         height: 19,
         marginTop: 15,
@@ -603,7 +619,21 @@ const styles = StyleSheet.create({
     cancelButton:{
         color:colors.red,
         fontSize: 18,
-        fontWeight: "700"  
+        fontWeight: "700",
+    },
+    cancelButton2:{
+        color:colors.red,
+        fontSize: 18,
+        fontWeight: "700",
+        bottom:10,
+        alignSelf:'center'
+    },
+    cityPickerStyle:{
+        height: height,
+        width:width,
+        position:position,
+        bottom:bottom,
+        
     }
 
 });

@@ -18,7 +18,7 @@ var {width} = Dimensions.get('window');
 var height =  width;
 
 Platform.OS === 'web' ? width= width *0.5 : width = width*0.9
-Platform.OS === 'web' ? height = height*0.4 : height = height*0.9
+Platform.OS === 'web' ? height = height*0.3 : height = height*0.9
 
 export default function Structure({ route }){
     const {
@@ -249,9 +249,10 @@ const styles = StyleSheet.create({
       marginBottom: 10,
       backgroundColor: colors.white,
       borderRadius: 10,
+      marginTop:30
     },
     imageScrollView:{
-      width: width,
+    width: width,
     height: height,
     margin: 5,
     

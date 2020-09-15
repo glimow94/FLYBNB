@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, Button, RefreshControlBase, Picker} from 'react-native';
+import {View, Text, StyleSheet, Button, RefreshControlBase, Picker, Platform} from 'react-native';
 import colors from '../style/colors/index';
 import DateSelector from '../components/DateSelector';
 import { useNavigation } from '@react-navigation/native';
@@ -9,6 +9,15 @@ import moment from "moment";
 import { diff } from 'react-native-reanimated';
 import host from '../configHost';
 
+//variabili dinamiche per lo style android/web
+var height = 0;
+var width = 50;
+var bottom=0;
+if( Platform.OS === 'android'){
+    height=40;
+    width=100;
+    bottom= 5
+}
 export default class BookingStructure extends Component{
   constructor(props){
     super(props);
@@ -582,6 +591,9 @@ const styles = StyleSheet.create({
       fontSize:8
     },
     Picker:{
+      height: height,
+      width:width,
+      bottom:bottom,
       margin:3
     }
 });

@@ -15,7 +15,8 @@ import axios from "axios";
 import host from '../configHost'
 
 const {width} = Dimensions.get('window');
-
+let {imageDim} = 0
+Platform.OS === 'web' ? imageDim = 100 : imageDim = 50;
 //pagina di registrazione struttura
 export default class AddStructure extends Component{
     
@@ -68,7 +69,7 @@ export default class AddStructure extends Component{
             //warning se qualche credenziale è sbagliata quando si clicca conferma
             warning:false,
             //stati che in realtà in questa pagina non servono ma servono a cityselector che è un componente usato anche in Home e deve avere questi 3 status necessariamente, altrimenti da errore
-            status1: true,
+            status1: false,
             status2:false,
             status3:false,
             parentType: 'AddStructure'//serve a cityselector per agire in modo diverso in base al componente padre che lo richiama (addStructure o Home)
@@ -195,7 +196,7 @@ export default class AddStructure extends Component{
         let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
         // verifica permessi di accesso alla gallery
         if (permissionResult.granted === false) {
-          alert("Permission to access camera roll is required!");
+          alert("È necessario attivare i permessi della fotocamera!");
           return;
         }
     
@@ -203,12 +204,11 @@ export default class AddStructure extends Component{
         if (pickerResult.cancelled === true) {
           return; // operazione abortita
         }
+        
+
         if (Platform.OS === 'web') {
-          // i browser web non possono condividere una URI locale per motivi di sicurezza
-          // facciamo un upload fittizio su anonymousfile.io e ricaviamo la URI remota del file
-          let remoteUri = await uploadToAnonymousFilesAsync(pickerResult.uri);
-          console.log("remote Uri")
-          console.log(pickerResult.uri)
+         
+
             if(index == 1){
                 this.setState({
                     structureImage_1 : pickerResult.uri
@@ -231,8 +231,6 @@ export default class AddStructure extends Component{
             }
         }
         else {
-          // remoteUri è null per un device mobile
-          console.log(remoteUri)
             if(index == 1){
                 this.setState({
                     structureImage_1 : pickerResult.uri
@@ -682,9 +680,10 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         paddingTop: 15,
         paddingBottom: 5,
-        height: 30,
+        height: 40,
         backgroundColor: colors.green01,
         borderBottomColor: colors.white,
+
     },
     pickerstyle:{
         marginTop: 5,
@@ -728,6 +727,8 @@ const styles = StyleSheet.create({
         width: 100,
         alignSelf:'center',
         borderRadius: 8,
+        width:imageDim,
+        height:imageDim
     },
     images:{
         flexDirection:'row',
@@ -735,6 +736,7 @@ const styles = StyleSheet.create({
     },
     image:{
         flexDirection:'column',
-        margin:5
+        margin:5,
+      
     }
 });

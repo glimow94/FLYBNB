@@ -1,5 +1,5 @@
 import React, {Component, useEffect} from 'react';
-import {View, Text, StyleSheet, Image, Dimensions, ScrollView, TouchableOpacity, Platform,} from 'react-native';
+import {View, Text, StyleSheet, Image, Dimensions, ScrollView, TouchableOpacity, Platform,TouchableHighlight} from 'react-native';
 import { Icon } from 'react-native-elements';
 import AsyncStorage from '@react-native-community/async-storage';
 import UserStructures from '../components/UserStructureList'
@@ -13,8 +13,11 @@ import BookingsList from '../components/BookingsList';
 import RequestList from '../components/RequestList';
 import axios from "axios";
 
+var {width} = Dimensions.get('window');
+var height =  width;
 
-
+Platform.OS === 'web' ? width= width *0.3 : width = width*0.8
+Platform.OS === 'web' ? height = height*0.3 : height = height*0.9
 
 class Profile extends Component{
 static contextType = UserContext
@@ -166,9 +169,17 @@ static contextType = UserContext
       <View style={styles.container}>
       <ScrollView style={styles.scrollViewWrapper}>
         <Text style={styles.titleHeader}>Area Personale</Text>
-
-        <View style={styles.profileCard}>
-           <View style={styles.userInfoBox}>
+        {Platform.OS === 'web'? 
+        <TouchableOpacity onPress={()=>this.props.navigation.navigate('Home')} style={styles.accessButton}>
+                    <Icon
+                    size={40}
+                    style={styles.icon}
+                    name='home'
+                    type='font-awesome-5'
+                    color={colors.white}
+        /><Text style={styles.accessText}>HOME</Text></TouchableOpacity>:null}
+        <View style={[{width:width},styles.profileCard]}>
+           <View style={[{width:width},styles.userInfoBox]}>
             <Image source={ this.state.profileImage != null ? {uri: this.state.profileImage} : require('../img/person.png') } 
                    style={styles.ProfileImage} 
             />
@@ -178,7 +189,6 @@ static contextType = UserContext
               style={styles.icon}
               name='camera'
               type='font-awesome'
-              color='#f50'
               color={colors.black}
             />
           </TouchableOpacity>
@@ -243,7 +253,7 @@ const styles = StyleSheet.create({
     container:{
         backgroundColor: colors.green01,
         height:'100%',
-        padding: 10
+        padding: 5
     },
     ProfileImage:{
       height: 100,
@@ -266,18 +276,20 @@ const styles = StyleSheet.create({
     },
     userInfoBox:{
       margin: 10,
+      marginTop:0,
       backgroundColor: colors.white,
       padding: 15,
       borderWidth: 2,
+      width:300,
       borderColor: colors.black,
-      borderRadius: 4,
-
+      borderRadius: 70,
     },
     titleHeader:{
       fontSize: 28,
       color: colors.white,
       fontWeight: "300",
-      margin: 20,
+      marginTop: 20,
+      marginBottom:10,
       alignSelf:'center'
     },
     menu:{
@@ -289,7 +301,7 @@ const styles = StyleSheet.create({
     },
     menuButton1:{
       height:30,
-      width:110,
+      width:120,
       backgroundColor: colors.blue,
       alignContent:'center',
       alignItems:'center',
@@ -304,7 +316,7 @@ const styles = StyleSheet.create({
     },
     menuButton2:{
       height:30,
-      width:110,
+      width:120,
       backgroundColor: colors.blue,
       flexDirection:'row',
       alignContent:'center',
@@ -320,7 +332,7 @@ const styles = StyleSheet.create({
     },
     menuButton3:{
       height:30,
-      width:110,
+      width:120,
       backgroundColor: colors.blue,
       alignContent:'center',
       alignItems:'center',
@@ -370,7 +382,7 @@ const styles = StyleSheet.create({
       padding:5,
       backgroundColor: colors.white,
       marginBottom:20,
-      width: 340
+      width: 350
     },
     structureButton:{
       color: colors.white, 
@@ -379,9 +391,9 @@ const styles = StyleSheet.create({
       width: 90,
       textAlign:'center',
       alignSelf:'center',
-      margin: 5,
       backgroundColor: colors.blue,
       borderColor: colors.black,
+      marginBottom:10,
       borderWidth: 2,
       borderRadius: 8
     },
@@ -390,6 +402,31 @@ const styles = StyleSheet.create({
       alignContent:'center',
       width:'100%'
     },
+    accessButton:{
+      borderWidth:3,
+      borderTopWidth:3,
+      borderRadius:50,
+      borderColor:colors.white,
+      alignContent:'center',
+      alignItems:'center',
+      height:80,
+      backgroundColor:colors.blue,
+      width:80,
+      position:'relative',
+      bottom:60,
+      marginRight:25,
+      alignSelf:'flex-start'
+    },
+    accessText:{
+      fontWeight:"600",
+      textAlign:'center',
+      fontSize:12,
+      color:colors.white
+    },
+    icon:{
+      marginTop:6,
+      alignSelf:'center'
+    }
 });
 
 export default Profile
