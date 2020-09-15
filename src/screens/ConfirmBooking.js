@@ -152,7 +152,6 @@ export default class BookingStructure extends Component{
           structure_id: parseInt(this.state.structure_id),
           checkIn: this.state.checkIn,
           checkOut: this.state.checkOut,
-          days: parseInt(this.state.diffDays),
           totPrice: parseInt(this.state.totPrice),
           cityTax: parseInt(this.state.cityTax)
         })
@@ -192,7 +191,6 @@ export default class BookingStructure extends Component{
           structure_id: parseInt(this.state.structure_id),
           checkIn: this.state.checkIn,
           checkOut: this.state.checkOut,
-          days: parseInt(this.state.diffDays),
           totPrice: parseInt(this.state.totPrice),
           cityTax: parseInt(this.state.cityTax),
           name: this.state.guestsData[index].name,
@@ -217,7 +215,6 @@ export default class BookingStructure extends Component{
        structure_id: parseInt(this.state.structure_id),
        checkIn: this.state.checkIn,
        checkOut: this.state.checkOut,
-       days: parseInt(this.state.diffDays),
        totPrice: parseInt(this.state.totPrice),
        cityTax: parseInt(this.state.cityTax)
      })
