@@ -132,7 +132,7 @@ export default class StructuresList extends Component {
     }
 
     async postRefused(itemID) {
-      const url = `http://${host.host}:3055/bookings/profile/response/refused/${itemID}`;
+      var url = `http://${host.host}:3055/bookings/profile/response/refused/${itemID}`;
       axios.post(url, {
           method: 'POST',
           headers: {

@@ -11,7 +11,6 @@ import Home from "./Home";
 import Structure from "../screens/Structure"
 import Login from './Login';
 import BookingStructure from './BookingStructure';
-import Trip from './Trip';
 import AddStructure from './AddStructure';
 import UserStructure from './UserStructure';
 import EditStructure from './EditStructure';

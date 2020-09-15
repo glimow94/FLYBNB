@@ -11,7 +11,6 @@ import LoggedOut from './LoggedOut';
 import Login from './Login';
 import Signup from './Signup';
 import Structure from "../screens/Structure"
-import Trip from "../screens/Trip"
 
 
 const Stack = createStackNavigator();
@@ -66,10 +65,10 @@ const HomeStackScreen = ({navigation}) =>(
 
 const NoLoggedStack = ({navigation}) => (
     <Stack.Navigator>
+        <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name = "Accedi" component={LoggedOut} />
         <Stack.Screen name = "Login" component={Login} />        
         <Stack.Screen name = "Signup" component={Signup} /> 
-        <Stack.Screen name="Home" component={Home} />
 
         
 

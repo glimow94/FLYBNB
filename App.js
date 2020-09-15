@@ -8,12 +8,8 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-community/async-storage';
 import host from './src/configHost';
 //screens e components
-import LoggedOut from "./src/screens/LoggedOut";
 import colors from "./src/style/colors/index"
-import Home from './src/screens/Home';
-import Structure from "./src/screens/Structure";
-import Profile from "./src/screens/Profile";
-import Explore from "./src/screens/Explore";
+
 import MainTab from "./src/screens/MainTab";
 import MainTabWeb from "./src/screens/MainTabWeb";
 import NoLoggedStack from "./src/screens/NoLoggedStack";
