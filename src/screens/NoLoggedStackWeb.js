@@ -36,17 +36,6 @@ export default class NoLoggedScreenWeb extends Component{
                     ),
                 }}
                 />
-                <Drawer.Screen
-                    name="Home"
-                    component={HomeStackScreen}
-                    options={{
-                        tabBarColor: colors.white,
-                        tabBarLabel: 'Home',
-                        tabBarIcon: ({ color }) => (
-                        <Icon name="explore" color={color} size={26} />
-                    ),
-                }}
-                />
             </Drawer.Navigator>
             )
     }
@@ -64,9 +53,9 @@ const HomeStackScreen = ({navigation}) =>(
 
 const NoLoggedStack = ({navigation}) => (
     <Stack.Navigator>
-        <Stack.Screen name = "Accedi" component={LoggedOut} />
+        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name = "Access" component={LoggedOut} />
         <Stack.Screen name = "Login" component={Login} />        
         <Stack.Screen name = "Signup" component={Signup} /> 
-        <Stack.Screen name="Home" component={Home} />
     </Stack.Navigator>
 );

@@ -1,7 +1,8 @@
 import React, { Component,  } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import colors from "../style/colors/index";
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import AsyncStorage from '@react-native-community/async-storage';
+
 import SearchBar from "../components/SearchBar";
 import { Icon } from 'react-native-elements';
 
@@ -93,15 +94,15 @@ class Home extends Component{
             ></SearchBar>
             {Platform.OS === 'web'? 
               <View style={{alignContent:'center',alignItems:'center'}}>
-                { this.state.token != null ?
-                  <TouchableOpacity onPress={()=>navigation.jumpTo('MainTab')} style={styles.accessButton}> 
+                { this.state.token == null ?
+                  <TouchableOpacity onPress={()=>navigation.navigate('Access')} style={styles.accessButton}> 
                     <Icon
                       size={40}
                       style={styles.icon}
                       name='user'
                       type='font-awesome'
                       color={colors.white}
-                  /><Text style={styles.accessText}>LOGIN</Text>
+                  /><Text style={styles.accessText}>ACCEDI</Text>
                   </TouchableOpacity>
                   :<TouchableOpacity onPress={()=>navigation.navigate('Profile')} style={styles.accessButton}>
                     <Icon
@@ -215,7 +216,8 @@ class Home extends Component{
           ></FilterSelector>
           </View>
           </View>}
-              {this.state.city == 'Luogo' == this.state.selectedName.length == 0 ? <Text style={styles.infoText}>Seleziona un luogo o cerca una struttura</Text>:<TouchableOpacity style={styles.deleteCityWrapper}><Text style={styles.deletecity} onPress={()=>this.setState({city:'Luogo'})}>Annulla Ricerca a {this.state.city}</Text></TouchableOpacity>}
+              {this.state.city == 'Luogo' && this.state.selectedName.length == 0 ? <Text style={styles.infoText}>Seleziona un luogo o cerca una struttura</Text>:null}
+              {this.state.city != 'Luogo' ? <TouchableOpacity style={styles.deleteCityWrapper}><Text style={styles.deletecity} onPress={()=>this.setState({city:'Luogo'})}>Annulla Ricerca a {this.state.city}</Text></TouchableOpacity>:null}
           <View style={styles.structuresList}>
             {/* <StructureListDB
                kitchen={this.state.kitchen}

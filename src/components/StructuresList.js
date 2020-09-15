@@ -37,8 +37,6 @@ class StructuresList extends Component {
     const itemToken = AsyncStorage.getItem('userToken')
     itemToken.then(token => {
       this.setState({userToken: token})
-      console.log("token state");
-      console.log(this.state.userToken);
       if(this.state.userToken != null){
         const url = `http://${host.host}:3055/structures/${this.state.userToken}`;
         axios.get(url, {
@@ -48,7 +46,7 @@ class StructuresList extends Component {
             }
           })
           .then(res => {
-            console.log(res.data);
+
             if(this._isMounted){
               const structures = res.data;
               this.setState({
@@ -58,7 +56,7 @@ class StructuresList extends Component {
             }
         })
       }else{
-        console.log("userToken è null");
+ 
         const url = `http://${host.host}:3055/structures`;
         axios.get(url, {
             method: 'GET',
@@ -67,7 +65,7 @@ class StructuresList extends Component {
             }
           })
           .then(res => {
-            console.log(res.data);
+            
             if(this._isMounted){
               const structures = res.data;
               this.setState({
@@ -191,6 +189,7 @@ class StructuresList extends Component {
         <FlatList
           data={this.dataServicesFilter(this.dataCityFilter(this.dataPriceFilter(this.dataStructureNameFilter(this.dataTypeFilter(this.dataBedsFilter(this.state.data))))))}
           keyExtractor = {(item, index) => index.toString()}
+          inverted={true}
           renderItem = {({item}) =>
               <View style={styles.item}>
                 <Text style={styles.title}>{item.title.toLowerCase()}</Text>

@@ -69,8 +69,5 @@ const NoLoggedStack = ({navigation}) => (
         <Stack.Screen name = "Accedi" component={LoggedOut} />
         <Stack.Screen name = "Login" component={Login} />        
         <Stack.Screen name = "Signup" component={Signup} /> 
-
-        
-
     </Stack.Navigator>
 );

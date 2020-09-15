@@ -83,7 +83,7 @@ export default class StructuresList extends Component {
 
    async postConfirm(itemID, earn) {
      var totEarn_ = this.state.totEarn;
-      const url = `http://${host.host}:3055/bookings/profile/response/${itemID}`;
+      var url = `http://${host.host}:3055/bookings/profile/response/${itemID}`;
       axios.post(url, {
           method: 'POST',
           headers: {
