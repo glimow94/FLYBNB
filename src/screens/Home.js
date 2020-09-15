@@ -94,7 +94,7 @@ class Home extends Component{
             {Platform.OS === 'web'? 
               <View style={{alignContent:'center',alignItems:'center'}}>
                 { this.state.token != null ?
-                  <TouchableOpacity onPress={()=>navigation.navigate('Accedi')} style={styles.accessButton}> 
+                  <TouchableOpacity onPress={()=>navigation.jumpTo('MainTab')} style={styles.accessButton}> 
                     <Icon
                       size={40}
                       style={styles.icon}
