@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, Button, Platform } from 'react-native';
 import CalendarPicker from 'react-native-calendar-picker';
 import colors from '../style/colors';
 import ConfirmButton from '../components/buttons/confirmButton';
@@ -11,7 +11,8 @@ var months = [
   'Jun', 'Jul', 'Aug', 'Sep',
   'Oct', 'Nov', 'Dec'
 ]; //mesi dell'anno che mi servono per convertire il mese della data nel suo corrispondente numero MM
-
+var scaleFactor = 450;
+Platform.OS === 'android' ? scaleFactor = 350 : null
 export default class DateSelector extends Component {
   constructor(props) {
     super(props);
@@ -174,7 +175,7 @@ export default class DateSelector extends Component {
     const maxDate = new Date(2050, 6, 3); // Max date
     const startDate = selectedStartDate ? selectedStartDate: ''; //Start date
     const endDate = selectedEndDate ? selectedEndDate : ''; //End date
-
+    
     return (
       <View>
         <View style={{alignContent:'center', alignItems:'center'}}>
@@ -211,7 +212,7 @@ export default class DateSelector extends Component {
                 todayBackgroundColor="#e6ffe6"
                 selectedDayColor="#FF6347"
                 selectedDayTextColor="#000000"
-                scaleFactor={450}
+                scaleFactor={scaleFactor}
                 textStyle={{
                     color: '#000000',
                 }}

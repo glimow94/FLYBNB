@@ -358,9 +358,8 @@ export default class EditStructure extends Component{
             .catch(function (error) {
                 console.log(error);
             });
-            
-            this.props.navigation.navigate('UserStructure',{
-                /* parametri da passare alla schermata successiva */
+        
+            this.props.navigation.navigate('Profile')/* ,{
                 userToken: this.state.user_id,
                 itemID: this.state.id,
                 itemName: this.state.title,
@@ -383,7 +382,7 @@ export default class EditStructure extends Component{
                 image2 : this.state.structureImage_2,
                 image3: this.state.structureImage_3,
                 image4 : this.state.structureImage_4
-            });
+            }); */
         }
     }
 

@@ -161,7 +161,10 @@ static contextType = UserContext
         console.log(error);
       });
   };
-
+  navigateToAddStructure(){
+    this.setState({status2:false})
+    this.props.navigation.navigate('AddStructure',{userToken: this.state.userToken})
+  }
   render(){
     const {signOut} = this.context
 
@@ -229,7 +232,7 @@ static contextType = UserContext
                   updateState={this.updateState.bind(this)}
                 ></UserStructures>
                </View>}
-              <Text style={styles.structureButton} onPress={()=> this.props.navigation.navigate('AddStructure',{userToken: this.state.userToken})} >Aggiungi +</Text>
+              <Text style={styles.structureButton} onPress={()=> this.navigateToAddStructure()} >Aggiungi +</Text>
               </View> : null
           }
           {this.state.status3? 

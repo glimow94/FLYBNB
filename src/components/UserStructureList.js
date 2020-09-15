@@ -86,43 +86,47 @@ class StructuresList extends Component {
       <View style={styles.container}>
        { this.state.data.length != 0 ? <FlatList
           data= {this.state.data}
+          extraData={this.state.newstructure}
           keyExtractor = {(item, index) => index.toString()}
           inverted={true}
           renderItem = {({item}) =>
-            <View style={styles.item}>
+            <TouchableOpacity  
+              style={styles.item}
+              onPress={()=>{
+                navigation.navigate('UserStructure',{
+                  /* parametri da passare alla schermata successiva */
+                  userToken: this.state.userToken,
+                  itemName: item.name,
+                  temSurname: item.surname,
+                  itemEmail: item.email,
+                  itemTitle: item.title,
+                  itemPrice: item.price,
+                  itemID: item.id,
+                  itemPlace: item.place,
+                  itemStreet: item.street,
+                  itemNumber: item.number,
+                  itemPostCode: item.post_code,
+                  itemBeds: item.beds,
+                  itemType: item.type,
+                  itemKitchen: item.kitchen,
+                  itemFullBoard: item.fullboard,
+                  itemAirConditioner: item.airConditioner,
+                  itemWifi: item.wifi,
+                  itemParking: item.parking,
+                  itemDescription: item.description,
+                  locationDescription: item.location_description,
+                  image1: item.image1,
+                  image2 : item.image2,
+                  image3: item.image3,
+                  image4 : item.image4,
+                  start_date : item.start_date,
+                  today_date : this.state.today
+              });}}
+            >
               
               <Text 
                 style={styles.titleStructure}
-                onPress={()=>{
-                  navigation.navigate('UserStructure',{
-                    /* parametri da passare alla schermata successiva */
-                    userToken: this.state.userToken,
-                    itemName: item.name,
-                    temSurname: item.surname,
-                    itemEmail: item.email,
-                    itemTitle: item.title,
-                    itemPrice: item.price,
-                    itemID: item.id,
-                    itemPlace: item.place,
-                    itemStreet: item.street,
-                    itemNumber: item.number,
-                    itemPostCode: item.post_code,
-                    itemBeds: item.beds,
-                    itemType: item.type,
-                    itemKitchen: item.kitchen,
-                    itemFullBoard: item.fullboard,
-                    itemAirConditioner: item.airConditioner,
-                    itemWifi: item.wifi,
-                    itemParking: item.parking,
-                    itemDescription: item.description,
-                    locationDescription: item.location_description,
-                    image1: item.image1,
-                    image2 : item.image2,
-                    image3: item.image3,
-                    image4 : item.image4,
-                    start_date : item.start_date,
-                    today_date : this.state.today
-                });}}
+                
               >{item.title}</Text>
 
               <Text>{item.place}</Text>
@@ -131,7 +135,9 @@ class StructuresList extends Component {
               <Text style={styles.dateswarning} onPress={()=>{console.log('INVIA RENDICONTO')}}>INVIA RENDICONTO TRIMESTRALE</Text>:null}
 
               <Text style={styles.editButton} 
-                onPress={()=> navigation.navigate('EditStructure',{
+                onPress={()=>{ 
+                  this.props.updateState({status2:false})
+                  navigation.navigate('EditStructure',{
                   /* parametri da passare alla schermata successiva */
                   userToken: this.state.userToken,
                   itemName: item.name,
@@ -157,8 +163,8 @@ class StructuresList extends Component {
                   image2 : item.image2,
                   image3: item.image3,
                   image4 : item.image4
-              })} >Modifica</Text>
-            </View>}
+              })}} >Modifica</Text>
+            </TouchableOpacity>}
           contentContainerStyle={{paddingTop:40}}
         />:<Text>Non hai nessuna struttura registrata</Text>}
       </View>

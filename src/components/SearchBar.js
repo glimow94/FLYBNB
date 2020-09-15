@@ -26,7 +26,7 @@ export default class SearchBar extends Component{
               <Icon name="ios-search" size={20} style={styles.iconstyle} />
               <TextInput 
                   underlineColorAndroid="transparent"
-                  placeholder={this.props.placeholder}
+                  placeholder={'Cerca Struttura'}
                   placeholderTextColor="grey"
                   style={styles.inputStyle}
                   onChangeText={ val =>this.changeName(val)}
@@ -41,7 +41,7 @@ export default class SearchBar extends Component{
 const styles = StyleSheet.create({
     searchBarStyle: {
         flexDirection:'row',
-        width: 150,
+        width: 200,
         backgroundColor: colors.white,
         borderBottomWidth: 1,
         borderBottomColor: colors.white,

@@ -318,8 +318,7 @@ export default class AddStructure extends Component{
             }
         else{
             await this.addStructurePost();
-            this.props.navigation.navigate('UserStructure',{
-                /* parametri da passare alla schermata successiva */
+            this.props.navigation.goBack()/* ,{
                 userToken: this.state.user_id,
                 itemID: this.state.id,
                 itemName: this.state.title,
@@ -342,7 +341,7 @@ export default class AddStructure extends Component{
                 image2 : this.state.structureImage_2,
                 image3: this.state.structureImage_3,
                 image4 : this.state.structureImage_4
-            });
+            } */
         }
         
     }

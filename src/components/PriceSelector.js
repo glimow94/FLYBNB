@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
  textInputStyle: {  
     textAlign: 'center', 
     position:'relative',
-    left: 10, 
+    
     height: 40,  
     width: 100,
     backgroundColor: colors.white,

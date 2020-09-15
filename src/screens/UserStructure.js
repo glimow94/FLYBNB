@@ -208,8 +208,8 @@ export default function UserStructure({ route }){
               </View>   
           </View>
           
-          <Text style={styles.structureButton} onPress={()=> navigate()} >Modifica</Text>
-
+{/*           <Text style={styles.structureButton} onPress={()=> navigate()} >Modifica</Text>
+ */}
           </View>
       </ScrollView>
     )

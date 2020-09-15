@@ -84,6 +84,7 @@ class Home extends Component{
           <View style={styles.searchHeader}>
             <Image
               style={styles.logo}
+              city={this.state.city}
               source={require('../img/logo_green.png')}
             />
             <SearchBar
@@ -213,7 +214,7 @@ class Home extends Component{
           ></FilterSelector>
           </View>
           </View>}
-          {this.state.city == 'Luogo' == this.state.selectedName.length == 0 ? <Text style={styles.infoText}>Seleziona un luogo o cerca una struttura</Text>:<Text onPress={()=>this.setState({city:'Luogo'})}>Annulla Selezione Città</Text>}
+              {this.state.city == 'Luogo' == this.state.selectedName.length == 0 ? <Text style={styles.infoText}>Seleziona un luogo o cerca una struttura</Text>:<TouchableOpacity style={styles.deleteCityWrapper}><Text style={styles.deletecity} onPress={()=>this.setState({city:'Luogo'})}>Annulla Ricerca a {this.state.city}</Text></TouchableOpacity>}
           <View style={styles.structuresList}>
             {/* <StructureListDB
                kitchen={this.state.kitchen}
@@ -321,7 +322,26 @@ const styles = StyleSheet.create({
         fontWeight: "300",
         position: 'relative',
         margin:5,
-        alignSelf:'center'
+        alignSelf:'center',
+        
+    },
+    deletecity:{
+      fontSize: 12,
+        color: colors.white,
+        fontWeight: "300",
+        position: 'relative',
+        margin:5,
+        alignSelf:'center',
+        marginBottom:10,
+       
+    },
+    deleteCityWrapper:{
+      backgroundColor:colors.red,
+      borderRadius:8,
+      width:240,
+      alignSelf:'center',
+      height:24,
+      
     },
     accessButton:{
       borderWidth:3,

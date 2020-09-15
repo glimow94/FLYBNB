@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     width:300,
     height:350,
     top:1,
-    right: 60,
+    right: 0,
     backgroundColor: colors.white,
     borderRadius:20,
     borderWidth:2,
