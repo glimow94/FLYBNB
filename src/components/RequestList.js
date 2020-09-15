@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     flexGrow:1,
     justifyContent:'center',
     alignContent:'center',
-    alignItems:'center',
+    
   },
   infoText:{
     fontSize:18,
@@ -248,6 +248,7 @@ const styles = StyleSheet.create({
    padding: 5,
    marginTop: 4,
    width: 300,
+   alignSelf:'center'
   },
   titleStructure:{
     fontSize:16,

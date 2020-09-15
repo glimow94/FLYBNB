@@ -4,14 +4,15 @@ import { StyleSheet, View, Picker, } from 'react-native';
 
 export default class BirthdayPicker extends React.Component {
   static defaultProps= {
-    selectedYear:   (new Date()).getFullYear(),     // Year to initialize the picker to (set to 0 to not have a year)
-    selectedMonth:  (new Date()).getMonth(),        // Month to initialize the picker to
-    selectedDay:    (new Date()).getDate(),         // Day to initailize the picker to
-    yearsBack:      100,                            // How many years backwards (from starting year) you want to show
+    //inizializzazione giorno/mese/anno
+    selectedYear:   (new Date()).getFullYear(),     
+    selectedMonth:  (new Date()).getMonth(),      
+    selectedDay:    (new Date()).getDate(),         
+    yearsBack:      100,                            //numero di anni da visualizzare rispettto alla datai iniziale 
 
-    onYearValueChange: function(year, idx) { },     // Function called when year changes
-    onMonthValueChange: function(month, idx) { },   // Function called when month changes
-    onDayValueChange: function(day, idx) { },       // Function called when day changes
+    onYearValueChange: function(year, idx) { },     
+    onMonthValueChange: function(month, idx) { },   
+    onDayValueChange: function(day, idx) { },       
   }
 
   constructor(props) {
@@ -56,38 +57,37 @@ export default class BirthdayPicker extends React.Component {
     return monthNames
   }
 
-  // Returns the number of days in the given month...
+  // Ritorna il numero di giorni in base al mese
   getNumDaysInMonth(year, month) {
-    // February is the only month that can change, so if there's no year, assume it has the maximum (29) days...
     return (year == 0 && month == 1) ? 29 : (new Date(year, month + 1, 0).getDate());
   }
 
-  // Returns the <Picker.Item> values for the years...
+  
   renderYearPickerItems() {
-    // If year was 0, change it to current...
+    
     var currentYear = (new Date()).getFullYear();
     var centerYear = this.startingYear;
     if (centerYear === 0) { centerYear = currentYear; }
 
-    // Set starting and ending years...
+ 
     var startYear = centerYear - this.props.yearsBack;
     var endYear = currentYear;
 
     var years = [];
     for (var i = startYear; i <= endYear; i++) {
-      years.push(<Picker.Item label={i.toString()} value={i} key={i} />);
+      years.push(<Picker.Item label={i.toString()} value={i.toString()} key={i} />);
     }
     years.push(<Picker.Item label="----" value={0} key={0} />);
     return years;
   }
 
-  // Returns the <Picker.Item> values for the months...
+  // <Picker.Item> per i mesi...
   renderMonthPickerItems() {
     var months = this.getMonthNames();
     return months.map(function(month, index) {
       var val = ''
       if(index <=9){
-        val = '0'+(index+1).toString()
+        val = '0'+(index+1).toString()//aggiungo lo 0 prima dei mesi ad una sola cifra per standrdizzare il formato delle date
       }
       else val = (index+1).toString()
       
@@ -95,9 +95,8 @@ export default class BirthdayPicker extends React.Component {
     });
   }
 
-  // Returns the <Picker.Item> values for the days (based on current month/year)...
+  // Ritorna i <Picker.Item> dei giorni basato sui valori month e days...
   renderDayPickerItems() {
-    // February is the only day that can change, so if there's no year, assume it has the maximum (29) days...
     var numDays = this.getNumDaysInMonth(this.state.year, this.state.month);
     
     var days = [];
@@ -112,19 +111,15 @@ export default class BirthdayPicker extends React.Component {
     return days;
   }
 
-  // Occurs when year value changes...
   onYearChange = (value, index) => {
-    // Check if days are valid...
     var maxDays = this.getNumDaysInMonth(value, this.state.month);
     var day = (this.state.day > maxDays) ? maxDays : this.state.day;
 
     this.setState({ year: value, day: day });
-    this.props.onYearValueChange(value.toString(), index);
+    this.props.onYearValueChange(value, index);
   }
 
-  // Occurs when month value changes...
   onMonthChange = (value, index) => {
-    // Check if days are valid...
     var maxDays = this.getNumDaysInMonth(this.state.year, value);
     var day = (this.state.day > maxDays) ? maxDays : this.state.day;
 
@@ -132,7 +127,6 @@ export default class BirthdayPicker extends React.Component {
     this.props.onMonthValueChange(value.toString(), index);
   }
 
-  // Occurs when day value changes...
   onDayChange = (value, index) => {
     this.setState({ day: value });
     this.props.onDayValueChange(value.toString(), index);

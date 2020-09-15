@@ -193,7 +193,7 @@ class StructuresList extends Component {
           keyExtractor = {(item, index) => index.toString()}
           renderItem = {({item}) =>
               <View style={styles.item}>
-                <Text style={styles.title}>{item.title}</Text>
+                <Text style={styles.title}>{item.title.toLowerCase()}</Text>
                 <Text style={styles.type}>{item.type}</Text>
                 <Text style={styles.place}>{item.place}</Text>
                 <View>

@@ -38,16 +38,14 @@ export default function UserStructure({ route }){
       image1,
       image2,
       image3,
-      image4,
-      
+      image4
      } = route.params;
-     
       var images = []
       if(image1 != null && image1.length != 0) images.push(image1)
       if(image2 != null && image2.length != 0) images.push(image2)
       if(image3 != null && image3.length != 0)  images.push(image3)
       if(image4 != null && image4.length != 0) images.push(image4)
-     console.log(image1)
+     console.log(images)
       const [state,setState] = React.useState({
         activeImage : 0,
         horizontalScroll: true,

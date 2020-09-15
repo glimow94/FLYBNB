@@ -114,11 +114,12 @@ class Home extends Component{
               </View>:null}
           </View>
 
-          <Text style={styles.titleStyle}>
+          {Platform.OS === 'web'? <Text style={styles.titleStyle}>
                 Come possiamo aiutarti?
-          </Text>
+          </Text>: null}
           
-          <View style={styles.buttonGroup}>
+          {Platform.OS==='web'?
+            <View style={styles.buttonGroup}>
                 <CitySelector
                   updateState={this.updateState.bind(this)}
                   city={this.state.city}
@@ -163,9 +164,56 @@ class Home extends Component{
                   city={this.state.city}
                   selectedName={this.state.selectedName}
                 ></FilterSelector>
-                
           </View>
-          {this.state.city == 'Luogo' == this.state.selectedName.length == 0 ? <Text style={styles.infoText}>Seleziona un luogo o cerca una struttura</Text>:null}
+          : <View style={styles.buttonGroupAndroid}>
+          <CitySelector
+            updateState={this.updateState.bind(this)}
+            city={this.state.city}
+            status1={this.state.status1}
+            status2={this.state.status2}
+            status3={this.state.status3}
+            status4={this.state.status4}
+            parentType={this.state.parentType}
+          ></CitySelector>
+          <View style={{flexDirection:'row'}}>
+          <TypeSelector
+            updateState={this.updateState.bind(this)} 
+            type={this.state.type}
+            beds={this.state.beds}
+            status1={this.state.status1}
+            status2={this.state.status2}
+            status3={this.state.status3}
+            status4={this.state.status4}
+            city={this.state.city}
+            selectedName={this.state.selectedName}
+          ></TypeSelector>
+          <PriceSelector
+            updateState={this.updateState.bind(this)}
+            price={this.state.price}
+            status1={this.state.status1}
+            status2={this.state.status2}
+            status3={this.state.status3}
+            status4={this.state.status4}
+            city={this.state.city}
+            selectedName={this.state.selectedName}
+          ></PriceSelector>
+          <FilterSelector 
+            updateState={this.updateState.bind(this)} 
+            kitchen={this.state.kitchen}
+            fullBoard={this.state.fullBoard}
+            airConditioner={this.state.airConditioner}
+            wifi={this.state.wifi}
+            parking={this.state.parking}
+            status1={this.state.status1}
+            status2={this.state.status2}
+            status3={this.state.status3}
+            status4={this.state.status4}
+            city={this.state.city}
+            selectedName={this.state.selectedName}
+          ></FilterSelector>
+          </View>
+          </View>}
+          {this.state.city == 'Luogo' == this.state.selectedName.length == 0 ? <Text style={styles.infoText}>Seleziona un luogo o cerca una struttura</Text>:<Text onPress={()=>this.setState({city:'Luogo'})}>Annulla Selezione Città</Text>}
           <View style={styles.structuresList}>
             {/* <StructureListDB
                kitchen={this.state.kitchen}
@@ -241,6 +289,13 @@ const styles = StyleSheet.create({
       alignContent:'center',
       margin:4
     },
+    buttonGroupAndroid:{
+      flexDirection: "column",
+      alignSelf:'center',
+      alignContent:'center',
+      alignItems:'center',
+      margin:4
+    },
     structuresList:{
       flex:1,
       top:10,
@@ -261,7 +316,7 @@ const styles = StyleSheet.create({
         marginLeft:10
     },
     infoText:{
-      fontSize: 12,
+      fontSize: 14,
         color: colors.white,
         fontWeight: "300",
         position: 'relative',
@@ -275,7 +330,7 @@ const styles = StyleSheet.create({
       alignContent:'center',
       alignItems:'center',
       height:80,
-      backgroundColor:colors.blue,
+      backgroundColor:colors.green01,
       width:80,
       marginRight:30,
     },

@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
   container: {
     position:'absolute',
     width:200,
-    height:200,
+    height:240,
     top:1,
     backgroundColor: colors.white,
     borderRadius:20,

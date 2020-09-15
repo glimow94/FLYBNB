@@ -410,7 +410,7 @@ const styles = StyleSheet.create({
       alignContent:'center',
       alignItems:'center',
       height:80,
-      backgroundColor:colors.blue,
+      backgroundColor:colors.green01,
       width:80,
       position:'relative',
       bottom:60,

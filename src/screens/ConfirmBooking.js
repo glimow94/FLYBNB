@@ -75,7 +75,7 @@ export default class BookingStructure extends Component{
         day = clientBirthdate.substring(0,2),
         month = clientBirthdate.substring(3,5),
         year = clientBirthdate.substring(6,10);
-    console.log(clientBirthdate)
+    
     var user ={
       name :clientName,
       surname : clientSurname,
@@ -91,17 +91,15 @@ export default class BookingStructure extends Component{
         var obj = {
             name : '',
             surname : '',
-            birthDay : '1',
-            birthMonth:'1',
+            birthDay : '01',
+            birthMonth:'01',
             birthYear:'2000',
             document_img : '',
             key:i //serve per il correto funzionamento delle funzioni della flatlist
         }
         guests_data.push(obj);
     }
-    console.log(guests_data)
-    console.log(guests)
-   
+    
 
     this.setState({
       user_id: userID,
@@ -129,10 +127,10 @@ export default class BookingStructure extends Component{
   }
 
   async postBooking () {
-    console.log(this.state.guestsData)
+    
     var error = false;
     for(var i = 0; i < this.state.guestsData.length ; i++){
-      console.log('SONO ENTRATOOOOOOOOOOOOOOOOOOOO')
+ 
       if(this.state.guestsData[i].name.trim().length == 0 ||
          this.state.guestsData[i].surname.trim().length == 0 ||
          this.state.guestsData[i].document_img.length == 0){
@@ -140,6 +138,7 @@ export default class BookingStructure extends Component{
           break
         }
     }
+    console.log(this.state.guestsData)
     console.log(error)
     if(error==false){
       const url = `http://${host.host}:3055/bookings/add`;
@@ -161,8 +160,7 @@ export default class BookingStructure extends Component{
           console.log(res);
           if(res){
             this.postGuest().then((res)=>{
-              console.log("result GUEST")
-              console.log(res)
+              
               if(res && res.filter(function(value){
                 return value.status == 201;
               }).length == res.length )
@@ -299,7 +297,7 @@ export default class BookingStructure extends Component{
     data[index].document_img = pickerResult.uri;
     if (Platform.OS === 'web') {
 
-      console.log(pickerResult.uri)
+      
       this.setState({
         guestsData:data
       })

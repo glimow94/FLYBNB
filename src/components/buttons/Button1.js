@@ -6,8 +6,8 @@ import colors from "../../style/colors/index";
 
 
 
-var margin = 8;
-Platform.OS === 'android' ? margin=2 : null
+var margin = 10;
+Platform.OS === 'android' ? margin=2 : margin = 10
 export default class CalendarButton extends Component {
   render() {
     const { text, onPress , backgroundColor, opacity } = this.props;

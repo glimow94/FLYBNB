@@ -11,7 +11,7 @@ import host from '../configHost';
 
 //variabili dinamiche per lo style android/web
 var height = 0;
-var width = 50;
+var width = 70;
 var bottom=0;
 if( Platform.OS === 'android'){
     height=40;
@@ -94,7 +94,6 @@ export default class BookingStructure extends Component{
         //se type = 1 creo l'array di oggetti con le date in formato oggetto Date, convertendo il formato da DD-MM-YYYY ad MM-DD-YYYY
         if(type == 1){
           for(var i = 0; i < diff ; i++){
-            console.log(dates[i])
             var month = dates[i].substring(3,5);
             var day = dates[i].substring(0,2);
             var year = dates[i].substring(6,10)
@@ -125,7 +124,6 @@ export default class BookingStructure extends Component{
       beds,
       clientBirthdate
     } = this.props.route.params;
-    console.log('userTokenAddStructure')
 
     this.setState({
       user_id: userID,
@@ -183,8 +181,8 @@ export default class BookingStructure extends Component{
         }
       })
       .then(res => {
-        console.log("ECCO LE DATE PRENOTATE DA UN UTENTE IN UNA STRUTTURA:");
-        console.log(res.data);
+        /* console.log("ECCO LE DATE PRENOTATE DA UN UTENTE IN UNA STRUTTURA:");
+        console.log(res.data); */
         const bookedDates = res.data
         this.setState({
           bookedDates: bookedDates
@@ -250,15 +248,11 @@ export default class BookingStructure extends Component{
                 startDate = moment(start, dateFormat),
                 endDate = moment(end,dateFormat);
                 
-                console.log(start_year)
-                console.log(end_year)
-                console.log(checkin_year)
-                console.log(checkout_year)
+                
             if(start_year == end_year && start_year == checkin_year){
               var diff = endDate.diff(startDate, 'days');
               diffDays = diffDays + diff
-              console.log('PRIMO DIFF')
-              console.log(diff)
+             
             }
             if(start_year == checkin_year && start_year != end_year){
               //se le date sono a cavallo fra due anni, es. checkin: 21 dicembre 2020 / checkout: 6 gennaio 2021
@@ -270,14 +264,12 @@ export default class BookingStructure extends Component{
               //calcolo diff = data_fine_anno - datacheckin
                   endDate_ = moment(end_,dateFormat),
                   diff_ = endDate_.diff(startDate,'days');
-                  console.log(endDate)
-                  console.log(startDate)
-                  console.log(diff_)
+                  
                   diffDays = diffDays + diff_
             }
           } 
           tot_bookings.push(diffDays,0)
-          console.log(tot_bookings)
+          
         }else{
           for(var i = 0; i < this.state.bookedDates.length; i++){
             //variabili dei checkin checkout della lista delle prenotazioni effettuate in precedenza
@@ -316,7 +308,7 @@ export default class BookingStructure extends Component{
             }
           } 
           tot_bookings.push(totDays_firstYear,totDays_2Year)
-          console.log(tot_bookings)
+         
         }
         
       }
@@ -369,7 +361,7 @@ datesCheck=()=>{
     }
     var array = [];
     array.push(datesError,error_string,remainingDays_firstYear,remainingDays_2Year);
-    console.log(datesError)
+    
     return array
 }
   
@@ -457,7 +449,7 @@ async postBooking () {
                     <Text style={styles.dateText}>Check-Out: </Text>
                     <Text style={styles.dateStyle}>{this.state.checkOut}</Text>
             </View>
-            <Text style={styles.texTitle}> {this.state.itemTitle}</Text>
+            <Text style={styles.texTitle}> {this.state.title}</Text>
             <Text style={styles.textInfo}>{this.state.city}, {this.state.street} </Text>
             <Text style={styles.textInfo}>Posti Letto: {this.state.beds} </Text>
             

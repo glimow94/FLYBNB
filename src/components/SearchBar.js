@@ -16,6 +16,7 @@ export default class SearchBar extends Component{
     })
     //console.log(this.state.structureName)
   }
+ 
   render()
     {
       return (
@@ -25,7 +26,7 @@ export default class SearchBar extends Component{
               <Icon name="ios-search" size={20} style={styles.iconstyle} />
               <TextInput 
                   underlineColorAndroid="transparent"
-                  placeholder="Cerca struttura"
+                  placeholder={this.props.placeholder}
                   placeholderTextColor="grey"
                   style={styles.inputStyle}
                   onChangeText={ val =>this.changeName(val)}

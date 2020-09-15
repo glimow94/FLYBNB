@@ -22,7 +22,6 @@ class StructuresList extends Component {
       today:''
     }
    }
-   _isMounted = false;
    monthNameToNum(monthname) {
     // da "Day Mon DayNumber Year" in "DD-MM-YYYY"
     var months = [
@@ -50,7 +49,6 @@ class StructuresList extends Component {
     var final_date = date_mod_format.replace(/ /g, '');
     var today = moment(final_date,'DD-MM-YYYY');
     console.log(date)
-    this._isMounted = true;
     //get current token
     const itemToken = AsyncStorage.getItem('userToken')
     itemToken.then(token => {
@@ -67,14 +65,13 @@ class StructuresList extends Component {
           })
           .then(res => {
             console.log(res.data);
-            if(this._isMounted){
-              const structures = res.data;
-              this.setState({
-                isLoading:false,
-                today : today,
-                data: structures
-              })
-            }
+            const structures = res.data;
+            this.setState({
+              isLoading:false,
+              today : today,
+              data: structures
+            })
+            
         })
       }
       });
@@ -130,7 +127,7 @@ class StructuresList extends Component {
 
               <Text>{item.place}</Text>
 
-              {this.state.today.diff(moment(item.start_date,'DD-MM-YYYY'), 'days') > -1 ? 
+              {this.state.today.diff(moment(item.start_date,'DD-MM-YYYY'), 'days') > 63 ? 
               <Text style={styles.dateswarning} onPress={()=>{console.log('INVIA RENDICONTO')}}>INVIA RENDICONTO TRIMESTRALE</Text>:null}
 
               <Text style={styles.editButton} 

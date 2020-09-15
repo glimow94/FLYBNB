@@ -338,7 +338,7 @@ const Signup = ({navigation})=>{
                             onDayValueChange={(day,i) =>changeBirthDay(day)}
                         ></BirthDayPicker>
                 </View>
-                <Text style={styles.label}>SESSO</Text>
+                <Text style={styles.label}>GENERE</Text>
                 <View style={{flexDirection:'row'}}>
                     <View style={styles.genderPicker}>
 
