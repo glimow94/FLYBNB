@@ -117,14 +117,14 @@ export default function UserStructure({ route }){
     return (
       <ScrollView style={styles.container}>
         {Platform.OS === 'web'? 
-        <TouchableOpacity onPress={()=>navigation.navigate('Login')} style={styles.accessButton}>
+        <TouchableOpacity onPress={()=>navigation.navigate('Profile')} style={styles.accessButton}>
                     <Icon
                     size={40}
                     style={styles.icon}
                     name='user'
                     type='font-awesome'
                     color={colors.white}
-        /><Text style={styles.accessText}>HOME</Text></TouchableOpacity>:null}
+        /><Text style={styles.accessText}>PROFILO</Text></TouchableOpacity>:null}
       <View style={{alignContent:'center',alignItems:'center'}}>
       {images.length > 0 ? 
         <View style={styles.imageScrollWrapper}>
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
       marginBottom: 10,
       backgroundColor: colors.white,
       borderRadius: 10,
-      marginTop:30
+      marginTop:10
     },
     imageScrollView:{
     width: width,
@@ -357,7 +357,7 @@ accessButton:{
   height:80,
   backgroundColor:colors.blue,
   width:80,
-  marginRight:30,
+  margin:20,
 },
 accessText:{
   fontWeight:"600",
@@ -367,6 +367,6 @@ accessText:{
 },
 icon:{
   marginTop:6,
-  alignSelf:'center'
+  alignSelf:'center',
 }
 });

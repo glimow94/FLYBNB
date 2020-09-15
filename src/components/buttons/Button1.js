@@ -1,12 +1,13 @@
 
 import React, { Component } from "react";
 import propTypes from "prop-types";
-import { Text, View, TouchableHighlight, StyleSheet } from "react-native";
+import { Text, View, TouchableHighlight, StyleSheet, Platform } from "react-native";
 import colors from "../../style/colors/index";
 
 
 
-
+var margin = 8;
+Platform.OS === 'android' ? margin=2 : null
 export default class CalendarButton extends Component {
   render() {
     const { text, onPress , backgroundColor, opacity } = this.props;
@@ -31,7 +32,7 @@ const styles = StyleSheet.create({
       borderRadius: 20,
       borderWidth: 3,
       borderColor: colors.white,
-      marginLeft:8,
+      marginLeft:margin,
       width:100,
     },
     buttonText: {
@@ -40,5 +41,6 @@ const styles = StyleSheet.create({
       width: "100%",
       textAlign: "center",
       color: colors.white,
+      marginBottom:4
     }
   });

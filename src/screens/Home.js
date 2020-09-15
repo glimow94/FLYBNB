@@ -61,10 +61,7 @@ class Home extends Component{
   async getToken(){
     try{
       const myToken = await AsyncStorage.getItem('userToken');
-      const clientMail = await AsyncStorage.getItem('email');
-      const clientName = await AsyncStorage.getItem('name');
-      const clientSurname = await AsyncStorage.getItem('surname');
-      const clientBirthdate = await AsyncStorage.getItem('birthdate');
+      
       if(myToken!=null){
         this.setState({
           token : myToken
@@ -242,7 +239,7 @@ const styles = StyleSheet.create({
       flexDirection: "row",
       justifyContent:'center',
       alignContent:'center',
-      padding: 10
+      margin:4
     },
     structuresList:{
       flex:1,
