@@ -83,7 +83,7 @@ export default class StructuresList extends Component {
 
    async postConfirm(itemID, earn) {
      var totEarn_ = this.state.totEarn;
-      var url = `http://${host.host}:3055/bookings/profile/response/${itemID}`;
+      const url = `http://${host.host}:3055/bookings/profile/response/${itemID}`;
       axios.post(url, {
           method: 'POST',
           headers: {
@@ -91,22 +91,8 @@ export default class StructuresList extends Component {
           }
         })
         .then(res => {
-          console.log(res);
-          })
-        .catch(function (error) {
-          console.log(error);
-        });
-
-        url = `http://${host.host}:3055/bookings/send/confirm`;
-        axios.post(url, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',   
-        },
-        id : parseInt(itemID)
-        })
-        .then(res => {
-          console.log(res);
+            console.log(res);
+            this.postEmailConfirm();
           })
         .catch(function (error) {
           console.log(error);
@@ -132,8 +118,26 @@ export default class StructuresList extends Component {
         
     }
 
+    async postEmailConfirm(){
+      const url = `http://${host.host}:3055/bookings/send/confirm`;
+      axios.post(url, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',   
+      },
+      id : parseInt(itemID)
+      })
+      .then(res => {
+        console.log(res);
+        })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
+
+
     async postRefused(itemID) {
-      var url = `http://${host.host}:3055/bookings/profile/response/refused/${itemID}`;
+      const url = `http://${host.host}:3055/bookings/profile/response/refused/${itemID}`;
       axios.post(url, {
           method: 'POST',
           headers: {
@@ -142,21 +146,7 @@ export default class StructuresList extends Component {
         })
         .then(res => {
           console.log(res);
-          })
-        .catch(function (error) {
-          console.log(error);
-        });
-        
-      url = `http://${host.host}:3055/bookings/send/refused`;
-        axios.post(url, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',   
-        },
-        id : parseInt(itemID)
-        })
-        .then(res => {
-          console.log(res);
+          this.postEmailRefused();
           })
         .catch(function (error) {
           console.log(error);
@@ -181,6 +171,22 @@ export default class StructuresList extends Component {
         
     }
     
+    async postEmailRefused(){
+      const url = `http://${host.host}:3055/bookings/send/refused`;
+      axios.post(url, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',   
+      },
+      id : parseInt(itemID)
+      })
+      .then(res => {
+        console.log(res);
+        })
+      .catch(function (error) {
+        console.log(error);
+      });
+    }
 
   render(){
     
