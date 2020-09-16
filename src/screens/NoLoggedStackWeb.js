@@ -41,16 +41,6 @@ export default class NoLoggedScreenWeb extends Component{
     }
 }
 
-
-
-const HomeStackScreen = ({navigation}) =>(
-    <HomeStack.Navigator>
-      <HomeStack.Screen name="Home" component={Home} />
-      <HomeStack.Screen name="Structure" component={Structure} />
-      <HomeStack.Screen name = "Login" component={Login} />
-    </HomeStack.Navigator>
-);
-
 const NoLoggedStack = ({navigation}) => (
     <Stack.Navigator>
         <Stack.Screen name="Home" component={Home} />

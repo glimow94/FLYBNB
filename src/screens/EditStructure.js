@@ -584,7 +584,7 @@ export default class EditStructure extends Component{
                     <TextInput
                         multiline={true}
                         placeholder= {this.state.location_description}
-                        //defaultValue= {this.state.location_description}
+                        defaultValue= {this.state.location_description}
                         numberOfLines={6}
                         style={styles.description}
                         maxLength={400}

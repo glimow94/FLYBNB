@@ -136,7 +136,6 @@ export default function App() {
         .catch(function (error) {
           console.log(error);
         });
-        return status
     },
 
     signOut: async() =>{
