@@ -14,9 +14,10 @@ import Login from './Login';
 import axios from "axios";
 import host from '../configHost'
 
-const {width} = Dimensions.get('window');
 let {imageDim} = 0
 Platform.OS === 'web' ? imageDim = 100 : imageDim = 50;
+var {width} = Dimensions.get('window');
+Platform.OS === 'web' ? width= width *0.5 : null
 //pagina di registrazione struttura
 export default class AddStructure extends Component{
     
@@ -167,7 +168,7 @@ export default class AddStructure extends Component{
         }
     }
     changeBeds = (val) => {
-        if(!val || val.trim().length === 0 || parseInt(val) <1 ){
+        if(!val || val.trim().length === 0 || parseInt(val) <1 || parseInt(val) > 20 ){
             this.setState({
                 beds:'',
                 bedsColor: '#DC143C',
@@ -200,7 +201,7 @@ export default class AddStructure extends Component{
           return;
         }
     
-        let pickerResult = await ImagePicker.launchImageLibraryAsync();
+        let pickerResult = await ImagePicker.launchImageLibraryAsync({base64:true});
         if (pickerResult.cancelled === true) {
           return; // operazione abortita
         }
@@ -230,25 +231,30 @@ export default class AddStructure extends Component{
                 })
             }
         }
-        else {
+        else{
+            //convertiamo in base64
+            let source =  'data:image/jpeg;base64,'+pickerResult.base64
+            // remoteUri è null per un device mobile
+                
+              
             if(index == 1){
                 this.setState({
-                    structureImage_1 : pickerResult.uri
+                    structureImage_1 : source
                 })
             }
             if(index == 2){
                 this.setState({
-                    structureImage_2 : pickerResult.uri
+                    structureImage_2 : source
                 })
             }
             if(index == 3){
                 this.setState({
-                    structureImage_3 : pickerResult.uri
+                    structureImage_3 : source
                 })
             }
             if(index == 4){
                 this.setState({
-                    structureImage_4 : pickerResult.uri
+                    structureImage_4 : source
                 })
             }
         }
@@ -481,7 +487,7 @@ export default class AddStructure extends Component{
                                             onChangeText={val => this.changeBeds(val)}
                                         ></TextInput>
                                 {   this.state.bedsAlert==true ? 
-                                        <Text style={{color: '#DC143C'}}>Inserisci posti letto</Text> : null
+                                        <View><Text style={{color: '#DC143C'}}>Inserisci posti letto</Text><Text style={{color:'#DC143C'}}>(MAX 20)</Text></View> : null
                                 }
                             </View>
                         </View>

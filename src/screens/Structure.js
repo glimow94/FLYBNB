@@ -52,7 +52,6 @@ export default function Structure({ route }){
     if(image2 != null && image2.length != 0) images.push(image2)
     if(image3 != null && image3.length != 0)  images.push(image3)
     if(image4 != null && image4.length != 0) images.push(image4)
-    console.log(images)
       const [state,setState] = React.useState({
         activeImage : 0,
         horizontalScroll: true,
@@ -78,9 +77,7 @@ export default function Structure({ route }){
           const clientBirthdate = await AsyncStorage.getItem('birthdate');
           if(myToken!=null){
             //abbiamo il token
-            console.log("ecco il token")
-            console.log(myToken)
-            console.log(itemID);
+            
             navigation.navigate('BookingStructure',{
               /* parametri da passare alla schermata successiva */
               itemTitle: itemTitle,

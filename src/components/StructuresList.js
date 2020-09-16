@@ -9,7 +9,6 @@ import { Icon } from 'react-native-elements';
 import axios from "axios";
 import AsyncStorage from '@react-native-community/async-storage';
 import host from '../configHost'
-import { getActiveChildNavigationOptions } from 'react-navigation';
 
 var height='95%';
 var width='100%';

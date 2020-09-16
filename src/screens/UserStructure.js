@@ -45,7 +45,6 @@ export default function UserStructure({ route }){
       if(image2 != null && image2.length != 0) images.push(image2)
       if(image3 != null && image3.length != 0)  images.push(image3)
       if(image4 != null && image4.length != 0) images.push(image4)
-     console.log(images)
       const [state,setState] = React.useState({
         activeImage : 0,
         horizontalScroll: true,
@@ -137,7 +136,7 @@ export default function UserStructure({ route }){
                   images.map((image,index)=>(
                     <Image
                       key={index}
-                      source={{uri: image}}
+                      source={{uri:image}}
                       style={styles.Image}
                     ></Image>
                   ))
@@ -353,7 +352,7 @@ accessButton:{
   alignContent:'center',
   alignItems:'center',
   height:80,
-  backgroundColor:colors.blue,
+  backgroundColor:colors.green01,
   width:80,
   margin:20,
 },

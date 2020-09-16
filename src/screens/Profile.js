@@ -124,22 +124,24 @@ static contextType = UserContext
       return;
     }
 
-    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+    let pickerResult = await ImagePicker.launchImageLibraryAsync({base64:true});
     if (pickerResult.cancelled === true) {
       return; // operazione abortita
     }
     if (Platform.OS === 'web') {
       // i browser web non possono condividere una URI locale per motivi di sicurezza
       // facciamo un upload fittizio su anonymousfile.io e ricaviamo la URI remota del file
-      console.log("remote Uri")
-      console.log(pickerResult.uri)
+ 
+      
       this.setState({
         profileImage: pickerResult.uri
       })
     } else {
+      //estraiamo in base64
+      let source =  'data:image/jpeg;base64,'+pickerResult.base64
       // remoteUri è null per un device mobile
       this.setState({
-        profileImage: pickerResult.uri
+        profileImage: source
       })
     }
 
@@ -303,7 +305,7 @@ const styles = StyleSheet.create({
       marginTop: 10
     },
     menuButton1:{
-      height:30,
+      height:40,
       width:120,
       backgroundColor: colors.green01,
       alignContent:'center',
@@ -318,7 +320,7 @@ const styles = StyleSheet.create({
       margin:0
     },
     menuButton2:{
-      height:30,
+      height:40,
       width:120,
       backgroundColor: colors.green01,
       flexDirection:'row',
@@ -334,7 +336,7 @@ const styles = StyleSheet.create({
       margin:0,
     },
     menuButton3:{
-      height:30,
+      height:40,
       width:120,
       backgroundColor: colors.green01,
       alignContent:'center',
@@ -364,6 +366,7 @@ const styles = StyleSheet.create({
       alignSelf:'center',
       color: colors.white,
       fontSize: 12,
+      fontWeight:'700',
       margin:4,
       justifyContent:"center",
       fontWeight:"600"
@@ -390,15 +393,16 @@ const styles = StyleSheet.create({
     structureButton:{
       color: colors.white, 
       fontSize:14, 
+      fontWeight:'700',
       padding:4,
       width: 90,
       textAlign:'center',
       alignSelf:'center',
       backgroundColor: colors.blue,
-      borderColor: colors.black,
+      borderColor: colors.black2,
       marginBottom:10,
       borderWidth: 3,
-      borderRadius: 8
+      borderRadius: 10
     },
     structuresList:{
       flex:1,

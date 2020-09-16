@@ -138,8 +138,7 @@ export default class BookingStructure extends Component{
           break
         }
     }
-    console.log(this.state.guestsData)
-    console.log(error)
+    
     if(error==false){
       const url = `http://${host.host}:3055/bookings/add`;
       await axios.post(url, {
@@ -286,7 +285,7 @@ export default class BookingStructure extends Component{
       return;
     }
 
-    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+    let pickerResult = await ImagePicker.launchImageLibraryAsync({base64:true});
     if (pickerResult.cancelled === true) {
       return; // operazione abortita
     }
@@ -299,9 +298,9 @@ export default class BookingStructure extends Component{
         guestsData:data
       })
     } else {
-
+      let source =  'data:image/jpeg;base64,'+pickerResult.base64
       this.setState({
-        guestsData:data
+        guestsData:source
       })
     }
   }

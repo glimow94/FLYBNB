@@ -14,9 +14,12 @@ import Login from './Login';
 import axios from "axios";
 import host from '../configHost'
 
-const {width} = Dimensions.get('window');
+
 let {imageDim} = 0
 Platform.OS === 'web' ? imageDim = 100 : imageDim = 50;
+var {width} = Dimensions.get('window');
+var height =  width;
+Platform.OS === 'web' ? width= width *0.5 : null
 
 //pagina di registrazione struttura
 export default class EditStructure extends Component{
@@ -166,7 +169,7 @@ export default class EditStructure extends Component{
         }
     }
     changeBeds = (val) => {
-        if(!val || val.trim().length === 0 || parseInt(val) <1){
+        if(!val || val.trim().length === 0 || parseInt(val) <1 || parseInt(val)>30){
             this.setState({
                 beds:'',
                 bedsColor: '#DC143C',
@@ -187,8 +190,7 @@ export default class EditStructure extends Component{
         })
     }
     changeLocationDescription = (val) => {
-        console.log("location DESCRIPTION");
-        console.log(this.state.location_description);
+        
         this.setState({
             location_description: val
         })
@@ -201,14 +203,13 @@ export default class EditStructure extends Component{
           return;
         }
     
-        let pickerResult = await ImagePicker.launchImageLibraryAsync();
+        let pickerResult = await ImagePicker.launchImageLibraryAsync({base64:true});
         if (pickerResult.cancelled === true) {
           return; // operazione abortita
         }
         
 
         if (Platform.OS === 'web') {
-         
 
             if(index == 1){
                 this.setState({
@@ -232,24 +233,26 @@ export default class EditStructure extends Component{
             }
         }
         else {
+            let source =  'data:image/jpeg;base64,'+pickerResult.base64
+            // remoteUri è null per un device mobile
             if(index == 1){
                 this.setState({
-                    structureImage_1 : pickerResult.uri
+                    structureImage_1 : source
                 })
             }
             if(index == 2){
                 this.setState({
-                    structureImage_2 : pickerResult.uri
+                    structureImage_2 : source
                 })
             }
             if(index == 3){
                 this.setState({
-                    structureImage_3 : pickerResult.uri
+                    structureImage_3 : source
                 })
             }
             if(index == 4){
                 this.setState({
-                    structureImage_4 : pickerResult.uri
+                    structureImage_4 : source
                 })
             }
         }
@@ -285,8 +288,6 @@ export default class EditStructure extends Component{
             image3,
             image4,
         } = this.props.route.params;
-        console.log('userTokenAddStructure')
-        console.log(itemName)
         this.setState({
             id: itemID,
             user_id: userToken,
@@ -429,7 +430,7 @@ export default class EditStructure extends Component{
                             <View style={{flexDirection:'column'}}>
                                 <Text style={[{width:150, color: this.state.numberColor},styles.label]}>N° Civico</Text>
                                     <TextInput
-                                        defaultValue={this.state.number}
+                                        defaultValue={this.state.number.toString()}
                                         underlineColorAndroid='transparent'  
                                         keyboardType={'numeric'}
                                         autoCorrect={false}
@@ -444,7 +445,7 @@ export default class EditStructure extends Component{
                             <View style={{flexDirection:'column'}}>
                                 <Text style={[{width:150, color: this.state.capColor},styles.label]}>CAP</Text>
                                     <TextInput
-                                        defaultValue={this.state.post_code}
+                                        defaultValue={this.state.post_code.toString()}
                                         underlineColorAndroid='transparent'  
                                         keyboardType={'numeric'}
                                         autoCorrect={false}
@@ -461,7 +462,7 @@ export default class EditStructure extends Component{
                                     <Text style={[{width:150, color: this.state.priceColor},styles.label]}>PREZZO PER NOTTE</Text>
                                         <TextInput
                                             underlineColorAndroid='transparent'  
-                                            defaultValue={this.state.price}
+                                            defaultValue={this.state.price.toString()}
                                             keyboardType={'numeric'}
                                             autoCorrect={false}
                                             style = {[{borderColor: this.state.priceColor, width: 100},styles.inputField]}
@@ -475,15 +476,15 @@ export default class EditStructure extends Component{
                                     <Text style={[{width:150, color: this.state.bedsColor},styles.label]}>POSTI LETTO</Text>
                                         <TextInput
                                             underlineColorAndroid='transparent'  
-                                            defaultValue={this.state.beds}
+                                            defaultValue={this.state.beds.toString()}
                                             keyboardType={'numeric'}
                                             autoCorrect={false}
                                             style = {[{borderColor: this.state.bedsColor, width: 100},styles.inputField]}
                                             onChangeText={val => this.changeBeds(val)}
                                         ></TextInput>
                                 {   this.state.bedsAlert==true ? 
-                                        <Text style={{color: '#DC143C'}}>Inserisci posti letto</Text> : null
-                                }
+                                        <View><Text style={{color: '#DC143C'}}>Inserisci posti letto</Text><Text style={{color:'#DC143C'}}>(MAX 20)</Text></View> : null
+                                    }
                             </View>
                         </View>
                     </View>
