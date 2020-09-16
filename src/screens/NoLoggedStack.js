@@ -27,17 +27,6 @@ export default class NoLoggedScreen extends Component{
                 shifting={true}
                 style={{ backgroundColor: colors.black }}>
                 <Tab.Screen
-                    name="Logout"
-                    component={NoLoggedStack}
-                    options={{
-                        tabBarColor :colors.white,
-                        tabBarLabel: 'Accesso',
-                        tabBarIcon: ({ color }) => (
-                        <Icon name="work" color={color} size={26} />
-                    ),
-                }}
-                />
-                <Tab.Screen
                     name="Home"
                     component={HomeStackScreen}
                     options={{
@@ -45,6 +34,18 @@ export default class NoLoggedScreen extends Component{
                         tabBarLabel: 'Home',
                         tabBarIcon: ({ color }) => (
                         <Icon name="explore" color={color} size={26} />
+                    ),
+                    
+                }}
+                />
+                <Tab.Screen
+                    name="Logout"
+                    component={NoLoggedStack}
+                    options={{
+                        tabBarColor :colors.white,
+                        tabBarLabel: 'Accesso',
+                        tabBarIcon: ({ color }) => (
+                        <Icon name="work" color={color} size={26} />
                     ),
                 }}
                 />
@@ -65,9 +66,9 @@ const HomeStackScreen = ({navigation}) =>(
 
 const NoLoggedStack = ({navigation}) => (
     <Stack.Navigator>
-        <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name = "Accedi" component={LoggedOut} />
         <Stack.Screen name = "Login" component={Login} />        
         <Stack.Screen name = "Signup" component={Signup} /> 
+        <Stack.Screen name="Home" component={Home}/>
     </Stack.Navigator>
 );
