@@ -281,7 +281,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: colors.black,
     padding:20,
-    paddingBottom:0,
+    paddingBottom:10,
     backgroundColor:colors.white,
     width: width
   },

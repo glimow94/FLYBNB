@@ -83,7 +83,6 @@ class StructuresList extends Component {
       <View style={styles.container}>
        { this.state.data.length != 0 ? <FlatList
           data= {this.state.data}
-          extraData={this.state.newstructure}
           keyExtractor = {(item, index) => index.toString()}
           inverted={true}
           renderItem = {({item}) =>
