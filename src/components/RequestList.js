@@ -92,7 +92,7 @@ export default class StructuresList extends Component {
         })
         .then(res => {
             console.log(res);
-            this.postEmailConfirm();
+            this.postEmailConfirm(itemID);
           })
         .catch(function (error) {
           console.log(error);
@@ -118,7 +118,7 @@ export default class StructuresList extends Component {
         
     }
 
-    async postEmailConfirm(){
+    async postEmailConfirm(itemID){
       const url = `http://${host.host}:3055/bookings/send/confirm`;
       axios.post(url, {
       method: 'POST',
@@ -146,7 +146,7 @@ export default class StructuresList extends Component {
         })
         .then(res => {
           console.log(res);
-          this.postEmailRefused();
+          this.postEmailRefused(itemID);
           })
         .catch(function (error) {
           console.log(error);
@@ -168,10 +168,9 @@ export default class StructuresList extends Component {
             break
           }
         }
-        
     }
     
-    async postEmailRefused(){
+    async postEmailRefused(itemID){
       const url = `http://${host.host}:3055/bookings/send/refused`;
       axios.post(url, {
       method: 'POST',
