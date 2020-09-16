@@ -97,12 +97,13 @@ export default class StructuresList extends Component {
           console.log(error);
         });
 
-        url = `http://${host.host}:3055/bookings/send/confirm/${itemID}`;
+        url = `http://${host.host}:3055/bookings/send/confirm`;
         axios.post(url, {
         method: 'POST',
         headers: {
           'content-type': 'application/json',   
-        }
+        },
+        id : parseInt(itemID)
         })
         .then(res => {
           console.log(res);
@@ -146,12 +147,13 @@ export default class StructuresList extends Component {
           console.log(error);
         });
         
-      url = `http://${host.host}:3055/bookings/send/refused/${itemID}`;
+      url = `http://${host.host}:3055/bookings/send/refused`;
         axios.post(url, {
         method: 'POST',
         headers: {
           'content-type': 'application/json',   
-        }
+        },
+        id : parseInt(itemID)
         })
         .then(res => {
           console.log(res);
