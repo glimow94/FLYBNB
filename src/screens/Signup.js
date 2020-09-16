@@ -520,15 +520,15 @@ const Signup = ({navigation})=>{
                     
                 </View>
                
-                
-            </ScrollView>
-            <View style = {styles.NextButton}>
+                <View style = {styles.NextButton}>
                     <NextButton 
                         text = "Iscriviti"
                         onPress = {()=> {loginCheck()}}
                         backgroundColor={colors.green01}
                     ></NextButton>
             </View>
+            </ScrollView>
+            
         </View>
     );
 }
@@ -545,7 +545,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     signupHeader: {
-        fontSize: 28,
+        fontSize: 18,
         color: colors.white,
         fontWeight: "300",
         margin: 40

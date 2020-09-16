@@ -203,9 +203,9 @@ export default class StructuresList extends Component {
             <FlatList
               data= {this.state.data}
               keyExtractor = {(item, index) => index.toString()}
+              inverted={true}
               renderItem = {({item}) =>
                 <View style={styles.item}>
-
                     <View style={styles.viewRow}>
                         {
                           item.request== 0 ? <Text style={styles.request}>In attesa di approvazione</Text> :null
