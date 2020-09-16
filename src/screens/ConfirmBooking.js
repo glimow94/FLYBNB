@@ -138,8 +138,7 @@ export default class BookingStructure extends Component{
           break
         }
     }
-    console.log(this.state.guestsData)
-    console.log(error)
+    
     if(error==false){
       const url = `http://${host.host}:3055/bookings/add`;
       await axios.post(url, {
@@ -156,7 +155,6 @@ export default class BookingStructure extends Component{
           cityTax: parseInt(this.state.cityTax)
         })
         .then(res => {
-          console.log(res);
           if(res){
             this.postGuest().then((res)=>{
               

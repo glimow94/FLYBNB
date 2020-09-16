@@ -496,9 +496,10 @@ export default class AddStructure extends Component{
                     <View style={styles.typePicker}>
                         <Picker 
                             mode="dropdown" 
-                            style={styles.pickerstyle}            
+                            style={styles.pickerstyle} 
+                            selectedValue={this.state.type}          
                             onValueChange={val => this.changeType(val)}>
-                            <Picker.Item label='B&B' value ={'B&B'}></Picker.Item>
+                            <Picker.Item label="B&B" value ={'B&B'}></Picker.Item>
                             <Picker.Item label='Casa Vacanze' value ={'Casa Vacanze'}></Picker.Item>
                         </Picker>
                                 

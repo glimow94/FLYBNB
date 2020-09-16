@@ -434,7 +434,7 @@ async postBooking () {
         <View style={styles.container}>
           <ScrollView>
             <Text style={styles.textHeader}>Prenotazione Struttura</Text>
-            <Text style={styles.subtitle}>seleziona date di soggiorno e conferma la prenotazione</Text>
+            <Text style={styles.subtitle}>seleziona date di soggiorno e Ospiti</Text>
             <DateSelector
               updateState={this.updateState.bind(this)}
               price = {this.state.price}
@@ -449,7 +449,8 @@ async postBooking () {
                     <Text style={styles.dateStyle}>{this.state.checkOut}</Text>
             </View>
             <Text style={styles.texTitle}> {this.state.title}</Text>
-            <Text style={styles.textInfo}>{this.state.city}, {this.state.street} </Text>
+            <Text style={styles.textInfo}>{this.state.city}</Text>
+            <Text style={styles.textInfo}>{this.state.street} </Text>
             <Text style={styles.textInfo}>Posti Letto: {this.state.beds} </Text>
             
             <View style={{flexDirection:"row"}}>
@@ -508,7 +509,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     textHeader: {
-      fontSize: 28,
+      fontSize: 22,
       color: colors.white,
       fontWeight: "300",
       marginTop:30,

@@ -19,16 +19,10 @@ const Login = ()=>{
     const { signIn } = React.useContext(UserContext)
     
 
-    const loginCheck = (email,password)=>{
-        //if textInputUsername && textInputPassw == Username && Passw then :
-        var result = signIn(email,password);
+    const loginCheck = async (email,password)=>{
         
-            /* setData({
-                ...data,
-                warning:true,
-                borderColor: colors.red
-            }) */
-        
+          signIn(email,password)
+          
     }
 
     const changeEmail=(val)=>{
@@ -46,6 +40,18 @@ const Login = ()=>{
         console.log(data.password)
 
     }
+    const getToken= async ()=>{
+        var token = false
+        try{
+          const myToken = await AsyncStorage.getItem('userToken');
+          if(myToken!=null){
+            token = myToken
+          }
+        }catch(e){
+          console.log(e)
+        }
+        return token
+      }
     return (
         <View style={styles.wrapper}>
             <Text style={styles.loginHeader}>Accedi ad un profilo esistente</Text>
@@ -72,10 +78,7 @@ const Login = ()=>{
                         data.warning ? <Text style={styles.warning}>CREDENZIALI ERRATE</Text>:null
                     }
                     <Text> Non hai un account? <Text onPress={()=> navigation.navigate(Signup)} style={styles.accountText} >Iscriviti</Text></Text>
-
-                </ScrollView>
-
-                <View style = {styles.NextButton}>
+                    <View style = {styles.NextButton}>
                     <NextButton 
                         text = "Accedi"
                         onPress = {
@@ -87,6 +90,9 @@ const Login = ()=>{
                         }
                     ></NextButton>                    
                 </View>
+                </ScrollView>
+
+                
                 
             </View>
         </View>
@@ -121,6 +127,7 @@ const styles = StyleSheet.create({
       },
       NextButton:{
           alignItems:'flex-end',
+          marginTop:70
           
       },
       InputWrapper: {

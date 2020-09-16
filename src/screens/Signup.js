@@ -545,7 +545,7 @@ const styles = StyleSheet.create({
         flex: 1
     },
     signupHeader: {
-        fontSize: 18,
+        fontSize: 22,
         color: colors.white,
         fontWeight: "300",
         margin: 40
