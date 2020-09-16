@@ -37,7 +37,7 @@ static contextType = UserContext
       //status per visualizzare le prenotazioni oppure le strutture personali
       status: false,
       status2: false,
-      status3: true,
+      status3: false,
       profileImage: null,
       waitingRequests:0
     }

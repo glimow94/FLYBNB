@@ -209,7 +209,6 @@ export default class StructuresList extends Component {
             <FlatList
               data= {this.state.data}
               keyExtractor = {(item, index) => index.toString()}
-              inverted={true}
               renderItem = {({item}) =>
                 <View style={styles.item}>
 
@@ -306,8 +305,11 @@ const styles = StyleSheet.create({
   },
   request:{
     color:colors.blue,
-    fontSize: 14,
-    fontWeight: "700"
+    fontSize: 16,
+    fontWeight: "700",
+    borderBottomColor:colors.blue,
+    borderBottomWidth:2,
+    alignSelf:'center',
   },
   requestDontApproved:{
     color:colors.red,
