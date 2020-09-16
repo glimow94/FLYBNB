@@ -434,7 +434,7 @@ async postBooking () {
         <View style={styles.container}>
           <ScrollView>
             <Text style={styles.textHeader}>Prenotazione Struttura</Text>
-            <Text style={styles.subtitle}>seleziona date di soggiorno e Ospiti</Text>
+            <Text style={styles.subtitle}>Seleziona date di Soggiorno e Ospiti</Text>
             <DateSelector
               updateState={this.updateState.bind(this)}
               price = {this.state.price}
@@ -527,7 +527,8 @@ const styles = StyleSheet.create({
       fontSize: 14,
       color: colors.white,
       fontWeight: "300",
-      marginBottom: 30
+      marginBottom: 30,
+      alignSelf:'center'
     },
     datesBox:{
       position: 'relative',
