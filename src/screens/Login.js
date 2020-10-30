@@ -72,6 +72,13 @@ const Login = ()=>{
                             secureTextEntry={true}
                             style = {[{borderBottomColor:data.borderColor},styles.inputField]}
                             onChangeText={(val)=>changePassw(val)}
+                            onKeyPress = {
+                                (event) => {
+                                  if(event.nativeEvent.key === "Enter"){
+                                    ()=> loginCheck(data.email,data.password)
+                                  }
+                                }
+                            }
                         ></TextInput>
                     </View>
                     {
@@ -103,7 +110,7 @@ const styles = StyleSheet.create({
         display: "flex",
         alignItems:'center',
         flex: 1,
-        backgroundColor: colors.green01
+        backgroundColor: colors.primary
     },
     scrollViewWrapper: {
         margin: 40,
@@ -117,8 +124,9 @@ const styles = StyleSheet.create({
     },
     loginHeader: {
         fontSize: 28,
-        color: colors.white,
+        color: colors.secondary,
         fontWeight: "300",
+        alignSelf:'center',
         margin: 40
     },
     scrollView:{
@@ -128,7 +136,6 @@ const styles = StyleSheet.create({
     NextButton:{
         alignItems:'flex-end',
         marginTop:70
-        
     },
     InputWrapper: {
         display: "flex",
@@ -136,17 +143,18 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     label:{
-        color: colors.white,
+        color: colors.transparent,
         fontWeight: "700", 
         marginTop: 15,
         marginBottom: 5
     },
     inputField: {
         borderBottomWidth: 1,
+        borderBottomColor: colors.secondary,
         paddingTop: 10,
         height: 40,
         width:200,
-        backgroundColor: colors.green01,
+        backgroundColor: colors.primary,
     },
     warning:{
         alignSelf:'center',

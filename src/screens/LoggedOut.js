@@ -1,22 +1,14 @@
 import React, { Component } from 'react';
 import { useNavigation } from '@react-navigation/native';
-
-
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import {
   Text,
   View,
   Image,
-  TouchableHighlight,
-  ScrollView,
   StyleSheet,
-  Button,
-  Dimensions
 } from 'react-native';
 
 import colors from "../style/colors/index";
 import LoginButton from "../components/buttons/LoginButton"
-import Login from './Login';
 import Signup from './Signup'
 
 export default function LoggedOut(){ 
@@ -28,11 +20,11 @@ const navigation = useNavigation();
       <View style={styles.welcomeWrapper}>
         <Image
           style={styles.logo}
-          source={require('../img/logo.png')}
+          source={require('../img/logo_white.png')}
         />
-        <Text style={styles.welcomeText}>
-         Benvenuto su flyBNB
-        </Text>
+        {/* <Text style={styles.welcomeText}>
+         Case Vacanze e Bnb
+        </Text> */}
         <View >
           <LoginButton 
             text="Accedi"
@@ -53,7 +45,7 @@ const styles = StyleSheet.create({
       flex: 1,
       alignItems:'center',
       alignContent:'center',
-      backgroundColor: colors.green01 
+      backgroundColor: colors.primary
     },
     welcomeWrapper: {
       flex: 1,
@@ -69,7 +61,7 @@ const styles = StyleSheet.create({
     },
     welcomeText: {
       fontSize: 30,
-      color: colors.white,
+      color: colors.transparent,
       fontWeight: "300",
       marginBottom: 40
     }

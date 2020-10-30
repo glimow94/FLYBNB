@@ -34,13 +34,14 @@ const styles = StyleSheet.create({
       display: "flex",
       borderRadius: 20,
       borderWidth: 3,
-      borderColor: colors.white,
+      borderColor: colors.secondary,
       marginBottom: 5
     },
     buttonText: {
       fontSize: 16,
       width: "100%",
       textAlign: "center",
-      color: colors.white,
+      fontWeight:'bold',
+      color: colors.blue,
     }
   });

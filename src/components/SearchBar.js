@@ -5,12 +5,14 @@ import colors from "../style/colors/index";
 var {width} = Dimensions.get('window');
 var fontSize = 13;
 var height = 50;
+var logoAlign = 'center';
 width = width*0.6
 
 if(Platform.OS == 'web'){
   width = width*0.4;
   fontSize = 20;
   height = 60;
+  logoAlign = null;
 }
 export default class SearchBar extends Component{
   constructor(props){
@@ -35,7 +37,7 @@ export default class SearchBar extends Component{
             <Image
                   style={styles.logo}
                   city={this.state.city}
-                  source={require('../img/logo_small_icon_only.png')}
+                  source={require('../img/logo_mini3.png')}
               />
               <TextInput 
                   underlineColorAndroid="transparent"
@@ -115,9 +117,9 @@ const styles = StyleSheet.create({
       fontSize:10
     },
     logo:{
-      width:70,
-      height:height,
-      marginBottom: 5
+      width: 50,
+      marginRight: 10,
+      alignSelf: logoAlign
     },
 
   

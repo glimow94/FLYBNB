@@ -29,7 +29,6 @@ export default function App() {
   const initialLoginState = {
     email: null,
     userToken: null,
-    signUpError:null
   }
 
   useEffect(() => {

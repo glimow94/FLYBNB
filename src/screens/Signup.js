@@ -10,10 +10,10 @@ import Login from './Login';
 import db from '../components/database_region_city'
 import AsyncStorage from "@react-native-community/async-storage";
 
-
+/* valori responsive per il picker della città (Residente a..) */
 var height = 40;
 var width = 200;
-var position = 'absolute';
+var position = 'relative';
 var bottom = 0;
 if( Platform.OS === 'android'){
 
@@ -222,7 +222,7 @@ const Signup = ({navigation})=>{
         }
     }
     const changePassw=(val)=>{
-        if(passwordRegex.test(val)==false && val != newUserData.repassw){
+        if(passwordRegex.test(val)==false){
             setData({
                 ...newUserData,
                 password:'',
@@ -244,7 +244,7 @@ const Signup = ({navigation})=>{
             setData({
                 ...newUserData,
                 repassw : val,
-                repasswColor: '#DC143C',
+                repasswColor: colors.red,
                 passwordAlert2: true
             })
         }
@@ -499,7 +499,7 @@ const Signup = ({navigation})=>{
                     <NextButton 
                         text = "Iscriviti"
                         onPress = {()=> {loginCheck()}}
-                        backgroundColor={colors.green01}
+                        backgroundColor={colors.primary}
                     ></NextButton>
             </View>
             </ScrollView>
@@ -513,7 +513,7 @@ const styles = StyleSheet.create({
         display: "flex",
         alignContent:'center',
         alignItems:'center',
-        backgroundColor: colors.green01
+        backgroundColor: colors.primary
     },
     scrollViewWrapper: {
         margin: 10,
@@ -521,7 +521,7 @@ const styles = StyleSheet.create({
     },
     signupHeader: {
         fontSize: 22,
-        color: colors.white,
+        color: colors.transparent,
         fontWeight: "300",
         margin: 40
     },
@@ -548,7 +548,7 @@ const styles = StyleSheet.create({
     },
 
     label:{
-        color: colors.white,
+        color: colors.secondary,
         fontWeight: "700", 
         width: 150,
         marginTop: 5,
@@ -565,8 +565,8 @@ const styles = StyleSheet.create({
         paddingTop: 15,
         paddingBottom: 5,
         height: 40,
-        backgroundColor: colors.green01,
-        borderBottomColor: colors.white
+        backgroundColor: colors.primary,
+        borderBottomColor: colors.secondary
     },
     genderPicker:{
         width:120,
@@ -589,7 +589,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         height: 19,
         marginTop: 15,
-        borderBottomColor: colors.white
+        borderBottomColor: colors.secondary
     },
     cancelButton:{
         color:colors.red,
@@ -608,7 +608,6 @@ const styles = StyleSheet.create({
         width:width,
         position:position,
         bottom:bottom,
-        
     }
 
 });

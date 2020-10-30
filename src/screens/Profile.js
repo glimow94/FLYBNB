@@ -25,17 +25,16 @@ var profileCardAlign = 'flex-start';
 var profileImageDim = 100;
 var profileCardHeight = '100%';
 var profileCardBorderWidth = 3;
-var profileCardWidth = 'auto';
+var profileCardWidth = 250;
 var profileInfoAlign = 'center';
 var profileMargin=0;
 var profilePadding = 20;
 var flexDirectionUserInfo = 'column';
 /*variabili di stile menu section responsive */
-var menuSectionWidth = '86%';
+var menuSectionWidth = width-250;
 var menuAlign = 'center';
-if(Platform.OS === 'web'){
-  width = 200;//profilecard width
-}else{
+
+if(Platform.OS === 'android'){
   containerFlexDirection = 'column';
   width = width*0.8;
   ScrollHeight = '90%';
@@ -319,7 +318,8 @@ const styles = StyleSheet.create({
       alignSelf:'center',
     },
     menuSection:{
-      width: menuSectionWidth,
+      width:'100%',
+      maxWidth: menuSectionWidth,
     },
     menu:{
       flexDirection: 'row',
