@@ -13,11 +13,12 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 var height='100%';
 var width='100%';
 var marginBottom = '10%';
-
+var borderBottomWidth = 0;
 if (Platform.OS == 'web'){
   height = '95%';
   width ='80%';
-  marginBottom = 0
+  marginBottom = 0;
+  borderBottomWidth = 2;
 }
 
 
@@ -345,13 +346,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     marginBottom: marginBottom,
     borderTopColor: colors.secondary,
-    borderTopWidth: 3,
+    borderTopWidth: 2,
     flexGrow:1,
     position:'absolute',
     /* justifyContent:'center',
     alignContent:'center',
     alignItems:'center', */
-    borderBottomWidth:3,
+    borderBottomWidth: borderBottomWidth,
     borderBottomColor:colors.secondary
     
   },

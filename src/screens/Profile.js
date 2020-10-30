@@ -32,13 +32,13 @@ var profilePadding = 20;
 var flexDirectionUserInfo = 'column';
 /*variabili di stile menu section responsive */
 var menuSectionWidth = '86%';
-var menuAlign = 'flex-start';
+var menuAlign = 'center';
 if(Platform.OS === 'web'){
   width = 200;//profilecard width
 }else{
   containerFlexDirection = 'column';
   width = width*0.8;
-  ScrollHeight = '85%';
+  ScrollHeight = '90%';
   infoboxWidth = width+40;
   flexDirectionUserInfo = 'row';
   profileImageDim = 50;
@@ -257,11 +257,11 @@ static contextType = UserContext
                   <View style={styles.infoBox}>
                     { this.state.structuresList.length == 0 ? <Text>Diventa host aggiungendo una struttura</Text>
                   :<View style={styles.structuresList}>
+                    <Text style={styles.structureButton} onPress={()=> this.navigateToAddStructure()} >Aggiungi +</Text>
                     <UserStructures
                       updateState={this.updateState.bind(this)}
                     ></UserStructures>
                   </View>}
-                  <Text style={styles.structureButton} onPress={()=> this.navigateToAddStructure()} >Aggiungi +</Text>
                   </View> : null
               }
               {this.state.status3? 
@@ -282,7 +282,7 @@ static contextType = UserContext
 
 const styles = StyleSheet.create({
     container:{
-      backgroundColor:colors.transparent2,
+      backgroundColor:colors.primary,
       height:'100%',
       flexDirection: containerFlexDirection,
     },
@@ -362,12 +362,11 @@ const styles = StyleSheet.create({
     menuSectionWrapper:{
       alignContent:'center',
       alignItems: 'center',
-      borderTopWidth: 3,
+      borderTopWidth: 2,
       borderColor: colors.secondary,
     },
     infoBox:{
       padding:5,
-      backgroundColor: colors.primary,
       marginBottom:20,
       width: infoboxWidth,
       alignSelf:'center'

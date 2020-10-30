@@ -196,76 +196,73 @@ export default class StructuresList extends Component {
     return (
       
       <View style={styles.container}>
-        {this.state.data.length != 0? 
-              
-        <View>
-      
-          <View style={{flexDirection:'row',alignContent:'center', alignSelf:'center'}}>
-            <Text style={styles.infoText}>Guadagni totali :</Text>
-            <Text style={styles.totEarn}> {this.state.totEarn} €</Text>
-          </View>
-          
-
-       
-            <FlatList
-              data= {this.state.data}
-              keyExtractor = {(item, index) => index.toString()}
-              inverted={true}
-              renderItem = {({item}) =>
-                <View style={styles.item}>
-                    <View style={styles.viewRow}>
-                        {
-                          item.request== 0 ? <Text style={styles.request}>In attesa di approvazione</Text> :null
-                        }
-                        {
-                          item.request== 1 ? <Text style={styles.requestApproved}>Prenotazione Approvata</Text>:null
-                        }
-                        {
-                          item.request== 2 ? <Text style={styles.requestDontApproved}>Prenotazione Rifiutata</Text>:null
-                        }
-                        
-                      <Text style={styles.titleStructure}>{item.title}, {item.type} </Text>
-                      <View style={{alignContent:'center',alignItems:'center'}}>
-                        <Text>Cliente:</Text>
-                        <Text style={styles.streetInfoText}>{item.name} {item.surname}</Text>
-                        <Text style={styles.streetInfoText}>{item.email}</Text>
+        {
+          this.state.data.length != 0?      
+          <View>
+            <View style={{flexDirection:'row',alignContent:'center', alignSelf:'center'}}>
+              <Text style={styles.infoText}>Guadagni totali :</Text>
+              <Text style={styles.totEarn}> {this.state.totEarn} €</Text>
+            </View>
+              <FlatList
+                data= {this.state.data}
+                keyExtractor = {(item, index) => index.toString()}
+                inverted={true}
+                renderItem = {({item}) =>
+                  <View style={styles.item}>
+                      <View style={styles.viewRow}>
+                          {
+                            item.request== 0 ? <Text style={styles.request}>In attesa di approvazione</Text> :null
+                          }
+                          {
+                            item.request== 1 ? <Text style={styles.requestApproved}>Approvata</Text>:null
+                          }
+                          {
+                            item.request== 2 ? <Text style={styles.requestDontApproved}>Rifiutata</Text>:null
+                          }
+                          
+                        <Text style={styles.titleStructure}>{item.title}, {item.type} </Text>
+                        <View style={styles.clientBox}>
+                          <Text style={[styles.clientInfoText,{color: colors.transparent}]}>Cliente:</Text>
+                          <Text style={styles.clientInfoText}>{item.name} {item.surname}</Text>
+                          <Text style={styles.clientInfoText}>{item.email.toLowerCase()}</Text>
+                        </View>
+                      
                       </View>
-                    
-                    </View>
-                    <View style={styles.checkInOut}>
-              
-                        <View style={{flexDirection:'column'}}>
-                          <Text style={styles.checkInOutText}>Check-In: </Text>
-                          <Text>{item.checkIn}</Text>
-                        </View>
-                        <View style={styles.checkoutBox}>
-                          <Text style={styles.checkInOutText}>Check-Out: </Text>
-                          <Text>{item.checkOut}</Text>
-                        </View>
+                      <View style={styles.checkInOut}>
+                
+                          <View style={{flexDirection:'column'}}>
+                            <Text style={styles.checkInOutText}>Check-In: </Text>
+                            <Text>{item.checkIn}</Text>
+                          </View>
+                          <View style={styles.checkoutBox}>
+                            <Text style={styles.checkInOutText}>Check-Out: </Text>
+                            <Text>{item.checkOut}</Text>
+                          </View>
 
-                    </View>
-                    <View style={styles.viewRow}>
-                        
-                        <View style={styles.priceBox}>
-                          <Text style={styles.priceText}>Tassa soggiorno:</Text>
-                          <Text style={styles.price}>{item.cityTax} € </Text>
-                          <Text style={styles.priceText}>Totale: </Text>
-                          <Text style={styles.price}>{item.totPrice} € </Text>
-                        </View>
-                        
-                    </View>
-                    {item.request == 0 ? <View style={styles.buttonGroup}>
-                        <View style={styles.button}>
-                            <Button onPress = {()=> {this.postConfirm(item.id, item.totPrice)}} title="Accetta"color={colors.green02}></Button>
-                        </View>
-                        <View style={styles.button}>
-                            <Button onPress = {()=> {this.postRefused(item.id)}} title="Rifiuta" color={colors.red}></Button>
-                        </View>
-                    </View>: null}
-                </View>}
-              contentContainerStyle={{paddingTop:40}}
-            />
-        </View>:<Text>Non hai nessuna richiesta di prenotazioni</Text>}
+                      </View>
+                      <View style={styles.viewRow}>
+                          
+                          <View style={styles.priceBox}>
+                            <Text style={styles.priceText}>Tassa soggiorno: </Text>
+                            <Text style={styles.taxPrice}>{item.cityTax} € </Text>
+                            <Text style={styles.priceText}>Totale: </Text>
+                            <Text style={styles.totPrice}>{item.totPrice} € </Text>
+                          </View>
+                          
+                      </View>
+                      {item.request == 0 ? <View style={styles.buttonGroup}>
+                          <View style={styles.button}>
+                              <Button onPress = {()=> {this.postConfirm(item.id, item.totPrice)}} title="Accetta"color={colors.green02}></Button>
+                          </View>
+                          <View style={styles.button}>
+                              <Button onPress = {()=> {this.postRefused(item.id)}} title="Rifiuta" color={colors.red}></Button>
+                          </View>
+                      </View>: null}
+                  </View>}
+                contentContainerStyle={{paddingTop:40}}
+              />
+          </View> : <Text>Non hai nessuna richiesta di prenotazioni</Text>
+      }
       </View>
     );
   }
@@ -288,21 +285,21 @@ const styles = StyleSheet.create({
     color:colors.black,
   },
   item: {
-   borderColor: colors.black,
-   borderWidth:3,
-   borderRadius: 8,
-   padding: 5,
-   marginTop: 4,
-   width: itemWidth,
-   alignSelf:'center'
+    borderColor: colors.tertiary,
+    borderWidth:3,
+    borderRadius: 8,
+    padding: 10,
+    marginTop: 4,
+    width: itemWidth,
+    alignSelf:'center'
   },
   titleStructure:{
-      fontSize:18,
-      fontWeight: "700",
-      color: colors.black,
-      margin:5,
-      alignSelf:'center',
-      marginLeft:0,
+    fontSize:18,
+    fontWeight: "700",
+    color: colors.black,
+    margin:5,
+    alignSelf:'flex-start',
+    marginLeft:0,
   },
   request:{
     color:colors.blue,
@@ -310,7 +307,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     borderBottomColor:colors.blue,
     borderBottomWidth:2,
-    alignSelf:'center',
+    alignSelf:'flex-start',
   },
   requestDontApproved:{
     color:colors.red,
@@ -318,7 +315,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     borderBottomColor:colors.red,
     borderBottomWidth:2,
-    alignSelf:'center',
+    alignSelf:'flex-start',
   },
   requestApproved:{
     color:colors.green02,
@@ -326,12 +323,18 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     borderBottomColor:colors.green02,
     borderBottomWidth:2,
-    alignSelf:'center',
+    alignSelf:'flex-start',
   },
-  streetInfoText:{
-    flexDirection:'row',
+  clientBox:{
+    alignSelf:'flex-start',
+    marginVertical: 10
+  },
+  clientInfoText:{
+    fontSize:12,
+    alignSelf:'flex-start',
     fontWeight:"700",
-    color:colors.black
+    color:colors.black,
+    marginTop:5
   },
   checkInOut:{
     flexDirection: 'row',
@@ -354,20 +357,25 @@ const styles = StyleSheet.create({
     fontWeight:"700",
     color:colors.black
   },
-  price:{
+  taxPrice:{
     fontSize: 16,
     fontWeight:"700",
     color: colors.blue
-
+  },
+  totPrice:{
+    fontSize: 18,
+    fontWeight:"700",
+    color: colors.green02,
+    alignSelf:'center'
   },
   buttonGroup:{
-      alignSelf:'center',
-      flexDirection:'row-reverse',
-      width:'100%'
+    alignSelf:'center',
+    flexDirection:'row-reverse',
+    width:'100%'
   },
   button:{
-      margin:4,
-      width: 85
+    margin:4,
+    width: 85
   }
   
 });

@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import host from '../configHost';
 import moment from 'moment';
 
-var itemWidth = '50%';
+var itemWidth = '40%';
 if(Platform.OS === 'android'){
   itemWidth = '90%';
 }
@@ -128,40 +128,45 @@ class StructuresList extends Component {
               </TouchableOpacity>
 
 
-              {this.state.today.diff(moment(item.start_date,'DD-MM-YYYY'), 'days') > 2 ? 
-              <Text style={styles.dateswarning}>INVIA RENDICONTO TRIMESTRALE</Text>:null}
+              {
+                this.state.today.diff(moment(item.start_date,'DD-MM-YYYY'), 'days') > 2 ? 
+                <Text style={styles.dateswarning}>INVIA RENDICONTO TRIMESTRALE</Text> : null
+              }
               <Text style={{alignSelf:'flex-start',fontWeight:'700'}}>{item.place}</Text>
-              <Text style={styles.editButton} 
+              <Text 
+                style={styles.editButton} 
                 onPress={()=>{ 
                   this.props.updateState({status2:false})
                   navigation.navigate('EditStructure',{
-                  /* parametri da passare alla schermata successiva */
-                  userToken: this.state.userToken,
-                  itemName: item.name,
-                  temSurname: item.surname,
-                  itemEmail: item.email,
-                  itemTitle: item.title,
-                  itemPrice: item.price,
-                  itemID: item.id,
-                  itemPlace: item.place,
-                  itemStreet: item.street,
-                  itemNumber: item.number,
-                  itemPostCode: item.post_code,
-                  itemBeds: item.beds,
-                  itemType: item.type,
-                  itemKitchen: item.kitchen,
-                  itemFullBoard: item.fullboard,
-                  itemAirConditioner: item.airConditioner,
-                  itemWifi: item.wifi,
-                  itemParking: item.parking,
-                  itemDescription: item.description,
-                  locationDescription: item.location_description,
-                  image1: item.image1,
-                  image2 : item.image2,
-                  image3: item.image3,
-                  image4 : item.image4
-              })}} >Modifica</Text>
-            </View>}
+                    /* parametri da passare alla schermata successiva */
+                    userToken: this.state.userToken,
+                    itemName: item.name,
+                    temSurname: item.surname,
+                    itemEmail: item.email,
+                    itemTitle: item.title,
+                    itemPrice: item.price,
+                    itemID: item.id,
+                    itemPlace: item.place,
+                    itemStreet: item.street,
+                    itemNumber: item.number,
+                    itemPostCode: item.post_code,
+                    itemBeds: item.beds,
+                    itemType: item.type,
+                    itemKitchen: item.kitchen,
+                    itemFullBoard: item.fullboard,
+                    itemAirConditioner: item.airConditioner,
+                    itemWifi: item.wifi,
+                    itemParking: item.parking,
+                    itemDescription: item.description,
+                    locationDescription: item.location_description,
+                    image1: item.image1,
+                    image2 : item.image2,
+                    image3: item.image3,
+                    image4 : item.image4
+                  })}} >Modifica
+              </Text>
+            </View>
+          }
           contentContainerStyle={{paddingTop:40}}
         />  : <Text>Nessuna struttura registrata, aggungine una per diventare Host!</Text>}
       </View>
@@ -179,20 +184,21 @@ const styles = StyleSheet.create({
     flexGrow:1,
   },
   item: {
-    borderColor: colors.black,
+    borderColor: colors.tertiary,
     borderWidth:3,
     borderRadius: 8,
     padding: 5,
     marginTop: 4,
     alignSelf:'center',
-    height: 200,
+    height: 'auto',
     width: itemWidth
   },
   titleStructure:{
     fontSize: 18,
-    color: colors.black2,
+    color: colors.secondary,
     fontWeight:'700',
-    alignSelf:'center',
+    alignSelf:'flex-start',
+    textDecorationLine:'underline'
   },
   editButton:{
     color: colors.white, 
@@ -217,7 +223,6 @@ const styles = StyleSheet.create({
 
   },
   structureButton:{
-    borderBottomWidth:3,
-    borderRadius:4,
+    
   }
 });

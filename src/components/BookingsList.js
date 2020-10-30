@@ -87,11 +87,11 @@ export default class StructuresList extends Component {
                   <Text style={styles.titleStructure}>{item.title}, {item.type} </Text>
                   <Text style={styles.streetInfoText}>{item.place} </Text>
                   <Text style={styles.streetInfoText}>{item.street}, {item.number}</Text>
-
-                  <Text style={styles.hostInfo}>HOST:</Text>
-                  <Text style={styles.hostInfo}> {item.name} {item.surname} </Text>
-                  <Text style={styles.hostInfo}> {item.email.toLowerCase()}</Text>
-
+                  <View style={styles.hostInfoBox}>
+                    <Text style={[styles.hostInfo,{color: colors.transparent}]}>HOST:</Text>
+                    <Text style={styles.hostInfo}> {item.name} {item.surname} </Text>
+                    <Text style={styles.hostInfo}> {item.email.toLowerCase()}</Text>
+                  </View>
                 </View>
                 <View style={styles.checkInOut}>
           
@@ -130,10 +130,10 @@ const styles = StyleSheet.create({
     flexGrow:1,
   },
   item: {
-   borderColor: colors.black,
+   borderColor: colors.tertiary,
    borderWidth:3,
    borderRadius: 8,
-   padding: 5,
+   padding: 10,
    marginTop: 4,
    width: itemWidth,
    alignSelf:'center'
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     borderBottomColor:colors.red,
     borderBottomWidth:2,
-    alignSelf:'center',
+    alignSelf:'flex-start',
   },
   requestWaiting:{
     color:colors.blue,
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     borderBottomColor:colors.blue,
     borderBottomWidth:2,
-    alignSelf:'center',
+    alignSelf:'flex-start',
   },
   requestApproved:{
     color:colors.green02,
@@ -168,17 +168,20 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     borderBottomColor:colors.green02,
     borderBottomWidth:2,
-    alignSelf:'center',
+    alignSelf:'flex-start',
   },
   streetInfoText:{
     flexDirection:'row',
     fontWeight:"700",
     color:colors.black,
-    alignSelf:'center',
+    alignSelf:'flex-start',
+  },
+  hostInfoBox:{
+    alignSelf:'flex-start',
+    marginVertical: 10
   },
   hostInfo:{
     fontSize:12,
-    alignSelf:'center',
     fontWeight:"700",
     color:colors.black,
     marginTop:5
@@ -207,8 +210,7 @@ const styles = StyleSheet.create({
   price:{
     fontSize: 16,
     fontWeight:"700",
-    color: colors.blue
-
+    color: colors.green02
   }
   
 });

@@ -110,6 +110,7 @@ const ProfileStackScreen = ({navigation}) =>(
     <ProfileStack.Screen 
       name = "Profile"  
       component={Profile}
+      options={{title: 'Area Personale'}} 
     />
     <ProfileStack.Screen 
       name = "AddStructure"  
