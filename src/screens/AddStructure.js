@@ -9,10 +9,17 @@ import CitySelector from "../components/CitySelector"
 import axios from "axios";
 import host from '../configHost'
 
-let {imageDim} = 0
-Platform.OS === 'web' ? imageDim = 100 : imageDim = 50;
+let {imageDim} = 0;
 var {width} = Dimensions.get('window');
-Platform.OS === 'web' ? width= width *0.5 : null
+var height = Dimensions.get('window').height;
+if(Platform.OS === 'web'){
+    imageDim = 100;
+    width= width *0.5;
+    height= height*0.6;
+}else{
+    imageDim = 50;
+    height = height*0.8
+}
 //pagina di registrazione struttura
 export default class AddStructure extends Component{
     
@@ -395,7 +402,7 @@ export default class AddStructure extends Component{
 
         return (
             <View style={styles.wrapper}>
-                <Text style={styles.titleHeader}>Aggiungi una nuova Struttura</Text>
+                <Text style={styles.titleHeader}>Aggiungi Struttura</Text>
                 <ScrollView style={styles.scrollViewWrapper}>
 
                     <Text style={[{width:150},styles.label]}>NOME STRUTTURA</Text>
@@ -642,14 +649,15 @@ export default class AddStructure extends Component{
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={{marginTop: 5}}>
+                    
+                    
+                </ScrollView>
+                <View style={{marginVertical: 5, minWidth:300}}>
                         {this.state.warning ? <View style={{backgroundColor:colors.white}}>
                             <Text style={styles.warningText}>ERRORE : CONTROLLA CHE TUTTI I DATI SIANO CORRETTI</Text>
                         </View>:null}
-                        <Button title="CONFERMA" color={colors.orange} onPress = {()=> {this.postData()}}></Button>
-                    </View>
-                    
-                </ScrollView>
+                        <Button title="CONFERMA" color={colors.green02} onPress = {()=> {this.postData()}}></Button>
+                </View>
             </View>
         );
     }
@@ -662,22 +670,22 @@ const styles = StyleSheet.create({
         display: "flex",
         alignContent:'center',
         alignItems:'center',
-        backgroundColor: colors.green01,
+        backgroundColor: colors.primary,
     },
     titleHeader:{
         fontSize: 28,
-        color: colors.white,
+        color: colors.secondary,
         fontWeight: "300",
         margin: 20,
         alignSelf:'center'
     },
     scrollViewWrapper: {
         margin: 10,
-        flex: 1,
-        width: width*0.8
+        width: width*0.9,
+        height: height
     },
     label:{
-        color: colors.white,
+        color: colors.transparent,
         fontWeight: "700", 
         marginTop: 5,
     },
@@ -686,8 +694,8 @@ const styles = StyleSheet.create({
         paddingTop: 15,
         paddingBottom: 5,
         height: 40,
-        backgroundColor: colors.green01,
-        borderBottomColor: colors.white,
+        backgroundColor: colors.primary,
+        borderBottomColor: colors.secondary,
 
     },
     pickerstyle:{
@@ -697,14 +705,17 @@ const styles = StyleSheet.create({
     serviceLabel:{
         alignSelf:'center', 
         textAlign:'center', 
+        fontSize: 20,
         marginTop: 10,
-        color: colors.white,
+        color: colors.secondary,
         fontWeight: "700", 
 
     },
     servicesBox:{
         backgroundColor: colors.white,
         borderRadius: 20,
+        borderWidth:2,
+        borderColor: colors.orange,
         margin:5
     },
     checkBox:{
@@ -717,7 +728,7 @@ const styles = StyleSheet.create({
     description:{
         backgroundColor: colors.white,
         borderWidth: 1,
-        borderColor: colors.black,
+        borderColor: colors.secondary,
         borderRadius: 8
     },
     warningText:{

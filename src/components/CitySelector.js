@@ -1,12 +1,8 @@
 import React, { Component, useCallback } from 'react';
 import { StyleSheet, Text, View, Button , Picker ,Dimensions} from 'react-native';
 import colors from '../style/colors';
-import CityButton from "../components/buttons/Button1"
-import DropDownPicker from 'react-native-dropdown-picker';
-import data from "../components/regioni_province_comuni";
-import comuni from '../components/comuni'
-import db from '../components/database_region_city'
-import ConfirmButton from './buttons/confirmButton';
+import CityButton from "../components/buttons/Button1";
+import db from '../components/database_region_city';
 
 const {width} = Dimensions.get('window');
 
@@ -190,7 +186,7 @@ export default class CitySelector extends Component{
       borderBottomWidth: 1,
       height: 19,
       marginTop: 15,
-      borderBottomColor: colors.white
+      borderBottomColor: colors.secondary
      },
      cancelButton:{
       color:colors.red,

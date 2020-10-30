@@ -300,7 +300,6 @@ class StructuresList extends Component {
                 <Text style={styles.place}>{item.place}</Text>
 
                 <View>
-                  <Text style={styles.beds}>Posti letto: {item.beds}</Text>
                   <View style={styles.serviceBox}>
                     <View style={{flexDirection:'row'}}>
                       <Text style={styles.service}>Pensione Completa: </Text>{item.fullboard ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
@@ -320,7 +319,7 @@ class StructuresList extends Component {
                         <Text style={styles.service}>Cucina: </Text>{item.kitchen ? <Icon size={20} name='check' type='font-awesome' color={colors.green02}/>:<Icon size={20} name='times' type='font-awesome' color={colors.red}/>}
                     </View>
                   </View>
-
+                  <Text style={styles.beds}>Posti letto: {item.beds}</Text>
                 </View>
                 <BookingButton 
                   text={parseInt(item.price)+'€ a Notte'} 
@@ -401,15 +400,18 @@ const styles = StyleSheet.create({
   beds:{
     fontSize:14,
     fontWeight:"700",
-    marginLeft:8
+    marginLeft:10,
+    alignSelf:'flex-end'
   },
   service:{
     fontSize:14,
     fontWeight:"700",
     color:colors.black2,
-    
+    marginLeft: 10,
   },
   serviceBox:{
+    flex:1,
+    flexWrap:'wrap',
     flexDirection:'row',
     marginTop:3
   }

@@ -27,7 +27,7 @@ export default class MainTabScreen extends Component{
         <Tab.Navigator
           initialRouteName="Home"
           activeColor= {colors.secondary}
-          barStyle={{height:50, paddingBottom: 10, borderTopColor:colors.secondary, borderTopWidth:2}}
+          barStyle={{borderTopColor:colors.secondary, borderTopWidth:2}}
           inactiveColor={colors.transparent}
           shifting={true}
           style={{ backgroundColor: colors.transparent }}
@@ -115,6 +115,7 @@ const ProfileStackScreen = ({navigation}) =>(
     <ProfileStack.Screen 
       name = "AddStructure"  
       component={AddStructure}
+      options={{title: 'Nuova Struttura'}} 
     />
     <ProfileStack.Screen 
       name = "UserStructure"  
@@ -123,6 +124,8 @@ const ProfileStackScreen = ({navigation}) =>(
     <ProfileStack.Screen 
       name = "EditStructure"  
       component={EditStructure}
+      options={{title: 'Modifica Struttura'}} 
+
     />
   </ProfileStack.Navigator>
 );
