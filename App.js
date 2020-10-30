@@ -135,6 +135,13 @@ export default function App() {
           })
         .catch(function (error) {
           console.log(error);
+          console.log(error);
+          if(error.response.status == 404){
+            alert("EMAIL ERRATA!!!");
+          }
+          if(error.response.status == 403){
+            alert("PASSWORD ERRATA!!!");
+          }
         });
     },
 
@@ -170,6 +177,9 @@ export default function App() {
                   })
                 .catch(function (error) {
                   console.log(error);
+                  if(error.response.status == 406 || error.response.status == 500){
+                    alert("IMPOSSIBILE REGISTRARTI!! EMAIL NON VALIDA PERCHé GIà PRESENTE!!! UTILIZZA UN ALTRA EMAIL");
+                  }
                 });
     },
 
