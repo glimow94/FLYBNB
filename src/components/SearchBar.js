@@ -1,78 +1,125 @@
 import React, { Component } from "react";
-import { View, TextInput, SafeAreaView, StyleSheet } from "react-native";
+import { View, TextInput, StyleSheet, Image , TouchableOpacity, Dimensions, Platform } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import colors from "../style/colors/index";
+var {width} = Dimensions.get('window');
+var fontSize = 13;
+var height = 50;
+width = width*0.6
 
+if(Platform.OS == 'web'){
+  width = width*0.4;
+  fontSize = 20;
+  height = 60;
+}
 export default class SearchBar extends Component{
   constructor(props){
     super(props);
     this.state={
-      structureName: ''
+      searchBarText: ''
     }
   }
-  changeName(val){
+  changeName = () => {
     this.props.updateState({
-      selectedName : val
+      searchBarText : this.state.searchBarText
     })
-    //console.log(this.state.structureName)
+    //console.log(this.state.searchBarText)
   }
+ 
   render()
     {
       return (
-        <SafeAreaView style={{flex:1, marginTop:20}}>
           <View style={styles.view1}>
+      
             <View style={styles.searchBarStyle}>
-              <Icon name="ios-search" size={20} style={styles.iconstyle} />
+            <Image
+                  style={styles.logo}
+                  city={this.state.city}
+                  source={require('../img/logo_small_icon_only.png')}
+              />
               <TextInput 
                   underlineColorAndroid="transparent"
-                  placeholder="Cerca struttura"
+                  placeholder={'es. "Sicilia", "Palermo" , "Casa di Mario"'}
                   placeholderTextColor="grey"
                   style={styles.inputStyle}
-                  onChangeText={ val =>this.changeName(val)}
+                  onChangeText={ val =>this.setState({searchBarText : val})}
+                  onSubmitEditing ={this.changeName}
+                  onKeyPress = {
+                    (event) => {
+                      if(event.nativeEvent.key === "Enter"){
+                        this.changeName
+                      }
+                    }
+                  }
               />
+              <TouchableOpacity style={styles.searchButton} onPress={this.changeName}>
+                <Icon name="ios-search"  size={30} style={styles.iconstyle} />
+              </TouchableOpacity>
             </View>
           </View>
-        </SafeAreaView>
+          
     );}
 }
 
 
 const styles = StyleSheet.create({
+    view1:{
+      flexDirection: "row",
+      
+      
+    }, 
     searchBarStyle: {
         flexDirection:'row',
-        width: 150,
         backgroundColor: colors.white,
-        borderBottomWidth: 1,
-        borderBottomColor: colors.white,
+        height: height,
+        borderRadius: 50,
+        borderRightWidth:1,
+        borderRightColor: colors.secondary
         
     },
     iconstyle: {
-        marginRight: 10
+        marginRight: 10,
+        color:colors.white
     },
 
     inputStyle:{
-        flex: 1, 
-        fontWeight: "600", 
-        borderRadius: 4,
-        width: 200,
-        backgroundColor: colors.white,
-        
+        fontWeight: "400",
+        fontSize: fontSize, 
+        borderRadius: 5,
+        borderColor:colors.secondary,
+        borderWidth: 1,
+        borderRightWidth:0,
+        borderTopRightRadius:0,
+        borderBottomRightRadius:0,
+        width: width,
+        height:height,
+        paddingLeft:5,
+        backgroundColor: colors.white2,
      
     },
 
-    view1:{
-        flexDirection: "row",
-        padding: 12,
-        borderRadius: 20,
-        borderWidth: 3,
-        borderColor: colors.white,
-        marginBottom: 5,
-        backgroundColor:colors.white,
-        marginHorizontal: 20,
-        width: 265,
-        shadowOffset: { width: 0, height: 0 },
-        shadowColor: "black",
-        shadowOpacity: 0.2,
+    searchButton:{
+      backgroundColor: colors.blue,
+      borderWidth: 1,
+      borderTopLeftRadius:0,
+      borderBottomLeftRadius:0,
+      borderColor: colors.secondary,
+      borderRadius:50,
+      flexDirection:'row',
+      justifyContent:'center',
+      alignItems:'center',    
+      padding:5,
+      paddingLeft:10
     },
+    buttonText:{
+      fontSize:10
+    },
+    logo:{
+      width:70,
+      height:height,
+      marginBottom: 5
+    },
+
+  
 
   });

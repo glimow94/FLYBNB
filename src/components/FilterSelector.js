@@ -31,7 +31,8 @@ export default class DateSelector extends Component {
           this.updateState({
               status3:true,
               status1:false,
-              status2:false
+              status2:false,
+              status4:false
             })
       }
   }
@@ -55,7 +56,7 @@ export default class DateSelector extends Component {
 
     return (
       <View>
-        <FilterButton text="Servizi" onPress={this.showHide}></FilterButton>
+       { this.props.city != 'Luogo' || this.props.searchBarText.length != 0 ? <FilterButton text="Servizi" onPress={this.showHide} backgroundColor={colors.white}></FilterButton>:<FilterButton text="Servizi" backgroundColor={colors.white} opacity={0.4}></FilterButton> }
         
         {   
           this.props.status3 ? 
@@ -133,29 +134,26 @@ export default class DateSelector extends Component {
 const styles = StyleSheet.create({
     wrapper:{
         flex:1,
-        marginBottom: 325,
-        marginTop: 20
+        position: 'absolute',
+        right:200,
+        top:50,
+        width:'100%'
     },
-  container: {
-    flexDirection:'column',
-    position:'absolute',
-    width:300,
-    height:340,
-    top:1,
-    right: 10,
-    backgroundColor: colors.white,
-    borderRadius:20,
-    borderWidth:2,
-    borderColor: colors.black,
-    shadowColor: colors.black,
-    
-    
-
-  },
- confirmButton:{
-    flexDirection:'row',
-    justifyContent:'center',
-    padding:15
- }
+    container: {
+        flexDirection:'column',
+        width:300,
+        height:370,
+        backgroundColor: colors.transparent,
+        borderRadius:20,
+        borderWidth:4,
+        paddingTop: 20,
+        borderColor: colors.black,
+        shadowColor: colors.black,
+    },
+    confirmButton:{
+        flexDirection:'row',
+        justifyContent:'center',
+        padding:15
+    }
 
 });

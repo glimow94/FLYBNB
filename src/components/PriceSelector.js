@@ -28,7 +28,8 @@ export default class PriceSelector extends Component {
             this.props.updateState({
               status2:true,
               status1:false,
-              status3:false
+              status3:false,
+              status4:false
             })
         }
     }
@@ -67,13 +68,13 @@ export default class PriceSelector extends Component {
     
     return (
       <View>
-        <PriceButton text={this.state.buttonText} onPress={this.showHide}></PriceButton>
+       { this.props.city != 'Luogo' || this.props.searchBarText.length != 0 ? <PriceButton text={this.state.buttonText} onPress={this.showHide} backgroundColor={colors.white}></PriceButton>:<PriceButton text={this.state.buttonText} backgroundColor={colors.white} opacity={0.4}></PriceButton>}
         
         {   
           this.props.status2 ? 
-            <View >
-                
-                
+          <View style={styles.wrapper}>
+            <View style={styles.container}>
+                <Text style={[{width:150},styles.label]}>PREZZO MAX.</Text>
                 <TextInput  
                     placeholder='Prezzo/notte' 
                     underlineColorAndroid='transparent'  
@@ -84,8 +85,11 @@ export default class PriceSelector extends Component {
                     }
                     onKeyPress={this.showHideKey}
                 />  
-                
-            </View> : null
+            </View>
+            <View style={styles.confirmButton}>
+                <ConfirmButton text='OK' onPress={this.showHide} ></ConfirmButton>           
+            </View>
+        </View>: null
         }
       </View>
     );
@@ -93,17 +97,46 @@ export default class PriceSelector extends Component {
 }
 
 const styles = StyleSheet.create({
- 
- textInputStyle: {  
-    textAlign: 'center', 
+  wrapper:{
+    flex:1,   
+    position:'absolute'
+  },
+  container: {
+    width:140,
+    height: 140,
+    alignContent:'center',
+    alignItems:'center',
     position:'relative',
-    left: 10, 
-    height: 40,  
-    width: 100,
-    backgroundColor: colors.white,
-    borderRadius: 10,  
-    borderWidth: 2,  
-    borderColor: colors.black,  
-    marginTop: 20  
-}  
+    top:50,
+    backgroundColor: colors.transparent,
+    borderRadius:20,
+    borderWidth:4,
+    borderColor: colors.black,
+    shadowColor: colors.black,
+    paddingTop: 20,
+    paddingBottom:10,
+    paddingHorizontal: 10
+
+  },
+  label:{
+    fontSize: 14,
+    fontWeight:"700",
+    color:colors.white,
+    marginBottom:10,
+    marginLeft: 55
+  },
+  textInputStyle: {  
+      textAlign: 'center', 
+      height: 40,  
+      width: 100,
+      backgroundColor: colors.white,
+      borderRadius: 8,  
+      borderWidth: 2,  
+      borderColor: colors.black,  
+  } ,
+  confirmButton:{
+    flexDirection:'row',
+    justifyContent:'center',
+    padding:10,
+  },
 });

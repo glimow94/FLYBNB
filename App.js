@@ -1,21 +1,19 @@
 import React , {useEffect}from 'react';
-import { StyleSheet, Text, View, ActivityIndicator  } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator, Platform  } from 'react-native';
 import { Icon } from 'react-native-elements';
 //navigazione
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import AsyncStorage from '@react-native-community/async-storage';
-
+import host from './src/configHost';
 //screens e components
-import LoggedOut from "./src/screens/LoggedOut";
 import colors from "./src/style/colors/index"
-import Home from './src/screens/Home';
-import Structure from "./src/screens/Structure";
-import Profile from "./src/screens/Profile";
-import Explore from "./src/screens/Explore";
+
 import MainTab from "./src/screens/MainTab";
+import MainTabWeb from "./src/screens/MainTabWeb";
 import NoLoggedStack from "./src/screens/NoLoggedStack";
+import NoLoggedStackWeb from './src/screens/NoLoggedStackWeb'
 
 import { UserContext }from "./src/components/context";
 import axios from "axios";
@@ -112,7 +110,8 @@ export default function App() {
     signIn: async(email,password) =>{
       let userToken;
       userToken=null;
-      const url = `http://localhost:3055/users/login`;
+      var status;
+      const url = `http://${host.host}:3055/users/login`;
 
       axios.post(url, {
           method: 'POST',
@@ -123,12 +122,13 @@ export default function App() {
           password: password
         })
         .then(res => {
+          status = res.status
           console.log(res.status);
           console.log(res.data[0]);
           console.log(res.data[0].id);
           if(res.status == 200){
             console.log("login success");
-            AsyncStorage.setItem('userToken', res.data[0].id);
+            AsyncStorage.multiSet([['userToken', res.data[0].id.toString()],['name',res.data[0].name],['surname',res.data[0].surname],['email', res.data[0].email],['birthdate', res.data[0].date], ['city', res.data[0].city]])
             userToken=AsyncStorage.getItem('userToken');
             dispatch({type : 'LOGIN', id: email, token : userToken });
           }
@@ -150,7 +150,7 @@ export default function App() {
     signUp: (name, surname, birthDay, birthMonth, birthYear,
             gender, fiscal_code, city, address, email, password) => {
 
-              const url = `http://localhost:3055/users/registration`;
+              const url = `http://${host.host}:3055/users/registration`;
               axios.post(url, {
                   method: 'POST',
                   headers: {
@@ -182,14 +182,21 @@ export default function App() {
   }), [])
 
   //se il token non è null allora è stato effettuato il login, quindi viene renderizzato MainTab
-  //altrimenti viene renderizzato NoLoggedStack che comprende la pagina di login/signIn e la  in cui si possono solo vedere le strutture
+  //altrimenti viene renderizzato NoLoggedStack che comprende la pagina di login/signIn e la Home in cui si possono solo vedere le strutture
   return (
     <UserContext.Provider value = {userContext}>
-      <NavigationContainer>
-        { loginState.userToken == null ? 
-           <NoLoggedStack></NoLoggedStack> : <MainTab></MainTab>
-        }
-      </NavigationContainer>
+      {Platform.OS === 'web'?
+        <NavigationContainer>
+          { loginState.userToken == null ? 
+            <NoLoggedStackWeb></NoLoggedStackWeb> : <MainTabWeb></MainTabWeb>
+          }
+        </NavigationContainer>
+      : <NavigationContainer>
+          {loginState.userToken == null ?
+            <NoLoggedStack></NoLoggedStack> : <MainTab></MainTab>
+          }
+        </NavigationContainer>  
+      }
     </UserContext.Provider>
   );
 }
@@ -197,9 +204,10 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.green01,
     alignItems: 'center',
+    height:"100%",
     justifyContent: 'center',
+    backgroundColor: colors.green01
   },
   menuicon:{
     margin: 15

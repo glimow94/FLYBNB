@@ -31,17 +31,20 @@ const styles = StyleSheet.create({
       padding: 5,
       display: "flex",
       borderRadius: 12,
-      borderWidth: 2,
+      borderWidth: 3,
       borderColor: colors.orange,
       marginTop:15,
       marginBottom: 5,
-      width:100,
+      width:150,
+      alignSelf:'center',
+      backgroundColor:colors.orange2
     },
     buttonText: {
       fontSize: 14,
+      fontWeight: "700",
     /*   fontWeight:700, */
       width: "100%",
       textAlign: "center",
-      color: colors.orange,
+      color: colors.white,
     }
   });

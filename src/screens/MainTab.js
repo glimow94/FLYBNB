@@ -6,80 +6,123 @@ import LoggedOut from "./LoggedOut";
 import colors from "../style/colors/index"
 import { Icon } from 'react-native-elements';
 
-import Profile from "./Profile"
-import Home from "./Home"
+import Profile from "./Profile";
+import Home from "./Home";
 import Structure from "../screens/Structure"
 import Login from './Login';
-import BookingStructure from './BookingStructure'
-import Trip from './Trip';
-
+import BookingStructure from './BookingStructure';
+import AddStructure from './AddStructure';
+import UserStructure from './UserStructure';
+import EditStructure from './EditStructure';
+import ConfirmBooking from './ConfirmBooking';
 
 const Tab = createMaterialBottomTabNavigator();
 
 const HomeStack = createStackNavigator();
 const LoggedOutStack = createStackNavigator();
-
+const ProfileStack = createStackNavigator();
 export default class MainTabScreen extends Component{
-    render()
-    {    return (
+    render(){    
+      return (
         <Tab.Navigator
-        initialRouteName="Home"
-        activeColor= {colors.green01}
-        inactiveColor={colors.black}
-        shifting={true}
-        style={{ backgroundColor: colors.black }}
-      >
-        <Tab.Screen
-          name="Trip"
-          component={Trip}
-          options={{
-            tabBarColor :colors.white,
-            tabBarLabel: 'Prenotazioni',
-            tabBarIcon: ({ color }) => (
-              <Icon name="work" color={color} size={26} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Home"
-          component={HomeStackScreen}
-          options={{
-            tabBarColor: colors.white,
-            tabBarLabel: 'Home',
-            tabBarIcon: ({ color }) => (
-              <Icon name="explore" color={color} size={26} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={Profile}
-          options={{
-            
-            tabBarLabel: 'Profilo',
-            tabBarColor: colors.white,
-            tabBarIcon: ({ color }) => (
-              <Icon name="account-circle" color={color} size={26} />
-            ),
-          }}
-        />
-      </Tab.Navigator>
-    )
+          initialRouteName="Home"
+          activeColor= {colors.secondary}
+          barStyle={{height:50, paddingBottom: 10, borderTopColor:colors.secondary, borderTopWidth:2}}
+          inactiveColor={colors.transparent}
+          shifting={true}
+          style={{ backgroundColor: colors.transparent }}
+        >
+          <Tab.Screen
+            name="Home"
+            component={HomeStackScreen}
+            options={{
+              tabBarColor: colors.white,
+              tabBarLabel: 'Home',
+              tabBarIcon: ({ color }) => (
+                <Icon name="explore" color={color} size={26} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Profile"
+            component={ProfileStackScreen}
+            options={{
+              tabBarLabel: 'Profilo',
+              tabBarColor: colors.white,
+              tabBarIcon: ({ color }) => (
+                <Icon name="account-circle" color={color} size={26} />
+              ),
+            }}
+          />
+        </Tab.Navigator>
+      )
     }
 }
 
 const HomeStackScreen = ({navigation}) =>(
-    <HomeStack.Navigator >
+    <HomeStack.Navigator 
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: colors.secondary,
+          height: 80
+        },
+        headerTintColor: colors.primary,
+        headerTitleStyle: {
+          fontWeight: '500',
+          fontSize: 20,
+          color: colors.primary
+        },
+      }}
+    >
       <HomeStack.Screen name="Home" component={Home} />
-      <HomeStack.Screen name="Structure" component={Structure} />
-      <HomeStack.Screen name="BookingStructure" component={BookingStructure} />
+      <HomeStack.Screen 
+        name="Structure" 
+        component={Structure} 
+        options={({route}) => ({title: route.params.itemTitle+' - '+route.params.itemType})} 
+      />
+      <HomeStack.Screen 
+        name="BookingStructure" 
+        component={BookingStructure} 
+        options={({route}) => ({title: 'Prenota - '+route.params.itemTitle})} 
+      />
+      <HomeStack.Screen 
+        name="ConfirmBooking" 
+        component={ConfirmBooking} 
+        options={({route}) => ({title: 'Ospiti - '+route.params.itemTitle})} 
+      />
     </HomeStack.Navigator>
 );
-
-const LoggedOutStackScreen = ({navigation}) =>(
-  <LoggedOutStack.Navigator >
-    <LoggedOutStack.Screen name="Accedi" component={LoggedOut} />
-    <LoggedOutStack.Screen name="Login" component={Login} />
-  </LoggedOutStack.Navigator>
+const ProfileStackScreen = ({navigation}) =>(
+  <ProfileStack.Navigator
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: colors.secondary,
+        height: 80
+      },
+      headerTintColor: colors.primary,
+      headerTitleStyle: {
+        fontWeight: '500',
+        fontSize: 20,
+        color: colors.primary
+      },
+    }}
+  >
+    <ProfileStack.Screen 
+      name = "Profile"  
+      component={Profile}
+    />
+    <ProfileStack.Screen 
+      name = "AddStructure"  
+      component={AddStructure}
+    />
+    <ProfileStack.Screen 
+      name = "UserStructure"  
+      component={UserStructure}
+    />
+    <ProfileStack.Screen 
+      name = "EditStructure"  
+      component={EditStructure}
+    />
+  </ProfileStack.Navigator>
 );
 

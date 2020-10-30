@@ -36,7 +36,7 @@ const navigation = useNavigation();
         <View >
           <LoginButton 
             text="Accedi"
-            onPress={()=>navigation.navigate(Login)}
+            onPress={()=>navigation.navigate('Login',{status:0})}
           />
         </View>
         <LoginButton 
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     },
     logo: {
       flex:1,
-      width:400,
+      width:260,
       marginTop: 20,
       marginBottom: 20,
       resizeMode:'contain'

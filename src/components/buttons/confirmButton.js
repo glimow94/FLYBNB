@@ -27,16 +27,17 @@ ConfirmButton.propTypes = {
 
 const styles = StyleSheet.create({
     button: {
-      padding: 10,
+      padding: 6,
       display: "flex",
       borderRadius: 20,
       borderWidth: 2,
       borderColor: colors.green01,
-      marginBottom: 30,
-      width:60,
+      width:40,
+      height: 30
     },
     buttonText: {
-      fontSize: 16,
+      fontSize: 12,
+      fontWeight: "700",
       width: "100%",
       textAlign: "center",
       color: colors.green01,

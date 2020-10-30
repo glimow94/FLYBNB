@@ -1,5 +1,5 @@
 import React, { Component, useCallback } from 'react';
-import { StyleSheet, Text, View, Button , Picker } from 'react-native';
+import { StyleSheet, Text, View, Button , Picker ,Dimensions} from 'react-native';
 import colors from '../style/colors';
 import CityButton from "../components/buttons/Button1"
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -8,19 +8,24 @@ import comuni from '../components/comuni'
 import db from '../components/database_region_city'
 import ConfirmButton from './buttons/confirmButton';
 
+const {width} = Dimensions.get('window');
 
 export default class CitySelector extends Component{
     constructor(props) {
         super(props);
         this.state = {
-          //set del valore di inizio e fine data
-          region: 'Luogo',
+          region: 'Regione',
           province: 'seleziona provincia',
-          province_code: 'Pa',
+          province_code: '',
           city_code: '',
-          // status è il valore che rende visibile/invisibile il menu delle citta
+          // status(1/2/3) è il valore che rende visibile/invisibile il menu delle regioni,province o città
+          status1: false,
           status3: false,
           status2: false,
+          marginTop: 5,
+          bottom: 20,
+          width: null,
+          pickerWidth: 250
         };
     }
     updateCity(data){
@@ -28,7 +33,6 @@ export default class CitySelector extends Component{
       this.setState({
         status3: false,
         status2:false,
-        status:false
       })
     }
     setRegion(item){
@@ -42,8 +46,16 @@ export default class CitySelector extends Component{
             this.props.updateState({status1:false})
         }
         else{
-            this.props.updateState({status1:true,status2:false,status3:false})
+            this.props.updateState({status1:true,status2:false,status3:false, status4:false})
         }
+        if(this.props.parentType=='Home'){//se clicco dalla home sul filtro del luogo, cambio lo stile rispetto a quando clicco dalla pagina addstructure
+          this.setState({
+            bottom: 0,
+            width: 108,
+            pickerWidth: 120
+          })
+        }
+
     }
     showProvinces=()=>{
         if(this.state.status2==true){
@@ -57,43 +69,45 @@ export default class CitySelector extends Component{
         
         return (
             <View>
-              <CityButton text={this.props.city.substring(0,9)} onPress={this.showHide}></CityButton>
+              { this.props.parentType == 'AddStructure' ?
+                <Text style={styles.alternativeCityButton} onPress={this.showHide}>{this.props.city.substring(0,20)}</Text>
+                 : <CityButton text={this.props.city.substring(0,9)} backgroundColor={colors.blue} onPress={this.showHide}></CityButton> }
 
-              <View style={styles.container}>
+              <View style={[{marginTop: this.state.marginTop, position: this.state.position, bottom: this.state.bottom, width: this.state.width},styles.container]}>
             { this.props.status1 ?
               <View>
-
-                <Picker mode="dropdown" 
-                    style={styles.pickerstyle}                  
-                    onValueChange={itemValue => this.setState({
-                                                  region: itemValue,
-                                                  province: 'seleziona provincia',
-                                                  city:'seleziona comune',
-                                                  status2: true
-                                                })
+                <View style={{flexDirection:'row'}}>
+                  <Picker mode="dropdown" 
+                      style={[{width:this.state.pickerWidth},styles.pickerstyle]}                  
+                      onValueChange={itemValue => this.setState({
+                                                    region: itemValue,
+                                                    province: 'Provincia',
+                                                    city:'Comune',
+                                                    status2: true
+                                                  })
                       }     
 
-                >
-                  <Picker.Item label={this.state.region} value ={this.state.region}></Picker.Item>
+                  >
+                    <Picker.Item label={this.state.region} value ={this.state.region}></Picker.Item>
 
-                  {
-                    db.map((item) =>{
-                      return(
-                        <Picker.Item  label={item.nome} value={item.nome} key={item.nome}/> 
-                      );
-                    })
-                  }
-                </Picker>
-
+                    {
+                      db.map((item) =>{
+                        return(
+                          <Picker.Item  label={item.nome} value={item.nome} key={item.nome}/> 
+                        );
+                      })
+                    }
+                  </Picker>{this.props.parentType=='AddStructure'?<Text style={styles.cancelButton} onPress={this.showHide}>X</Text>: null}
+                </View>
                 {
                   this.state.status2 ? 
                   <Picker 
                     mode="dropdown" 
-                    style={styles.pickerstyle}
+                    style={[{width:this.state.pickerWidth},styles.pickerstyle]}
                     onValueChange={
                       itemValue => this.setState({
                       province: itemValue,
-                      city:'seleziona comune',
+                      city:'Comune',
                       status3: true
                     })}
                   >
@@ -121,9 +135,12 @@ export default class CitySelector extends Component{
                   this.state.status3 ? 
                   <Picker 
                     mode="dropdown" 
-                    style={styles.pickerstyle}
+                    style={[{width:this.state.pickerWidth},styles.pickerstyle]}
                     onValueChange={itemValue => this.updateCity({
-                      city:itemValue
+                      city:itemValue,
+                      region: this.state.region,
+                      province : this.state.province,
+                      status1:false
                     })}
                   >
                   <Picker.Item label={this.state.city} value ={this.state.city_code}></Picker.Item>
@@ -152,7 +169,7 @@ export default class CitySelector extends Component{
                     )
                   }
                   </Picker> : null
-                }
+                } 
            </View> : null
             }
             </View>
@@ -164,13 +181,20 @@ export default class CitySelector extends Component{
    const styles = StyleSheet.create({
      container: {
        flexDirection:'column',
-       width: 108,
-       marginTop: 20
-     },
-     pickerstyle:{
-      
      },
      cancelButton:{
        width:'50'
+     },
+     alternativeCityButton:{
+      width: 200,
+      borderBottomWidth: 1,
+      height: 19,
+      marginTop: 15,
+      borderBottomColor: colors.white
+     },
+     cancelButton:{
+      color:colors.red,
+      fontSize: 18,
+      fontWeight: "700"  
      }
    })
