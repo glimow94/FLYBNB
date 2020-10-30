@@ -8,6 +8,7 @@ import { UserContext } from "../components/context";
 import { useNavigation } from "@react-navigation/native";
 import Login from './Login';
 import db from '../components/database_region_city'
+import AsyncStorage from "@react-native-community/async-storage";
 
 
 var height = 40;
@@ -36,6 +37,7 @@ const Signup = ({navigation})=>{
         address:'',
         email:'',
         password:'',
+        repassw: '',
         validation: false,
 
         //stati utili alla validazione del form NOME E COGNOME
@@ -65,18 +67,14 @@ const Signup = ({navigation})=>{
         status1: false,
         status3: false,
         status2: false,
-        
-        
-
     })
 
     //regex per la validazione
     //PASSSWORD: deve contenere almeno 6 caratteri(max 20),almeno un carattere maiusoclo,uno minuscolo e un numero
-    const passwordRegex = new RegExp("^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{6,}$")
-    const emailRegex = new RegExp("[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}")
-    const nameRegex = new RegExp('/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/')
-    const { signUp } = React.useContext(UserContext)
-
+    const passwordRegex = new RegExp("^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{6,}$");
+    const emailRegex = new RegExp("[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}");
+    const {signUp} = React.useContext(UserContext);
+    const {getSignUpError} = React.useContext(UserContext);
     const validationCheck=()=>{
         var error = false;
         if(
@@ -85,28 +83,16 @@ const Signup = ({navigation})=>{
            || (newUserData.city=='' || newUserData.city.trim().length === 0)
            || (newUserData.email=='' || newUserData.email.trim().length === 0)
            || (newUserData.password=='' || newUserData.password.trim().length === 0)
+           || (newUserData.password != newUserData.repassw)
             
         ){
-            error = true
+            error = true;
         }
-        return error
-        
+        return error;
     }    
 
-    const loginCheck = ()=>{
-        console.log(
-            newUserData.name, 
-                newUserData.surname, 
-                newUserData.birthDay,
-                newUserData.birthMonth, 
-                newUserData.birthYear, 
-                newUserData.gender,
-                newUserData.city, 
-                newUserData.email, 
-                newUserData.password,
-                newUserData.address
-        )
-        var error = validationCheck()
+    const loginCheck = async ()=>{
+        var error = validationCheck();
         if(
             error == false
         ){  
@@ -122,13 +108,14 @@ const Signup = ({navigation})=>{
                 newUserData.address,
                 newUserData.email, 
                 newUserData.password,
-                );
-                navigation.navigate(Login);
-            }
+                navigation
+            );
+        }
         else{
             alert('Completa correttamente tutti i campi')
         }
-    }
+/*         alert(getSignUpError())
+ */    }
 
     const changeName = (val) => {
         
@@ -148,12 +135,6 @@ const Signup = ({navigation})=>{
                 nameAlert: false
             })
         }
-    }
-    function updateState(datafilter){
-        setData({
-            ...newUserData,
-            datafilter
-        })
     }
     const changeSurname = (val) => {
         if(!val || val.trim().length === 0){
@@ -221,14 +202,6 @@ const Signup = ({navigation})=>{
         })
     }
 
-
-    const changeCity = (val) => {
-        setData({
-            ...newUserData,
-            city: val
-        })
-    }
-
     const changeEmail=(val)=>{
         var mail= val.toUpperCase()
         if(emailRegex.test(mail)==false){
@@ -249,7 +222,7 @@ const Signup = ({navigation})=>{
         }
     }
     const changePassw=(val)=>{
-        if(passwordRegex.test(val)==false){
+        if(passwordRegex.test(val)==false && val != newUserData.repassw){
             setData({
                 ...newUserData,
                 password:'',
@@ -270,6 +243,7 @@ const Signup = ({navigation})=>{
         if(val != newUserData.password){
             setData({
                 ...newUserData,
+                repassw : val,
                 repasswColor: '#DC143C',
                 passwordAlert2: true
             })
@@ -277,6 +251,7 @@ const Signup = ({navigation})=>{
         else{
             setData({
                 ...newUserData,
+                repassw: val,
                 repasswColor: colors.white,
                 passwordAlert2: false
             })

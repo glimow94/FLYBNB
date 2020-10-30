@@ -172,7 +172,8 @@ const styles = StyleSheet.create({
     height:80,
     backgroundColor:colors.secondary,
     width:80,
-    marginRight:30,
+    marginTop:20,
+    marginRight:60,
   },
   accessText:{
     fontWeight:"600",

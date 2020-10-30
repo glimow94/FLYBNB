@@ -19,35 +19,6 @@ import { UserContext }from "./src/components/context";
 import axios from "axios";
 
 
-const HomeStack = createStackNavigator();
-const Drawer = createDrawerNavigator();
-
-
-/* const HomeStackScreen = ({navigation}) =>(
-      <HomeStack.Navigator>
-        <HomeStack.Screen name="Logout" component={LoggedOut} />
-        <HomeStack.Screen name="Home" component={Home} options={
-          {
-            name:'rowing',
-            headerLeft:()=>(
-              <Icon
-              
-                name='list'
-                type='font-awesome'
-                color='#f50'
-                onPress={() => navigation.openDrawer()}
-                color={colors.black} />
-            )
-          }
-        } />
-        <HomeStack.Screen name="Structure" component={Structure} />
-      </HomeStack.Navigator>
-);
-
- */
-
-
-
 export default function App() {
   /* isLoading serve per l'effetto di caricamento
      userToken è il token identificativo dell'utente*/
@@ -58,7 +29,9 @@ export default function App() {
   const initialLoginState = {
     email: null,
     userToken: null,
+    signUpError:null
   }
+
   useEffect(() => {
     var userToken = null;
     // code to run on component mount
@@ -95,22 +68,16 @@ export default function App() {
           email: null,
           userToken: null
         };
-      case 'REGISTER' :
-        return{
-          ...prevState,
-          email: action.id, //action.email??
-          usertoken: action.token,
-        };  
     }
   }
   //NB : in redux la funzione dispatch innesca un cambiamento dello stato
-  const [loginState,dispatch] = React.useReducer(loginReducer,initialLoginState)
-  const userContext = React.useMemo(()=>({
+  const [loginState,dispatch] = React.useReducer(loginReducer,initialLoginState);
 
+  const userContext = React.useMemo(()=>({
+  
     signIn: async(email,password) =>{
       let userToken;
       userToken=null;
-      var status;
       const url = `http://${host.host}:3055/users/login`;
 
       axios.post(url, {
@@ -137,10 +104,10 @@ export default function App() {
           console.log(error);
           console.log(error);
           if(error.response.status == 404){
-            alert("EMAIL ERRATA!!!");
+            alert("Email Errata");
           }
           if(error.response.status == 403){
-            alert("PASSWORD ERRATA!!!");
+            alert("Password Errata");
           }
         });
     },
@@ -155,8 +122,7 @@ export default function App() {
     },
 
     signUp: (name, surname, birthDay, birthMonth, birthYear,
-            gender, fiscal_code, city, address, email, password) => {
-
+            gender, fiscal_code, city, address, email, password, navigation) => {
               const url = `http://${host.host}:3055/users/registration`;
               axios.post(url, {
                   method: 'POST',
@@ -172,22 +138,18 @@ export default function App() {
                   address: address,
                   password: password
                 })
-                .then(res => {
+                .then((res) => { 
                   console.log(res);
-                  })
-                .catch(function (error) {
+                  navigation.navigate('Login');
+                  alert('Iscrizione avvenuta con successo');
+                })
+                .catch((error)=>{
                   console.log(error);
                   if(error.response.status == 406 || error.response.status == 500){
-                    alert("IMPOSSIBILE REGISTRARTI!! EMAIL NON VALIDA PERCHé GIà PRESENTE!!! UTILIZZA UN ALTRA EMAIL");
+                    alert('Esiste gia un utente questa e-mail')
                   }
                 });
     },
-
-    getUserToken:()=>{
-      console.log(loginState.userToken)
-      return loginState.userToken
-
-    }
 
   }), [])
 
