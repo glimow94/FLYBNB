@@ -500,6 +500,7 @@ const Signup = ({navigation})=>{
                         text = "Iscriviti"
                         onPress = {()=> {loginCheck()}}
                         backgroundColor={colors.primary}
+                        borderColor={colors.secondary}
                     ></NextButton>
             </View>
             </ScrollView>

@@ -21,7 +21,7 @@ var ScrollHeight = height-125;
 
 var infoboxWidth = '100%';
 /* variabili di stile responsive per la profile-card */
-var profileCardAlign = 'flex-start';
+var profileCardTextSize = 16;
 var profileImageDim = 100;
 var profileCardHeight = '100%';
 var profileCardBorderWidth = 3;
@@ -39,9 +39,9 @@ if(Platform.OS === 'android'){
   width = width*0.8;
   ScrollHeight = '90%';
   infoboxWidth = width+40;
+  profileCardTextSize = 12;
   flexDirectionUserInfo = 'row';
   profileImageDim = 50;
-  profileCardAlign = 'center';
   profileCardHeight = '15%';
   profileCardBorderWidth = 0;
   profileMargin = 15;
@@ -77,6 +77,9 @@ static contextType = UserContext
       borderWidth1: 0,
       borderWidth2: 0,
       borderWidth3: 3,
+      /* dati per gestire il rendiconto, salviamo le prenotazioni delle strutture dell'utente (vengono passsate dal componente RequestList) */
+      /*  per poi passarle al componente Userstructure (alla singola struttura, e solo quelle che sono state approvate!) */
+      requestList: []
     }
   }
   
@@ -224,7 +227,7 @@ static contextType = UserContext
             <Text style={styles.usernameText}>{this.state.name} {this.state.surname}</Text>
             <Text onPress={signOut} style={styles.logoutButton} >LOGOUT</Text>
           </View>
-          <View style={{marginLeft: profileMargin, alignSelf:'center',flex:1, flexWrap:'wrap'}}>
+          <View style={{ paddingHorizontal: 20 ,alignSelf:'center', alignContent:'flex-end' , alignItems:'flex-end' , flex:1, flexWrap:'wrap'}}>
             <Text style={styles.profileTextInfo}>{this.state.city}</Text>
             <Text style={styles.profileTextInfo}>{this.state.email}</Text> 
           </View> 
@@ -259,6 +262,7 @@ static contextType = UserContext
                     <Text style={styles.structureButton} onPress={()=> this.navigateToAddStructure()} >Aggiungi +</Text>
                     <UserStructures
                       updateState={this.updateState.bind(this)}
+                      requestList={this.state.requestList} //passiamo tutte le richieste da smistare in ogni struttura per calcolare il rendiconto...
                     ></UserStructures>
                   </View>}
                   </View> : null
@@ -303,10 +307,11 @@ const styles = StyleSheet.create({
     },
     profileTextInfo:{
       margin: 1,
-      alignSelf: menuAlign
+      alignSelf: menuAlign,
+      fontSize: profileCardTextSize
     },
     usernameText:{
-      fontSize: 18,
+      fontSize: profileCardTextSize,
       fontWeight:"bold",
       marginBottom: 4,
       alignSelf:'center'

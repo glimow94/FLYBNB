@@ -68,7 +68,7 @@ export default class PriceSelector extends Component {
     
     return (
       <View>
-       { this.props.city != 'Luogo' || this.props.searchBarText.length != 0 ? <PriceButton text={this.state.buttonText} onPress={this.showHide} backgroundColor={colors.white}></PriceButton>:<PriceButton text={this.state.buttonText} backgroundColor={colors.white} opacity={0.4}></PriceButton>}
+       { this.props.city != 'Luogo' || this.props.searchBarText.length != 0 ? <PriceButton text={this.state.buttonText} onPress={this.showHide} backgroundColor={colors.white} borderColor={colors.secondary}></PriceButton>:<PriceButton text={this.state.buttonText} backgroundColor={colors.white} borderColor={colors.secondary} opacity={0.4}></PriceButton>}
         
         {   
           this.props.status2 ? 

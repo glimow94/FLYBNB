@@ -23,7 +23,8 @@ class StructuresList extends Component {
       data: [],
       isLoading: true,
       userToken: null,
-      today:''
+      today:'',
+      requestList:[] //lista delle richieste di prenotazione di TUTTE l estrutture dell'utente(da smistare in ogni singola struttura), ci servono per inviare il rendiconto
     }
    }
    monthNameToNum(monthname) {
@@ -46,7 +47,12 @@ class StructuresList extends Component {
     }
   }
    componentDidMount = () => {
-    var date = new Date()
+     this.setState({
+      requestList: this.props.requestList
+     })
+    /* OPERAZIONI PER IL CONTROLLO PERIODICO DEL RENDICONTO */
+    /* Calcoliamo la data di oggi e la convertiamo nel formato accettabile dalla libreria moment... cioè DD/MM/YYYY */
+    var date = new Date();
     var date_mod = date.toString().replace("12:00:00 GMT+0200","").slice(4);
     var month_num = this.monthNameToNum(date_mod.substr(0,3));
     var date_mod_format = date_mod.substr(4,2)+"/"+month_num+"/"+date_mod.substr(6,5); //data in formato DD/MonthName/AAAA
@@ -95,6 +101,16 @@ class StructuresList extends Component {
               <TouchableOpacity
                 style={styles.structureButton}
                 onPress={()=>{
+                  /* passo alla singola strutture solo le richieste(requestList) accettate per essa*/
+                  var structureRequest = []; //richieste da passare alla navigazione
+                  if(this.state.requestList.length != 0){
+                    for(let i = 0; i < this.state.requestList.length ; i++){
+                      if(this.state.requestList[i].structure_id == item.id && this.state.requestList[i].request == 1){
+                        structureRequest.push(this.state.requestList[i])
+                      }
+                    }
+                    console.log(structureRequest)
+                  }
                   navigation.navigate('UserStructure',{
                     /* parametri da passare alla schermata successiva */
                     userToken: this.state.userToken,
@@ -121,8 +137,9 @@ class StructuresList extends Component {
                     image2 : item.image2,
                     image3: item.image3,
                     image4 : item.image4,
-                    
-                });}}
+                    requestList : structureRequest
+                  });}
+                }
               >
                 <Text style={styles.titleStructure}>{item.title}</Text>
               </TouchableOpacity>

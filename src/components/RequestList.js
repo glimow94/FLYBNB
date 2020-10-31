@@ -58,6 +58,7 @@ export default class StructuresList extends Component {
               }
               if(res.data[i].request == 0){
                 waitingRequests = waitingRequests +1;
+                possibleEarn = possibleEarn + res.data[i].totPrice;
               }
             }
             
@@ -70,6 +71,11 @@ export default class StructuresList extends Component {
                 possibleEarn:possibleEarn,
                 waitingRequests:waitingRequests
               })
+              /* qui aggiorniamo requestList presente nllo stato di Login (genitore) passandogli solo le richieste GIA ACCETTATE (per il rendiconto dei 3 mesi precedenti) */
+              this.props.updateState({
+                requestList : structures
+              })
+              /* qui aggiorniamo il numero di notifiche da passare al bottone...(se sono maggiori di 10 allora passiamo un '9+' generico) */
               if(waitingRequests < 10){
                 this.props.updateState({
                   waitingRequests:waitingRequests
@@ -202,6 +208,10 @@ export default class StructuresList extends Component {
             <View style={{flexDirection:'row',alignContent:'center', alignSelf:'center'}}>
               <Text style={styles.infoText}>Guadagni totali :</Text>
               <Text style={styles.totEarn}> {this.state.totEarn} €</Text>
+            </View>
+            <View style={{flexDirection:'row',alignContent:'center', alignSelf:'center'}}>
+              <Text style={styles.infoText}>Richieste in sospeso :</Text>
+              <Text style={styles.totEarn}> {this.state.possibleEarn} €</Text>
             </View>
               <FlatList
                 data= {this.state.data}

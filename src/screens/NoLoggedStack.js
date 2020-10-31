@@ -24,7 +24,7 @@ export default class NoLoggedScreen extends Component{
                 initialRouteName="Home"
                 activeColor= {colors.secondary}
                 inactiveColor={colors.transparent}
-                barStyle={{height:50, paddingBottom: 10, borderTopColor:colors.secondary, borderTopWidth:2}}
+                barStyle={{borderTopColor:colors.secondary, borderTopWidth:2}}
                 shifting={true}
                 style={{ backgroundColor: colors.secondary }}>
                 <Tab.Screen
@@ -97,7 +97,10 @@ const NoLoggedStack = ({navigation}) => (
             },
         }}
     >
-        <Stack.Screen name = "Accedi" component={LoggedOut} />
+        <Stack.Screen 
+            name = "Accedi" 
+            component={LoggedOut} 
+        />
         <Stack.Screen name = "Login" component={Login} />        
         <Stack.Screen name = "Signup" component={Signup} /> 
         <Stack.Screen name="Home" component={Home}/>

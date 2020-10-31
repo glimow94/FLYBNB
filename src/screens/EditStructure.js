@@ -15,11 +15,17 @@ import axios from "axios";
 import host from '../configHost'
 
 
-let {imageDim} = 0
-Platform.OS === 'web' ? imageDim = 100 : imageDim = 50;
+let {imageDim} = 0;
 var {width} = Dimensions.get('window');
-var height =  width;
-Platform.OS === 'web' ? width= width *0.5 : null
+var height = Dimensions.get('window').height;
+if(Platform.OS === 'web'){
+    imageDim = 100;
+    width= width *0.5;
+    height= height*0.6;
+}else{
+    imageDim = 50;
+    height = height*0.8
+}
 
 //pagina di registrazione struttura
 export default class EditStructure extends Component{
@@ -31,6 +37,8 @@ export default class EditStructure extends Component{
             title : '',
             user_id: '',
             type:'B&B',
+            region:'',
+            province:'',
             city:'',
             street:'',
             number:'',
@@ -293,7 +301,7 @@ export default class EditStructure extends Component{
             user_id: userToken,
             title: itemTitle,
             type:itemType,
-            city:itemPlace,
+            city:itemPlace.substring(itemPlace.lastIndexOf(",")+1,itemPlace.length),
             street:itemStreet,
             number:itemNumber,
             post_code:itemPostCode,
@@ -335,7 +343,7 @@ export default class EditStructure extends Component{
                 },
                 title: this.state.title,
                 type: this.state.type,
-                place: this.state.city,
+                place: this.state.region +','+this.state.province+','+this.state.city,
                 street: this.state.street,
                 number: this.state.number,
                 post_code: this.state.post_code,
@@ -409,6 +417,8 @@ export default class EditStructure extends Component{
                     <CitySelector
                         updateState={this.updateState.bind(this)}
                         city={this.state.city}
+                        region={this.state.region}
+                        province={this.state.province}
                         status1={this.state.status1}
                         status2={this.state.status2}
                         status3={this.state.status3}
@@ -644,15 +654,14 @@ export default class EditStructure extends Component{
                                 />
                             </TouchableOpacity>
                         </View>
-                    </View>
-                    <View style={{marginTop: 5}}>
-                        {this.state.warning ? <View style={{backgroundColor:colors.white}}>
-                            <Text style={styles.warningText}>ERRORE : CONTROLLA CHE TUTTI I DATI SIANO CORRETTI</Text>
-                        </View>:null}
-                        <Button title="MODIFICA" color={colors.orange} onPress = {()=> {this.postData()}}></Button>
-                    </View>
-                    
+                    </View>                    
                 </ScrollView>
+                <View style={{marginVertical: 5, minWidth:300}}>
+                    {this.state.warning ? <View style={{backgroundColor:colors.white}}>
+                        <Text style={styles.warningText}>ERRORE : CONTROLLA CHE TUTTI I DATI SIANO CORRETTI</Text>
+                    </View>:null}
+                    <Button title="MODIFICA" color={colors.red} onPress = {()=> {this.postData()}}></Button>
+                </View>
             </View>
         );
     }
@@ -665,32 +674,32 @@ const styles = StyleSheet.create({
         display: "flex",
         alignContent:'center',
         alignItems:'center',
-        backgroundColor: colors.green01,
+        backgroundColor: colors.primary,
     },
     titleHeader:{
         fontSize: 28,
-        color: colors.white,
+        color: colors.secondary,
         fontWeight: "300",
         margin: 20,
         alignSelf:'center'
     },
     scrollViewWrapper: {
         margin: 10,
-        flex: 1,
-        width: width*0.8
+        width: width*0.9,
+        height: height
     },
     label:{
-        color: colors.white,
+        color: colors.transparent,
         fontWeight: "700", 
-        marginTop: 5,
+        marginTop: 10,
     },
     inputField: {
         borderBottomWidth: 1,
         paddingTop: 15,
         paddingBottom: 5,
         height: 40,
-        backgroundColor: colors.green01,
-        borderBottomColor: colors.white,
+        backgroundColor: colors.primary,
+        borderBottomColor: colors.secondary,
     },
     pickerstyle:{
         marginTop: 5,
@@ -707,6 +716,8 @@ const styles = StyleSheet.create({
     servicesBox:{
         backgroundColor: colors.white,
         borderRadius: 20,
+        borderWidth:2,
+        borderColor: colors.orange,
         margin:5
     },
     checkBox:{
@@ -719,8 +730,8 @@ const styles = StyleSheet.create({
     description:{
         backgroundColor: colors.white,
         borderWidth: 1,
-        borderColor: colors.black,
-        borderRadius: 8,
+        borderColor: colors.secondary,
+        borderRadius: 8
     },
     warningText:{
         backgroundColor: colors.white,

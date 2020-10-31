@@ -176,7 +176,7 @@ export default class BookingStructure extends Component{
           console.log(error);
         });
 
-        alert('Prenotazione Effetuata con successo!')
+        alert('Prenotazione Effettuata con successo!')
     }
     else this.setState({alert:true})
     

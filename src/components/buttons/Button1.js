@@ -1,7 +1,7 @@
 
 import React, { Component } from "react";
 import propTypes from "prop-types";
-import { Text, View, TouchableHighlight, StyleSheet, Platform } from "react-native";
+import { Text, View, TouchableOpacity, StyleSheet, Platform } from "react-native";
 import colors from "../../style/colors/index";
 
 
@@ -10,11 +10,11 @@ var margin = 10;
 Platform.OS === 'android' ? margin=2 : margin = 10
 export default class CalendarButton extends Component {
   render() {
-    const { text, onPress , backgroundColor, opacity } = this.props;
+    const { text, onPress , backgroundColor, opacity, borderColor } = this.props;
     return (
-      <TouchableHighlight style={[{backgroundColor:backgroundColor, opacity:opacity},styles.button]} onPress={onPress}>
+      <TouchableOpacity style={[styles.button, {backgroundColor:backgroundColor, opacity:opacity, borderColor: borderColor}]} onPress={onPress}>
         <Text style={styles.buttonText}>{text}</Text>
-      </TouchableHighlight>
+      </TouchableOpacity>
     );
   }
 }
@@ -22,18 +22,20 @@ CalendarButton.propTypes = {
   text: propTypes.string.isRequired,
   textColor: propTypes.string,
   backgroundColor: propTypes.string,
+  borderColor: propTypes.string,
   onPress: propTypes.func
 };
 
 const styles = StyleSheet.create({
     button: {
-      padding: 5,
+      paddingVertical: 5,
+      paddingHorizontal: 8,
       display: "flex",
       borderRadius: 20,
-      borderWidth: 3,
-      borderColor: colors.secondary,
+      borderWidth:3,
       marginLeft:margin,
-      width:100,
+      width:'auto',
+      minWidth:100,
     },
     buttonText: {
       fontSize: 16,

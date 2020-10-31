@@ -120,12 +120,12 @@ const ProfileStackScreen = ({navigation}) =>(
     <ProfileStack.Screen 
       name = "UserStructure"  
       component={UserStructure}
+      options={({route}) => ({title: route.params.itemTitle+' - '+route.params.itemType})} 
     />
     <ProfileStack.Screen 
       name = "EditStructure"  
       component={EditStructure}
       options={{title: 'Modifica Struttura'}} 
-
     />
   </ProfileStack.Navigator>
 );

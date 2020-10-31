@@ -75,7 +75,7 @@ const Login = ()=>{
                             onKeyPress = {
                                 (event) => {
                                   if(event.nativeEvent.key === "Enter"){
-                                    ()=> loginCheck(data.email,data.password)
+                                    loginCheck(data.email,data.password)
                                   }
                                 }
                             }
@@ -95,6 +95,8 @@ const Login = ()=>{
                             */
                           ()=> loginCheck(data.email,data.password)
                         }
+                        backgroundColor={colors.primary}
+                        borderColor={colors.secondary}
                     ></NextButton>                    
                 </View>
                 </ScrollView>

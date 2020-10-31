@@ -131,7 +131,6 @@ export default function Structure({ route }){
           <View style={{alignContent:'center',alignItems:'center'}}>
             {
               images.length > 0 ? 
-
               <View style={styles.imageScrollWrapper}>
                   <ScrollView 
                     pagingEnabled 
@@ -238,7 +237,7 @@ export default function Structure({ route }){
           </View>
         </ScrollView>
         <View style={styles.BookingButton}>
-          <BookingButton text="PRENOTA" backgroundColor={colors.primary} onPress={getToken}></BookingButton> 
+          <BookingButton text="PRENOTA" backgroundColor={colors.primary} borderColor={colors.secondary} onPress={getToken}></BookingButton> 
         </View>
       </View>
     )
@@ -257,7 +256,6 @@ const styles = StyleSheet.create({
   Image:{
     width: width,
     height: '100%',
-    borderRadius:15,
     resizeMode:'contain'
   },
   imageScrollWrapper:{
@@ -265,7 +263,6 @@ const styles = StyleSheet.create({
     height: '30%',
     marginBottom: 10,
     backgroundColor: colors.white,
-    borderRadius: 10,
   },
   imageScrollView:{
     width: width,
