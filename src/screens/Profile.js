@@ -34,7 +34,7 @@ var flexDirectionUserInfo = 'column';
 var menuSectionWidth = width-250;
 var menuAlign = 'center';
 
-if(Platform.OS === 'android'){
+if(Platform.OS === 'android' || Dimensions.get('window').width < 700){
   containerFlexDirection = 'column';
   width = width*0.8;
   ScrollHeight = '90%';

@@ -8,7 +8,7 @@ var height = 50;
 var logoAlign = 'center';
 width = width*0.6
 
-if(Platform.OS == 'web'){
+if(Platform.OS == 'web' && Dimensions.get('window').width > 700){
   width = width*0.4;
   fontSize = 20;
   height = 60;

@@ -1,27 +1,21 @@
 import React, { Component } from "react";
-import { View, Text, TextInput,ScrollView, StyleSheet, Picker, TextPropTypes, Platform } from "react-native";
+import { View, Text, TextInput,ScrollView, StyleSheet, Picker, Dimensions, Platform } from "react-native";
 import colors from "../style/colors/index";
 import NextButton from "../components/buttons/Button1";
 import BirthDayPicker from "../components/BirthdayPicker"
-import CitySelector from "../components/CitySelector"
 import { UserContext } from "../components/context";
-import { useNavigation } from "@react-navigation/native";
-import Login from './Login';
-import db from '../components/database_region_city'
-import AsyncStorage from "@react-native-community/async-storage";
+import db from '../components/database_region_city';
 
 /* valori responsive per il picker della città (Residente a..) */
 var height = 40;
 var width = 200;
 var position = 'relative';
 var bottom = 0;
-if( Platform.OS === 'android'){
-
+if( Platform.OS === 'android' || Dimensions.get('window').width < 700){
     height=40;
     width=150;
     position='relative';
     bottom=10;
-
 }
 //pagina di registrazione utente
 const Signup = ({navigation})=>{

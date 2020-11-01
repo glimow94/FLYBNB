@@ -12,7 +12,7 @@ import { TextInput } from 'react-native-paper';
 
 var wrapperWidth = '35%';
 var ScreenHeight = Dimensions.get("window").height* 0.6;
-if( Platform.OS === 'android'){
+if( Platform.OS === 'android' || Dimensions.get('window').width < 700){
     wrapperWidth = '100%';
     ScreenHeight = '100%';
 }

@@ -3,17 +3,16 @@ import {View, Text, StyleSheet, Image, ScrollView, Dimensions, Platform, Touchab
 
 import colors from '../style/colors';
 import { Icon } from 'react-native-elements';
-
-import { useNavigation } from '@react-navigation/native';
 import MenuButton from '../components/buttons/Button1'
-import { Menu } from 'react-native-paper';
 
 var {width} = Dimensions.get('window');
 var height =  width;
+var titleFontSize = 18;
 
-if(Platform.OS === 'web'){
+if(Platform.OS === 'web' && Dimensions.get('window').width > 700){
   width = width*0.6;
   height = height*0.3;
+  titleFontSize = 30;
 }else{
   width = width;
   height = height*0.9;
@@ -52,7 +51,7 @@ export default function UserStructure({ route }){
       if(image2 != null && image2.length != 0) images.push(image2)
       if(image3 != null && image3.length != 0)  images.push(image3)
       if(image4 != null && image4.length != 0) images.push(image4)
-      console.log(requestList)
+      
       const [state,setState] = React.useState({
         activeImage : 0,
         horizontalScroll: true,
@@ -67,6 +66,7 @@ export default function UserStructure({ route }){
       useEffect(() => {
         if(Platform.OS == 'android'){
           setState({
+            ...state,
             horizontalScroll: false,
           })
         }
@@ -78,6 +78,7 @@ export default function UserStructure({ route }){
         //contentOffSet misura quanto una view (in questo caso l'img della scrollView) è stata spostataa dall'origine tramite evento di tocco/trascinamento
         if(slide !== state.activeImage){
           setState({
+            ...state,
             activeImage: slide
           })
         }
@@ -87,6 +88,7 @@ export default function UserStructure({ route }){
       const showInfo = ()=>{
         if(state.status1 == false){
           setState({
+            ...state,
             status1 : true,
             status2 : false,
             button1Border : colors.secondary,
@@ -98,6 +100,7 @@ export default function UserStructure({ route }){
       const showStatement = ()=>{
         if(state.status2 == false){
           setState({
+            ...state,
             status1 : false,
             status2 : true,
             button1Border : colors.primary,
@@ -213,25 +216,16 @@ export default function UserStructure({ route }){
         }
         {state.status2 ? 
           <View style={{alignContent:'center',alignItems:'center'}}>
-            <Text style={styles.itemTitle}>Resoconto prenotazioni per la struttura "{itemTitle}"</Text>
+            <Text style={styles.headerTitle}>Resoconto prenotazioni per la struttura "{itemTitle}"</Text>
             <FlatList
                 data= {requestList}
+                style={{marginVertical: 10}}
                 keyExtractor = {(item, index) => index.toString()}
                 inverted={true}
                 renderItem = {({item}) =>
                   <View style={styles.item}>
-                      <View style={styles.viewRow}>
-                        <Text style={styles.titleStructure}>{item.title}, {item.type} </Text>
-                        <View style={styles.clientBox}>
-                          <Text style={[styles.clientInfoText,{color: colors.transparent}]}>Cliente:</Text>
-                          <Text style={styles.clientInfoText}>{item.name} {item.surname}</Text>
-                          <Text style={styles.clientInfoText}>{item.email.toLowerCase()}</Text>
-                        </View>
-                      
-                      </View>
                       <View style={styles.checkInOut}>
-                
-                          <View style={{flexDirection:'column'}}>
+                          <View style={{flexDirection:'column', marginRight:20}}>
                             <Text style={styles.checkInOutText}>Check-In: </Text>
                             <Text>{item.checkIn}</Text>
                           </View>
@@ -239,17 +233,21 @@ export default function UserStructure({ route }){
                             <Text style={styles.checkInOutText}>Check-Out: </Text>
                             <Text>{item.checkOut}</Text>
                           </View>
-
                       </View>
-                      <View style={styles.viewRow}>
-                          
+                      <View style={styles.clientInfo}>
+                        <View style={styles.clientBox}>
+                          <Text style={[styles.clientInfoText,{color: colors.transparent}]}>Cliente:</Text>
+                          <Text style={styles.clientInfoText}>{item.name} {item.surname}</Text>
+                          <Text style={styles.clientInfoText}>{item.email.toLowerCase()}</Text>
+                        </View>
+                      </View>
+                      <View style={styles.priceInfo}>
                           <View style={styles.priceBox}>
                             <Text style={styles.priceText}>Tassa soggiorno: </Text>
                             <Text style={styles.taxPrice}>{item.cityTax} € </Text>
-                            <Text style={styles.priceText}>Totale: </Text>
+                            <Text style={[styles.priceText,{marginLeft:20}]}>Totale: </Text>
                             <Text style={styles.totPrice}>{item.totPrice} € </Text>
-                          </View>
-                          
+                          </View>             
                       </View>
                   </View>}
                 contentContainerStyle={{paddingTop:40}}
@@ -274,6 +272,7 @@ const styles = StyleSheet.create({
   },
   scrollwrapper:{
     height: height,
+    width:'100%'
   },
   /* stile per la sezione INFO */
   Image:{
@@ -416,6 +415,33 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderColor: colors.transparent,
     padding: 2
-  }
+  },
   /* stile per la sezione RENDICONTO */
+  headerTitle:{
+    fontSize: titleFontSize,
+    fontWeight: "500",
+    alignSelf:'center',
+    marginHorizontal: 20
+  },
+  item:{
+    marginBottom: 10,
+    borderRadius: 20,
+    borderWidth: 3,
+    padding: 10,
+    borderColor: colors.secondary
+  },
+  checkInOut:{
+    flexDirection:'row',
+    marginBottom: 6
+  },
+  clientInfo:{
+    marginBottom: 6
+  },
+  priceInfo:{
+    borderTopWidth: 2,
+    borderTopColor: colors.secondary
+  },
+  priceBox:{
+    flexDirection:'row'
+  },
 });

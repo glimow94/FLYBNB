@@ -1,9 +1,7 @@
 //componente che restituisce le strutture di uno specifico utente
 import React, { Component } from 'react';
-import { SafeAreaView,Button, View, FlatList, StyleSheet, Text, TouchableOpacity, Platform } from 'react-native';
-import Constants from 'expo-constants';
+import {View, FlatList, StyleSheet, Text, TouchableOpacity, Platform, Dimensions } from 'react-native';
 import colors from "../style/colors/index";
-import BookingButton from "../components/buttons/bookingButton";
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
 import AsyncStorage from '@react-native-community/async-storage';
@@ -11,7 +9,7 @@ import host from '../configHost';
 import moment from 'moment';
 
 var itemWidth = '40%';
-if(Platform.OS === 'android'){
+if(Platform.OS === 'android' || Dimensions.get('window').width < 700){
   itemWidth = '90%';
 }
 class StructuresList extends Component {
@@ -146,7 +144,7 @@ class StructuresList extends Component {
 
 
               {
-                this.state.today.diff(moment(item.start_date,'DD-MM-YYYY'), 'days') > 2 ? 
+                this.state.today.diff(moment(item.start_date,'DD-MM-YYYY'), 'days') > 0 ? 
                 <Text style={styles.dateswarning}>INVIA RENDICONTO TRIMESTRALE</Text> : null
               }
               <Text style={{alignSelf:'flex-start',fontWeight:'700'}}>{item.place}</Text>

@@ -1,13 +1,13 @@
 //componente che restituisce le strutture di uno specifico utente
 import React, { Component } from 'react';
-import {View, FlatList, StyleSheet, Text, Platform } from 'react-native';
+import {View, FlatList, StyleSheet, Text, Platform, Dimensions } from 'react-native';
 import colors from "../style/colors/index";
 import axios from "axios";
 import AsyncStorage from '@react-native-community/async-storage';
 import host from '../configHost'
 
 var itemWidth = '50%';
-if(Platform.OS === 'android'){
+if(Platform.OS === 'android' || Dimensions.get('window').width < 700){
   itemWidth = '90%';
 }
 

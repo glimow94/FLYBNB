@@ -15,12 +15,13 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  Platform
+  Platform,
+  Dimensions
 } from 'react-native';
 
 var screen_padding =  0;
 
-Platform.OS === 'web' ? screen_padding = 100 : null;
+Platform.OS === 'web' && Dimensions.get('window').width > 700 ? screen_padding = 100 : null;
 
 class Home extends Component{
   constructor(props){
@@ -98,7 +99,7 @@ class Home extends Component{
             <View style={styles.headerWrapper}>
                 <View style={{alignContent:'center',alignItems:'center'}}>
                   {
-                    Platform.OS == 'web' ? <Text style={styles.titleStyle}> Benvenuto su FlyBNB , prenota la tua vacanza </Text>
+                    Platform.OS == 'web' && Dimensions.get('window').width > 700 ? <Text style={styles.titleStyle}> Benvenuto su FlyBNB , prenota la tua vacanza </Text>
                                           : <Text style={styles.titleStyle}> Benvenuto su FlyBNB </Text>
                   }
                   <View style={styles.searchHeader}>
@@ -179,7 +180,7 @@ class Home extends Component{
 export default function(props) {
   const navigation = useNavigation();
 
-  return <Home {...props} navigation={navigation} />;
+  return <Home navigation={navigation} />;
 }
 const styles = StyleSheet.create({
     container:{

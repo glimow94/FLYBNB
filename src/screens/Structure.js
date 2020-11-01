@@ -11,15 +11,12 @@ import { useNavigation } from '@react-navigation/native';
 
 import Login from './Login'
 
-import BookingStructure from './BookingStructure';
-import { color } from 'react-native-reanimated';
-
 var {width} = Dimensions.get('window');
 var height =  width;
 var buttonAlign = 'flex-end';
 var servicesFlexDirection='row';
 
-if(Platform.OS === 'web'){
+if(Platform.OS === 'web' && Dimensions.get('window').width > 700){
   width = width*0.6;
   height = height*0.3;
   buttonAlign = 'center',
