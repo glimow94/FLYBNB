@@ -18,6 +18,7 @@ export default class StructuresList extends Component {
     super(props);
     this.state = {
       data: [],
+      structureGuests: [],
       isLoading: true,
       userToken: null,
       status:'',
@@ -48,6 +49,7 @@ export default class StructuresList extends Component {
             }
           })
           .then(res => {
+            this.getStructureGuest();
             var totalEarn = 0,
                 possibleEarn = 0,//guadagni possibili se si accettano le richieste in sospeso
                 waitingRequests = 0;
@@ -88,6 +90,26 @@ export default class StructuresList extends Component {
       });
       console.log(this.state.data)
     }
+
+    async getStructureGuest() {
+       const url = `http://${host.host}:3055/users/statement/${this.state.userToken}`;
+       axios.get(url, {
+           method: 'GET',
+           headers: {
+             'content-type': 'application/json',   
+           }
+         })
+         .then(res => {
+             console.log(res);
+             const structureGuests = res.data;
+             this.setState({
+              structureGuests: structureGuests
+            })
+           })
+         .catch(function (error) {
+           console.log(error);
+         });
+     }
 
    async postConfirm(itemID, earn) {
      var totEarn_ = this.state.totEarn;
