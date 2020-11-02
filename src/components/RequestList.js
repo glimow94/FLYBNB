@@ -8,7 +8,7 @@ import host from '../configHost'
 
 var itemWidth = '50%';
 if(Platform.OS === 'android' || Dimensions.get('window').width < 700){
-  itemWidth = '90%';
+  itemWidth = '100%';
 }
 
 export default class StructuresList extends Component {
@@ -17,8 +17,8 @@ export default class StructuresList extends Component {
      
     super(props);
     this.state = {
-      data: [],
-      structureGuests: [],
+      data: [],//lista di tutte le richieste di prenotazione a carico delle strutture dell'utente loggato
+      bookingGuests: [],//lista di tutti gli ospiti
       isLoading: true,
       userToken: null,
       status:'',
@@ -101,14 +101,16 @@ export default class StructuresList extends Component {
            }
          })
          .then(res => {
-             console.log(res);
-             const structureGuests = res.data;
-             this.setState({
-              structureGuests: structureGuests
+            const guests = res.data;
+            this.setState({
+              bookingGuests: guests
             })
-           })
+            this.updateState({
+              bookingGuests: guests
+            })
+          })
          .catch(function (error) {
-           console.log(error);
+            console.log(error);
          });
      }
 
@@ -318,7 +320,7 @@ const styles = StyleSheet.create({
     color:colors.black,
   },
   item: {
-    borderColor: colors.tertiary,
+    borderColor: colors.secondary,
     borderWidth:3,
     borderRadius: 8,
     padding: 10,

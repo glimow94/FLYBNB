@@ -4,6 +4,7 @@ import {View, Text, StyleSheet, Image, ScrollView, Dimensions, Platform, Touchab
 import colors from '../style/colors';
 import { Icon } from 'react-native-elements';
 import MenuButton from '../components/buttons/Button1'
+import moment from "moment";
 
 var {width} = Dimensions.get('window');
 var height =  width;
@@ -19,95 +20,141 @@ if(Platform.OS === 'web' && Dimensions.get('window').width > 700){
 }
 
 export default function UserStructure({ route }){
-    const {
-      userToken,
-      itemName,
-      itemSurname,
-      itemEmail, 
-      itemTitle,
-      itemPrice,
-      itemID,
-      itemPlace,
-      itemStreet,
-      itemNumber,
-      itemPostCode,
-      itemType,
-      itemBeds,
-      itemKitchen,
-      itemFullBoard,
-      itemAirConditioner,
-      itemWifi,
-      itemParking,
-      itemDescription,
-      locationDescription,
-      image1,
-      image2,
-      image3,
-      image4,
-      requestList
-     } = route.params;
-      var images = []
-      if(image1 != null && image1.length != 0) images.push(image1)
-      if(image2 != null && image2.length != 0) images.push(image2)
-      if(image3 != null && image3.length != 0)  images.push(image3)
-      if(image4 != null && image4.length != 0) images.push(image4)
-      
-      const [state,setState] = React.useState({
-        activeImage : 0,
-        horizontalScroll: true,
-        /* variabili per la gestione del menu [INFO | RENDICONTO ] */
-        button1Border: colors.secondary, //il bottone attivo avrà il bordo colorato
-        button2Border: colors.primary, 
-        status1: true, //se status1 è true mostra la sezione delle info struttura
-        status2: false, // se status2 è true mostra la sezione del rendiconto
-        requestList : requestList //richieste accettate per questa struttura (utili al rendiconto)
-      })
-
-      useEffect(() => {
-        if(Platform.OS == 'android'){
-          setState({
-            ...state,
-            horizontalScroll: false,
-          })
-        }
+  const {
+    userToken,
+    itemName,
+    itemSurname,
+    itemEmail, 
+    itemTitle,
+    itemPrice,
+    itemID,
+    itemPlace,
+    itemStreet,
+    itemNumber,
+    itemPostCode,
+    itemType,
+    itemBeds,
+    itemKitchen,
+    itemFullBoard,
+    itemAirConditioner,
+    itemWifi,
+    itemParking,
+    itemDescription,
+    locationDescription,
+    image1,
+    image2,
+    image3,
+    image4,
+    requestList,
+    guestsList
+    } = route.params;
+    var images = []
+    if(image1 != null && image1.length != 0) images.push(image1)
+    if(image2 != null && image2.length != 0) images.push(image2)
+    if(image3 != null && image3.length != 0)  images.push(image3)
+    if(image4 != null && image4.length != 0) images.push(image4)
     
-      }, [])
-      
-      const imageChanged = ({nativeEvent}) => {
-        const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width );
-        //contentOffSet misura quanto una view (in questo caso l'img della scrollView) è stata spostataa dall'origine tramite evento di tocco/trascinamento
-        if(slide !== state.activeImage){
-          setState({
-            ...state,
-            activeImage: slide
-          })
-        }
-      }
+    const [state,setState] = React.useState({
+      activeImage : 0,
+      horizontalScroll: true,
+      /* variabili per la gestione del menu [INFO | RENDICONTO ] */
+      button1Border: colors.secondary, //il bottone attivo avrà il bordo colorato
+      button2Border: colors.primary, 
+      status1: true, //se status1 è true mostra la sezione delle info struttura
+      status2: false, // se status2 è true mostra la sezione del rendiconto
 
-      /* funzioni di visibilità delle sezioni info e rendiconto del menu */
-      const showInfo = ()=>{
-        if(state.status1 == false){
-          setState({
-            ...state,
-            status1 : true,
-            status2 : false,
-            button1Border : colors.secondary,
-            button2Border : colors.primary
-          })
-        }
-      }
+      /* variabili per la gestione delle prenotazioni per il rendiconto */
+      requestList : requestList, //richieste accettate per questa struttura (utili al rendiconto)
+      guestsList : guestsList, //lista degli ospiti per questa struttura, da suddividere in base alle prenotazioni
+      bookingList : [], //lista delle prenotazioni integrata con gli ospiti
+      bookingListFiltered: [],//lista delle prenotazioni effettivamente visualizzate nel rendering in base ai filtri
+      /* range di date per filtrare le prenotazioni */
+      startDate : '',
+      endDate: ''
+    })
 
-      const showStatement = ()=>{
-        if(state.status2 == false){
-          setState({
-            ...state,
-            status1 : false,
-            status2 : true,
-            button1Border : colors.primary,
-            button2Border : colors.secondary
-          })
+    useEffect(() => {
+      /* su android non verrà visualizzata la barra di scrolling per le immagini (si usa il touch) */
+      var horizontalScroll_ = true;
+      if(Platform.OS == 'android'){
+        horizontalScroll_ = false;
+      }
+      /* Associo ad ogni prenotazione gli ospiti corrispondenti */
+      var bookingList = [];
+      for(var i = 0; i < state.requestList.length ; i++){
+        var singleBooking = [],
+            guests = [];
+        singleBooking.push(state.requestList[i]);
+        for(var j = 0; j < state.guestsList.length; j++){
+          if(state.guestsList[j].id == state.requestList[i].id){
+            guests.push(guestsList[j]);
+          }
+        }
+        if(guests.length > 0) singleBooking.push(guests);
+        bookingList.push(singleBooking);
+      }
+      console.log(bookingList)
+      setState({
+        ...state,
+        bookingList: bookingList,
+        bookingListFiltered : bookingList,
+        horizontalScroll: horizontalScroll_
+      })
+    }, [])
+    const imageChanged = ({nativeEvent}) => {
+      const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width );
+      //contentOffSet misura quanto una view (in questo caso l'img della scrollView) è stata spostataa dall'origine tramite evento di tocco/trascinamento
+      if(slide !== state.activeImage){
+        setState({
+          ...state,
+          activeImage: slide
+        })
+      }
+    }
+
+    /* funzioni di visibilità delle sezioni info e rendiconto del menu */
+    const showInfo = ()=>{
+      if(state.status1 == false){
+        setState({
+          ...state,
+          status1 : true,
+          status2 : false,
+          button1Border : colors.secondary,
+          button2Border : colors.primary
+        })
+      }
+    }
+
+    const showStatement = ()=>{
+      if(state.status2 == false){
+        setState({
+          ...state,
+          status1 : false,
+          status2 : true,
+          button1Border : colors.primary,
+          button2Border : colors.secondary
+        })
+      }
+    }
+    /* funzione che filtra le prenotazioni in base alle date selezionate */
+    const bookingsFilter = (start, end)=>{
+      var filteredData = [],
+          bookingCheckIn,
+          dateFormat = 'DD-MM-YYYY',
+          startDate = moment(start,dateFormat),
+          endDate = moment(end,dateFormat);
+      for(var i = 0; i < state.bookingList.length ; i++){
+        /* checkIn >= a startdate && checkIn <= endDate*/
+        bookingCheckIn = moment(state.bookingList[i][0].checkIn, dateFormat);
+        if( bookingCheckIn >= startDate && bookingCheckIn < endDate){
+          filteredData.push(state.bookingList[i]);
         }
       }
+      setState({
+        ...state,
+        bookingListFiltered : filteredData
+      })
+    }
     return (
       <View style={styles.container}>
         <Text style={styles.itemTitle}>{itemTitle}</Text>
@@ -217,43 +264,66 @@ export default function UserStructure({ route }){
         {state.status2 ? 
           <View style={{alignContent:'center',alignItems:'center'}}>
             <Text style={styles.headerTitle}>Resoconto prenotazioni per la struttura "{itemTitle}"</Text>
-            <FlatList
-                data= {requestList}
-                style={{marginVertical: 10}}
-                keyExtractor = {(item, index) => index.toString()}
-                inverted={true}
-                renderItem = {({item}) =>
-                  <View style={styles.item}>
-                      <View style={styles.checkInOut}>
-                          <View style={{flexDirection:'column', marginRight:20}}>
-                            <Text style={styles.checkInOutText}>Check-In: </Text>
-                            <Text>{item.checkIn}</Text>
+            <Text style={styles.headerSubtitle}>*Richieste accettate nella struttura</Text>
+            { state.bookingList.length == 0 ?
+              <Text style={styles.headerSubtitle}>Questa struttura non ha ancora ricevuto prenotazioni</Text> : 
+              <View>
+                <MenuButton text='FILTRA' onPress={()=>bookingsFilter('01/01/2021','29/01/2021')} ></MenuButton>
+                <FlatList
+                    data= {state.bookingListFiltered}
+                    style={{marginVertical: 10}}
+                    keyExtractor = {(item, index) => index.toString()}
+                    inverted={true}
+                    renderItem = {({item}) =>
+                      <View style={styles.item}>
+                          <View style={styles.checkInOut}>
+                              <View style={{flexDirection:'column', marginRight:20}}>
+                                <Text style={styles.checkInOutText}>Check-In: </Text>
+                                <Text>{item[0].checkIn}</Text>
+                              </View>
+                              <View style={styles.checkoutBox}>
+                                <Text style={styles.checkInOutText}>Check-Out: </Text>
+                                <Text>{item[0].checkOut}</Text>
+                              </View>
                           </View>
-                          <View style={styles.checkoutBox}>
-                            <Text style={styles.checkInOutText}>Check-Out: </Text>
-                            <Text>{item.checkOut}</Text>
+                          <View style={styles.clientInfo}>
+                            <View style={styles.clientBox}>
+                              <Text style={[styles.clientInfoText,{color: colors.transparent}]}>Cliente:</Text>
+                              <Text style={styles.clientInfoText}>{item[0].name} {item[0].surname}</Text>
+                              <Text style={styles.clientInfoText}>{item[0].email.toLowerCase()}</Text>
+                            </View>
                           </View>
-                      </View>
-                      <View style={styles.clientInfo}>
-                        <View style={styles.clientBox}>
-                          <Text style={[styles.clientInfoText,{color: colors.transparent}]}>Cliente:</Text>
-                          <Text style={styles.clientInfoText}>{item.name} {item.surname}</Text>
-                          <Text style={styles.clientInfoText}>{item.email.toLowerCase()}</Text>
-                        </View>
-                      </View>
-                      <View style={styles.priceInfo}>
-                          <View style={styles.priceBox}>
-                            <Text style={styles.priceText}>Tassa soggiorno: </Text>
-                            <Text style={styles.taxPrice}>{item.cityTax} € </Text>
-                            <Text style={[styles.priceText,{marginLeft:20}]}>Totale: </Text>
-                            <Text style={styles.totPrice}>{item.totPrice} € </Text>
-                          </View>             
-                      </View>
-                  </View>}
-                contentContainerStyle={{paddingTop:40}}
-              />
-          </View> : null
-        }
+                          <View style={styles.guestInfo}>
+                            <Text style={styles.clientInfoText,{color:colors.transparent}}>Ospiti:</Text>
+                            <FlatList
+                              data= {item[1]}
+                              keyExtractor = {(item, index) => index.toString()}
+                              renderItem = {({item}) =>
+                                      <View style={styles.guestInfoWrapper}>
+                                        <Text style={styles.guestInfoText}>{item.name}</Text>
+                                        <Text style={styles.guestInfoText}>{item.surname}</Text>
+                                        <Text style={styles.guestInfoText}>{item.date}</Text>
+                                      </View>
+                              }
+                              contentContainerStyle={{paddingTop:40}}
+                            />
+                          </View>
+                          <View style={styles.priceInfo}>
+                              <View style={styles.priceBox}>
+                                <Text style={styles.priceText}>Tassa soggiorno: </Text>
+                                <Text style={styles.taxPrice}>{item[0].cityTax} € </Text>
+                                <Text style={[styles.priceText,{marginLeft:20,alignSelf:'flex-end'}]}>Totale: </Text>
+                                <Text style={styles.totPrice}>{item[0].totPrice} € </Text>
+                              </View>             
+                          </View>
+                      </View>}
+                    contentContainerStyle={{paddingTop:40}}
+                />
+              </View>
+            }
+            </View> : null
+          }
+        
         </ScrollView>
       </View>
     )
@@ -428,17 +498,32 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 3,
     padding: 10,
+    minWidth: width-5,
     borderColor: colors.secondary
   },
   checkInOut:{
     flexDirection:'row',
+    alignSelf:'center',
     marginBottom: 6
   },
   clientInfo:{
     marginBottom: 6
   },
+  guestInfo:{
+    width:'100%',
+    marginVertical:10,
+  },
+  guestInfoWrapper:{
+    width:'100%',
+    flexDirection:'row'
+  },
+  guestInfoText:{
+    marginVertical: 5,
+    marginRight:15
+  },
   priceInfo:{
     borderTopWidth: 2,
+    paddingTop: 10,
     borderTopColor: colors.secondary
   },
   priceBox:{

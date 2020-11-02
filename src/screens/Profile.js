@@ -79,7 +79,8 @@ static contextType = UserContext
       borderWidth3: 3,
       /* dati per gestire il rendiconto, salviamo le prenotazioni delle strutture dell'utente (vengono passsate dal componente RequestList) */
       /*  per poi passarle al componente Userstructure (alla singola struttura, e solo quelle che sono state approvate!) */
-      requestList: []
+      requestList: [],
+      bookingGuests:[]//lista degli ospiti
     }
   }
   
@@ -263,6 +264,7 @@ static contextType = UserContext
                     <UserStructures
                       updateState={this.updateState.bind(this)}
                       requestList={this.state.requestList} //passiamo tutte le richieste da smistare in ogni struttura per calcolare il rendiconto...
+                      bookingGuests={this.state.bookingGuests}
                     ></UserStructures>
                   </View>}
                   </View> : null
@@ -358,7 +360,7 @@ const styles = StyleSheet.create({
     },
     menuText:{
       alignSelf:'center',
-      color: colors.blue,
+      color: colors.secondary,
       fontSize: 12,
       fontWeight:'bold',
       margin:4,

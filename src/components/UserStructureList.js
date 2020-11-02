@@ -22,6 +22,7 @@ class StructuresList extends Component {
       isLoading: true,
       userToken: null,
       today:'',
+      deadline:90,//equivale a 3 mesi
       requestList:[] //lista delle richieste di prenotazione di TUTTE l estrutture dell'utente(da smistare in ogni singola struttura), ci servono per inviare il rendiconto
     }
    }
@@ -46,7 +47,8 @@ class StructuresList extends Component {
   }
    componentDidMount = () => {
      this.setState({
-      requestList: this.props.requestList
+      requestList: this.props.requestList,
+      bookingGuests: this.props.bookingGuests
      })
     /* OPERAZIONI PER IL CONTROLLO PERIODICO DEL RENDICONTO */
     /* Calcoliamo la data di oggi e la convertiamo nel formato accettabile dalla libreria moment... cioè DD/MM/YYYY */
@@ -104,10 +106,18 @@ class StructuresList extends Component {
                   if(this.state.requestList.length != 0){
                     for(let i = 0; i < this.state.requestList.length ; i++){
                       if(this.state.requestList[i].structure_id == item.id && this.state.requestList[i].request == 1){
-                        structureRequest.push(this.state.requestList[i])
+                        structureRequest.push(this.state.requestList[i]);
                       }
                     }
-                    console.log(structureRequest)
+                  }
+                  /* passo alla singola struttura solo gli ospiti correlati alle richieste di prenotazione per essa */
+                  var guests = [];
+                  if(this.state.bookingGuests.length!=0){
+                    for(let j = 0; j < this.state.bookingGuests.length; j++){
+                      if(this.state.bookingGuests[j].structure_id == item.id){
+                        guests.push(this.state.bookingGuests[j]);
+                      }
+                    }
                   }
                   navigation.navigate('UserStructure',{
                     /* parametri da passare alla schermata successiva */
@@ -135,7 +145,8 @@ class StructuresList extends Component {
                     image2 : item.image2,
                     image3: item.image3,
                     image4 : item.image4,
-                    requestList : structureRequest
+                    requestList : structureRequest,
+                    guestsList : guests
                   });}
                 }
               >
@@ -144,7 +155,7 @@ class StructuresList extends Component {
 
 
               {
-                this.state.today.diff(moment(item.start_date,'DD-MM-YYYY'), 'days') > 0 ? 
+                this.state.today.diff(moment(item.start_date,'DD-MM-YYYY'), 'days') > this.state.deadline ? 
                 <Text style={styles.dateswarning}>INVIA RENDICONTO TRIMESTRALE</Text> : null
               }
               <Text style={{alignSelf:'flex-start',fontWeight:'700'}}>{item.place}</Text>
