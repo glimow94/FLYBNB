@@ -108,8 +108,7 @@ const Signup = ({navigation})=>{
         else{
             alert('Completa correttamente tutti i campi')
         }
-/*         alert(getSignUpError())
- */    }
+    }
 
     const changeName = (val) => {
         
@@ -301,7 +300,8 @@ const Signup = ({navigation})=>{
                         <BirthDayPicker
                             selectedYear={newUserData.birthYear}
                             selectedMonth={newUserData.birthMonth}
-                            selectedDay={newUserData.birthDay}                            
+                            selectedDay={newUserData.birthDay}   
+                            maxYears = {(new Date()).getFullYear()}                         
                             onYearValueChange={(year,i)=>changeBirthYear(year)}
                             onMonthValueChange={(month,i) => changeBirthMonth(month)}
                             onDayValueChange={(day,i) =>changeBirthDay(day)}

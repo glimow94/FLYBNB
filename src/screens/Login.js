@@ -14,15 +14,44 @@ const Login = ()=>{
         email:'',
         password:'',
         warning: false,
-        borderColor: colors.white
+        passWarning : false,
+        emailWarning: false,
+        emailBorderColor: colors.secondary,
+        passwBorderColor: colors.secondary
     })
     const { signIn } = React.useContext(UserContext)
     
-
     const loginCheck = async (email,password)=>{
-        
-          signIn(email,password)
-          
+        if((!data.email || data.email.trim().length == 0) ){
+            setData({
+                ...data,
+                emailWarning: true,
+                emailBorderColor: colors.red
+            })
+        }else{
+            setData({
+                ...data,
+                emailWarning: false,
+                emailBorderColor: colors.secondary
+            })
+        }
+        if((!data.password || data.password.trim().length == 0) ){
+            setData({
+                ...data,
+                passWarning: true,
+                passwBorderColor: colors.red
+            })
+        }else{
+            setData({
+                ...data,
+                passWarning: false,
+                passwBorderColor: colors.secondary
+            })
+        }
+        if((data.email && data.email.trim().length != 0) && ((data.password && data.password.trim().length != 0)) ){
+            signIn(email,password)  
+        }
+
     }
 
     const changeEmail=(val)=>{
@@ -30,15 +59,12 @@ const Login = ()=>{
             ...data,
             email:val
         })
-        console.log(data.email)
     }
     const changePassw=(val)=>{
         setData({
             ...data,
             password:val
         })
-        console.log(data.password)
-
     }
     const getToken= async ()=>{
         var token = false
@@ -61,16 +87,19 @@ const Login = ()=>{
                         <Text style={styles.label}>INDIRIZZO E-MAIL</Text>
                         <TextInput
                             autoCorrect={false}
-                            style = {[{borderBottomColor:data.borderColor},styles.inputField]}
+                            style = {[{borderBottomColor:data.emailBorderColor},styles.inputField]}
                             onChangeText={(val) => changeEmail(val)}
                         ></TextInput>
+                        {   data.emailWarning==true ? 
+                            <Text style={{color:colors.red}}>Inserisci email</Text> : null
+                        }
                     </View>
                     <View style={styles.InputWrapper}>
                         <Text style={styles.label}>PASSWORD</Text>
                         <TextInput
                             autoCorrect={false}
                             secureTextEntry={true}
-                            style = {[{borderBottomColor:data.borderColor},styles.inputField]}
+                            style = {[{borderBottomColor:data.passwBorderColor},styles.inputField]}
                             onChangeText={(val)=>changePassw(val)}
                             onKeyPress = {
                                 (event) => {
@@ -80,6 +109,9 @@ const Login = ()=>{
                                 }
                             }
                         ></TextInput>
+                        {   data.passWarning==true ? 
+                            <Text style={{color:colors.red}}>Inserisci password</Text> : null
+                        }
                     </View>
                     {
                         data.warning ? <Text style={styles.warning}>CREDENZIALI ERRATE</Text>:null
@@ -152,7 +184,6 @@ const styles = StyleSheet.create({
     },
     inputField: {
         borderBottomWidth: 1,
-        borderBottomColor: colors.secondary,
         paddingTop: 10,
         height: 40,
         width:200,

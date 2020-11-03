@@ -56,7 +56,7 @@ export default class DateSelector extends Component {
 
     return (
       <View>
-       { this.props.city != 'Luogo' || this.props.searchBarText.length != 0 ? <FilterButton text="Servizi" onPress={this.showHide} backgroundColor={colors.white} borderColor={colors.secondary}></FilterButton>:<FilterButton text="Servizi" backgroundColor={colors.white} borderColor={colors.secondary} opacity={0.4}></FilterButton> }
+       { this.props.searchBarText.length != 0 ? <FilterButton text="Servizi" onPress={this.showHide} backgroundColor={colors.white} borderColor={colors.secondary} ></FilterButton>:<FilterButton text="Servizi" backgroundColor={colors.white} borderColor={colors.secondary} opacity={0.2}></FilterButton> }
         
         {   
           this.props.status3 ? 
@@ -66,7 +66,7 @@ export default class DateSelector extends Component {
                     style={styles.checkBox}
                     checkedIcon='dot-circle-o'
                     uncheckedIcon='circle-o'
-                    title='Colazione inclusa'
+                    title='Pensione Completa'
                     checked={this.props.fullBoard}
                     onPress={()=>{
                         this.props.fullBoard==false ? this.updateState({fullBoard: true}) : this.updateState({fullBoard: false})

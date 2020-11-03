@@ -35,6 +35,8 @@ const styles = StyleSheet.create({
       borderWidth:3,
       marginLeft:margin,
       width:'auto',
+      alignContent:'center',
+      alignItems:'center',
       minWidth:100,
     },
     buttonText: {

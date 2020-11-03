@@ -8,7 +8,7 @@ export default class BirthdayPicker extends React.Component {
     selectedYear:   (new Date()).getFullYear(),     
     selectedMonth:  (new Date()).getMonth(),      
     selectedDay:    (new Date()).getDate(),         
-    yearsBack:      100,                            //numero di anni da visualizzare rispettto alla datai iniziale 
+    yearsBack:      100,//numero di anni da visualizzare rispetto alla data iniziale 
 
     onYearValueChange: function(year, idx) { },     
     onMonthValueChange: function(month, idx) { },   
@@ -71,7 +71,7 @@ export default class BirthdayPicker extends React.Component {
 
  
     var startYear = centerYear - this.props.yearsBack;
-    var endYear = currentYear;
+    var endYear = this.props.maxYears;
 
     var years = [];
     for (var i = startYear; i <= endYear; i++) {
@@ -86,10 +86,10 @@ export default class BirthdayPicker extends React.Component {
     var months = this.getMonthNames();
     return months.map(function(month, index) {
       var val = ''
-      if(index <=9){
-        val = '0'+(index+1).toString()//aggiungo lo 0 prima dei mesi ad una sola cifra per standrdizzare il formato delle date
+      if(index <9){
+        val = '0'+(index+1).toString();//aggiungo lo 0 prima dei mesi ad una sola cifra per standrdizzare il formato delle date
       }
-      else val = (index+1).toString()
+      else val = (index+1).toString();
       
       return <Picker.Item label={month} value={val} key={index} />;
     });

@@ -365,7 +365,8 @@ export default class BookingStructure extends Component{
                                           <BirthDayPicker
                                               selectedYear={this.state.guestsData[item.key].birthYear}
                                               selectedMonth={this.state.guestsData[item.key].birthMonth}
-                                              selectedDay={this.state.guestsData[item.key].birthDay}                            
+                                              selectedDay={this.state.guestsData[item.key].birthDay} 
+                                              maxYears = {(new Date()).getFullYear()}                                                    
                                               onYearValueChange={(year,i)=> this.changeBirthYear(year,item.key)}
                                               onMonthValueChange={(month,i) => this.changeBirthMonth(month,item.key)}
                                               onDayValueChange={(day,i) => this.changeBirthDay(day,item.key)}

@@ -62,7 +62,6 @@ class StructuresList extends Component {
     const itemToken = AsyncStorage.getItem('userToken')
     itemToken.then(token => {
       this.setState({userToken: token})
-      
       if(this.state.userToken != null){
         const url = `http://${host.host}:3055/structures/profile/${this.state.userToken}`;
         axios.get(url, {
@@ -73,12 +72,13 @@ class StructuresList extends Component {
           })
           .then(res => {
             const structures = res.data;
+            console.log('STRUTTUREEEE')
+            console.log(res.data)
             this.setState({
               isLoading:false,
               today : today,
               data: structures
             })
-            
         })
       }
       });
@@ -119,6 +119,7 @@ class StructuresList extends Component {
                       }
                     }
                   }
+                  console.log(item)
                   navigation.navigate('UserStructure',{
                     /* parametri da passare alla schermata successiva */
                     userToken: this.state.userToken,
@@ -139,6 +140,7 @@ class StructuresList extends Component {
                     itemAirConditioner: item.airConditioner,
                     itemWifi: item.wifi,
                     itemParking: item.parking,
+                    itemStartDate : item.start_date, //data in cui la struttura è stata creata
                     itemDescription: item.description,
                     locationDescription: item.location_description,
                     image1: item.image1,
@@ -155,7 +157,7 @@ class StructuresList extends Component {
 
 
               {
-                this.state.today.diff(moment(item.start_date,'DD-MM-YYYY'), 'days') > this.state.deadline ? 
+                this.state.today.diff(moment(item.start_date,'DD-MM-YYYY'), 'days') > 0 ? 
                 <Text style={styles.dateswarning}>INVIA RENDICONTO TRIMESTRALE</Text> : null
               }
               <Text style={{alignSelf:'flex-start',fontWeight:'700'}}>{item.place}</Text>

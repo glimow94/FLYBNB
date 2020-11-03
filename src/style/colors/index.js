@@ -3,6 +3,7 @@ export default {
     white: '#ffffff',
     green01: '#008388',
     primary: '#F9FEFF',
+    primaryTransparent: 'rgba(249, 254, 255, 0.9)',
     secondary: '#3BC3DE',
     tertiary: '#009999',
     green02: '#32CD32',

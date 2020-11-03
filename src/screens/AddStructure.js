@@ -518,7 +518,7 @@ export default class AddStructure extends Component{
                             checkedColor={colors.orange}
                             checkedIcon='dot-circle-o'
                             uncheckedIcon='circle-o'
-                            title='Colazione inclusa'
+                            title='Pensione Completa'
                             checked={this.state.fullBoard}
                             onPress={()=>{
                                 this.state.fullBoard==false ? this.setState({fullBoard: true}) : this.setState({fullBoard: false})

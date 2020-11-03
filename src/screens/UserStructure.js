@@ -1,16 +1,17 @@
 import React, {Component, useEffect} from 'react';
-import {View, Text, StyleSheet, Image, ScrollView, Dimensions, Platform, TouchableOpacity, FlatList} from 'react-native';
+import {View, Text, StyleSheet, Image, ScrollView, Button, Dimensions, Platform, TouchableOpacity, FlatList} from 'react-native';
 
 import colors from '../style/colors';
 import { Icon } from 'react-native-elements';
-import MenuButton from '../components/buttons/Button1'
+import MenuButton from '../components/buttons/Button1';
 import moment from "moment";
+import DatePicker from '../components/BirthdayPicker';
 
 var {width} = Dimensions.get('window');
 var height =  width;
 var titleFontSize = 18;
 
-if(Platform.OS === 'web' && Dimensions.get('window').width > 700){
+if(Platform.OS === 'web' || Dimensions.get('window').width > 700){
   width = width*0.6;
   height = height*0.3;
   titleFontSize = 30;
@@ -39,6 +40,7 @@ export default function UserStructure({ route }){
     itemAirConditioner,
     itemWifi,
     itemParking,
+    itemStartDate,
     itemDescription,
     locationDescription,
     image1,
@@ -69,8 +71,18 @@ export default function UserStructure({ route }){
       bookingList : [], //lista delle prenotazioni integrata con gli ospiti
       bookingListFiltered: [],//lista delle prenotazioni effettivamente visualizzate nel rendering in base ai filtri
       /* range di date per filtrare le prenotazioni */
-      startDate : '',
-      endDate: ''
+      dateDay1:'1',
+      dateMonth1:'2',
+      dateYear1:'2000',
+      //seconda data
+      dateDay2:'2',
+      dateMonth2:'3',
+      dateYear2:'2000',
+      date1:'',
+      date2:'',
+      startDate: itemStartDate,//data in cui è stata creata la struttura (la useremo come limite inferiore per il filtro delle date)
+      deleteSearchButtonStatus: false,
+      maxYear: 2050
     })
 
     useEffect(() => {
@@ -81,6 +93,7 @@ export default function UserStructure({ route }){
       }
       /* Associo ad ogni prenotazione gli ospiti corrispondenti */
       var bookingList = [];
+
       for(var i = 0; i < state.requestList.length ; i++){
         var singleBooking = [],
             guests = [];
@@ -93,14 +106,32 @@ export default function UserStructure({ route }){
         if(guests.length > 0) singleBooking.push(guests);
         bookingList.push(singleBooking);
       }
+      /* CALCOLO DATA INIZIALE PER I FILTRI, sarà startDate (si deve suddividere in giorno mese e anno separatamente) */
+      var day = itemStartDate.substring(0,2),
+          month = itemStartDate.substring(3,5),
+          year = itemStartDate.substring(6,10);
       console.log(bookingList)
+      /* calcolo il limite di anni massimi selezionabili */
+      var now = (new Date()).getFullYear(),
+          maxYear_ = now+50;
+      
       setState({
         ...state,
         bookingList: bookingList,
         bookingListFiltered : bookingList,
-        horizontalScroll: horizontalScroll_
+        horizontalScroll: horizontalScroll_,
+        dateDay1: day,
+        dateMonth1: month,
+        dateYear1: year,
+        //seconda data
+        dateDay2: day,
+        dateMonth2: month,
+        dateYear2: year,
+        maxYear : maxYear_
       })
     }, [])
+
+    /* funzione per gestione dello scrolling delle immagini */
     const imageChanged = ({nativeEvent}) => {
       const slide = Math.ceil(nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width );
       //contentOffSet misura quanto una view (in questo caso l'img della scrollView) è stata spostataa dall'origine tramite evento di tocco/trascinamento
@@ -136,24 +167,143 @@ export default function UserStructure({ route }){
         })
       }
     }
-    /* funzione che filtra le prenotazioni in base alle date selezionate */
-    const bookingsFilter = (start, end)=>{
-      var filteredData = [],
-          bookingCheckIn,
+    /* funzioni per il selettore delle date */
+    const changeDay1=(day)=>{
+      setState({
+        ...state,
+        dateDay1: day 
+      })
+    }
+    const changeMonth1=(month)=>{
+      setState({
+        ...state,
+        dateMonth1 : month
+      })
+    }
+    const changeYear1=(year)=>{
+      if(parseInt(year) <= parseInt(state.dateYear2)){
+        setState({
+          ...state,
+          dateYear1:year
+        })
+      }else{
+        setState({
+          ...state,
+          dateYear1: year,
+          dateYear2: year
+        })
+      }
+     
+    }
+    const changeDay2=(day)=>{
+      var maxday = state.dateDay1;
+      /* se anno e mese di data1 sono uguali ad anno e mese di data2, non può essere selezionato un giorno maggiore del giorno di data1 per data2 */
+      if(parseInt(state.dateYear2)==parseInt(state.dateYear1) && parseInt(state.dateMonth2)==parseInt(state.dateMonth1)){
+        if(parseInt(day)>=parseInt(state.dateDay1)){
+          setState({
+            ...state,
+            dateDay2:day
+          })
+        }else{
+          setState({
+            ...state,
+            dateDay2: state.dateDay1
+          })
+        }
+      }else{
+        setState({
+          ...state,
+          dateDay2:day
+        })
+      }
+    }
+    const changeMonth2=(month)=>{
+      /*  se l'anno selezionato per data2 e per data2 sono uguali allora non potrà essere selezionato un mese minore rispetto a quelo di data1*/
+      var maxMonth = state.dateMonth1;
+      if(parseInt(state.dateYear2)==parseInt(state.dateYear1)){
+        if(parseInt(month)>=parseInt(maxMonth)){
+          setState({
+            ...state,
+            dateMonth2: month
+          })
+        }else{
+          setState({
+            ...state,
+            dateMonth2: maxMonth
+          })
+        }
+      }
+      else{
+        setState({
+          ...state,
+          dateMonth2:month
+        })
+      }
+      
+    }
+    const changeYear2=(year)=>{
+      /* se l'anno selezionato per la data2 è minore dell'anno della data2 allora verrrà automaticamente selezionato per la data2 l'anno della data1 */
+      var minYear = state.dateYear1;
+      if(parseInt(year)>=parseInt(minYear)){
+        setState({
+          ...state,
+          dateYear2: year 
+        })
+      }else{
+        setState({
+          ...state,
+          dateYear2: minYear
+        })
+      }
+    }
+    
+    /* funzione chiamata alla pressione del tasto 'filtra', fa un controllo sule date seleizonate e dopo richiama datesFilter */
+    const bookingsFilter = () =>{
+      var start = state.dateDay1+'/'+state.dateMonth1+'/'+state.dateYear1,
+          end = state.dateDay2+'/'+state.dateMonth2+'/'+state.dateYear2,
           dateFormat = 'DD-MM-YYYY',
           startDate = moment(start,dateFormat),
           endDate = moment(end,dateFormat);
-      for(var i = 0; i < state.bookingList.length ; i++){
-        /* checkIn >= a startdate && checkIn <= endDate*/
-        bookingCheckIn = moment(state.bookingList[i][0].checkIn, dateFormat);
-        if( bookingCheckIn >= startDate && bookingCheckIn < endDate){
-          filteredData.push(state.bookingList[i]);
-        }
+
+      /* controllo che start sia minore di end */
+      if(startDate <= endDate){
+        
+        datesFilter(start,end);
+      }else{
+        alert('Date non valide, assicurati che la data iniziale sia minore della data finale')
       }
-      setState({
-        ...state,
-        bookingListFiltered : filteredData
-      })
+    }
+    /* funzione che filtra le prenotazioni in base alle date selezionate */
+    const datesFilter = (start, end)=>{
+      var filteredData = [];
+      if(start.trim().length != 0){
+        var bookingCheckIn,
+            dateFormat = 'DD-MM-YYYY',
+            startDate = moment(start,dateFormat),
+            endDate = moment(end,dateFormat);
+        for(var i = 0; i < state.bookingList.length ; i++){
+          /* checkIn >= a startdate && checkIn <= endDate*/
+          bookingCheckIn = moment(state.bookingList[i][0].checkIn, dateFormat);
+          if( bookingCheckIn >= startDate && bookingCheckIn <= endDate){
+            filteredData.push(state.bookingList[i]);
+          }
+        }
+        setState({
+          ...state,
+          bookingListFiltered : filteredData,
+          deleteSearchButtonStatus : true,
+          date1: start,
+          date2: end
+        })
+      }else{
+        filteredData = state.bookingList;
+        setState({
+          ...state,
+          bookingListFiltered:filteredData,
+          deleteSearchButtonStatus: false
+        })
+      }
+      
     }
     return (
       <View style={styles.container}>
@@ -263,12 +413,64 @@ export default function UserStructure({ route }){
         }
         {state.status2 ? 
           <View style={{alignContent:'center',alignItems:'center'}}>
-            <Text style={styles.headerTitle}>Resoconto prenotazioni per la struttura "{itemTitle}"</Text>
-            <Text style={styles.headerSubtitle}>*Richieste accettate nella struttura</Text>
+            <View>
+              <Text style={styles.headerTitle}>Resoconto prenotazioni per la struttura "{itemTitle}"</Text>
+              <Text style={styles.headerSubtitle}>(*Richieste accettate)</Text>
+            </View>
             { state.bookingList.length == 0 ?
               <Text style={styles.headerSubtitle}>Questa struttura non ha ancora ricevuto prenotazioni</Text> : 
-              <View>
-                <MenuButton text='FILTRA' onPress={()=>bookingsFilter('01/01/2021','29/01/2021')} ></MenuButton>
+              <View style={{flex:1}}>
+                <View style={styles.datesFilterWrapper}>
+                  <Text>Filtra prenotazioni dal [gg/mm/aaaa] :</Text>
+                  <DatePicker
+                    selectedYear={state.dateYear1}
+                    selectedMonth={state.dateMonth1}
+                    selectedDay={state.dateDay1}    
+                    maxYears = {state.maxYear}    
+                    yearsBack = {0}                      
+                    onYearValueChange={(year,i)=>changeYear1(year)}
+                    onMonthValueChange={(month,i) => changeMonth1(month)}
+                    onDayValueChange={(day,i) =>changeDay1(day)}
+                  ></DatePicker>
+                  <Text>al:</Text>
+                  <DatePicker
+                    selectedYear={state.dateYear2}
+                    selectedMonth={state.dateMonth2}
+                    selectedDay={state.dateDay2}    
+                    maxYears = {state.maxYear}    
+                    yearsBack = {0}                      
+                    onYearValueChange={(year,i)=>changeYear2(year)}
+                    onMonthValueChange={(month,i) => changeMonth2(month)}
+                    onDayValueChange={(day,i) =>changeDay2(day)}
+                  ></DatePicker>
+                  <View style={{alignSelf:'center'}}>
+                    <Button title='FILTRA' onPress={()=>bookingsFilter()} ></Button>
+                  </View>
+                </View>
+                {
+                  state.deleteSearchButtonStatus==false ?
+                    <Text style={styles.filterTitle}>Tutte le prenotazioni: </Text>
+                  : <View>
+                      {
+                        state.bookingListFiltered.length != 0 ?
+                        <Text style={styles.filterTitle}>Penotazioni dal {state.date1} al {state.date2}</Text>
+                          :
+                        <Text style={styles.filterTitle}>Nessuna prenotazione dal {state.date1} al {state.date2}</Text>
+                      }
+                      
+                      <TouchableOpacity style={styles.deleteCurrentSearchButton} onPress={()=>datesFilter('','')}>
+                      <Text style={styles.deleteSearchText} >
+                          Annulla Ricerca
+                      </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.deleteCurrentSearchButton} onPress={()=>{console.log(state.bookingListFiltered)}}>
+                      <Text style={styles.deleteSearchText} >
+                          invia rendiconto
+                      </Text>
+                      </TouchableOpacity>
+                    </View>
+                    
+                }
                 <FlatList
                     data= {state.bookingListFiltered}
                     style={{marginVertical: 10}}
@@ -305,7 +507,6 @@ export default function UserStructure({ route }){
                                         <Text style={styles.guestInfoText}>{item.date}</Text>
                                       </View>
                               }
-                              contentContainerStyle={{paddingTop:40}}
                             />
                           </View>
                           <View style={styles.priceInfo}>
@@ -317,7 +518,6 @@ export default function UserStructure({ route }){
                               </View>             
                           </View>
                       </View>}
-                    contentContainerStyle={{paddingTop:40}}
                 />
               </View>
             }
@@ -489,9 +689,17 @@ const styles = StyleSheet.create({
   /* stile per la sezione RENDICONTO */
   headerTitle:{
     fontSize: titleFontSize,
-    fontWeight: "500",
+    fontWeight: "bold",
     alignSelf:'center',
     marginHorizontal: 20
+  },
+  headerSubtitle:{
+    alignSelf:'flex-start',
+    color: colors.red,
+    marginHorizontal:20
+  },
+  datesFilterWrapper:{
+    marginVertical: 20
   },
   item:{
     marginBottom: 10,
@@ -528,5 +736,32 @@ const styles = StyleSheet.create({
   },
   priceBox:{
     flexDirection:'row'
+  },
+  datesFilterWrapper:{
+    minWidth: width-5,
+    alignContent:'center',
+    alignItems:'center',
+    marginVertical: 20
+  },
+  deleteSearchText:{
+    fontSize: 12,
+    color: colors.white,
+    fontWeight: "300",
+    position: 'relative',
+    margin:2,
+    alignSelf:'center',   
+  },
+  filterTitle:{
+    fontSize: titleFontSize,
+    fontWeight: "bold",
+    alignSelf:'flex-start',
+    marginHorizontal: 20
+  },
+  deleteCurrentSearchButton:{
+    backgroundColor:colors.red,
+    borderRadius:8,
+    marginLeft: 20,
+    width:100,
+    height:20,
   },
 });
