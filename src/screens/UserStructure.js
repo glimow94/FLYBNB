@@ -48,7 +48,8 @@ export default function UserStructure({ route }){
     image3,
     image4,
     requestList,
-    guestsList
+    guestsList,
+    infoStatus
     } = route.params;
     var images = []
     if(image1 != null && image1.length != 0) images.push(image1)
@@ -115,6 +116,18 @@ export default function UserStructure({ route }){
       var now = (new Date()).getFullYear(),
           maxYear_ = now+50;
       
+      /* verifico quale sezione aprire all'apertura fra INFO  e RENDICONTO in base al valore passato nella navigazione */
+      var infoStatus_ = true,
+          statementStatus_ = false,
+          button1Border_ = colors.secondary,
+          button2Border_ = colors.primary;
+      if(!infoStatus){
+        infoStatus_ = false;
+        statementStatus_ = true;
+        button1Border_ = colors.primary,
+        button2Border_ = colors.red
+      }
+      
       setState({
         ...state,
         bookingList: bookingList,
@@ -127,7 +140,11 @@ export default function UserStructure({ route }){
         dateDay2: day,
         dateMonth2: month,
         dateYear2: year,
-        maxYear : maxYear_
+        maxYear : maxYear_,
+        status1 : infoStatus_,
+        status2 : statementStatus_,
+        button1Border : button1Border_,
+        button2Border : button2Border_
       })
     }, [])
 
