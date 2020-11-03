@@ -83,10 +83,64 @@ class StructuresList extends Component {
       }
       });
   }
-
+  navigateToStructure(item){
+    const { navigation } = this.props;
+    /* variabile che discrimina quale sezione aprire, se bisogna mandare il rendiconto apre prima la sezione del rendiconto */
+    var infoStatus_ = true;
+    this.state.today.diff(moment(item.start_date,'DD-MM-YYYY'), 'days') > this.state.deadline*(item.statement + 1) ? 
+          infoStatus_ = false : null
+    /* passo alla singola strutture solo le richieste(requestList) accettate per essa*/
+    var structureRequest = []; //richieste da passare alla navigazione
+    if(this.state.requestList.length != 0){
+      for(let i = 0; i < this.state.requestList.length ; i++){
+        if(this.state.requestList[i].structure_id == item.id && this.state.requestList[i].request == 1){
+          structureRequest.push(this.state.requestList[i]);
+        }
+      }
+    }
+    /* passo alla singola struttura solo gli ospiti correlati alle richieste di prenotazione per essa */
+    var guests = [];
+    if(this.state.bookingGuests.length!=0){
+      for(let j = 0; j < this.state.bookingGuests.length; j++){
+        if(this.state.bookingGuests[j].structure_id == item.id){
+          guests.push(this.state.bookingGuests[j]);
+        }
+      }
+    }
+    navigation.navigate('UserStructure',{
+      /* parametri da passare alla schermata successiva */
+      userToken: this.state.userToken,
+      itemName: item.name,
+      temSurname: item.surname,
+      itemEmail: item.email,
+      itemTitle: item.title,
+      itemPrice: item.price,
+      itemID: item.id,
+      itemPlace: item.place,
+      itemStreet: item.street,
+      itemNumber: item.number,
+      itemPostCode: item.post_code,
+      itemBeds: item.beds,
+      itemType: item.type,
+      itemKitchen: item.kitchen,
+      itemFullBoard: item.fullboard,
+      itemAirConditioner: item.airConditioner,
+      itemWifi: item.wifi,
+      itemParking: item.parking,
+      itemStartDate : item.start_date, //data in cui la struttura è stata creata
+      itemDescription: item.description,
+      locationDescription: item.location_description,
+      image1: item.image1,
+      image2 : item.image2,
+      image3: item.image3,
+      image4 : item.image4,
+      requestList : structureRequest,
+      guestsList : guests,
+      infoStatus: infoStatus_, //se info = true viene mostrata la pagina delle info struttura, se è false la pagina del rendiconto(utile per il bottone 'invia rendiconto')
+    });
+  }
   render(){
     
-    const { navigation } = this.props;
 
     return (
       
@@ -100,99 +154,84 @@ class StructuresList extends Component {
             <View style={styles.item}>
               <TouchableOpacity
                 style={styles.structureButton}
-                onPress={()=>{
-                  /* passo alla singola strutture solo le richieste(requestList) accettate per essa*/
-                  var structureRequest = []; //richieste da passare alla navigazione
-                  if(this.state.requestList.length != 0){
-                    for(let i = 0; i < this.state.requestList.length ; i++){
-                      if(this.state.requestList[i].structure_id == item.id && this.state.requestList[i].request == 1){
-                        structureRequest.push(this.state.requestList[i]);
-                      }
-                    }
-                  }
-                  /* passo alla singola struttura solo gli ospiti correlati alle richieste di prenotazione per essa */
-                  var guests = [];
-                  if(this.state.bookingGuests.length!=0){
-                    for(let j = 0; j < this.state.bookingGuests.length; j++){
-                      if(this.state.bookingGuests[j].structure_id == item.id){
-                        guests.push(this.state.bookingGuests[j]);
-                      }
-                    }
-                  }
-                  console.log(item)
-                  navigation.navigate('UserStructure',{
-                    /* parametri da passare alla schermata successiva */
-                    userToken: this.state.userToken,
-                    itemName: item.name,
-                    temSurname: item.surname,
-                    itemEmail: item.email,
-                    itemTitle: item.title,
-                    itemPrice: item.price,
-                    itemID: item.id,
-                    itemPlace: item.place,
-                    itemStreet: item.street,
-                    itemNumber: item.number,
-                    itemPostCode: item.post_code,
-                    itemBeds: item.beds,
-                    itemType: item.type,
-                    itemKitchen: item.kitchen,
-                    itemFullBoard: item.fullboard,
-                    itemAirConditioner: item.airConditioner,
-                    itemWifi: item.wifi,
-                    itemParking: item.parking,
-                    itemStartDate : item.start_date, //data in cui la struttura è stata creata
-                    itemDescription: item.description,
-                    locationDescription: item.location_description,
-                    image1: item.image1,
-                    image2 : item.image2,
-                    image3: item.image3,
-                    image4 : item.image4,
-                    requestList : structureRequest,
-                    guestsList : guests
-                  });}
-                }
+                onPress={()=>{this.navigateToStructure(item)}}
               >
                 <Text style={styles.titleStructure}>{item.title}</Text>
               </TouchableOpacity>
-
-
-              {
-                this.state.today.diff(moment(item.start_date,'DD-MM-YYYY'), 'days') > 0 ? 
-                <Text style={styles.dateswarning}>INVIA RENDICONTO TRIMESTRALE</Text> : null
-              }
               <Text style={{alignSelf:'flex-start',fontWeight:'700'}}>{item.place}</Text>
-              <Text 
-                style={styles.editButton} 
-                onPress={()=>{ 
-                  this.props.updateState({status2:false})
-                  navigation.navigate('EditStructure',{
-                    /* parametri da passare alla schermata successiva */
-                    userToken: this.state.userToken,
-                    itemName: item.name,
-                    temSurname: item.surname,
-                    itemEmail: item.email,
-                    itemTitle: item.title,
-                    itemPrice: item.price,
-                    itemID: item.id,
-                    itemPlace: item.place,
-                    itemStreet: item.street,
-                    itemNumber: item.number,
-                    itemPostCode: item.post_code,
-                    itemBeds: item.beds,
-                    itemType: item.type,
-                    itemKitchen: item.kitchen,
-                    itemFullBoard: item.fullboard,
-                    itemAirConditioner: item.airConditioner,
-                    itemWifi: item.wifi,
-                    itemParking: item.parking,
-                    itemDescription: item.description,
-                    locationDescription: item.location_description,
-                    image1: item.image1,
-                    image2 : item.image2,
-                    image3: item.image3,
-                    image4 : item.image4
-                  })}} >Modifica
-              </Text>
+              <View style={{flexDirection:'row', alignSelf:'flex-end'}}>
+                {
+                  /* CALCOLO DATA SCADENZA RENDICONTO TRIMESTRALE: vengono usati 4 parametri,
+                    1- START_DATE -> attributo 'Data' della struttura, indica il giorno in cui è stata creata la struttura (dato salvato nel db)
+                    2- TODAY -> La data di oggi, inizializzata in componentDidMount
+                    3- STATEMENT -> attributo numerico della struttura, indica il numero di volte in cui è stato mandato il rendiconto (inizializata a 0 e salvata nel database)
+                    4- DEADLINE -> è inizializzata a 90, indica i 3 mesi di tempo, è un dato costante salvato in this.state, nel componente  
+
+                    CALCOLO: Quando vengono scaricate le strutture, deadline è inizializzato a 90
+                            Calcoliamo i giorni di differenza fra START_DATE e TODAY :
+                            DIFF_DAYS = (TODAY - START_DATE)
+
+                            Calcoliamo se è necessario mandare il rendiconto (quindi calcoliamo se sono passati 3 mesi dall'ultimo rendicont):
+                            DEADLINE * (STATEMENT + 1)
+
+                            Se DIFF_DAYS >= DEADLINE * (STATEMENT + 1) allora mostriamo un messaggio di avviso, cliccando sul bottone si verrà reindirizzati alla pagina del rendiconto
+
+                            Se viene mandato il rendiconto la variabile STATEMENT della struttura nel db viene aggiornata aggiungendo +1 al conteggio
+
+                    ESEMPIO: 1) l'utente crea una struttura, STATEMENT = 0, START_DATE = 1/1/2021 , DEADLINE = 90 * (STATEMENT + 1) = 90
+
+                            2) Arriviamo al 31/3/2020, passano quindi 90 giorni da quando l'ha creata,
+                              - Viene effettuato il controllo (31/3/2020 - 1/1/2021) > 90 * (0 + 1) 
+                              - L'utente viene avvisato di dover mandare il rendiconto
+                              - L'utente clicca su invia rendiconto all'ufficio del turismo
+                              - Il parametro STATEMENT della struttra, che conta le volte in cui si è mandato il rendiconto, diventa 0+1 = 1
+                                                  STATEMENT = 1
+                            3) Passano altri 90 giorni, siamo al 29/6/2020
+                              - Viene effettuato il controllo (29/6/2020 - 31/3/2020) > 90 * (1 +1) 
+                                che sarebbe TODAY - (START_DATE + (DEADLINE * STATEMENT)) > DEADLINE * (STATEMENT + 1)
+                                Quindi se TODAY - (START_DATE + (DEADLINE * STATEMENT) )  >  180 viene mostrato l'avviso del rendiconto
+                              - l'utente invia il rendiconto e STATEMENT viene aggiornato a STATEMENT+1 = 2
+                            ...
+                            ...
+
+                            il procedimento si ripete n volte...
+                  */
+                  this.state.today.diff(moment(item.start_date,'DD-MM-YYYY'), 'days') > this.state.deadline*(item.statement + 1) ? 
+                    <Text style={styles.dateswarning} onPress={()=>{this.navigateToStructure(item)}}>RENDICONTO TRIMESTRALE</Text> : null
+                  }
+                <Text 
+                  style={styles.editButton} 
+                  onPress={()=>{ 
+                    this.props.updateState({status2:false})
+                    navigation.navigate('EditStructure',{
+                      /* parametri da passare alla schermata successiva */
+                      userToken: this.state.userToken,
+                      itemName: item.name,
+                      temSurname: item.surname,
+                      itemEmail: item.email,
+                      itemTitle: item.title,
+                      itemPrice: item.price,
+                      itemID: item.id,
+                      itemPlace: item.place,
+                      itemStreet: item.street,
+                      itemNumber: item.number,
+                      itemPostCode: item.post_code,
+                      itemBeds: item.beds,
+                      itemType: item.type,
+                      itemKitchen: item.kitchen,
+                      itemFullBoard: item.fullboard,
+                      itemAirConditioner: item.airConditioner,
+                      itemWifi: item.wifi,
+                      itemParking: item.parking,
+                      itemDescription: item.description,
+                      locationDescription: item.location_description,
+                      image1: item.image1,
+                      image2 : item.image2,
+                      image3: item.image3,
+                      image4 : item.image4
+                    })}} >Modifica
+                </Text>
+              </View>
             </View>
           }
           contentContainerStyle={{paddingTop:40}}
@@ -243,14 +282,18 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
   dateswarning:{
-    color: colors.red,
-    fontSize:10,
-    marginTop: 8,
-    fontWeight:'600',
-    textDecorationLine:'underline'
+    color: colors.white, 
+    fontSize:12, 
+    fontWeight: "700",
+    padding:4,
+    textAlign:'center',
+    alignSelf:'flex-end',
+    margin: 2,
+    backgroundColor: colors.red,
+    borderColor: colors.orange2,
+    borderWidth: 1,
+    borderRadius: 4
 
   },
-  structureButton:{
-    
-  }
+  
 });

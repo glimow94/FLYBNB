@@ -22,32 +22,28 @@ const Login = ()=>{
     const { signIn } = React.useContext(UserContext)
     
     const loginCheck = async (email,password)=>{
+        var emailWarning_ = false,
+            passWarning_ = false,
+            emailBorderColor_ = colors.secondary,
+            passwBorderColor_ = colors.secondary;
         if((!data.email || data.email.trim().length == 0) ){
-            setData({
-                ...data,
-                emailWarning: true,
-                emailBorderColor: colors.red
-            })
-        }else{
-            setData({
-                ...data,
-                emailWarning: false,
-                emailBorderColor: colors.secondary
-            })
+            
+            emailWarning_ = true;
+            emailBorderColor_ = colors.red;
+        
         }
         if((!data.password || data.password.trim().length == 0) ){
-            setData({
-                ...data,
-                passWarning: true,
-                passwBorderColor: colors.red
-            })
-        }else{
-            setData({
-                ...data,
-                passWarning: false,
-                passwBorderColor: colors.secondary
-            })
+            
+            passWarning_ = true,
+            passwBorderColor_ = colors.red
+        
         }
+        setData({
+            emailWarning : emailWarning_,
+            passWarning : passWarning_,
+            emailBorderColor: emailBorderColor_,
+            passwBorderColor: passwBorderColor_
+        })
         if((data.email && data.email.trim().length != 0) && ((data.password && data.password.trim().length != 0)) ){
             signIn(email,password)  
         }
