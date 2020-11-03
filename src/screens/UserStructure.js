@@ -49,7 +49,10 @@ export default function UserStructure({ route }){
     image4,
     requestList,
     guestsList,
-    infoStatus
+    statementStatus,//è true se deve essere mandato il rendiconto
+    statementNumber,//numero di volte in cui l'utente ha mandato il rendiconto per questa struttura
+    deadline,//limite settato a 3 mesi, (= 90 [giorni])
+    startDate, //data in cui è stata creata la struttura
     } = route.params;
     var images = []
     if(image1 != null && image1.length != 0) images.push(image1)
@@ -89,12 +92,16 @@ export default function UserStructure({ route }){
     useEffect(() => {
       /* su android non verrà visualizzata la barra di scrolling per le immagini (si usa il touch) */
       var horizontalScroll_ = true;
+      /* STATI SE DEVE ESSERE MANDATO IL RENDICONTO (cioè se statementStatus = true)*/
+      var infoStatus_ = true,
+          statementStatus_ = false,
+          button1Border_ = colors.secondary,
+          button2Border_ = colors.primary;
       if(Platform.OS == 'android'){
         horizontalScroll_ = false;
       }
       /* Associo ad ogni prenotazione gli ospiti corrispondenti */
       var bookingList = [];
-
       for(var i = 0; i < state.requestList.length ; i++){
         var singleBooking = [],
             guests = [];
@@ -107,44 +114,81 @@ export default function UserStructure({ route }){
         if(guests.length > 0) singleBooking.push(guests);
         bookingList.push(singleBooking);
       }
-      /* CALCOLO DATA INIZIALE PER I FILTRI, sarà startDate (si deve suddividere in giorno mese e anno separatamente) */
-      var day = itemStartDate.substring(0,2),
-          month = itemStartDate.substring(3,5),
-          year = itemStartDate.substring(6,10);
-      console.log(bookingList)
-      /* calcolo il limite di anni massimi selezionabili */
+      /* CALCOLO DATA INIZIALE  E FINALE PER I FILTRI, sarà startDate per entrambe se non deve essere mandato il rendiconto (si deve suddividere in giorno mese e anno separatamente) */
+      var day1 = itemStartDate.substring(0,2),
+          month1 = itemStartDate.substring(3,5),
+          year1 = itemStartDate.substring(6,10),
+          day2 = day1,
+          month2 = month1,
+          year2 = year1,
+          start = '',//data iniziale pre-impostata per il filtro del rendiconto, se non deve essere mandato il rendiconto lasciamo vuoto così vengono visualizzate tutte le prenotazoni
+          end = ''; // data finale per il filtro del rendiconto
+
+      /* calcolo il limite di anni massimi selezionabili nel picker */
       var now = (new Date()).getFullYear(),
           maxYear_ = now+50;
-      
-      /* verifico quale sezione aprire all'apertura fra INFO  e RENDICONTO in base al valore passato nella navigazione */
-      var infoStatus_ = true,
-          statementStatus_ = false,
-          button1Border_ = colors.secondary,
-          button2Border_ = colors.primary;
-      if(!infoStatus){
+
+      /*********SE DEVE ESSERE MANDATO IL RENDICONTO***********/
+      var deadline_ = deadline,
+          start = '',
+          end = '',//date in formato moment.js
+          startDateString = '', //data iniziale pre-impostata per il filtro del rendiconto
+          endDateString = '', // data finale per il filtro del rendiconto
+          dateFormat = 'DD/MM/YYYY',
+          bookingListFiltered_ = bookingList,
+          deleteSearchButtonStatus_ = false;
+      if(statementStatus){
         infoStatus_ = false;
         statementStatus_ = true;
-        button1Border_ = colors.primary,
-        button2Border_ = colors.red
+        button1Border_ = colors.primary;
+        button2Border_ = colors.red;
+        /* calcolo data inizio e fine rendiconto */
+        deadline_ = deadline_ * (statementNumber + 1)// 90, 180,270,.....
+        start = moment(startDate,dateFormat).add(deadline_ -90,'days');// data inizio rendiconto (all'inizio è startdate + 0 giorni, al secondo rendiconto sarà startdate + 90 giorni, al terzo rendiconto startDate + 180 ...ecc...ecc..)
+        end= moment(start,dateFormat).add(90,'days');// data fine rendiconto (3 mesi dopo)
+        /* imposto le date dei picker per i filtri del rendiconto */
+        startDateString = start.format(dateFormat);
+        endDateString = end.format(dateFormat);
+        day1 = startDateString.substring(0,2);
+        month1 = startDateString.substring(3,5);
+        year1 = startDateString.substring(6,10);
+        day2 = endDateString.substring(0,2);
+        month2 = endDateString.substring(3,5);
+        year2 = endDateString.substring(6,10);
+        /* CALCOLO BOOKINGLISTFILTERED , ovvero le prenotazioni che verranno visualizzate da mandare come rendiconto degli ultimi 3 mesi */ 
+        var filteredData = [];
+        for(var i = 0; i < bookingList.length ; i++){
+          /* checkIn >= a startdate && checkIn <= endDate*/
+          var bookingCheckIn = moment(bookingList[i][0].checkIn, dateFormat);
+          if( bookingCheckIn >= start && bookingCheckIn <= end){
+            filteredData.push(bookingList[i]);
+          }
+        }
+        bookingListFiltered_ = filteredData;
+        deleteSearchButtonStatus_ = true;
       }
       
       setState({
         ...state,
         bookingList: bookingList,
-        bookingListFiltered : bookingList,
+        bookingListFiltered : bookingListFiltered_,
         horizontalScroll: horizontalScroll_,
-        dateDay1: day,
-        dateMonth1: month,
-        dateYear1: year,
+        /* prima data rendiconto */
+        dateDay1: day1,
+        dateMonth1: month1,
+        dateYear1: year1,
         //seconda data
-        dateDay2: day,
-        dateMonth2: month,
-        dateYear2: year,
+        dateDay2: day2,
+        dateMonth2: month2,
+        dateYear2: year2,
+        date1: startDateString,
+        date2: endDateString,
         maxYear : maxYear_,
         status1 : infoStatus_,
         status2 : statementStatus_,
         button1Border : button1Border_,
-        button2Border : button2Border_
+        button2Border : button2Border_,
+        deleteSearchButtonStatus: deleteSearchButtonStatus_
       })
     }, [])
 
@@ -284,7 +328,6 @@ export default function UserStructure({ route }){
 
       /* controllo che start sia minore di end */
       if(startDate <= endDate){
-        
         datesFilter(start,end);
       }else{
         alert('Date non valide, assicurati che la data iniziale sia minore della data finale')
@@ -320,7 +363,6 @@ export default function UserStructure({ route }){
           deleteSearchButtonStatus: false
         })
       }
-      
     }
     return (
       <View style={styles.container}>
