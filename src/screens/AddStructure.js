@@ -7,7 +7,8 @@ import { Icon } from 'react-native-elements';
 import colors from "../style/colors/index";
 import CitySelector from "../components/CitySelector"
 import axios from "axios";
-import host from '../configHost'
+import host from '../configHost';
+import dateConverter from '../components/dateConverter';
 
 let {imageDim} = 0;
 var {width} = Dimensions.get('window');
@@ -286,25 +287,6 @@ export default class AddStructure extends Component{
     updateState(filterStatus){
         this.setState(filterStatus)
     }
-    monthNameToNum(monthname) {
-        // da "Day Mon DayNumber Year" in "DD-MM-YYYY"
-        var months = [
-            'Jan', 'Feb', 'Mar', 'Apr', 'May',
-            'Jun', 'Jul', 'Aug', 'Sep',
-            'Oct', 'Nov', 'Dec'
-        ]; //mesi dell'anno che mi servono per convertire il mese della data nel suo corrispondente numero MM
-        var index = months.indexOf(monthname);
-        
-        //aggiungo lo 0 prima del numero del mese se questo è < 10, ovvero 1 diventa 01, 2 diventa 02, ecc.ecc.
-        if(index+1 < 10 && index != -1){
-          index = index +1;
-          var month = '0'+index.toString()
-          return month
-        }
-        else {
-          return index!=-1 ? index+1 : undefined;
-        }
-      }
       
     componentDidMount = () => {
         const {userToken} = this.props.route.params;
@@ -357,11 +339,8 @@ export default class AddStructure extends Component{
     }
 
     async addStructurePost(){
-        var date_creation = new Date()
-        var date_mod = date_creation.toString().replace("12:00:00 GMT+0200","").slice(4);
-        var month_num = this.monthNameToNum(date_mod.substr(0,3));
-        var date_mod_format = date_mod.substr(4,2)+"/"+month_num+"/"+date_mod.substr(6,5); //data in formato DD/MonthName/AAAA
-        var final_date = date_mod_format.replace(/ /g, '');
+        var start_date = new Date(), //data di creazione della struttura
+            start_dateString = dateConverter(start_date);
         const url = `http://${host.host}:3055/structures/add`;
         axios.post(url, {
                 method: 'POST',
@@ -388,10 +367,10 @@ export default class AddStructure extends Component{
                 image2: this.state.structureImage_2,
                 image3: this.state.structureImage_3,
                 image4: this.state.structureImage_4,
-                start_date: final_date
+                start_date: start_dateString
             })
             .then(res => {
-                console.log(res);
+                alert('Struttura Creata con Successo')
                 })
             .catch(function (error) {
                 console.log(error);
@@ -523,7 +502,6 @@ export default class AddStructure extends Component{
                             onPress={()=>{
                                 this.state.fullBoard==false ? this.setState({fullBoard: true}) : this.setState({fullBoard: false})
                             }}
-                            
                         />
                         <CheckBox
                             containerStyle={styles.checkBox}

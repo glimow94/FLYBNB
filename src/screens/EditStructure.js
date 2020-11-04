@@ -5,12 +5,6 @@ import * as ImagePicker from 'expo-image-picker';
 import uploadToAnonymousFilesAsync from 'anonymous-files';
 import { Icon } from 'react-native-elements';
 import colors from "../style/colors/index";
-import NextButton from "../components/buttons/Button1";
-import BirthDayPicker from "../components/BirthdayPicker"
-import CitySelector from "../components/CitySelector"
-import { UserContext } from "../components/context";
-import { useNavigation } from "@react-navigation/native";
-import Login from './Login';
 import axios from "axios";
 import host from '../configHost'
 
@@ -86,7 +80,55 @@ export default class EditStructure extends Component{
 
         }
     }
+    componentDidMount = () => {
+        const {
+            userToken,
+            itemTitle,
+            itemPrice,
+            itemID,
+            itemPlace,
+            itemStreet,
+            itemNumber,
+            itemPostCode,
+            itemType,
+            itemBeds,
+            itemKitchen,
+            itemFullBoard,
+            itemAirConditioner,
+            itemWifi,
+            itemParking,
+            itemDescription,
+            locationDescription,
+            image1,
+            image2,
+            image3,
+            image4,
+        } = this.props.route.params;
 
+        this.setState({
+            id: itemID,
+            user_id: userToken,
+            title: itemTitle,
+            type:itemType,
+            city:itemPlace,
+            street:itemStreet,
+            number:itemNumber,
+            post_code:itemPostCode,
+            description:itemDescription,
+            location_description:locationDescription,
+            beds:itemBeds,
+            price:itemPrice,
+            fullBoard: itemFullBoard,
+            wifi: itemWifi,
+            parking:itemParking,
+            kitchen:itemKitchen,
+            airConditioner:itemAirConditioner,
+            structureImage_1:image1,
+            structureImage_2:image2,
+            structureImage_3:image3,
+            structureImage_4:image4
+        })
+    }
     changeTitle = (val) => {
         
         if(!val || val.trim().length === 0){
@@ -110,56 +152,7 @@ export default class EditStructure extends Component{
         })
     }
 
-    changeStreet = (val) => {
-        
-        if(!val || val.trim().length === 0){
-            this.setState({
-                street:'',
-                streetColor: '#DC143C',
-                streetAlert:true
-            })
-        }
-        else{
-            this.setState({
-                street: val,
-                streetColor: colors.white,
-                streetAlert: false
-            })
-        }
-    }
-    changeNumber = (val) => {
-        if(!val || val.trim().length === 0 || parseInt(val) < 1){
-            this.setState({
-                number:'',
-                numberColor: '#DC143C',
-                numberAlert:true
-            })
-        }
-        else{
-            this.setState({
-                number: val,
-                numberColor: colors.white,
-                numberAlert: false
-            })
-        }
-    }
-    changeCAP = (val) => {
-        
-        if(!val || val.trim().length === 0){
-            this.setState({
-                post_code:'',
-                capColor: '#DC143C',
-                capAlert:true
-            })
-        }
-        else{
-            this.setState({
-                post_code: val,
-                capColor: colors.white,
-                capAlert: false
-            })
-        }
-    }
+
     changePrice = (val) => {
         if(!val || val.trim().length === 0 || parseInt(val) < 1){
             this.setState({
@@ -269,58 +262,6 @@ export default class EditStructure extends Component{
         this.setState(filterStatus)
     }
 
-    componentDidMount = () => {
-        const {
-            userToken,
-            itemName,
-            itemSurname,
-            itemEmail, 
-            itemTitle,
-            itemPrice,
-            itemID,
-            itemPlace,
-            itemStreet,
-            itemNumber,
-            itemPostCode,
-            itemType,
-            itemBeds,
-            itemKitchen,
-            itemFullBoard,
-            itemAirConditioner,
-            itemWifi,
-            itemParking,
-            itemDescription,
-            locationDescription,
-            image1,
-            image2,
-            image3,
-            image4,
-        } = this.props.route.params;
-        this.setState({
-            id: itemID,
-            user_id: userToken,
-            title: itemTitle,
-            type:itemType,
-            city:itemPlace.substring(itemPlace.lastIndexOf(",")+1,itemPlace.length),
-            street:itemStreet,
-            number:itemNumber,
-            post_code:itemPostCode,
-            description:itemDescription,
-            location_description:locationDescription,
-            beds:itemBeds,
-            price:itemPrice,
-            fullBoard: itemFullBoard,
-            wifi: itemWifi,
-            parking:itemParking,
-            kitchen:itemKitchen,
-            airConditioner:itemAirConditioner,
-            structureImage_1:image1,
-            structureImage_2:image2,
-            structureImage_3:image3,
-            structureImage_4:image4
-        })
-    }
-
     postData = () => {
         if(
             (!this.state.title || this.state.title.trim().length === 0) || 
@@ -343,7 +284,7 @@ export default class EditStructure extends Component{
                 },
                 title: this.state.title,
                 type: this.state.type,
-                place: this.state.region +','+this.state.province+','+this.state.city,
+                place: this.state.city,
                 street: this.state.street,
                 number: this.state.number,
                 post_code: this.state.post_code,
@@ -401,7 +342,21 @@ export default class EditStructure extends Component{
             <View style={styles.wrapper}>
                 <Text style={styles.titleHeader}>Modifica la tua Struttura</Text>
                 <ScrollView style={styles.scrollViewWrapper}>
-
+                    <View style={styles.sensibleInfoWrapper}>
+                        <Text style={{fontSize: 16, fontWeight: 'bold'}}>Informazioni sensibili non modificabili</Text>
+                        <View style={{flexDirection:'row'}}>
+                            <Text style={{color: colors.blue}}>Luogo: </Text>
+                            <Text>{this.state.city}</Text>
+                        </View>
+                        <View style={{flexDirection:'row'}}>
+                            <Text style={{color: colors.blue}}>Via: </Text>
+                            <Text>{this.state.street} {this.state.number}</Text>
+                        </View>
+                        <View style={{flexDirection:'row'}}>
+                            <Text style={{color: colors.blue}}>CAP: </Text>
+                            <Text>{this.state.post_code}</Text>
+                        </View>
+                    </View>
                     <Text style={[{width:150},styles.label]}>NOME STRUTTURA</Text>
                                 <TextInput
                                     defaultValue={this.state.title}
@@ -413,60 +368,7 @@ export default class EditStructure extends Component{
                                     <Text style={{color: '#DC143C'}}>Inserisci il nome della struttura</Text> : null
                     }
                     
-                    <Text style={[{width:150},styles.label]}>CITTA</Text>
-                    <CitySelector
-                        updateState={this.updateState.bind(this)}
-                        city={this.state.city}
-                        region={this.state.region}
-                        province={this.state.province}
-                        status1={this.state.status1}
-                        status2={this.state.status2}
-                        status3={this.state.status3}
-                        parentType={this.state.parentType}
-                        marginTop={0}
-                    ></CitySelector>
-                    <Text style={[{width:150},styles.label]}>INDIRIZZO</Text>
-                        <TextInput
-                            defaultValue={this.state.street}
-                            autoCorrect={false}
-                            style = {[{borderColor: this.state.streetColor},styles.inputField]}
-                            onChangeText={val => this.changeStreet(val)}
-                        ></TextInput>
-                    {   this.state.streetAlert==true ? 
-                                    <Text style={{color: '#DC143C'}}>Inserisci una via </Text> : null
-                    }
                     <View>
-                        <View style={{flexDirection:"row"}}>
-                            <View style={{flexDirection:'column'}}>
-                                <Text style={[{width:150, color: this.state.numberColor},styles.label]}>N° Civico</Text>
-                                    <TextInput
-                                        defaultValue={this.state.number.toString()}
-                                        underlineColorAndroid='transparent'  
-                                        keyboardType={'numeric'}
-                                        autoCorrect={false}
-                                        style = {[{borderColor: this.state.numberColor, width: 90},styles.inputField]}
-                                        onChangeText={val => this.changeNumber(val)}
-                                    ></TextInput>
-                                {   this.state.numberAlert==true ? 
-                                        <Text style={{color: '#DC143C'}}>Inserisci civico</Text> : null
-                                }
-                                    
-                            </View>
-                            <View style={{flexDirection:'column'}}>
-                                <Text style={[{width:150, color: this.state.capColor},styles.label]}>CAP</Text>
-                                    <TextInput
-                                        defaultValue={this.state.post_code.toString()}
-                                        underlineColorAndroid='transparent'  
-                                        keyboardType={'numeric'}
-                                        autoCorrect={false}
-                                        style = {[{borderColor: this.state.capColor, width: 100},styles.inputField]}
-                                        onChangeText={val => this.changeCAP(val)}
-                                    ></TextInput>
-                                {   this.state.capAlert==true ? 
-                                        <Text style={{color: '#DC143C'}}>Inserisci CAP</Text> : null
-                                }
-                            </View>
-                        </View>
                         <View style={{flexDirection:'row'}}>
                             <View style={{flexDirection:'column'}}>
                                     <Text style={[{width:150, color: this.state.priceColor},styles.label]}>PREZZO PER NOTTE</Text>
@@ -675,6 +577,14 @@ const styles = StyleSheet.create({
         alignContent:'center',
         alignItems:'center',
         backgroundColor: colors.primary,
+    },
+    sensibleInfoWrapper: {
+        alignSelf:'center', 
+        borderColor: colors.transparent, 
+        borderWidth: 2, 
+        borderRadius: 10, 
+        padding: 10, 
+        marginVertical: 10
     },
     titleHeader:{
         fontSize: 28,
