@@ -6,6 +6,8 @@ import { Icon } from 'react-native-elements';
 import MenuButton from '../components/buttons/Button1';
 import moment from "moment";
 import DatePicker from '../components/BirthdayPicker';
+import host from '../configHost'
+import axios from "axios";
 
 var {width} = Dimensions.get('window');
 var height =  width;
@@ -320,8 +322,25 @@ export default function UserStructure({ route }){
           deleteSearchButtonStatus: false
         })
       }
-      
     }
+
+    const postStatementMail = async ()=> {
+      const url = `http://${host.host}:3055/users/send/emailStatement`;
+      return axios.post(url, {
+         method: 'POST',
+         headers: {
+           'content-type': 'application/json',
+         },
+         booking_list: state.bookingListFiltered
+       })
+       .then(res => {
+         console.log(res);
+         })
+       .catch(function (error) {
+         console.log(error);
+       });
+    }
+
     return (
       <View style={styles.container}>
         <Text style={styles.itemTitle}>{itemTitle}</Text>
@@ -536,6 +555,8 @@ export default function UserStructure({ route }){
                           </View>
                       </View>}
                 />
+
+                <Button title={'INVIA RENDICONTO'} onPress = {()=> postStatementMail()} color={colors.green02}></Button>
               </View>
             }
             </View> : null
