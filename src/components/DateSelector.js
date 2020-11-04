@@ -28,7 +28,7 @@ export default class DateSelector extends Component {
       status: false,
       status2:true,
       maxRange: 28,
-      disabledDates:[],
+      disabledDates:[],//date da disabilitare
       index:'',
       
     };
@@ -97,15 +97,14 @@ export default class DateSelector extends Component {
     return range
   }
   onDateChange(date, type) {
-    var date_mod = date.toString().replace("12:00:00 GMT+0200","").slice(4);
-    var month_num = this.monthNameToNum(date_mod.substr(0,3));
-    
-    var date_mod_format = date_mod.substr(4,2)+"/"+month_num+"/"+date_mod.substr(6,5); //data in formato DD/MonthName/AAAA
-
-    var final_date = date_mod_format.replace(/ /g, '');
-    var diffDays = ''; //variabile che conterrà il numero di giorni fra il checkin e il checkout utile a calcolare il prezzo totale
-    var cityTax= 0;
-    var totalPrice= 0;
+    /* trasformo la data in formato date in una stringa del tipo DD-MM-YYYY */
+    var date_mod = date.toString().replace("12:00:00 GMT+0200","").slice(4),
+        month_num = this.monthNameToNum(date_mod.substr(0,3)),
+        date_mod_format = date_mod.substr(4,2)+"/"+month_num+"/"+date_mod.substr(6,5), //data in formato DD/MonthName/AAAA
+        final_date = date_mod_format.replace(/ /g, ''),
+        diffDays = '', //variabile che conterrà il numero di giorni fra il checkin e il checkout utile a calcolare il prezzo totale
+        cityTax= 0,
+        totalPrice= 0;
 
     if (type === 'END_DATE') {
       diffDays = parseInt((date - this.state.selectedStartDateOriginal) / (1000 * 60 * 60 * 24), 10);
@@ -144,17 +143,17 @@ export default class DateSelector extends Component {
       else{
         var checkOut = new Date(date);
         checkOut.setDate(checkOut.getDate()+1);
-        var checkOut_mod = checkOut.toString().replace("12:00:00 GMT+0200","").slice(4);
-        var monthCheckout_num = this.monthNameToNum(checkOut_mod.substr(0,3));
-        var checkOut_mod_format = checkOut_mod.substr(4,2)+"/"+monthCheckout_num+"/"+checkOut_mod.substr(6,5); //data in formato DD/MonthName/AAAA
-        
-        var final_checkOut = checkOut_mod_format.replace(/ /g, '');
+        var checkOut_mod = checkOut.toString().replace("12:00:00 GMT+0200","").slice(4),
+            monthCheckout_num = this.monthNameToNum(checkOut_mod.substr(0,3)),
+            checkOut_mod_format = checkOut_mod.substr(4,2)+"/"+monthCheckout_num+"/"+checkOut_mod.substr(6,5), //data in formato DD/MonthName/AAAA
+            final_checkOut = checkOut_mod_format.replace(/ /g, '');
 
-        var diffDays = 1;
+        diffDays = 1;
         totalPrice = this.props.price*diffDays + (this.props.city.length/2)*diffDays;
         cityTax = (this.props.city.length/2)*diffDays;
         this.setState({
           selectedStartDate: final_date,
+          selectedStartDateOriginal: date,
           selectedEndDate: final_checkOut,
           maxRange:1,
         })
@@ -168,10 +167,6 @@ export default class DateSelector extends Component {
       }
     }
   }
-
-  
-  
-
   render() {
     const { selectedStartDate, selectedEndDate } = this.state;
     const minDate = new Date(); // Min date

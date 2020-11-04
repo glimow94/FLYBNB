@@ -9,14 +9,14 @@ import DatePicker from '../components/BirthdayPicker';
 
 var {width} = Dimensions.get('window');
 var height =  width;
-var titleFontSize = 18;
+var titleFontSize = 21;
 
 if(Platform.OS === 'web' || Dimensions.get('window').width > 700){
   width = width*0.6;
   height = height*0.3;
   titleFontSize = 30;
 }else{
-  width = width;
+  width = width*0.9;
   height = height*0.9;
 }
 
@@ -142,7 +142,7 @@ export default function UserStructure({ route }){
         infoStatus_ = false;
         statementStatus_ = true;
         button1Border_ = colors.primary;
-        button2Border_ = colors.red;
+        button2Border_ = colors.secondary;
         /* calcolo data inizio e fine rendiconto */
         deadline_ = deadline_ * (statementNumber + 1)// 90, 180,270,.....
         start = moment(startDate,dateFormat).add(deadline_ -90,'days');// data inizio rendiconto (all'inizio è startdate + 0 giorni, al secondo rendiconto sarà startdate + 90 giorni, al terzo rendiconto startDate + 180 ...ecc...ecc..)
@@ -630,6 +630,7 @@ const styles = StyleSheet.create({
   container:{
     flex:1,
     height:'100%',
+    paddingHorizontal: 5,
     alignContent:'center',
     alignItems:'center',
     backgroundColor: colors.primary,
@@ -808,7 +809,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 3,
     padding: 10,
-    minWidth: width-5,
+    minWidth: width,
     borderColor: colors.secondary
   },
   checkInOut:{
@@ -854,7 +855,7 @@ const styles = StyleSheet.create({
     alignSelf:'center',   
   },
   filterTitle:{
-    fontSize: titleFontSize-4,
+    fontSize: titleFontSize-2,
     fontWeight: "bold",
     alignSelf:'flex-start',
     marginHorizontal: 20
@@ -867,7 +868,11 @@ const styles = StyleSheet.create({
     height:20,
   },
   alertStatementWrapper:{
+    flex:1,
+    flexWrap: 'wrap',
+    width: width,
     borderColor: colors.red,
+    alignSelf:'center',
     borderWidth: 1,
     borderRadius: 5,
     marginVertical: 10
@@ -886,7 +891,8 @@ const styles = StyleSheet.create({
     backgroundColor:colors.green02,
     borderRadius:8,
     marginLeft: 20,
-    padding: 8,
+    marginVertical: 5,
+    padding: 5,
     alignSelf:'flex-start'
   },
   sendStatementText:{

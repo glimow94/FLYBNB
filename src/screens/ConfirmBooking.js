@@ -331,67 +331,89 @@ export default class BookingStructure extends Component{
             </View>
             <View>
               <FlatList
-                  data= {this.state.guestsData}
-                  keyExtractor = {(item, index) => index.toString()}
-                  renderItem = {({item}) =>
-                          <View style={styles.formContainer}>
-                              <Text style={styles.formGuestTitle}>Ospite {item.key+1}</Text>
-                                  <View style={styles.InputWrapper}>
-                                      <Text style={styles.label}>NOME</Text>
-                                      <TextInput
-                                          autoCorrect={false}
-                                          defaultValue={this.state.guestsData[item.key].name}
-                                          style = {styles.inputField}
-                                          onChangeText={(val) => this.changeName(val,item.key)}
-                                      ></TextInput>
-                                      {   this.state.nameAlert==true ? 
-                                          <Text style={{color: '#DC143C'}}>Inserisci un nome valido </Text> : null
-                                      }
-                                  </View>
-                                  <View style={styles.InputWrapper}>
-                                      <Text style={styles.label}>COGNOME</Text>
-                                      <TextInput
-                                          autoCorrect={false}
-                                          defaultValue={this.state.guestsData[item.key].surname}
-                                          style = {styles.inputField}
-                                          onChangeText={(val) => this.changeSurName(val,item.key)}
-                                      ></TextInput>
-                                      {   this.state.surnameAlert==true ? 
-                                          <Text style={{color: '#DC143C'}}>Inserisci un cognome valido </Text> : null
-                                      }
-                                  </View>
-                                  <View style={styles.birthdatePickers}>
-                                      <Text style={styles.label}>NATO IL (GG/MM/AA)</Text>
-                                          <BirthDayPicker
-                                              selectedYear={this.state.guestsData[item.key].birthYear}
-                                              selectedMonth={this.state.guestsData[item.key].birthMonth}
-                                              selectedDay={this.state.guestsData[item.key].birthDay} 
-                                              maxYears = {(new Date()).getFullYear()}                                                    
-                                              onYearValueChange={(year,i)=> this.changeBirthYear(year,item.key)}
-                                              onMonthValueChange={(month,i) => this.changeBirthMonth(month,item.key)}
-                                              onDayValueChange={(day,i) => this.changeBirthDay(day,item.key)}
-                                          ></BirthDayPicker>
-                                  </View>
-                                  <Text style={styles.label}>FOTO DOCUMENTO: </Text>
-                                  <View style={{flexDirection:'column'}}>
-                                      
-                                      <Image source={ this.state.guestsData[item.key].document_img !== '' ? {uri: this.state.guestsData[item.key].document_img} : require('../img/structure_image.png') } style={styles.documentImage} />
-                                      <TouchableOpacity style={styles.button} onPress={() => this.profileImagePickerAsync(item.key)}>
-                                          <Icon
-                                              size={20}
-                                              style={styles.icon}
-                                              name='camera'
-                                              type='font-awesome'
-                                              color='#f50'
-                                              color={colors.black}
-                                          />
-                                      </TouchableOpacity>
-                                  </View>
-                          </View>
-
-                      }
-                  contentContainerStyle={{paddingTop:40}}
+                data= {this.state.guestsData}
+                keyExtractor = {(item, index) => index.toString()}
+                renderItem = {({item}) =>
+                      <View style={styles.formContainer}>
+                        <Text style={styles.formGuestTitle}>Ospite {item.key+1}</Text>
+                        <View style={styles.InputWrapper}>
+                          <Text style={styles.label}>NOME</Text>
+                          <TextInput
+                              autoCorrect={false}
+                              defaultValue={this.state.guestsData[item.key].name}
+                              style = {styles.inputField}
+                              onChangeText={(val) => this.changeName(val,item.key)}
+                          ></TextInput>
+                          {   this.state.nameAlert==true ? 
+                              <Text style={{color: '#DC143C'}}>Inserisci un nome valido </Text> : null
+                          }
+                        </View>
+                        <View style={styles.InputWrapper}>
+                          <Text style={styles.label}>COGNOME</Text>
+                          <TextInput
+                              autoCorrect={false}
+                              defaultValue={this.state.guestsData[item.key].surname}
+                              style = {styles.inputField}
+                              onChangeText={(val) => this.changeSurName(val,item.key)}
+                          ></TextInput>
+                          {   this.state.surnameAlert==true ? 
+                              <Text style={{color: '#DC143C'}}>Inserisci un cognome valido </Text> : null
+                          }
+                        </View>
+                        <View style={styles.birthdatePickers}>
+                          <Text style={styles.label}>NATO IL (GG/MM/AA)</Text>
+                            <BirthDayPicker
+                              selectedYear={this.state.guestsData[item.key].birthYear}
+                              selectedMonth={this.state.guestsData[item.key].birthMonth}
+                              selectedDay={this.state.guestsData[item.key].birthDay} 
+                              maxYears = {(new Date()).getFullYear()}                                                    
+                              onYearValueChange={(year,i)=> this.changeBirthYear(year,item.key)}
+                              onMonthValueChange={(month,i) => this.changeBirthMonth(month,item.key)}
+                              onDayValueChange={(day,i) => this.changeBirthDay(day,item.key)}
+                            ></BirthDayPicker>
+                        </View>
+                        <Text style={styles.label}>FOTO DOCUMENTO: </Text>
+                        <View style={{flexDirection:'column'}}>
+                          <Image source={ this.state.guestsData[item.key].document_img !== '' ? {uri: this.state.guestsData[item.key].document_img} : require('../img/structure_image.png') } style={styles.documentImage} />
+                          <TouchableOpacity style={styles.button} onPress={() => this.profileImagePickerAsync(item.key)}>
+                              <Icon
+                                size={20}
+                                style={styles.icon}
+                                name='camera'
+                                type='font-awesome'
+                                color='#f50'
+                                color={colors.black}
+                              />
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    }
+                contentContainerStyle={{paddingTop:40}}
               />
+              {/* <Text style={styles.label}>PAGAMENTO</Text>
+              <View style={styles.InputWrapper}>
+                <Text style={styles.label}>NUMERO DI CARTA</Text>
+                <TextInput
+                    autoCorrect={false}
+                    defaultValue={this.state.surname}
+                    onChangeText={(val) => this.changeCardNumber(val,item.key)}
+                ></TextInput>
+                {   this.state.surnameAlert==true ? 
+                    <Text style={{color: '#DC143C'}}>Inserisci un cognome valido </Text> : null
+                }
+              </View>
+              <View style={styles.InputWrapper}>
+                <Text style={styles.label}>PROPRIETARIO</Text>
+                <TextInput
+                    autoCorrect={false}
+                    style={{height: 50}}
+                    defaultValue={this.state.cardName+''+this.state.cardSurname}
+                    onChangeText={(val) => this.changeCardName(val,item.key)}
+                ></TextInput>
+                {   this.state.surnameAlert==true ? 
+                    <Text style={{color: '#DC143C'}}>Inserisci un cognome valido </Text> : null
+                }
+              </View> */}
             </View>
           </ScrollView>
           {this.state.alert ? <Text style={styles.alertText}>ERRORE: Completa tutti i campi degli ospiti, compresi i documenti</Text>:null}
