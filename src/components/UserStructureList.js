@@ -43,6 +43,7 @@ import axios from "axios";
 import AsyncStorage from '@react-native-community/async-storage';
 import host from '../configHost';
 import moment from 'moment';
+import dateConverter from '../components/dateConverter'
 
 var itemWidth = '40%';
 if(Platform.OS === 'android' || Dimensions.get('window').width < 700){
@@ -62,39 +63,16 @@ class StructuresList extends Component {
       requestList:[] //lista delle richieste di prenotazione di TUTTE l estrutture dell'utente(da smistare in ogni singola struttura), ci servono per inviare il rendiconto
     }
    }
-   monthNameToNum(monthname) {
-    // da "Day Mon DayNumber Year" in "DD-MM-YYYY"
-    var months = [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May',
-        'Jun', 'Jul', 'Aug', 'Sep',
-        'Oct', 'Nov', 'Dec'
-    ]; //mesi dell'anno che mi servono per convertire il mese della data nel suo corrispondente numero MM
-    var index = months.indexOf(monthname);
-    
-    //aggiungo lo 0 prima del numero del mese se questo è < 10, ovvero 1 diventa 01, 2 diventa 02, ecc.ecc.
-    if(index+1 < 10 && index != -1){
-      index = index +1;
-      var month = '0'+index.toString()
-      return month
-    }
-    else {
-      return index!=-1 ? index+1 : undefined;
-    }
-  }
+  
    componentDidMount = () => {
      this.setState({
       requestList: this.props.requestList,
-      bookingGuests: this.props.bookingGuests
      })
     /* OPERAZIONI PER IL CONTROLLO PERIODICO DEL RENDICONTO, CALCOLO DATA ODIERNA IN FORMATO STRINGA DD-MM-YYYY*/
     /* Calcoliamo la data di oggi e la convertiamo nel formato accettabile dalla libreria moment... cioè DD/MM/YYYY */
-    var date = new Date(2021, 6, 28); //NOTA: infica la data di oggi, per testare il funzionamento del rendiconto cambiarla 
-    var date_mod = date.toString().replace("12:00:00 GMT+0200","").slice(4);
-    var month_num = this.monthNameToNum(date_mod.substr(0,3));
-    var date_mod_format = date_mod.substr(4,2)+"/"+month_num+"/"+date_mod.substr(6,5); //data in formato DD/MonthName/AAAA
-    var final_date = date_mod_format.replace(/ /g, '');
-    var today = moment(final_date,'DD-MM-YYYY');
-    console.log(today)
+    var date = new Date(2021, 6, 28), //NOTA: indica la data di oggi, per testare il funzionamento del rendiconto cambiarla 
+        dateString = dateConverter(date),
+        today = moment(dateString,'DD-MM-YYYY');
     //get current token
     const itemToken = AsyncStorage.getItem('userToken')
     itemToken.then(token => {
@@ -122,13 +100,11 @@ class StructuresList extends Component {
   }
   navigateToStructure(item){
     const { navigation } = this.props;
-    var statementStatus_ = false; //variabile che discrimina quale sezione aprire, se bisogna mandare il rendiconto viene settata a false e apre prima la sezione del rendiconto
+    var statementStatus_ = false; //variabile che discrimina quale sezione aprire nella pagine successiva (INFO O RENDICONTO In UserStructure), se bisogna mandare il rendiconto viene settata a false e apre prima la sezione del rendiconto
     
     /* ***********CONTROLLO DEL RENDICONTO***********/ 
     //VEDI COMMENTI A INIZIO PAGINA PER LA SPIEGAZIONE
     //se deve essere mandato vengono modificate le informazioni passate alla navigazione sulla struttura
-    console.log(item.start_date)
-    console.log(this.state.today.format('DD/MM/YYYY'))
     if(this.state.today.diff(moment(item.start_date,'DD-MM-YYYY'), 'days') > this.state.deadline*(item.statement + 1)){
       statementStatus_ = true;
     }
@@ -137,20 +113,12 @@ class StructuresList extends Component {
     var structureRequest = []; //richieste da passare alla navigazione
     if(this.state.requestList.length != 0){
       for(let i = 0; i < this.state.requestList.length ; i++){
-        if(this.state.requestList[i].structure_id == item.id && this.state.requestList[i].request == 1){
+        if(this.state.requestList[i][0].structure_id == item.id && this.state.requestList[i][0].request == 1){
           structureRequest.push(this.state.requestList[i]);
         }
       }
     }
-    /* passo alla singola struttura solo gli ospiti correlati alle richieste di prenotazione per essa */
-    var guests = [];
-    if(this.state.bookingGuests.length!=0){
-      for(let j = 0; j < this.state.bookingGuests.length; j++){
-        if(this.state.bookingGuests[j].structure_id == item.id){
-          guests.push(this.state.bookingGuests[j]);
-        }
-      }
-    }
+    
     navigation.navigate('UserStructure',{
       /* parametri da passare alla schermata successiva */
       userToken: this.state.userToken,
@@ -179,7 +147,6 @@ class StructuresList extends Component {
       image3: item.image3,
       image4 : item.image4,
       requestList : structureRequest,
-      guestsList : guests,
       statementStatus: statementStatus_, //se statementStatus = true viene mostrata la pagina del rendiconto pre-impostata per inviarlo all'ufficio del turismo
       statementNumber : item.statement,//numero di volte in cui è stato mandato il rendiconto
       deadline : this.state.deadline,//90 giorni

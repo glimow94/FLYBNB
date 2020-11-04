@@ -3,14 +3,8 @@ import { StyleSheet, Text, View, Button, Platform, Modal, Dimensions } from 'rea
 import CalendarPicker from 'react-native-calendar-picker';
 import colors from '../style/colors';
 import ConfirmButton from '../components/buttons/confirmButton';
-import CalendarButton from '../components/buttons/Button1'
-//definisco la funzione 'changeDateFormat' per convertire una stringa di data 
-// da "Day Mon DayNumber Year" in "DD-MM-YYYY"
-var months = [
-  'Jan', 'Feb', 'Mar', 'Apr', 'May',
-  'Jun', 'Jul', 'Aug', 'Sep',
-  'Oct', 'Nov', 'Dec'
-]; //mesi dell'anno che mi servono per convertire il mese della data nel suo corrispondente numero MM
+import CalendarButton from '../components/buttons/Button1';
+import dateConverter from '../components/dateConverter';
 
 //fattore di scala per il calendario responsive
 var scaleFactor = 450;
@@ -56,19 +50,6 @@ export default class DateSelector extends Component {
       }
   }
 
-  monthNameToNum(monthname) {
-    var index = months.indexOf(monthname);
-    
-    //aggiungo lo 0 prima del numero del mese se questo è < 10, ovvero 1 diventa 01, 2 diventa 02, ecc.ecc.
-    if(index+1 < 10 && index != -1){
-      index = index +1;
-      var month = '0'+index.toString()
-      return month
-    }
-    else {
-      return index!=-1 ? index+1 : undefined;
-    }
-  }
   
   //funzione che calcola il range massimo di selezione delle date a partire dalla scelta della data iniziale(check-in) sul calendario
   rangeDates(start_date){
@@ -98,10 +79,7 @@ export default class DateSelector extends Component {
   }
   onDateChange(date, type) {
     /* trasformo la data in formato date in una stringa del tipo DD-MM-YYYY */
-    var date_mod = date.toString().replace("12:00:00 GMT+0200","").slice(4),
-        month_num = this.monthNameToNum(date_mod.substr(0,3)),
-        date_mod_format = date_mod.substr(4,2)+"/"+month_num+"/"+date_mod.substr(6,5), //data in formato DD/MonthName/AAAA
-        final_date = date_mod_format.replace(/ /g, ''),
+    var dateString = dateConverter(date),
         diffDays = '', //variabile che conterrà il numero di giorni fra il checkin e il checkout utile a calcolare il prezzo totale
         cityTax= 0,
         totalPrice= 0;
@@ -111,11 +89,11 @@ export default class DateSelector extends Component {
       totalPrice = this.props.price*diffDays + (this.props.city.length/2)*diffDays;
       cityTax = (this.props.city.length/2)*diffDays;
       this.setState({
-        selectedEndDate: final_date,
+        selectedEndDate: dateString,
         status: false
       });
       this.props.updateState({
-        checkOut: final_date,
+        checkOut: dateString,
         diffDays: diffDays,
         totPrice: totalPrice,
         cityTax: cityTax
@@ -131,35 +109,31 @@ export default class DateSelector extends Component {
       })
       if(maxRange > 1){  
           this.setState({
-          selectedStartDate: final_date,
+          selectedStartDate: dateString,
           selectedEndDate: null,
           selectedStartDateOriginal: date,
           maxRange : maxRange,
         });
         this.props.updateState({
-          checkIn: final_date
+          checkIn: dateString
         })
       }
       else{
         var checkOut = new Date(date);
         checkOut.setDate(checkOut.getDate()+1);
-        var checkOut_mod = checkOut.toString().replace("12:00:00 GMT+0200","").slice(4),
-            monthCheckout_num = this.monthNameToNum(checkOut_mod.substr(0,3)),
-            checkOut_mod_format = checkOut_mod.substr(4,2)+"/"+monthCheckout_num+"/"+checkOut_mod.substr(6,5), //data in formato DD/MonthName/AAAA
-            final_checkOut = checkOut_mod_format.replace(/ /g, '');
-
+        var checkOutString = dateConverter(checkOut);
         diffDays = 1;
         totalPrice = this.props.price*diffDays + (this.props.city.length/2)*diffDays;
         cityTax = (this.props.city.length/2)*diffDays;
         this.setState({
-          selectedStartDate: final_date,
+          selectedStartDate: dateString,
           selectedStartDateOriginal: date,
-          selectedEndDate: final_checkOut,
+          selectedEndDate: checkOutString,
           maxRange:1,
         })
         this.props.updateState({
-          checkIn:final_date,
-          checkOut: final_checkOut,
+          checkIn: dateString,
+          checkOut: checkOutString,
           diffDays: diffDays,
           totPrice: totalPrice,
           cityTax: cityTax,
@@ -246,6 +220,5 @@ const styles = StyleSheet.create({
     alignContent:'center',
     alignItems:'center',
     padding:5,
-    
   }
 });

@@ -6,6 +6,7 @@ import { Icon } from 'react-native-elements';
 import MenuButton from '../components/buttons/Button1';
 import moment from "moment";
 import DatePicker from '../components/BirthdayPicker';
+import dateConverter from '../components/dateConverter';
 
 var {width} = Dimensions.get('window');
 var height =  width;
@@ -87,6 +88,11 @@ export default function UserStructure({ route }){
       startDate: itemStartDate,//data in cui è stata creata la struttura (la useremo come limite inferiore per il filtro delle date)
       deleteSearchButtonStatus: false,
       maxYear: 2050,
+      totEarn: 0,//guadagno totale nella seguente struttura
+      totTaxes: 0,//tasse totali
+      statementEarn:0,
+      statementTaxes:0,
+      datePickerYearsBack: 0,
       statementStatus: statementStatus
     })
 
@@ -101,20 +107,7 @@ export default function UserStructure({ route }){
       if(Platform.OS == 'android'){
         horizontalScroll_ = false;
       }
-      /* Associo ad ogni prenotazione gli ospiti corrispondenti */
-      var bookingList = [];
-      for(var i = 0; i < state.requestList.length ; i++){
-        var singleBooking = [],
-            guests = [];
-        singleBooking.push(state.requestList[i]);
-        for(var j = 0; j < state.guestsList.length; j++){
-          if(state.guestsList[j].id == state.requestList[i].id){
-            guests.push(guestsList[j]);
-          }
-        }
-        if(guests.length > 0) singleBooking.push(guests);
-        bookingList.push(singleBooking);
-      }
+      var bookingList = requestList;
       /* CALCOLO DATA INIZIALE  E FINALE PER I FILTRI, sarà startDate per entrambe se non deve essere mandato il rendiconto (si deve suddividere in giorno mese e anno separatamente) */
       var day1 = itemStartDate.substring(0,2),
           month1 = itemStartDate.substring(3,5),
@@ -128,7 +121,6 @@ export default function UserStructure({ route }){
       /* calcolo il limite di anni massimi selezionabili nel picker */
       var now = (new Date()).getFullYear(),
           maxYear_ = now+50;
-
       /*********SE DEVE ESSERE MANDATO IL RENDICONTO***********/
       var deadline_ = deadline,
           start = '',
@@ -137,7 +129,10 @@ export default function UserStructure({ route }){
           endDateString = '', // data finale per il filtro del rendiconto
           dateFormat = 'DD/MM/YYYY',
           bookingListFiltered_ = bookingList,
-          deleteSearchButtonStatus_ = false;
+          deleteSearchButtonStatus_ = false,
+          yearsBack = 0,
+          statementEarn_ = 0,
+          statementTaxes_ = 0;
       if(statementStatus){
         infoStatus_ = false;
         statementStatus_ = true;
@@ -156,6 +151,7 @@ export default function UserStructure({ route }){
         day2 = endDateString.substring(0,2);
         month2 = endDateString.substring(3,5);
         year2 = endDateString.substring(6,10);
+        yearsBack = parseInt(year1) - parseInt(itemStartDate.substring(6,10));
         /* CALCOLO BOOKINGLISTFILTERED , ovvero le prenotazioni che verranno visualizzate da mandare come rendiconto degli ultimi 3 mesi */ 
         var filteredData = [];
         for(var i = 0; i < bookingList.length ; i++){
@@ -163,6 +159,8 @@ export default function UserStructure({ route }){
           var bookingCheckIn = moment(bookingList[i][0].checkIn, dateFormat);
           if( bookingCheckIn >= start && bookingCheckIn <= end){
             filteredData.push(bookingList[i]);
+            statementEarn_ = statementEarn_ + bookingList[i][0].totPrice;
+            statementTaxes_ = statementTaxes_ + bookingList[i][0].cityTax;
           }
         }
         bookingListFiltered_ = filteredData;
@@ -190,6 +188,9 @@ export default function UserStructure({ route }){
         button1Border : button1Border_,
         button2Border : button2Border_,
         deleteSearchButtonStatus: deleteSearchButtonStatus_,
+        datePickerYearsBack : yearsBack,
+        statementEarn : statementEarn_,
+        statementTaxes : statementTaxes_
       })
     }, [])
 
@@ -321,17 +322,16 @@ export default function UserStructure({ route }){
     
     /* funzione chiamata alla pressione del tasto 'filtra', fa un controllo sule date seleizonate e dopo richiama datesFilter */
     const bookingsFilter = () =>{
-      var start = state.dateDay1+'/'+state.dateMonth1+'/'+state.dateYear1,
-          end = state.dateDay2+'/'+state.dateMonth2+'/'+state.dateYear2,
+      var start = dateConverter(new Date(state.dateYear1,state.dateMonth1,state.dateDay1)),
+          end = dateConverter(new Date(state.dateYear2,state.dateMonth2,state.dateDay2)),
           dateFormat = 'DD-MM-YYYY',
           startDate = moment(start,dateFormat),
           endDate = moment(end,dateFormat);
-
       /* controllo che start sia minore di end */
       if(startDate <= endDate){
         datesFilter(start,end);
       }else{
-        alert('Date non valide, assicurati che la data iniziale sia minore della data finale')
+        alert('Date non valide, assicurati che la data iniziale sia minore della data finale');
       }
     }
     /* funzione che filtra le prenotazioni in base alle date selezionate */
@@ -358,8 +358,12 @@ export default function UserStructure({ route }){
         })
       }else{
         filteredData = state.bookingList;
+        console.log(itemStartDate)
         setState({
           ...state,
+          dateDay1 : itemStartDate.substring(0,2),
+          dateMonth1 : itemStartDate.substring(3,5),
+          dateYear1 : itemStartDate.substring(6,10),
           bookingListFiltered:filteredData,
           deleteSearchButtonStatus: false
         })
@@ -489,7 +493,7 @@ export default function UserStructure({ route }){
                     selectedMonth={state.dateMonth1}
                     selectedDay={state.dateDay1}    
                     maxYears = {state.maxYear}    
-                    yearsBack = {0}                      
+                    yearsBack = {state.datePickerYearsBack}                      
                     onYearValueChange={(year,i)=>changeYear1(year)}
                     onMonthValueChange={(month,i) => changeMonth1(month)}
                     onDayValueChange={(day,i) =>changeDay1(day)}
@@ -500,7 +504,7 @@ export default function UserStructure({ route }){
                     selectedMonth={state.dateMonth2}
                     selectedDay={state.dateDay2}    
                     maxYears = {state.maxYear}    
-                    yearsBack = {0}                      
+                    yearsBack = {state.datePickerYearsBack}                      
                     onYearValueChange={(year,i)=>changeYear2(year)}
                     onMonthValueChange={(month,i) => changeMonth2(month)}
                     onDayValueChange={(day,i) =>changeDay2(day)}
@@ -550,6 +554,15 @@ export default function UserStructure({ route }){
                   </View>
                   :
                   <View>
+                    { state.statementStatus ?
+                      null :
+                      <View style={styles.mainInfo}>
+                        <View style={{flexDirection:'row', alignItems:'center'}}>
+                          <Text style = {styles.infoLabel}>Guadagni Totali: </Text>
+                          <Text style = {styles.infoText}>{state.totEarn}</Text>
+                        </View>
+                      </View>
+                    }
                     {
                       state.deleteSearchButtonStatus==false ? /* -> se non sono state filtrate le prenotazioni.... */
                         <Text style={styles.filterTitle}>Tutte le prenotazioni: </Text>
@@ -568,6 +581,19 @@ export default function UserStructure({ route }){
                         </View>
                     }
                   </View>
+                }
+                {
+                  state.statementStatus ? 
+                  <View style={styles.mainInfo}>
+                    <View style={{flexDirection:'row', alignItems:'center'}}>
+                      <Text style = {styles.infoLabel}>Guadagni Totali (rendiconto): </Text>
+                      <Text style = {styles.infoText}>{state.statementEarn}</Text>
+                    </View>
+                    <View style={{flexDirection:'row', alignItems:'center'}}>
+                      <Text style = {styles.infoLabel}>Tasse totali (rendiconto): </Text>
+                      <Text style = {styles.infoText}>{state.statementTaxes}</Text>
+                    </View>
+                  </View> : null
                 }
                 <FlatList
                     data= {state.bookingListFiltered}

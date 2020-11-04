@@ -68,7 +68,7 @@ export default class PriceSelector extends Component {
     
     return (
       <View>
-       { this.props.searchBarText.length != 0 ? <PriceButton text={this.state.buttonText} onPress={this.showHide} backgroundColor={colors.white} borderColor={colors.secondary}></PriceButton>:<PriceButton text={this.state.buttonText} backgroundColor={colors.white} borderColor={colors.secondary} opacity={0.2}></PriceButton>}
+       <PriceButton text={this.state.buttonText} onPress={this.showHide} backgroundColor={colors.primary} borderColor={colors.secondary}></PriceButton>
         {   
           this.props.status2 ? 
           <View style={styles.wrapper}>
@@ -105,7 +105,6 @@ const styles = StyleSheet.create({
     height: 140,
     alignContent:'center',
     alignItems:'center',
-    position:'relative',
     top:50,
     backgroundColor: colors.transparent,
     borderRadius:20,
@@ -115,7 +114,6 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingBottom:10,
     paddingHorizontal: 10
-
   },
   label:{
     fontSize: 14,

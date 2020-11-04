@@ -104,11 +104,13 @@ class Home extends Component{
             <View style={styles.headerWrapper}>
               <View style={{alignContent:'center',alignItems:'center'}}>
                 {
-                  Platform.OS == 'web' && Dimensions.get('window').width > 700 ? <Text style={styles.titleStyle}>Dove vuoi andare?</Text>
-                                        : <Text style={styles.titleStyle}>Dove vuoi andare?</Text>
+                  Platform.OS == 'web' && Dimensions.get('window').width > 700 ? 
+                  <Text style={styles.titleStyle}>Dove vuoi andare?</Text>
+                    : 
+                  <Text style={styles.titleStyle}>Dove vuoi andare?</Text>
                 }
                 <View style={styles.searchHeader}>
-                  <View>
+
                     <SearchBar
                         updateState={this.updateState.bind(this)}
                     ></SearchBar>
@@ -124,48 +126,47 @@ class Home extends Component{
                       </TouchableOpacity>
                       </View>
                     }
-                  </View>
+
                 </View>
                 
                 <View style={styles.buttonGroup}>
-                    <Button onPress={()=>{console.log(this.state.structuresDATA)}}></Button>
-                    <TypeSelector
-                      updateState={this.updateState.bind(this)} 
-                      type={this.state.type}
-                      beds={this.state.beds}
-                      status1={this.state.status1}
-                      status2={this.state.status2}
-                      status3={this.state.status3}
-                      status4={this.state.status4}
-                      city={this.state.city}
-                      searchBarText={this.state.searchBarText}
-                    ></TypeSelector>
-                    <PriceSelector
-                      updateState={this.updateState.bind(this)}
-                      price={this.state.price}
-                      status1={this.state.status1}
-                      status2={this.state.status2}
-                      status3={this.state.status3}
-                      status4={this.state.status4}
-                      city={this.state.city}
-                      searchBarText={this.state.searchBarText}
-                    ></PriceSelector>
-                    <FilterSelector 
-                      updateState={this.updateState.bind(this)} 
-                      kitchen={this.state.kitchen}
-                      fullBoard={this.state.fullBoard}
-                      airConditioner={this.state.airConditioner}
-                      wifi={this.state.wifi}
-                      parking={this.state.parking}
-                      status1={this.state.status1}
-                      status2={this.state.status2}
-                      status3={this.state.status3}
-                      status4={this.state.status4}
-                      city={this.state.city}
-                      searchBarText={this.state.searchBarText}
-                    ></FilterSelector>
-                  </View>
+                  <TypeSelector
+                    updateState={this.updateState.bind(this)} 
+                    type={this.state.type}
+                    beds={this.state.beds}
+                    status1={this.state.status1}
+                    status2={this.state.status2}
+                    status3={this.state.status3}
+                    status4={this.state.status4}
+                    city={this.state.city}
+                    searchBarText={this.state.searchBarText}
+                  ></TypeSelector>
+                  <PriceSelector
+                    updateState={this.updateState.bind(this)}
+                    price={this.state.price}
+                    status1={this.state.status1}
+                    status2={this.state.status2}
+                    status3={this.state.status3}
+                    status4={this.state.status4}
+                    city={this.state.city}
+                    searchBarText={this.state.searchBarText}
+                  ></PriceSelector>
+                  <FilterSelector 
+                    updateState={this.updateState.bind(this)} 
+                    kitchen={this.state.kitchen}
+                    fullBoard={this.state.fullBoard}
+                    airConditioner={this.state.airConditioner}
+                    wifi={this.state.wifi}
+                    parking={this.state.parking}
+                    status1={this.state.status1}
+                    status2={this.state.status2}
+                    status3={this.state.status3}
+                    status4={this.state.status4}
+                    city={this.state.city}
+                    searchBarText={this.state.searchBarText}
+                  ></FilterSelector>
                 </View>
+              </View>
             </View>
           </ImageBackground>
     )
@@ -184,7 +185,6 @@ const styles = StyleSheet.create({
       height:'100%',
     },
     searchHeader:{
-      flexDirection:'row',
       alignContent:'center',
       alignItems:'center',
     },

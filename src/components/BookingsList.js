@@ -1,11 +1,12 @@
-//componente che restituisce le strutture di uno specifico utente
+//componente che restituisce le prenotazioni che ha inviato il cliente
 import React, { Component } from 'react';
 import {View, FlatList, StyleSheet, Text, Platform, Dimensions } from 'react-native';
 import colors from "../style/colors/index";
 import axios from "axios";
 import AsyncStorage from '@react-native-community/async-storage';
 import host from '../configHost'
-
+import dateConverter from '../components/dateConverter';
+import moment from 'moment'
 var itemWidth = '50%';
 if(Platform.OS === 'android' || Dimensions.get('window').width < 700){
   itemWidth = '90%';
@@ -20,11 +21,21 @@ export default class StructuresList extends Component {
       data: [],
       isLoading: true,
       userToken: null,
-      status:''
+      status:'',
+      today: '' //data di oggi
     }
    }
    _isMounted = false;
    componentDidMount = () => {
+    /* OPERAZIONI PER IL CONTROLLO DELLA SCADENZA DI UNA RICHISTA IN ATTESA DI APPROVAZIONE, CALCOLO DATA ODIERNA IN FORMATO STRINGA DD-MM-YYYY*/
+    /* Calcoliamo la data di oggi e la convertiamo nel formato accettabile dalla libreria moment... cioè DD/MM/YYYY */
+    var date = new Date(),
+    todayDate = dateConverter(date),//converte data in formato Date in una stringa DD-MM-YYYY
+    today_ = moment(todayDate,'DD-MM-YYYY');
+    console.log(today_)
+    this.setState({
+    today: today_
+    })
     this._isMounted = true;
     //get current token
     const itemToken = AsyncStorage.getItem('userToken')
@@ -71,8 +82,16 @@ export default class StructuresList extends Component {
 
                 <View style={styles.viewRow}>
                     {
-                      item.request== 0 ? <Text style={styles.requestWaiting}>In Attesa di Approvazione</Text>
-                      : null
+                      item.request== 0 ?
+                      <View>
+                        { moment(dateConverter(new Date(item.checkIn.substring(6,10),(parseInt(item.checkIn.substring(3,5))-1).toString(),item.checkIn.substring(0,2))),'DD-MM-YYYY') > this.state.today ?
+                          <Text style={styles.requestWaiting}>In attesa di approvazione</Text> 
+                            :
+                          <Text style={styles.requestDontApproved}>Scaduta e Rimborsata</Text> 
+                        }
+                      </View>
+                        :
+                      null
                     }
                     {
                       item.request== 1 ? <Text style={styles.requestApproved}>Richiesta Approvata</Text>
@@ -82,8 +101,6 @@ export default class StructuresList extends Component {
                       item.request== 2 ? <Text style={styles.requestDontApproved}>Richiesta Rifiutata e Rimborsata</Text>
                       : null
                     }
-                    
-                    
                   <Text style={styles.titleStructure}>{item.title}, {item.type} </Text>
                   <Text style={styles.streetInfoText}>{item.place} </Text>
                   <Text style={styles.streetInfoText}>{item.street}, {item.number}</Text>
