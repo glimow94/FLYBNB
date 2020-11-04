@@ -131,6 +131,8 @@ export default function UserStructure({ route }){
           bookingListFiltered_ = bookingList,
           deleteSearchButtonStatus_ = false,
           yearsBack = 0,
+          totEarn_ = 0,
+          totTax_ = 0,
           statementEarn_ = 0,
           statementTaxes_ = 0;
       if(statementStatus){
@@ -166,6 +168,11 @@ export default function UserStructure({ route }){
         bookingListFiltered_ = filteredData;
         deleteSearchButtonStatus_ = true;
       }
+      //calcolo guadagni totali
+      for(var i = 0; i < bookingList.length ; i++){
+        totEarn_ = totEarn_ + bookingList[i][0].totPrice;
+        totTax_ = totTax_ + bookingList[i][0].cityTax;
+      }
       
       setState({
         ...state,
@@ -189,6 +196,8 @@ export default function UserStructure({ route }){
         button2Border : button2Border_,
         deleteSearchButtonStatus: deleteSearchButtonStatus_,
         datePickerYearsBack : yearsBack,
+        totEarn: totEarn_,
+        totTaxes: totTax_,
         statementEarn : statementEarn_,
         statementTaxes : statementTaxes_
       })
@@ -336,7 +345,9 @@ export default function UserStructure({ route }){
     }
     /* funzione che filtra le prenotazioni in base alle date selezionate */
     const datesFilter = (start, end)=>{
-      var filteredData = [];
+      var filteredData = [],
+          totEarn_ = 0,
+          totTax_ = 0;
       if(start.trim().length != 0){
         var bookingCheckIn,
             dateFormat = 'DD-MM-YYYY',
@@ -349,12 +360,19 @@ export default function UserStructure({ route }){
             filteredData.push(state.bookingList[i]);
           }
         }
+        //calcolo guadagni e tasse
+        for(var i = 0; i < filteredData.length; i++){
+          totEarn_ = totEarn_ + filteredData[i][0].totPrice;
+          totTax_ = totTax_ +filteredData[i][0].cityTax;
+        }
         setState({
           ...state,
           bookingListFiltered : filteredData,
           deleteSearchButtonStatus : true,
           date1: start,
-          date2: end
+          date2: end,
+          totEarn : totEarn_,
+          totTaxes : totTax_
         })
       }else{
         filteredData = state.bookingList;
@@ -365,7 +383,8 @@ export default function UserStructure({ route }){
           dateMonth1 : itemStartDate.substring(3,5),
           dateYear1 : itemStartDate.substring(6,10),
           bookingListFiltered:filteredData,
-          deleteSearchButtonStatus: false
+          deleteSearchButtonStatus: false,
+
         })
       }
     }
@@ -554,15 +573,6 @@ export default function UserStructure({ route }){
                   </View>
                   :
                   <View>
-                    { state.statementStatus ?
-                      null :
-                      <View style={styles.mainInfo}>
-                        <View style={{flexDirection:'row', alignItems:'center'}}>
-                          <Text style = {styles.infoLabel}>Guadagni Totali: </Text>
-                          <Text style = {styles.infoText}>{state.totEarn}</Text>
-                        </View>
-                      </View>
-                    }
                     {
                       state.deleteSearchButtonStatus==false ? /* -> se non sono state filtrate le prenotazioni.... */
                         <Text style={styles.filterTitle}>Tutte le prenotazioni: </Text>
@@ -587,13 +597,24 @@ export default function UserStructure({ route }){
                   <View style={styles.mainInfo}>
                     <View style={{flexDirection:'row', alignItems:'center'}}>
                       <Text style = {styles.infoLabel}>Guadagni Totali (rendiconto): </Text>
-                      <Text style = {styles.infoText}>{state.statementEarn}</Text>
+                      <Text style = {styles.infoText}>{state.statementEarn} €</Text>
                     </View>
                     <View style={{flexDirection:'row', alignItems:'center'}}>
                       <Text style = {styles.infoLabel}>Tasse totali (rendiconto): </Text>
-                      <Text style = {styles.infoText}>{state.statementTaxes}</Text>
+                      <Text style = {styles.infoText}>{state.statementTaxes} €</Text>
                     </View>
-                  </View> : null
+                  </View> 
+                  :
+                  <View style={styles.mainInfo}>
+                    <View style={{flexDirection:'row', alignItems:'center'}}>
+                      <Text style = {styles.infoLabel}>Guadagni Totali: </Text>
+                      <Text style = {styles.infoText}>{state.totEarn} €</Text>
+                    </View>
+                    <View style={{flexDirection:'row', alignItems:'center'}}>
+                      <Text style = {styles.infoLabel}>Tasse Totali: </Text>
+                      <Text style = {styles.infoText}>{state.totTaxes} €</Text>
+                    </View>
+                  </View> 
                 }
                 <FlatList
                     data= {state.bookingListFiltered}
