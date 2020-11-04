@@ -62,7 +62,7 @@ export default class BookingStructure extends Component{
   updateState(filterStatus){
     this.setState(filterStatus);
   }
-  //funzione che renderizza i picker item per la sscelta del numero di ospiti
+  //funzione che renderizza i picker item per la scelta del numero di ospiti
   renderGuestsNumber(){
     var num = [];
     if(this.state.beds>0){

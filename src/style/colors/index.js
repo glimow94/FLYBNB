@@ -11,6 +11,7 @@ export default {
     orange2: '#FF4500',
     blue: '#1E90FF',
     red: '#DC143C',
+    yellow: '#FFFF00',
     grey: '#ECECEC',
     black2: '#202020',
     transparent: 'rgba(60,60,60,0.9)',

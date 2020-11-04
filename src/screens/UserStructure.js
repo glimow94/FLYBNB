@@ -11,14 +11,14 @@ import axios from "axios";
 
 var {width} = Dimensions.get('window');
 var height =  width;
-var titleFontSize = 18;
+var titleFontSize = 21;
 
 if(Platform.OS === 'web' || Dimensions.get('window').width > 700){
   width = width*0.6;
   height = height*0.3;
   titleFontSize = 30;
 }else{
-  width = width;
+  width = width*0.9;
   height = height*0.9;
 }
 
@@ -51,7 +51,10 @@ export default function UserStructure({ route }){
     image4,
     requestList,
     guestsList,
-    infoStatus
+    statementStatus,//è true se deve essere mandato il rendiconto
+    statementNumber,//numero di volte in cui l'utente ha mandato il rendiconto per questa struttura
+    deadline,//limite settato a 3 mesi, (= 90 [giorni])
+    startDate, //data in cui è stata creata la struttura
     } = route.params;
     var images = []
     if(image1 != null && image1.length != 0) images.push(image1)
@@ -85,18 +88,23 @@ export default function UserStructure({ route }){
       date2:'',
       startDate: itemStartDate,//data in cui è stata creata la struttura (la useremo come limite inferiore per il filtro delle date)
       deleteSearchButtonStatus: false,
-      maxYear: 2050
+      maxYear: 2050,
+      statementStatus: statementStatus
     })
 
     useEffect(() => {
       /* su android non verrà visualizzata la barra di scrolling per le immagini (si usa il touch) */
       var horizontalScroll_ = true;
+      /* STATI SE DEVE ESSERE MANDATO IL RENDICONTO (cioè se statementStatus = true)*/
+      var infoStatus_ = true,
+          statementStatus_ = false,
+          button1Border_ = colors.secondary,
+          button2Border_ = colors.primary;
       if(Platform.OS == 'android'){
         horizontalScroll_ = false;
       }
       /* Associo ad ogni prenotazione gli ospiti corrispondenti */
       var bookingList = [];
-
       for(var i = 0; i < state.requestList.length ; i++){
         var singleBooking = [],
             guests = [];
@@ -109,44 +117,81 @@ export default function UserStructure({ route }){
         if(guests.length > 0) singleBooking.push(guests);
         bookingList.push(singleBooking);
       }
-      /* CALCOLO DATA INIZIALE PER I FILTRI, sarà startDate (si deve suddividere in giorno mese e anno separatamente) */
-      var day = itemStartDate.substring(0,2),
-          month = itemStartDate.substring(3,5),
-          year = itemStartDate.substring(6,10);
-      console.log(bookingList)
-      /* calcolo il limite di anni massimi selezionabili */
+      /* CALCOLO DATA INIZIALE  E FINALE PER I FILTRI, sarà startDate per entrambe se non deve essere mandato il rendiconto (si deve suddividere in giorno mese e anno separatamente) */
+      var day1 = itemStartDate.substring(0,2),
+          month1 = itemStartDate.substring(3,5),
+          year1 = itemStartDate.substring(6,10),
+          day2 = day1,
+          month2 = month1,
+          year2 = year1,
+          start = '',//data iniziale pre-impostata per il filtro del rendiconto, se non deve essere mandato il rendiconto lasciamo vuoto così vengono visualizzate tutte le prenotazoni
+          end = ''; // data finale per il filtro del rendiconto
+
+      /* calcolo il limite di anni massimi selezionabili nel picker */
       var now = (new Date()).getFullYear(),
           maxYear_ = now+50;
-      
-      /* verifico quale sezione aprire all'apertura fra INFO  e RENDICONTO in base al valore passato nella navigazione */
-      var infoStatus_ = true,
-          statementStatus_ = false,
-          button1Border_ = colors.secondary,
-          button2Border_ = colors.primary;
-      if(!infoStatus){
+
+      /*********SE DEVE ESSERE MANDATO IL RENDICONTO***********/
+      var deadline_ = deadline,
+          start = '',
+          end = '',//date in formato moment.js
+          startDateString = '', //data iniziale pre-impostata per il filtro del rendiconto
+          endDateString = '', // data finale per il filtro del rendiconto
+          dateFormat = 'DD/MM/YYYY',
+          bookingListFiltered_ = bookingList,
+          deleteSearchButtonStatus_ = false;
+      if(statementStatus){
         infoStatus_ = false;
         statementStatus_ = true;
-        button1Border_ = colors.primary,
-        button2Border_ = colors.red
+        button1Border_ = colors.primary;
+        button2Border_ = colors.secondary;
+        /* calcolo data inizio e fine rendiconto */
+        deadline_ = deadline_ * (statementNumber + 1)// 90, 180,270,.....
+        start = moment(startDate,dateFormat).add(deadline_ -90,'days');// data inizio rendiconto (all'inizio è startdate + 0 giorni, al secondo rendiconto sarà startdate + 90 giorni, al terzo rendiconto startDate + 180 ...ecc...ecc..)
+        end= moment(start,dateFormat).add(90,'days');// data fine rendiconto (3 mesi dopo)
+        /* imposto le date dei picker per i filtri del rendiconto */
+        startDateString = start.format(dateFormat);
+        endDateString = end.format(dateFormat);
+        day1 = startDateString.substring(0,2);
+        month1 = startDateString.substring(3,5);
+        year1 = startDateString.substring(6,10);
+        day2 = endDateString.substring(0,2);
+        month2 = endDateString.substring(3,5);
+        year2 = endDateString.substring(6,10);
+        /* CALCOLO BOOKINGLISTFILTERED , ovvero le prenotazioni che verranno visualizzate da mandare come rendiconto degli ultimi 3 mesi */ 
+        var filteredData = [];
+        for(var i = 0; i < bookingList.length ; i++){
+          /* checkIn >= a startdate && checkIn <= endDate*/
+          var bookingCheckIn = moment(bookingList[i][0].checkIn, dateFormat);
+          if( bookingCheckIn >= start && bookingCheckIn <= end){
+            filteredData.push(bookingList[i]);
+          }
+        }
+        bookingListFiltered_ = filteredData;
+        deleteSearchButtonStatus_ = true;
       }
       
       setState({
         ...state,
         bookingList: bookingList,
-        bookingListFiltered : bookingList,
+        bookingListFiltered : bookingListFiltered_,
         horizontalScroll: horizontalScroll_,
-        dateDay1: day,
-        dateMonth1: month,
-        dateYear1: year,
+        /* prima data rendiconto */
+        dateDay1: day1,
+        dateMonth1: month1,
+        dateYear1: year1,
         //seconda data
-        dateDay2: day,
-        dateMonth2: month,
-        dateYear2: year,
+        dateDay2: day2,
+        dateMonth2: month2,
+        dateYear2: year2,
+        date1: startDateString,
+        date2: endDateString,
         maxYear : maxYear_,
         status1 : infoStatus_,
         status2 : statementStatus_,
         button1Border : button1Border_,
-        button2Border : button2Border_
+        button2Border : button2Border_,
+        deleteSearchButtonStatus: deleteSearchButtonStatus_,
       })
     }, [])
 
@@ -286,7 +331,6 @@ export default function UserStructure({ route }){
 
       /* controllo che start sia minore di end */
       if(startDate <= endDate){
-        
         datesFilter(start,end);
       }else{
         alert('Date non valide, assicurati che la data iniziale sia minore della data finale')
@@ -450,13 +494,15 @@ export default function UserStructure({ route }){
         {state.status2 ? 
           <View style={{alignContent:'center',alignItems:'center'}}>
             <View>
-              <Text style={styles.headerTitle}>Resoconto prenotazioni per la struttura "{itemTitle}"</Text>
-              <Text style={styles.headerSubtitle}>(*Richieste accettate)</Text>
+              <Text style={styles.headerTitle}>Archivio prenotazioni della struttura "{itemTitle}"</Text>
             </View>
-            { state.bookingList.length == 0 ?
-              <Text style={styles.headerSubtitle}>Questa struttura non ha ancora ricevuto prenotazioni</Text> : 
+            { state.bookingList.length == 0 && !state.statementStatus ?
+            <View>
+              <Text style={[styles.headerSubtitle,{color: colors.red}]}>Questa struttura non ha ancora ricevuto prenotazioni</Text>
+            </View> : 
               <View style={{flex:1}}>
-                <View style={styles.datesFilterWrapper}>
+                { !state.statementStatus ?
+                  <View style={styles.datesFilterWrapper}>
                   <Text>Filtra prenotazioni dal [gg/mm/aaaa] :</Text>
                   <DatePicker
                     selectedYear={state.dateYear1}
@@ -482,30 +528,66 @@ export default function UserStructure({ route }){
                   <View style={{alignSelf:'center'}}>
                     <Button title='FILTRA' onPress={()=>bookingsFilter()} ></Button>
                   </View>
-                </View>
+                </View> : null
+                }
                 {
-                  state.deleteSearchButtonStatus==false ?
-                    <Text style={styles.filterTitle}>Tutte le prenotazioni: </Text>
-                  : <View>
-                      {
-                        state.bookingListFiltered.length != 0 ?
-                        <Text style={styles.filterTitle}>Penotazioni dal {state.date1} al {state.date2}</Text>
-                          :
-                        <Text style={styles.filterTitle}>Nessuna prenotazione dal {state.date1} al {state.date2}</Text>
-                      }
-                      
-                      <TouchableOpacity style={styles.deleteCurrentSearchButton} onPress={()=>datesFilter('','')}>
-                      <Text style={styles.deleteSearchText} >
-                          Annulla Ricerca
-                      </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity style={styles.deleteCurrentSearchButton} onPress={()=>{console.log(state.bookingListFiltered)}}>
-                      <Text style={styles.deleteSearchText} >
-                          invia rendiconto
-                      </Text>
-                      </TouchableOpacity>
+                  state.statementStatus ? 
+                  <View>
+                    <View style={styles.alertStatementWrapper}>
+                      <View style={styles.alertStatement}>
+                        <Icon
+                          size={15}
+                          name='exclamation-triangle'
+                          type='font-awesome-5'
+                          color={colors.yellow}
+                        />
+                        <Text style={{color: colors.white}}> ATTENZIONE</Text>
+                      </View>
+                      <View style={{margin : 5}}>
+                        <Text style={{fontSize: 18}}>
+                          È obbligatorio inviare il rendiconto trimestrale all'ufficio del turismo, di seguito vengono mostrate le prenotazioni accettate degli ultimi tre mesi
+                        </Text>
+                        <Text style={{fontSize: 18}}>
+                         Cliccando su <Text style={{color: colors.green02}}>Invia Rendiconto</Text> verrà inviato via mail il rendiconto a : <Text style={{fontWeight: 'bold'}}> {itemPlace.substring(itemPlace.lastIndexOf(",")+1,itemPlace.length).toLowerCase()}@turismo.it </Text>
+                        </Text>
+                        <Text style={{fontSize: 18}}>
+                         Se vuoi gestire questa operazione senza il supporto di flyBnb puoi <Text style={{color: colors.red}} onPress={()=>{setState({ ...state,statementStatus: false})}}>Annullare il Rendiconto</Text> 
+                        </Text>
+                      </View>
                     </View>
                     
+                    {
+                      state.bookingListFiltered.length != 0 ?
+                      <Text style={styles.filterTitle}>Rendiconto dal {state.date1} al {state.date2} : </Text>
+                        :
+                      <Text style={styles.filterTitle}>Nessuna prenotazione dal {state.date1} al {state.date2}</Text>
+                    }
+                    <TouchableOpacity style={styles.sendStatementButton} onPress={()=>{console.log(state.bookingListFiltered)}}>
+                            <Text style={styles.sendStatementText} >
+                                invia rendiconto
+                            </Text>
+                    </TouchableOpacity>
+                  </View>
+                  :
+                  <View>
+                    {
+                      state.deleteSearchButtonStatus==false ? /* -> se non sono state filtrate le prenotazioni.... */
+                        <Text style={styles.filterTitle}>Tutte le prenotazioni: </Text>
+                      : <View>
+                          {
+                            state.bookingListFiltered.length != 0 ?
+                            <Text style={styles.filterTitle}>Penotazioni dal {state.date1} al {state.date2}</Text>
+                              :
+                            <Text style={styles.filterTitle}>Nessuna prenotazione dal {state.date1} al {state.date2}</Text>
+                          }
+                          <TouchableOpacity style={styles.deleteCurrentSearchButton} onPress={()=>datesFilter('','')}>
+                            <Text style={styles.deleteSearchText} >
+                                Annulla Ricerca
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                    }
+                  </View>
                 }
                 <FlatList
                     data= {state.bookingListFiltered}
@@ -570,6 +652,7 @@ const styles = StyleSheet.create({
   container:{
     flex:1,
     height:'100%',
+    paddingHorizontal: 5,
     alignContent:'center',
     alignItems:'center',
     backgroundColor: colors.primary,
@@ -729,12 +812,16 @@ const styles = StyleSheet.create({
     fontSize: titleFontSize,
     fontWeight: "bold",
     alignSelf:'center',
+    color:colors.transparent,
     marginHorizontal: 20
   },
   headerSubtitle:{
     alignSelf:'flex-start',
-    color: colors.red,
-    marginHorizontal:20
+    marginHorizontal:20,
+    marginBottom: 10,
+    fontSize: 18,
+    color:colors.transparent,
+    fontWeight: 'bold'
   },
   datesFilterWrapper:{
     marginVertical: 20
@@ -744,7 +831,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 3,
     padding: 10,
-    minWidth: width-5,
+    minWidth: width,
     borderColor: colors.secondary
   },
   checkInOut:{
@@ -790,7 +877,7 @@ const styles = StyleSheet.create({
     alignSelf:'center',   
   },
   filterTitle:{
-    fontSize: titleFontSize,
+    fontSize: titleFontSize-2,
     fontWeight: "bold",
     alignSelf:'flex-start',
     marginHorizontal: 20
@@ -802,4 +889,39 @@ const styles = StyleSheet.create({
     width:100,
     height:20,
   },
+  alertStatementWrapper:{
+    width: width,
+    height: 'auto',
+    borderColor: colors.red,
+    alignSelf:'center',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginVertical: 10
+  },
+  alertStatement:{
+    flexDirection:'row', 
+    alignItems:'center', 
+    alignContent:'center',
+    width: 'auto',
+    alignSelf:'flex-start',
+    backgroundColor: colors.red,
+    borderRadius: 5,
+    padding: 5,
+  },
+  sendStatementButton:{
+    backgroundColor:colors.green02,
+    borderRadius:8,
+    marginLeft: 20,
+    marginVertical: 5,
+    padding: 5,
+    alignSelf:'flex-start'
+  },
+  sendStatementText:{
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: colors.white,
+    position: 'relative',
+    margin:2,
+    alignSelf:'center',
+  }
 });
