@@ -376,7 +376,11 @@ export default function UserStructure({ route }){
         })
       }else{
         filteredData = state.bookingList;
-        console.log(itemStartDate)
+        //calcolo guadagni e tasse
+        for(var i = 0; i < filteredData.length; i++){
+          totEarn_ = totEarn_ + filteredData[i][0].totPrice;
+          totTax_ = totTax_ +filteredData[i][0].cityTax;
+        }
         setState({
           ...state,
           dateDay1 : itemStartDate.substring(0,2),
@@ -384,7 +388,8 @@ export default function UserStructure({ route }){
           dateYear1 : itemStartDate.substring(6,10),
           bookingListFiltered:filteredData,
           deleteSearchButtonStatus: false,
-
+          totEarn: totEarn_,
+          totTaxes: totTax_
         })
       }
     }
