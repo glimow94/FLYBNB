@@ -144,9 +144,9 @@ class StructuresList extends Component {
               })}
               >
                 <ImageBackground source={item.image1 ? {uri: item.image1} : null} style={styles.imageStyle} imageStyle={{opacity:0.35}} > 
-                <Text style={styles.title}>{item.title.substring(item.title.lastIndexOf(",")+1,item.title.length)}</Text>
+                <Text style={styles.title}>{item.title}</Text>
                   <Text style={styles.type}>{item.type}</Text>
-                  <Text style={styles.place}>{item.place}</Text>
+                  <Text style={styles.place}>{item.place.substring(item.place.lastIndexOf(",")+1,item.place.length)}</Text>
                   <View>
                     <Text style={styles.beds}>Posti letto: {item.beds}</Text>
                     <View style={styles.serviceBox}>

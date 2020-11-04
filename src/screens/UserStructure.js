@@ -86,7 +86,8 @@ export default function UserStructure({ route }){
       date2:'',
       startDate: itemStartDate,//data in cui è stata creata la struttura (la useremo come limite inferiore per il filtro delle date)
       deleteSearchButtonStatus: false,
-      maxYear: 2050
+      maxYear: 2050,
+      statementStatus: statementStatus
     })
 
     useEffect(() => {
@@ -188,7 +189,7 @@ export default function UserStructure({ route }){
         status2 : statementStatus_,
         button1Border : button1Border_,
         button2Border : button2Border_,
-        deleteSearchButtonStatus: deleteSearchButtonStatus_
+        deleteSearchButtonStatus: deleteSearchButtonStatus_,
       })
     }, [])
 
@@ -473,13 +474,15 @@ export default function UserStructure({ route }){
         {state.status2 ? 
           <View style={{alignContent:'center',alignItems:'center'}}>
             <View>
-              <Text style={styles.headerTitle}>Resoconto prenotazioni per la struttura "{itemTitle}"</Text>
-              <Text style={styles.headerSubtitle}>(*Richieste accettate)</Text>
+              <Text style={styles.headerTitle}>Archivio prenotazioni della struttura "{itemTitle}"</Text>
             </View>
-            { state.bookingList.length == 0 ?
-              <Text style={styles.headerSubtitle}>Questa struttura non ha ancora ricevuto prenotazioni</Text> : 
+            { state.bookingList.length == 0 && !state.statementStatus ?
+            <View>
+              <Text style={[styles.headerSubtitle,{color: colors.red}]}>Questa struttura non ha ancora ricevuto prenotazioni</Text>
+            </View> : 
               <View style={{flex:1}}>
-                <View style={styles.datesFilterWrapper}>
+                { !state.statementStatus ?
+                  <View style={styles.datesFilterWrapper}>
                   <Text>Filtra prenotazioni dal [gg/mm/aaaa] :</Text>
                   <DatePicker
                     selectedYear={state.dateYear1}
@@ -505,30 +508,66 @@ export default function UserStructure({ route }){
                   <View style={{alignSelf:'center'}}>
                     <Button title='FILTRA' onPress={()=>bookingsFilter()} ></Button>
                   </View>
-                </View>
+                </View> : null
+                }
                 {
-                  state.deleteSearchButtonStatus==false ?
-                    <Text style={styles.filterTitle}>Tutte le prenotazioni: </Text>
-                  : <View>
-                      {
-                        state.bookingListFiltered.length != 0 ?
-                        <Text style={styles.filterTitle}>Penotazioni dal {state.date1} al {state.date2}</Text>
-                          :
-                        <Text style={styles.filterTitle}>Nessuna prenotazione dal {state.date1} al {state.date2}</Text>
-                      }
-                      
-                      <TouchableOpacity style={styles.deleteCurrentSearchButton} onPress={()=>datesFilter('','')}>
-                      <Text style={styles.deleteSearchText} >
-                          Annulla Ricerca
-                      </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity style={styles.deleteCurrentSearchButton} onPress={()=>{console.log(state.bookingListFiltered)}}>
-                      <Text style={styles.deleteSearchText} >
-                          invia rendiconto
-                      </Text>
-                      </TouchableOpacity>
+                  state.statementStatus ? 
+                  <View>
+                    <View style={styles.alertStatementWrapper}>
+                      <View style={styles.alertStatement}>
+                        <Icon
+                          size={15}
+                          name='exclamation-triangle'
+                          type='font-awesome-5'
+                          color={colors.yellow}
+                        />
+                        <Text style={{color: colors.white}}> ATTENZIONE</Text>
+                      </View>
+                      <View style={{margin : 5}}>
+                        <Text style={{fontSize: 18}}>
+                          È obbligatorio inviare il rendiconto trimestrale all'ufficio del turismo, di seguito vengono mostrate le prenotazioni accettate degli ultimi tre mesi
+                        </Text>
+                        <Text style={{fontSize: 18}}>
+                         Cliccando su <Text style={{color: colors.green02}}>Invia Rendiconto</Text> verrà inviato via mail il rendiconto a : <Text style={{fontWeight: 'bold'}}> {itemPlace.substring(itemPlace.lastIndexOf(",")+1,itemPlace.length).toLowerCase()}@turismo.it </Text>
+                        </Text>
+                        <Text style={{fontSize: 18}}>
+                         Se vuoi gestire questa operazione senza il supporto di flyBnb puoi <Text style={{color: colors.red}} onPress={()=>{setState({ ...state,statementStatus: false})}}>Annullare il Rendiconto</Text> 
+                        </Text>
+                      </View>
                     </View>
                     
+                    {
+                      state.bookingListFiltered.length != 0 ?
+                      <Text style={styles.filterTitle}>Rendiconto dal {state.date1} al {state.date2} : </Text>
+                        :
+                      <Text style={styles.filterTitle}>Nessuna prenotazione dal {state.date1} al {state.date2}</Text>
+                    }
+                    <TouchableOpacity style={styles.sendStatementButton} onPress={()=>{console.log(state.bookingListFiltered)}}>
+                            <Text style={styles.sendStatementText} >
+                                invia rendiconto
+                            </Text>
+                    </TouchableOpacity>
+                  </View>
+                  :
+                  <View>
+                    {
+                      state.deleteSearchButtonStatus==false ? /* -> se non sono state filtrate le prenotazioni.... */
+                        <Text style={styles.filterTitle}>Tutte le prenotazioni: </Text>
+                      : <View>
+                          {
+                            state.bookingListFiltered.length != 0 ?
+                            <Text style={styles.filterTitle}>Penotazioni dal {state.date1} al {state.date2}</Text>
+                              :
+                            <Text style={styles.filterTitle}>Nessuna prenotazione dal {state.date1} al {state.date2}</Text>
+                          }
+                          <TouchableOpacity style={styles.deleteCurrentSearchButton} onPress={()=>datesFilter('','')}>
+                            <Text style={styles.deleteSearchText} >
+                                Annulla Ricerca
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
+                    }
+                  </View>
                 }
                 <FlatList
                     data= {state.bookingListFiltered}
@@ -750,12 +789,16 @@ const styles = StyleSheet.create({
     fontSize: titleFontSize,
     fontWeight: "bold",
     alignSelf:'center',
+    color:colors.transparent,
     marginHorizontal: 20
   },
   headerSubtitle:{
     alignSelf:'flex-start',
-    color: colors.red,
-    marginHorizontal:20
+    marginHorizontal:20,
+    marginBottom: 10,
+    fontSize: 18,
+    color:colors.transparent,
+    fontWeight: 'bold'
   },
   datesFilterWrapper:{
     marginVertical: 20
@@ -811,7 +854,7 @@ const styles = StyleSheet.create({
     alignSelf:'center',   
   },
   filterTitle:{
-    fontSize: titleFontSize,
+    fontSize: titleFontSize-4,
     fontWeight: "bold",
     alignSelf:'flex-start',
     marginHorizontal: 20
@@ -823,4 +866,35 @@ const styles = StyleSheet.create({
     width:100,
     height:20,
   },
+  alertStatementWrapper:{
+    borderColor: colors.red,
+    borderWidth: 1,
+    borderRadius: 5,
+    marginVertical: 10
+  },
+  alertStatement:{
+    flexDirection:'row', 
+    alignItems:'center', 
+    alignContent:'center',
+    width: 'auto',
+    alignSelf:'flex-start',
+    backgroundColor: colors.red,
+    borderRadius: 5,
+    padding: 5,
+  },
+  sendStatementButton:{
+    backgroundColor:colors.green02,
+    borderRadius:8,
+    marginLeft: 20,
+    padding: 8,
+    alignSelf:'flex-start'
+  },
+  sendStatementText:{
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: colors.white,
+    position: 'relative',
+    margin:2,
+    alignSelf:'center',
+  }
 });

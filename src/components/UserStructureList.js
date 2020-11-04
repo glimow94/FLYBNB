@@ -86,14 +86,15 @@ class StructuresList extends Component {
       requestList: this.props.requestList,
       bookingGuests: this.props.bookingGuests
      })
-    /* OPERAZIONI PER IL CONTROLLO PERIODICO DEL RENDICONTO */
+    /* OPERAZIONI PER IL CONTROLLO PERIODICO DEL RENDICONTO, CALCOLO DATA ODIERNA IN FORMATO STRINGA DD-MM-YYYY*/
     /* Calcoliamo la data di oggi e la convertiamo nel formato accettabile dalla libreria moment... cioè DD/MM/YYYY */
-    var date = new Date();
+    var date = new Date(2021, 6, 28); //NOTA: infica la data di oggi, per testare il funzionamento del rendiconto cambiarla 
     var date_mod = date.toString().replace("12:00:00 GMT+0200","").slice(4);
     var month_num = this.monthNameToNum(date_mod.substr(0,3));
     var date_mod_format = date_mod.substr(4,2)+"/"+month_num+"/"+date_mod.substr(6,5); //data in formato DD/MonthName/AAAA
     var final_date = date_mod_format.replace(/ /g, '');
     var today = moment(final_date,'DD-MM-YYYY');
+    console.log(today)
     //get current token
     const itemToken = AsyncStorage.getItem('userToken')
     itemToken.then(token => {
@@ -126,6 +127,8 @@ class StructuresList extends Component {
     /* ***********CONTROLLO DEL RENDICONTO***********/ 
     //VEDI COMMENTI A INIZIO PAGINA PER LA SPIEGAZIONE
     //se deve essere mandato vengono modificate le informazioni passate alla navigazione sulla struttura
+    console.log(item.start_date)
+    console.log(this.state.today.format('DD/MM/YYYY'))
     if(this.state.today.diff(moment(item.start_date,'DD-MM-YYYY'), 'days') > this.state.deadline*(item.statement + 1)){
       statementStatus_ = true;
     }
@@ -212,6 +215,7 @@ class StructuresList extends Component {
                 <Text 
                   style={styles.editButton} 
                   onPress={()=>{ 
+                    const { navigation } = this.props;
                     this.props.updateState({status2:false})
                     navigation.navigate('EditStructure',{
                       /* parametri da passare alla schermata successiva */
@@ -286,8 +290,8 @@ const styles = StyleSheet.create({
     textAlign:'center',
     alignSelf:'flex-end',
     margin: 2,
-    backgroundColor: colors.orange2,
-    borderColor: colors.red,
+    backgroundColor: colors.green01,
+    borderColor: colors.green01,
     borderWidth: 1,
     borderRadius: 10
   },
