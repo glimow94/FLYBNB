@@ -868,9 +868,8 @@ const styles = StyleSheet.create({
     height:20,
   },
   alertStatementWrapper:{
-    flex:1,
-    flexWrap: 'wrap',
     width: width,
+    height: 'auto',
     borderColor: colors.red,
     alignSelf:'center',
     borderWidth: 1,
