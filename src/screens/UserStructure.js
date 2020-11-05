@@ -419,6 +419,11 @@ export default function UserStructure({ route }){
        })
        .then(res => {
          console.log(res);
+         setState({
+           ...state,
+           statementStatus: false
+         })
+         alert('rendiconto inviato')
          })
        .catch(function (error) {
          console.log(error);
@@ -436,10 +441,16 @@ export default function UserStructure({ route }){
        })
        .then(res => {
          console.log(res);
+         setState({
+          ...state,
+          statementStatus: false
+          })
+          alert('rendiconto annullato')
          })
        .catch(function (error) {
          console.log(error);
        });
+       
     }
 
     return (
@@ -608,7 +619,7 @@ export default function UserStructure({ route }){
                          Cliccando su <Text style={{color: colors.green02}}>Invia Rendiconto</Text> verrà inviato via mail il rendiconto a : <Text style={{fontWeight: 'bold'}}> {itemPlace.substring(itemPlace.lastIndexOf(",")+1,itemPlace.length).toLowerCase()}@turismo.it </Text>
                         </Text>
                         <Text style={{fontSize: 18}}>
-                         Se vuoi gestire questa operazione senza il supporto di flyBnb puoi <Text style={{color: colors.red}} onPress={()=>{setState({ ...state,statementStatus: false})}}>Annullare il Rendiconto</Text> 
+                         Se vuoi gestire questa operazione senza il supporto di flyBnb puoi <Text style={{color: colors.red}} onPress={()=>{updateStatement()}}>Annullare il Rendiconto</Text> 
                         </Text>
                       </View>
                     </View>
