@@ -118,7 +118,9 @@ class StructuresList extends Component {
         }
       }
     }
-    
+    if(statementStatus_){
+      this.props.updateState({status2:false, status3: true, borderWidth3: 3, borderWidth2: 0})
+    }
     navigation.navigate('UserStructure',{
       /* parametri da passare alla schermata successiva */
       userToken: this.state.userToken,
@@ -150,7 +152,7 @@ class StructuresList extends Component {
       statementStatus: statementStatus_, //se statementStatus = true viene mostrata la pagina del rendiconto pre-impostata per inviarlo all'ufficio del turismo
       statementNumber : item.statement,//numero di volte in cui è stato mandato il rendiconto
       deadline : this.state.deadline,//90 giorni
-      startDate : item.start_date//data in cui è stata creata la struttura
+      startDate : item.start_date,//data in cui è stata creata la struttura
     });
   }
   render(){
