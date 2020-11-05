@@ -28,7 +28,7 @@ export default function UserStructure({ route }){
     userToken,
     itemName,
     itemSurname,
-    itemEmail, 
+    itemEmail,
     itemTitle,
     itemPrice,
     itemID,
@@ -397,13 +397,25 @@ export default function UserStructure({ route }){
     }
 
     const postStatementMail = async ()=> {
-      const url = `http://${host.host}:3055/users/send/emailStatement`;
+      const url = `http://${host.host}:3055/users/send/emailStatement/${itemID}`;
       return axios.post(url, {
          method: 'POST',
          headers: {
            'content-type': 'application/json',
          },
-         booking_list: state.bookingListFiltered
+         statementNumber: parseInt(statementNumber),
+         booking_list: state.bookingListFiltered,
+         totTaxes : state.totTaxes,
+         date1: state.date1,
+         date2: state.date2,
+         structure_id: parseInt(itemID),
+         itemName: itemName,
+         itemSurname: itemSurname,
+         itemEmail: itemEmail,
+         itemPlace: itemPlace,
+         itemStreet: itemStreet,
+         itemNumber: itemNumber,
+         itemPostCode: itemPostCode
        })
        .then(res => {
          console.log(res);
