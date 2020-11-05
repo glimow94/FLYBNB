@@ -425,6 +425,23 @@ export default function UserStructure({ route }){
        });
     }
 
+    const updateStatement = async ()=> {
+      const url = `http://${host.host}:3055/structures/update/statement/${itemID}`;
+      return axios.post(url, {
+         method: 'POST',
+         headers: {
+           'content-type': 'application/json',
+         },
+         statementNumber: parseInt(statementNumber)
+       })
+       .then(res => {
+         console.log(res);
+         })
+       .catch(function (error) {
+         console.log(error);
+       });
+    }
+
     return (
       <View style={styles.container}>
         <Text style={styles.itemTitle}>{itemTitle}</Text>
