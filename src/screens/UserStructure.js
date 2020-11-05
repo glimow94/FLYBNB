@@ -17,8 +17,8 @@ if(Platform.OS === 'web' || Dimensions.get('window').width > 700){
   height = height*0.3;
   titleFontSize = 30;
 }else{
-  width = width*0.9;
-  height = height*0.9;
+  width = width;
+  height = height;
 }
 
 export default function UserStructure({ route }){
@@ -331,8 +331,8 @@ export default function UserStructure({ route }){
     
     /* funzione chiamata alla pressione del tasto 'filtra', fa un controllo sule date seleizonate e dopo richiama datesFilter */
     const bookingsFilter = () =>{
-      var start = dateConverter(new Date(state.dateYear1,state.dateMonth1,state.dateDay1)),
-          end = dateConverter(new Date(state.dateYear2,state.dateMonth2,state.dateDay2)),
+      var start = dateConverter(new Date(state.dateYear1,(parseInt(state.dateMonth1)-1).toString(),state.dateDay1)),
+          end = dateConverter(new Date(state.dateYear2,(parseInt(state.dateMonth2)-1).toString(),state.dateDay2)),
           dateFormat = 'DD-MM-YYYY',
           startDate = moment(start,dateFormat),
           endDate = moment(end,dateFormat);
@@ -612,11 +612,11 @@ export default function UserStructure({ route }){
                   :
                   <View style={styles.mainInfo}>
                     <View style={{flexDirection:'row', alignItems:'center'}}>
-                      <Text style = {styles.infoLabel}>Guadagni Totali: </Text>
+                      <Text style = {styles.infoLabel}>Guadagni : </Text>
                       <Text style = {styles.infoText}>{state.totEarn} €</Text>
                     </View>
                     <View style={{flexDirection:'row', alignItems:'center'}}>
-                      <Text style = {styles.infoLabel}>Tasse Totali: </Text>
+                      <Text style = {styles.infoLabel}>Tasse : </Text>
                       <Text style = {styles.infoText}>{state.totTaxes} €</Text>
                     </View>
                   </View> 

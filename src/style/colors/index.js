@@ -15,5 +15,7 @@ export default {
     grey: '#ECECEC',
     black2: '#202020',
     transparent: 'rgba(60,60,60,0.9)',
-    transparent2: 'rgba(10,206,255,0.05)'
+    transparent2: 'rgba(10,206,255,0.05)',
+    transparent3: 'rgba(255,255,255,0.5)'
+
   };

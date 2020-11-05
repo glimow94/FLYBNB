@@ -56,9 +56,11 @@ export default class DateSelector extends Component {
 
     return (
       <View>
-        <FilterButton text="Struttura" onPress={this.showHide} backgroundColor={colors.primary} borderColor={colors.secondary} ></FilterButton>
+        {
+          this.props.searchBarText ? <FilterButton text="Struttura" onPress={this.showHide} backgroundColor={colors.primary} borderColor={colors.secondary} ></FilterButton> : null
+        }
         {   
-          this.props.status4 ? 
+          this.props.status4 && this.props.searchBarText ? 
           <View style={styles.wrapper}>
             <View style={styles.container}>
                 <Text style={[{width:150},styles.label]}>TIPO</Text>
@@ -107,6 +109,7 @@ const styles = StyleSheet.create({
     container: {
       position:'absolute',
       width:200,
+      height:'auto',
       top:10,
       backgroundColor: colors.transparent,
       borderRadius:20,

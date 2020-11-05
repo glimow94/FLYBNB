@@ -1,12 +1,9 @@
 import React, {Component, useEffect} from 'react';
 import {View, Text, StyleSheet, Button, Image, ScrollView, Dimensions, Platform} from 'react-native';
-
 import colors from '../style/colors';
 import BookingButton from '../components/buttons/Button1'
 import AsyncStorage from '@react-native-community/async-storage';
 import { Icon } from 'react-native-elements';
-
-
 import { useNavigation } from '@react-navigation/native';
 
 import Login from './Login'
@@ -127,33 +124,49 @@ export default function Structure({ route }){
         <ScrollView style={styles.scrollwrapper}>
           <View style={{alignContent:'center',alignItems:'center'}}>
             {
-              images.length > 0 ? 
+              images.length != 0 ? 
               <View style={styles.imageScrollWrapper}>
-                  <ScrollView 
-                    pagingEnabled 
-                    horizontal
-                    onScroll={imageChanged}
-                    scrollEventThrottle={16}
-                    showsHorizontalScrollIndicator={state.horizontalScroll}
-                    style={styles.imageScrollView}>
-                      {
-                        images.map((image,index)=>(
-                          <Image
-                            key={index}
-                            source={{uri: image}}
-                            style={styles.Image}
-                          ></Image>
-                        ))
-                      }
-                  </ScrollView>
-                  <View style={styles.pagination}>
+                <ScrollView 
+                  pagingEnabled 
+                  horizontal
+                  onScroll={imageChanged}
+                  scrollEventThrottle={16}
+                  showsHorizontalScrollIndicator={state.horizontalScroll}
+                  style={styles.imageScrollView}>
                     {
-                      images.map((i,k)=>(
-                        <Text key={k} style={k == state.activeImage? styles.paginActiveDot :styles.paginDot}>⬤</Text>
+                      images.map((image,index)=>(
+                        <Image
+                          key={index}
+                          source={{uri: image}}
+                          style={styles.Image}
+                        ></Image>
                       ))
                     }
-                  </View>
-              </View> : null  
+                </ScrollView>
+                <View style={styles.pagination}>
+                  {
+                    images.map((i,k)=>(
+                      <Text key={k} style={k == state.activeImage? styles.paginActiveDot :styles.paginDot}>⬤</Text>
+                    ))
+                  }
+                </View>
+              </View> : <View style={styles.imageScrollWrapper}>
+                    {
+                  
+                        <Image
+                          key={index}
+                          source={require('../img/logo_white.png')}
+                          style={styles.Image}
+                        ></Image>
+                    }
+                <View style={styles.pagination}>
+                  {
+                    images.map((i,k)=>(
+                      <Text key={k} style={k == state.activeImage? styles.paginActiveDot :styles.paginDot}>⬤</Text>
+                    ))
+                  }
+                </View>
+              </View> 
             }     
             <Text style={styles.itemTitle}>{itemTitle}</Text>
             <View style={styles.structureInfo}>

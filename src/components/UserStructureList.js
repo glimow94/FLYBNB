@@ -70,7 +70,7 @@ class StructuresList extends Component {
      })
     /* OPERAZIONI PER IL CONTROLLO PERIODICO DEL RENDICONTO, CALCOLO DATA ODIERNA IN FORMATO STRINGA DD-MM-YYYY*/
     /* Calcoliamo la data di oggi e la convertiamo nel formato accettabile dalla libreria moment... cioè DD/MM/YYYY */
-    var date = new Date(2021, 6, 28), //NOTA: indica la data di oggi, per testare il funzionamento del rendiconto cambiarla 
+    var date = new Date(), //NOTA: indica la data di oggi, per testare il funzionamento del rendiconto cambiarla 
         dateString = dateConverter(date),
         today = moment(dateString,'DD-MM-YYYY');
     //get current token
@@ -183,7 +183,7 @@ class StructuresList extends Component {
                   style={styles.editButton} 
                   onPress={()=>{ 
                     const { navigation } = this.props;
-                    this.props.updateState({status2:false})
+                    this.props.updateState({status2:false, status3: true, borderWidth3: 3, borderWidth2: 0})
                     navigation.navigate('EditStructure',{
                       /* parametri da passare alla schermata successiva */
                       userToken: this.state.userToken,

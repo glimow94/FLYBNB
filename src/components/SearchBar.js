@@ -78,11 +78,13 @@ export default class SearchBar extends Component{
           <View style={styles.view1}>
       
             <View style={styles.searchBarStyle}>
-            <Image
-                  style={styles.logo}
-                  city={this.state.city}
-                  source={require('../img/logo_mini3.png')}
-              />
+              <View style={styles.logoWrapper}>
+                <Image
+                    style={styles.logo}
+                    city={this.state.city}
+                    source={require('../img/logo_mini3.png')}
+                />
+              </View>
               <TextInput 
                   underlineColorAndroid="transparent"
                   placeholder={'es. "Sicilia", "Palermo" , "Casa di Mario"'}
@@ -113,26 +115,27 @@ const styles = StyleSheet.create({
       flexDirection: "row",
     }, 
     searchBarStyle: {
-        flexDirection:'row',
-        backgroundColor: colors.white,
-        height: height,
-        borderRadius: 50,
+      flexDirection:'row',
+      backgroundColor: colors.white,
+      height: height,
+      borderRadius: 50,
     },
     iconstyle: {
-        marginRight: 10,
-        color:colors.white
+      marginRight: 10,
+      color:colors.white
     },
 
     inputStyle:{
-        fontWeight: "400",
-        fontSize: fontSize, 
-        borderWidth:1,
-        borderColor: colors.secondary,
-        borderRightWidth:0,
-        width: width,
-        height:height,
-        paddingLeft:5,
-        backgroundColor: colors.white2,
+      fontWeight: "400",
+      fontSize: fontSize, 
+      borderWidth:1,
+      borderColor: colors.secondary,
+      borderRightWidth:0,
+      borderLeftWidth:0,
+      width: width,
+      height:height,
+      paddingLeft:5,
+      backgroundColor: colors.primary,
     },
 
     searchButton:{
@@ -151,10 +154,18 @@ const styles = StyleSheet.create({
     buttonText:{
       fontSize:10
     },
+    logoWrapper:{
+      borderWidth:1,
+      borderColor: colors.secondary,
+      borderRightWidth:0,
+      width: 70,
+      backgroundColor: colors.primary,
+      height: height
+    },
     logo:{
-      width: 50,
-      height: height,
-      marginRight: 5,
+      width: 45,
+      height: height-5,
+      marginRight: 18,
       alignSelf: logoAlign
     },
   });
