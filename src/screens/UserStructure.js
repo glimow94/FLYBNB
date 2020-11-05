@@ -7,6 +7,8 @@ import MenuButton from '../components/buttons/Button1';
 import moment from "moment";
 import DatePicker from '../components/BirthdayPicker';
 import dateConverter from '../components/dateConverter';
+import host from '../configHost'
+import axios from "axios";
 
 var {width} = Dimensions.get('window');
 var height =  width;
@@ -588,7 +590,13 @@ export default function UserStructure({ route }){
                         :
                       <Text style={styles.filterTitle}>Nessuna prenotazione dal {state.date1} al {state.date2}</Text>
                     }
-                    <TouchableOpacity style={styles.sendStatementButton} onPress={()=>{console.log(state.bookingListFiltered)}}>
+                    <TouchableOpacity style={styles.sendStatementButton} onPress={()=>{postStatementMail()
+                    .then(res => {
+                        setState({
+                        ...state,
+                        statementStatus: false
+                      })
+                    })}}>
                             <Text style={styles.sendStatementText} >
                                 invia rendiconto
                             </Text>
@@ -687,8 +695,6 @@ export default function UserStructure({ route }){
                           </View>
                       </View>}
                 />
-
-                <Button title={'INVIA RENDICONTO'} onPress = {()=> postStatementMail()} color={colors.green02}></Button>
               </View>
             }
             </View> : null
