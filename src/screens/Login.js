@@ -26,25 +26,23 @@ const Login = ()=>{
             passWarning_ = false,
             emailBorderColor_ = colors.secondary,
             passwBorderColor_ = colors.secondary;
-        if((!data.email || data.email.trim().length == 0) ){
-            
+        if(data.email.trim().length == 0){
             emailWarning_ = true;
             emailBorderColor_ = colors.red;
         
         }
-        if((!data.password || data.password.trim().length == 0) ){
-            
+        if(data.password.trim().length == 0){
             passWarning_ = true,
             passwBorderColor_ = colors.red
-        
         }
         setData({
+            ...data,
             emailWarning : emailWarning_,
             passWarning : passWarning_,
             emailBorderColor: emailBorderColor_,
             passwBorderColor: passwBorderColor_
         })
-        if((data.email && data.email.trim().length != 0) && ((data.password && data.password.trim().length != 0)) ){
+        if(data.email.trim().length != 0  && data.password.trim().length !=0  ){
             signIn(email,password)  
         }
 

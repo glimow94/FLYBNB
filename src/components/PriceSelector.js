@@ -11,7 +11,7 @@ export default class PriceSelector extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      buttonText: 'Prezzo',
+      buttonText: this.props.price,
     };
   }
 //callback per comunicare con gli altri pulsanti in modo da chiuderli una volta aperto questo
@@ -68,9 +68,11 @@ export default class PriceSelector extends Component {
     
     return (
       <View>
-       <PriceButton text={this.state.buttonText} onPress={this.showHide} backgroundColor={colors.primary} borderColor={colors.secondary}></PriceButton>
+        {
+          this.props.searchBarText ? <PriceButton text={this.state.buttonText} onPress={this.showHide} backgroundColor={colors.primary} borderColor={colors.secondary}></PriceButton>: null
+        }
         {   
-          this.props.status2 ? 
+          this.props.status2 && this.props.searchBarText ? 
           <View style={styles.wrapper}>
             <View style={styles.container}>
                 <Text style={[{width:150},styles.label]}>PREZZO MAX.</Text>

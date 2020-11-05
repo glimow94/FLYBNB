@@ -98,75 +98,76 @@ class Home extends Component{
                     beds={this.state.beds}
                     structuresDATA = {this.state.structuresDATA}
                     searchBarText={this.state.searchBarText}
-                ></StructuresList> : null
+                  ></StructuresList> 
+                : 
+                  <View style={styles.homeScreen}>
+                    <Text style={styles.homeScreenText1}>Benvenuto su FlyBNB</Text>
+                    <Text style={styles.homeScreenText2}>Trova l'alloggio perfetto per la tua vacanza,</Text>
+                    <Text style={styles.homeScreenText2}>Scegli fra i nostri BnB e le nostre Case Vacanze sparse in tutta Italia.</Text>
+                  </View>
               }
             </View>
-            <View style={styles.headerWrapper}>
-              <View style={{alignContent:'center',alignItems:'center'}}>
-                {
-                  Platform.OS == 'web' && Dimensions.get('window').width > 700 ? 
-                  <Text style={styles.titleStyle}>Dove vuoi andare?</Text>
-                    : 
-                  <Text style={styles.titleStyle}>Dove vuoi andare?</Text>
-                }
-                <View style={styles.searchHeader}>
-
-                    <SearchBar
-                        updateState={this.updateState.bind(this)}
-                    ></SearchBar>
-                    {this.state.searchBarText.length == 0 ? <Text style={styles.infoText}>Seleziona un luogo o cerca una struttura</Text>
-                      :
-                      <View style={{flexDirection:'row', alignItems:'center',alignSelf:'center',alignContent:'center'}}>
-                        <Text style={styles.infoText}>Ricerca per "{this.state.searchBarText}"</Text>
-                        <TouchableOpacity 
-                          style={styles.deleteCurrentSearchButton}
-                          onPress={()=>this.setState({searchBarText:'', price:'Prezzo',kitchen: false,fullBoard: false,airConditioner:false,wifi:false,parking:false,type:'Qualsiasi',beds:0})}
-                        >
-                          <Text style={styles.deleteSearchText}>Annulla Ricerca</Text>
-                      </TouchableOpacity>
-                      </View>
-                    }
-
+            <View style={[this.state.searchBarText.trim().length != 0 ? {paddingBottom:50} : null, styles.headerWrapper]}>
+              {
+                Platform.OS == 'web' && Dimensions.get('window').width > 700 ? 
+                <Text style={styles.titleStyle}>Dove vuoi andare?</Text>
+                  : 
+                <Text style={styles.titleStyle}>Dove vuoi andare?</Text>
+              }
+              <View style={styles.searchHeader}>
+                  <SearchBar
+                      updateState={this.updateState.bind(this)}
+                  ></SearchBar>
+              {
+                this.state.searchBarText.length == 0 ? <Text style={styles.infoText}>Cerca un Luogo o una Struttura</Text>
+                :
+                <View style={{flexDirection:'row', alignItems:'center',alignSelf:'center',alignContent:'center'}}>
+                  <Text style={styles.infoText}>Ricerca per "{this.state.searchBarText}"</Text>
+                  <TouchableOpacity 
+                    style={styles.deleteCurrentSearchButton}
+                    onPress={()=>this.setState({ price:'Prezzo',kitchen: false,fullBoard: false,airConditioner:false,wifi:false,parking:false,type:'Qualsiasi',beds:0,searchBarText:'',})}
+                  >
+                    <Text style={styles.deleteSearchText}>Annulla Ricerca</Text>
+                </TouchableOpacity>
                 </View>
-                
-                <View style={styles.buttonGroup}>
-                  <TypeSelector
-                    updateState={this.updateState.bind(this)} 
-                    type={this.state.type}
-                    beds={this.state.beds}
-                    status1={this.state.status1}
-                    status2={this.state.status2}
-                    status3={this.state.status3}
-                    status4={this.state.status4}
-                    city={this.state.city}
-                    searchBarText={this.state.searchBarText}
-                  ></TypeSelector>
-                  <PriceSelector
-                    updateState={this.updateState.bind(this)}
-                    price={this.state.price}
-                    status1={this.state.status1}
-                    status2={this.state.status2}
-                    status3={this.state.status3}
-                    status4={this.state.status4}
-                    city={this.state.city}
-                    searchBarText={this.state.searchBarText}
-                  ></PriceSelector>
-                  <FilterSelector 
-                    updateState={this.updateState.bind(this)} 
-                    kitchen={this.state.kitchen}
-                    fullBoard={this.state.fullBoard}
-                    airConditioner={this.state.airConditioner}
-                    wifi={this.state.wifi}
-                    parking={this.state.parking}
-                    status1={this.state.status1}
-                    status2={this.state.status2}
-                    status3={this.state.status3}
-                    status4={this.state.status4}
-                    city={this.state.city}
-                    searchBarText={this.state.searchBarText}
-                  ></FilterSelector>
-                </View>
-              </View>
+              }
+            </View>
+            </View>
+            <View style={styles.buttonGroup}>
+              <TypeSelector
+                updateState={this.updateState.bind(this)} 
+                type={this.state.type}
+                beds={this.state.beds}
+                status1={this.state.status1}
+                status2={this.state.status2}
+                status3={this.state.status3}
+                status4={this.state.status4}
+                city={this.state.city}
+                searchBarText={this.state.searchBarText}
+              ></TypeSelector>
+              <PriceSelector
+                updateState={this.updateState.bind(this)}
+                price={this.state.price}
+                status1={this.state.status1}
+                status2={this.state.status2}
+                status3={this.state.status3}
+                status4={this.state.status4}
+                searchBarText={this.state.searchBarText}
+              ></PriceSelector>
+              <FilterSelector 
+                updateState={this.updateState.bind(this)} 
+                kitchen={this.state.kitchen}
+                fullBoard={this.state.fullBoard}
+                airConditioner={this.state.airConditioner}
+                wifi={this.state.wifi}
+                parking={this.state.parking}
+                status1={this.state.status1}
+                status2={this.state.status2}
+                status3={this.state.status3}
+                status4={this.state.status4}
+                city={this.state.city}
+                searchBarText={this.state.searchBarText}
+              ></FilterSelector>
             </View>
           </ImageBackground>
     )
@@ -200,12 +201,16 @@ const styles = StyleSheet.create({
       flexDirection: "row",
       justifyContent:'center',
       alignContent:'center',
+      position:'absolute',
       alignSelf:'center',
+      marginTop: 145,
       margin:4
     },
     headerWrapper:{
       position:'absolute',
       alignSelf:'center',
+      alignContent:'center',
+      alignItems:'center',
       width:'100%',
       backgroundColor: colors.primaryTransparent,
       borderBottomWidth:3,
@@ -240,6 +245,26 @@ const styles = StyleSheet.create({
       marginLeft: 5,
       width:100,
       height:20,
+    },
+    homeScreen:{
+      padding: 20,
+      margin:10,
+      backgroundColor: colors.transparent3,
+      borderRadius: 20,
+      width: '90%',
+      paddingVertical: 50
+    },
+    homeScreenText1:{
+      fontWeight: 'bold',
+      color: colors.black,
+      fontSize: 30,
+      marginBottom: 50
+    },
+    homeScreenText2:{
+      fontWeight: 'bold',
+      color: colors.transparent,
+      fontSize: 22,
+      marginVertical: 10
     },
     
 });

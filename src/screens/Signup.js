@@ -7,15 +7,26 @@ import { UserContext } from "../components/context";
 import db from '../components/database_region_city';
 
 /* valori responsive per il picker della città (Residente a..) */
-var height = 40;
-var width = 200;
-var position = 'relative';
-var bottom = 0;
+var {width} = Dimensions.get('window');
+var height =  width;
+
+
+var pickerHeight= 40;
+var pickerWidth = 200;
+var pickerPosition = 'relative';
+var pickerBottom = 0;
+var addressInputWidth = 400;
 if( Platform.OS === 'android' || Dimensions.get('window').width < 700){
-    height=40;
-    width=150;
-    position='relative';
-    bottom=10;
+    pickerHeight=40;
+    pickerWidth=150;
+    pickerPosition='relative';
+    pickerBottom=10;
+    width = width;
+    height = height*0.9;
+    addressInputWidth = width*0.8
+}else{
+    width = width*0.6;
+    height = height*0.3;
 }
 //pagina di registrazione utente
 const Signup = ({navigation})=>{
@@ -267,7 +278,7 @@ const Signup = ({navigation})=>{
     }
     return (
         <View style={styles.wrapper}>
-            <Text style={styles.signupHeader}>Registrati per usufruire di tutte le funzionalità di flyBNB</Text>
+            <Text style={styles.signupHeader}>Registrati per accedere a tutte le funzionalità di flyBNB</Text>
             <ScrollView style={styles.scrollViewWrapper}>
 
                 <View style={styles.addressForm}>
@@ -434,7 +445,7 @@ const Signup = ({navigation})=>{
                         <Text style={styles.label}>INDIRIZZO</Text>
                         <TextInput
                             autoCorrect={false}
-                            style = {[{borderColor: newUserData.addressColor},styles.inputField]}
+                            style = {[{borderColor: newUserData.addressColor},{width: addressInputWidth},styles.inputField]}
                             onChangeText={(val) => changeAddress(val)}
                         ></TextInput>
                         {   newUserData.addressAlert==true ? 
@@ -446,7 +457,7 @@ const Signup = ({navigation})=>{
                         <Text style={styles.label}>INDIRIZZO E-MAIL</Text>
                         <TextInput
                             autoCorrect={false}
-                            style = {[{borderColor: newUserData.emailColor},styles.inputField]}
+                            style = {[{borderColor: newUserData.emailColor},{width: addressInputWidth},styles.inputField]}
                             onChangeText={(val) => changeEmail(val)}
                         ></TextInput>
                         {   newUserData.emailAlert==true ? 
@@ -496,7 +507,7 @@ const Signup = ({navigation})=>{
                         backgroundColor={colors.primary}
                         borderColor={colors.secondary}
                     ></NextButton>
-            </View>
+                </View>
             </ScrollView>
             
         </View>
@@ -505,14 +516,13 @@ const Signup = ({navigation})=>{
 const styles = StyleSheet.create({
     wrapper: {
         flex:1,
-        display: "flex",
         alignContent:'center',
         alignItems:'center',
         backgroundColor: colors.primary
     },
     scrollViewWrapper: {
-        margin: 10,
-        flex: 1
+        flex: 1,
+        alignSelf:'center'
     },
     signupHeader: {
         fontSize: 22,
@@ -599,11 +609,10 @@ const styles = StyleSheet.create({
         alignSelf:'center'
     },
     cityPickerStyle:{
-        height: height,
-        width:width,
-        position:position,
-        bottom:bottom,
+        height: pickerHeight,
+        width: pickerWidth,
+        position: pickerPosition,
+        bottom: pickerBottom,
     }
-
 });
 export default Signup

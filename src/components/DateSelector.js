@@ -212,7 +212,6 @@ const styles = StyleSheet.create({
     alignContent:'center',
     padding:20,
     bottom: 100
-
   },
   checkInOutText:{
     position: 'relative',

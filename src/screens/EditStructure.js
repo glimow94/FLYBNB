@@ -12,7 +12,7 @@ import host from '../configHost'
 let {imageDim} = 0;
 var {width} = Dimensions.get('window');
 var height = Dimensions.get('window').height;
-if(Platform.OS === 'web'){
+if(Platform.OS === 'web' && Dimensions.get('window').width > 700){
     imageDim = 100;
     width= width *0.5;
     height= height*0.6;

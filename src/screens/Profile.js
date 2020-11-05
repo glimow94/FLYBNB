@@ -210,7 +210,7 @@ static contextType = UserContext
       });
   };
   navigateToAddStructure(){
-    this.setState({status2:false})
+    this.setState({status2:false, borderWidth2: 0, status3: true, borderWidth3: 3})
     this.props.navigation.navigate('AddStructure',{userToken: this.state.userToken})
   }
   render(){

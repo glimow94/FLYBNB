@@ -56,9 +56,11 @@ export default class DateSelector extends Component {
 
     return (
       <View>
-       <FilterButton text="Servizi" onPress={this.showHide} backgroundColor={colors.primary} borderColor={colors.secondary} ></FilterButton>
+        {
+          this.props.searchBarText ? <FilterButton text="Servizi" onPress={this.showHide} backgroundColor={colors.primary} borderColor={colors.secondary} ></FilterButton>: null
+        }
         {   
-          this.props.status3 ? 
+          this.props.status3 && this.props.searchBarText ? 
           <View style={styles.wrapper}>
             <View style={styles.container}>
                 <CheckBox
@@ -69,8 +71,7 @@ export default class DateSelector extends Component {
                     checked={this.props.fullBoard}
                     onPress={()=>{
                         this.props.fullBoard==false ? this.updateState({fullBoard: true}) : this.updateState({fullBoard: false})
-                     }}
-                    
+                     }}    
                 />
                 <CheckBox
                     style={styles.checkBox}
