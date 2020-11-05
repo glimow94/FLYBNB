@@ -7,6 +7,8 @@ import MenuButton from '../components/buttons/Button1';
 import moment from "moment";
 import DatePicker from '../components/BirthdayPicker';
 import dateConverter from '../components/dateConverter';
+import host from '../configHost'
+import axios from "axios";
 
 var {width} = Dimensions.get('window');
 var height =  width;
@@ -393,6 +395,24 @@ export default function UserStructure({ route }){
         })
       }
     }
+
+    const postStatementMail = async ()=> {
+      const url = `http://${host.host}:3055/users/send/emailStatement`;
+      return axios.post(url, {
+         method: 'POST',
+         headers: {
+           'content-type': 'application/json',
+         },
+         booking_list: state.bookingListFiltered
+       })
+       .then(res => {
+         console.log(res);
+         })
+       .catch(function (error) {
+         console.log(error);
+       });
+    }
+
     return (
       <View style={styles.container}>
         <Text style={styles.itemTitle}>{itemTitle}</Text>
@@ -570,7 +590,13 @@ export default function UserStructure({ route }){
                         :
                       <Text style={styles.filterTitle}>Nessuna prenotazione dal {state.date1} al {state.date2}</Text>
                     }
-                    <TouchableOpacity style={styles.sendStatementButton} onPress={()=>{console.log(state.bookingListFiltered)}}>
+                    <TouchableOpacity style={styles.sendStatementButton} onPress={()=>{postStatementMail()
+                    .then(res => {
+                        setState({
+                        ...state,
+                        statementStatus: false
+                      })
+                    })}}>
                             <Text style={styles.sendStatementText} >
                                 invia rendiconto
                             </Text>
