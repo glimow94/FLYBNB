@@ -408,14 +408,7 @@ export default function UserStructure({ route }){
          totTaxes : state.totTaxes,
          date1: state.date1,
          date2: state.date2,
-         structure_id: parseInt(itemID),
-         itemName: itemName,
-         itemSurname: itemSurname,
-         itemEmail: itemEmail,
-         itemPlace: itemPlace,
-         itemStreet: itemStreet,
-         itemNumber: itemNumber,
-         itemPostCode: itemPostCode
+         structure_id: parseInt(itemID)
        })
        .then(res => {
          console.log(res);
