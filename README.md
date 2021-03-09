@@ -53,7 +53,7 @@ Guida per eseguire l'applicativo:
 
 
 
-# [1] VERIFICA EMAIL INVIATE DAL SISTEMA
+# VERIFICA EMAIL INVIATE DAL SISTEMA [1]
 
 1. accedi a: infomailer210@gmail.com
 2. password: qwerty123,.-
