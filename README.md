@@ -1,4 +1,10 @@
-# FLYBNB
+# FLYBNB 
+
+>react-native-cli: 2.0.1
+
+>react-native: 0.61.4
+
+
 App di prenotazione camere web/mobile
 
 Guida per eseguire l'applicativo:
