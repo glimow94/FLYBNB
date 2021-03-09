@@ -3,7 +3,7 @@ App di prenotazione camere web/mobile
 
 Guida per eseguire l'applicativo:
 
-BACK-END
+# BACK-END
 
 1. Accedere a MySQL con phpMyAdmin
 2. creare nuovo database con nome 'flybnb' e codifica caratteri 'utf8mb4_general_ci'
@@ -14,7 +14,7 @@ BACK-END
  	npm install
 	npm start
 
-FRONT-END
+# FRONT-END
 
 1. Assicurarsi di essere connessi ad una rete
 2. Aprire il terminale ed eseguire il comando 'ipconfig' per ottenere il proprio indirizzo IPV4
@@ -25,12 +25,39 @@ FRONT-END
 	expo start --web (per la vista Desktop/Web)
 	expo  start --android (per la vista app Android)
 
-VERIFICA EMAIL INVIATE DAL SISTEMA
+# FEATURES DEL SISTEMA
+
+- Il software permette all’utente di visualizzare tutti gli alloggi di un determinato luogo o corrispondenti ai criteri di ricerca
+
+- L’utente può selezionare il Luogo in cui intende alloggiare, filtrando i risultati in base al tipo di struttura (b&b o Casa Vacanze), posti letto, prezzo massimo, servizi generali (aria condizionata, parcheggio,pensione completa,cucina,wifi)
+
+- il sistema gestisce la registrazione e l'autenticazione degli utenti
+
+- l’utente non registrato/non loggato può  visualizzare le strutture presenti nel sistema, tuttavia non può effettuarne la prenotazione 
+
+- Il sistema gestisce le date di checkin e checkout che l'utente intende prenotare, rendendo disponibili solo le date che non sono state prenotate da nessun altro utente. Inoltre è stato imposto un limite di 28 notti annuali per la prenotazione di una stessa struttura.
+
+- Il sistema gestisce attraverso uno scambio di email le prenotazioni delle strutture* 
+
+- il sistema gestisce gli ospiti selezionati dall'utente attraverso documenti d'identità e dati anagrafici
+
+- l’utente può visualizzare tutte le prenotazioni effettuate e controllare se sono state rifiutate,accettate o se sono in attesa di approvazione attraverso la propria area personale
+
+- l’utente può diventare Host aggiungendo una struttura nel proprio profilo personale, il numero di strutture è illimitato.
+- 
+- Per ogni struttura vengono registrate tutte le prenotazioni effettuate ordinate in base alla data di pernottamento
+
+- l’utente Host può gestire e controllare le richieste di prenotazione ricevute nelle proprie strutture ed eventualmente rifiutarle o accettarle
+
+
+
+# VERIFICA EMAIL INVIATE DAL SISTEMA*
+
 1. accedi a: infomailer210@gmail.com
 2. password: qwerty123,.-
 3. Accedere e controllare la sezione email inviate
 	
-ACCESSO UTENTI TEST
+# ACCESSO UTENTI TEST
 
 1. USERNAME: ADMIN@ADMIN.COM    PASSWORD: Admin123
 2. USERNAME: TEST@TEST.COM  PASSWORD: Test123
