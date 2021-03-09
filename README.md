@@ -37,21 +37,23 @@ Guida per eseguire l'applicativo:
 
 - Il sistema gestisce le date di checkin e checkout che l'utente intende prenotare, rendendo disponibili solo le date che non sono state prenotate da nessun altro utente. Inoltre è stato imposto un limite di 28 notti annuali per la prenotazione di una stessa struttura.
 
-- Il sistema gestisce attraverso uno scambio di email le prenotazioni delle strutture* 
+- Il sistema gestisce attraverso uno scambio di email le prenotazioni delle strutture*[1]
 
 - il sistema gestisce gli ospiti selezionati dall'utente attraverso documenti d'identità e dati anagrafici
 
 - l’utente può visualizzare tutte le prenotazioni effettuate e controllare se sono state rifiutate,accettate o se sono in attesa di approvazione attraverso la propria area personale
 
 - l’utente può diventare Host aggiungendo una struttura nel proprio profilo personale, il numero di strutture è illimitato.
-- 
+
+- Per ogni struttura è necessario inviare un rendiconto delle prenotazioni ogni 3 mesi all'ufficio del turismo, il sistema gestisce questa funzionalità *[2]
+
 - Per ogni struttura vengono registrate tutte le prenotazioni effettuate ordinate in base alla data di pernottamento
 
 - l’utente Host può gestire e controllare le richieste di prenotazione ricevute nelle proprie strutture ed eventualmente rifiutarle o accettarle
 
 
 
-# VERIFICA EMAIL INVIATE DAL SISTEMA*
+# [1] VERIFICA EMAIL INVIATE DAL SISTEMA
 
 1. accedi a: infomailer210@gmail.com
 2. password: qwerty123,.-
@@ -64,7 +66,7 @@ Guida per eseguire l'applicativo:
 
 NOTA:
 
--Per testare il funzionamento del rendiconto cambiare la data alla riga 73 del componente UserStructureList 
+[2]- Per testare il funzionamento del rendiconto cambiare la data alla riga 73 del componente UserStructureList 
 	ESEMPIO: new Date(2021,4,11) per avere come data odierna l' 11 marzo 2021
 
 -Per testare ll'invio dei documenti inserire immagini di pochi kilobyte
