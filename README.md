@@ -11,8 +11,9 @@ Guida per eseguire l'applicativo:
 4. Selezionare 'scegli file' e caricare il file flybnb.sql presente nella cartella "database" , quindi cliccare in basso 'Esegui'
 5. Entrare nel file backend\db\config.js e inserire in 'user' e 'password' le proprie credenziali MySQL e salvare le modifiche
 6. Da terminale, entrare nella cartella "backend/" ed eseguire i seguenti comandi:
- 	npm install
-	npm start
+> npm install
+
+> npm start
 
 # FRONT-END
 
@@ -21,9 +22,14 @@ Guida per eseguire l'applicativo:
 3. Aprire il file flybnb\src\configHost.js e incollare in 'host' l'indirizzo locale IPV4
 4. Aprire ed Accendere un Emulatore Android oppure scaricare in uno Smartphone l'app "expo" e Scannarizzare il barcode restituito da expo start --android
 5. Apri il terminale, entra nella cartella /flybnb/ ed esegui i seguenti comandi: 
-npm install 
-expo start --web (per la vista Desktop/Web)
-expo  start --android (per la vista app Android)
+
+vista desktop:
+
+> expo start --web 
+
+vista android:
+
+>expo  start --android (per la vista app Android)
 
 
 
