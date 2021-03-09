@@ -66,9 +66,10 @@ Guida per eseguire l'applicativo:
 
 NOTA:
 
-[2]- Per testare il funzionamento del rendiconto cambiare la data alla riga 73 del componente UserStructureList 
+# [2] 
+Per testare il funzionamento del rendiconto cambiare la data alla riga 73 del componente UserStructureList 
 	ESEMPIO: new Date(2021,4,11) per avere come data odierna l' 11 marzo 2021
 
--Per testare ll'invio dei documenti inserire immagini di pochi kilobyte
+
 
 
