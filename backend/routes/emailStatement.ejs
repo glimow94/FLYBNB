@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <p>Dear Ufficio del Turismo di <%= city %>,</p>
+        <b>Di seguito il RENDICONTO del PROPRIETARIO <%= ownerInfo.name %> <%= ownerInfo.surname %> <%= ownerInfo.email %></b><br/>
+        <b>per la STRUTTURA : <%= ownerInfo.title %> <%= ownerInfo.type %></b>
+        <b>                   <%= ownerInfo.street %> <%= ownerInfo.place %> <%= ownerInfo.post_code %> NUMERO <%= ownerInfo.number %></b>
+        <br/><b>RENDICONTO DA <%= date1 %> A <%= date2 %>: </b>
+        <% if(length == 0) { %>
+            <br/><br/><b>NESSUNA PRENOTAZIONE EFFETTUATA PER QUESTA STRUTTURA IN QUESTO PERIODO</b>
+        <% }%>
+        <% if(length != 0) { %>
+            <b>NUMERO DI PRENOTAZIONI : <%= length %> </b>
+            <% item.forEach(function(element) { %>
+                <ul>
+                    <br/>
+                    <li><b>CHECK-IN: <%= element[0].checkIn %> CHECK-OUT: <%= element[0].checkOut %></b></li>
+                    <li><b>CLIENTE: <%= element[0].name %> <%= element[0].surname %> <%= element[0].email %></b></li>
+                    <li><b>NUMERO DI OSPITI : <%= element[1].length %> </b>
+                    <li><b>DATI ANAGRAFICI DEGLI OSPITI : </b>
+                        <ul>
+                            <% element[1].forEach(function(guest) { %>
+                                <li><b><%= guest.name %> <%= guest.surname%> DATA DI NASCITA: <%= guest.date%></b></li>
+                            <% }); %>
+                        </ul>
+                    </li>
+                    <br/><li><b>TASSA DI SOGGIORNO: <%= element[0].cityTax %> €</b></li>
+                    <li><b>PAGAMENTO EFFETTUATO: <%= element[0].totPrice %> €</b></li>
+                </ul>
+            <% }); %>
+            
+            <br/><li><b>TOTALI TASSE DI SOGGIORNO PAGATE : <%= totTaxes %> €</b></li>
+        <% }%>
+
+        <br/><br/>
+        Thanks and regards,
+        <br/>FlyBnB
+    </body>
+</html>

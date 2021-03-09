@@ -84,7 +84,7 @@ export default class StructuresList extends Component {
                     {
                       item.request== 0 ?
                       <View>
-                        { moment(dateConverter(new Date(item.checkIn.substring(6,10),(parseInt(item.checkIn.substring(3,5))-1).toString(),item.checkIn.substring(0,2))),'DD-MM-YYYY') > this.state.today ?
+                        { moment(dateConverter(new Date(item.checkIn.substring(6,10),(parseInt(item.checkIn.substring(3,5))-1).toString(),item.checkIn.substring(0,2))),'DD-MM-YYYY') >= this.state.today ?
                           <Text style={styles.requestWaiting}>In attesa di approvazione</Text> 
                             :
                           <Text style={styles.requestDontApproved}>Scaduta e Rimborsata</Text> 

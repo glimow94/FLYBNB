@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <p>Dear users,</p>
+        <b>IL PROPRIETARIO : <%= ownerInfo.name %> <%= ownerInfo.surname %> <%= ownerInfo.email %></b><br/>
+        <b>HA RIFIUTATO LA PRENOTAZIONE DEL CLIENTE : <%= clientInfo.name %> <%= clientInfo.surname %> <%= clientInfo.email %></b>
+        <b>PRESSO LA STRUTTURA :</b>
+        <ul>
+            <li><b>NOME: <%= ownerInfo.title %> <%= ownerInfo.type %></b></li>
+            <li><b>INDIRIZZO: <%= ownerInfo.street %> <%= ownerInfo.place %>  <%= ownerInfo.number %></b></li>
+            <li><b>PROPRIETARIO: <%= ownerInfo.name %> <%= ownerInfo.surname %> <%= ownerInfo.email %></b></li>
+        </ul>
+        <br/><b>BOOKING INFO : </b>
+        <ul>
+            <li><b>STATO: RICHIESTA RIFIUTATA</b></li>
+            <li><b>CHECK-IN: <%= ownerInfo.checkIn %> CHECK-OUT: <%= ownerInfo.checkOut %></b></li>
+            <li><b>TASSA DI SOGGIORNO: <%= ownerInfo.cityTax %> €</b></li>
+            <li><b>RIMBORSO EFFETTUATO: <%= ownerInfo.totPrice %> €</b></li>
+        </ul>
+
+        <br/><br/>
+        Thanks and regards,
+        <br/>FlyBnB
+    </body>
+</html>
