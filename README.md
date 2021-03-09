@@ -21,9 +21,9 @@ Guida per eseguire l'applicativo:
 3. Aprire il file flybnb\src\configHost.js e incollare in 'host' l'indirizzo locale IPV4
 4. Aprire ed Accendere un Emulatore Android oppure scaricare in uno Smartphone l'app "expo" e Scannarizzare il barcode restituito da expo start --android
 5. Apri il terminale, entra nella cartella /flybnb/ ed esegui i seguenti comandi: 
-	npm install
-	expo start --web (per la vista Desktop/Web)
-	expo  start --android (per la vista app Android)
+npm install 
+expo start --web (per la vista Desktop/Web)
+expo  start --android (per la vista app Android)
 
 
 
