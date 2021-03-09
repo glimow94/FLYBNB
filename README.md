@@ -25,6 +25,9 @@ Guida per eseguire l'applicativo:
 	expo start --web (per la vista Desktop/Web)
 	expo  start --android (per la vista app Android)
 
+
+
+
 # FEATURES DEL SISTEMA
 
 - Il software permette all’utente di visualizzare tutti gli alloggi di un determinato luogo o corrispondenti ai criteri di ricerca
