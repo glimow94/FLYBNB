@@ -1,6 +1,6 @@
 # FLYBNB 
 
-App di prenotazione camere web/mobile
+App di prenotazione camere web/mobile realizzata con il framework javascript React Native
 
 >react-native-cli: 2.0.1
 
