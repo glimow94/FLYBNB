@@ -29,7 +29,7 @@ vista desktop:
 
 vista android:
 
->expo  start --android (per la vista app Android)
+>expo  start --android 
 
 
 
