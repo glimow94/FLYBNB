@@ -28,11 +28,13 @@ App di prenotazione camere web/mobile realizzata con il framework javascript Rea
 4. Aprire ed Accendere un Emulatore Android oppure scaricare in uno Smartphone l'app "expo" e Scannarizzare il barcode restituito da expo start --android
 5. Apri il terminale, entra nella cartella /flybnb/ ed esegui i seguenti comandi: 
 
-vista desktop:
+> npm install
+
+Per eseguire in vista desktop:
 
 > expo start --web 
 
-vista android:
+Per eseguire in vista android:
 
 >expo  start --android 
 
